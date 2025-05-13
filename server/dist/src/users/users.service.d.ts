@@ -11,7 +11,7 @@ export declare class UsersService {
     create(createUserDto: CreateUserDto): Promise<{
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
@@ -23,9 +23,24 @@ export declare class UsersService {
         accessToken: string;
     }>;
     findOne(id: string): Promise<{
+        cart: ({
+            items: {
+                id: string;
+                productId: string;
+                quantity: number;
+                variantId: string | null;
+                bulkId: string | null;
+                cartId: string;
+            }[];
+        } & {
+            id: string;
+            updatedAt: Date;
+            userId: string;
+        }) | null;
+    } & {
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
@@ -36,7 +51,7 @@ export declare class UsersService {
     findByEmail(email: string): Promise<{
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
@@ -58,7 +73,7 @@ export declare class UsersService {
     } & {
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
@@ -80,7 +95,7 @@ export declare class UsersService {
     } & {
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
@@ -91,7 +106,7 @@ export declare class UsersService {
     updateUser(userId: string, updateUserDto: UpdateUserDto): Promise<{
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;

@@ -1,15 +1,27 @@
-import { IsOptional, IsString, IsDateString } from 'class-validator';
+import { IsOptional, IsString, IsDateString, IsEmail } from 'class-validator';
 
-export class UpdateBulkClientRequestDto {
+export class UpdateUserBulkRequestDto {
+  @IsEmail()
   @IsOptional()
+  email?: string;
+
   @IsString()
-  status?: string; // e.g., "pending", "approved", "rejected"
-
   @IsOptional()
+  password?: string;
+
   @IsString()
-  reviewedById?: string; // The ID of the manager/admin who reviewed the request
-
   @IsOptional()
-  @IsDateString()
-  reviewedAt?: string; // Date when the request was reviewed
+  name?: string;
+
+  @IsString()
+  @IsOptional()
+  storeName?: string;
+
+  @IsString()
+  @IsOptional()
+  legalDocs?: string;
+
+  @IsString()
+  @IsOptional()
+  status?: string;
 }

@@ -1,59 +1,91 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Configuration from "@/configuration";
+
 export default function Register() {
+  const router = useRouter();
+  const api = Configuration.BACK_BASEURL;
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${api}users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          name: formData.name
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Registration failed");
+      }
+
+      // Registration successful - redirect or show success message
+      router.push("/admin/users");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Registration failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div
-      className="modal modalCentered fade form-sign-in modal-part-content"
-      id="register"
-    >
+    <div className="modal modalCentered fade form-sign-in modal-part-content" id="register">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="header">
             <div className="demo-title">Register</div>
-            <span
-              className="icon-close icon-close-popup"
-              data-bs-dismiss="modal"
-            />
+            <span className="icon-close icon-close-popup" data-bs-dismiss="modal" />
           </div>
           <div className="tf-login-form">
-            <form onSubmit={(e) => e.preventDefault()} className="">
+            <form onSubmit={handleSubmit}>
               <div className="tf-field style-1">
                 <input
                   className="tf-field-input tf-input"
                   placeholder=" "
                   type="text"
                   required
-                  name=""
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
                 />
-                <label className="tf-field-label" htmlFor="">
-                  First name
-                </label>
-              </div>
-              <div className="tf-field style-1">
-                <input
-                  className="tf-field-input tf-input"
-                  placeholder=" "
-                  type="text"
-                  required
-                  name=""
-                />
-                <label className="tf-field-label" htmlFor="">
-                  Last name
-                </label>
+                <label className="tf-field-label">Full Name</label>
               </div>
               <div className="tf-field style-1">
                 <input
                   className="tf-field-input tf-input"
                   placeholder=" "
                   type="email"
-                  autoComplete="abc@xyz.com"
                   required
-                  name=""
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                 />
-                <label className="tf-field-label" htmlFor="">
-                  Email *
-                </label>
+                <label className="tf-field-label">Email *</label>
               </div>
               <div className="tf-field style-1">
                 <input
@@ -61,21 +93,24 @@ export default function Register() {
                   placeholder=" "
                   type="password"
                   required
-                  name=""
-                  autoComplete="current-password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
                 />
-                <label className="tf-field-label" htmlFor="">
-                  Password *
-                </label>
+                <label className="tf-field-label">Password *</label>
               </div>
+
+              {error && <div className="alert alert-danger">{error}</div>}
+
               <div className="bottom">
                 <div className="w-100">
-                  <Link
-                    href={`/register`}
+                  <button
+                    type="submit"
                     className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
+                    disabled={isLoading}
                   >
-                    <span>Register</span>
-                  </Link>
+                    {isLoading ? "Processing..." : "Register"}
+                  </button>
                 </div>
                 <div className="w-100">
                   <a

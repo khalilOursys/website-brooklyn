@@ -57,6 +57,14 @@ export default function Page() {
           >
             <i className="fa fa-edit" />
           </Button>
+          <Button
+            onClick={() => router.push("/admin/categories/detail/" + cell.row.original.id)}
+            variant="info"
+            size="sm"
+            className="text-info btn-link view"
+          >
+            <i className="fa fa-eye" />
+          </Button>
         </div>
       ),
     },

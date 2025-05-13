@@ -11,55 +11,144 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BulkClientRequestsService = void 0;
 const common_1 = require("@nestjs/common");
+const bcrypt = require("bcrypt");
 const prisma_service_1 = require("../prisma.service");
 let BulkClientRequestsService = class BulkClientRequestsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(createDto) {
-        const existingRequest = await this.prisma.bulkClientRequest.findUnique({
-            where: { userId: createDto.userId },
-        });
-        if (existingRequest) {
-            throw new common_1.BadRequestException(`User with id ${createDto.userId} already has a bulk request.`);
-        }
-        return await this.prisma.bulkClientRequest.create({
+    async createUserWithBulkRequest(data) {
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        return this.prisma.user.create({
             data: {
-                userId: createDto.userId,
-                storeName: createDto.storeName,
-                legalDocs: createDto.legalDocs,
-                status: 'pending',
+                email: data.email,
+                password: hashedPassword,
+                name: data.name,
+                role: 'BULK_CLIENT',
+                bulkRequests: {
+                    create: {
+                        storeName: data.storeName,
+                        legalDocs: data.legalDocs,
+                        status: 'pending',
+                    },
+                },
+            },
+            include: {
+                bulkRequests: true,
+            },
+        });
+    }
+    async getUserWithBulkRequest(userId) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            include: { bulkRequests: true },
+        });
+        if (!user) {
+            throw new common_1.NotFoundException('User not found');
+        }
+        return user;
+    }
+    async updateUserWithBulkRequest(userId, data) {
+        const updateData = {};
+        const bulkUpdateData = {};
+        if (data.email)
+            updateData.email = data.email;
+        if (data.name)
+            updateData.name = data.name;
+        if (data.password) {
+            updateData.password = await bcrypt.hash(data.password, 10);
+        }
+        if (data.storeName)
+            bulkUpdateData.storeName = data.storeName;
+        if (data.legalDocs)
+            bulkUpdateData.legalDocs = data.legalDocs;
+        if (data.status) {
+            bulkUpdateData.status = data.status;
+            if (data.status === 'approved' || data.status === 'rejected') {
+                bulkUpdateData.reviewedAt = new Date();
+            }
+        }
+        return this.prisma.user.update({
+            where: { id: userId },
+            data: {
+                ...updateData,
+                bulkRequests: {
+                    update: {
+                        where: { userId },
+                        data: bulkUpdateData,
+                    },
+                },
+            },
+            include: {
+                bulkRequests: true,
+            },
+        });
+    }
+    async deleteUserWithBulkRequest(userId) {
+        await this.prisma.bulkClientRequest.deleteMany({
+            where: { userId },
+        });
+        return this.prisma.user.delete({
+            where: { id: userId },
+        });
+    }
+    async updateBulkRequestStatus(bulkRequestId, status, reviewedById) {
+        const updateData = { status };
+        if (status === 'approved' || status === 'rejected') {
+            updateData.reviewedAt = new Date();
+            if (reviewedById) {
+                updateData.reviewedById = reviewedById;
+            }
+        }
+        return this.prisma.bulkClientRequest.update({
+            where: { id: bulkRequestId },
+            data: updateData,
+            include: {
+                user: true,
+                reviewedBy: true,
             },
         });
     }
     async findAll() {
         return await this.prisma.bulkClientRequest.findMany({
-            orderBy: { submittedAt: 'desc' },
-            include: { user: true },
+            include: {
+                user: true,
+            },
         });
-    }
-    async findOne(id) {
-        const request = await this.prisma.bulkClientRequest.findUnique({
-            where: { id },
-            include: { user: true },
-        });
-        if (!request) {
-            throw new common_1.NotFoundException(`Bulk client request with id ${id} not found.`);
-        }
-        return request;
     }
     async update(id, updateDto) {
-        await this.findOne(id);
-        return await this.prisma.bulkClientRequest.update({
+        const currentRequest = await this.prisma.bulkClientRequest.findUnique({
+            where: { id },
+            include: {
+                user: true,
+            },
+        });
+        if (!currentRequest) {
+            throw new Error('Request not found');
+        }
+        const updatedRequest = await this.prisma.bulkClientRequest.update({
             where: { id },
             data: updateDto,
         });
-    }
-    async remove(id) {
-        await this.findOne(id);
-        return await this.prisma.bulkClientRequest.delete({
-            where: { id },
-        });
+        if (currentRequest.status !== 'approved' &&
+            updatedRequest.status === 'approved') {
+            const existingCart = await this.prisma.cart.findFirst({
+                where: {
+                    userId: currentRequest.userId,
+                },
+            });
+            if (!existingCart) {
+                await this.prisma.cart.create({
+                    data: {
+                        userId: currentRequest.userId,
+                    },
+                });
+            }
+            else {
+                console.log(`User ${currentRequest.userId} already has a cart`);
+            }
+        }
+        return updatedRequest;
     }
 };
 exports.BulkClientRequestsService = BulkClientRequestsService;

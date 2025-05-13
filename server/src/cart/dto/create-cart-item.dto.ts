@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 export class CreateCartItemDto {
   @IsString()
   @IsNotEmpty()
-  cartId: string;  // The cart to which the item is added
+  cartId: string; // The cart to which the item is added
 
   @IsString()
   @IsNotEmpty()
@@ -11,7 +11,11 @@ export class CreateCartItemDto {
 
   @IsOptional()
   @IsString()
-  variantId?: string;  // Optional, for products with variants
+  bulkId?: string; // Optional, for  bulk products
+
+  @IsOptional()
+  @IsString()
+  variantId?: string; // Optional, for products with variants
 
   @IsNumber()
   quantity: number;

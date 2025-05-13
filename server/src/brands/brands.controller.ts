@@ -39,7 +39,7 @@ export class BrandsController {
     return await this.brandsService.findAll();
   }
 
-  @Get(':id')
+  @Get('getBrandById/:id')
   async findOne(@Param('id') id: string) {
     return await this.brandsService.findOne(id);
   }

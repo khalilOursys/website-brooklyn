@@ -18,3 +18,23 @@ export declare const multerConfigBrands: {
         mimetype: string;
     }, cb: (arg0: Error | null, arg1: boolean) => void) => void;
 };
+export declare const multerConfigClientRequests: {
+    storage: import("multer").StorageEngine;
+    limits: {
+        fileSize: number;
+        files: number;
+    };
+    fileFilter: (req: any, file: {
+        mimetype: string;
+    }, cb: (arg0: Error | null, arg1: boolean) => void) => void;
+};
+export declare const multerConfigBundle: {
+    storage: import("multer").StorageEngine;
+    limits: {
+        fileSize: number;
+        files: number;
+    };
+    fileFilter: (req: any, file: {
+        mimetype: string;
+    }, cb: (arg0: Error | null, arg1: boolean) => void) => void;
+};

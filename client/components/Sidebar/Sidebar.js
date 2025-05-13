@@ -99,7 +99,7 @@ function Sidebar({ routes, background, users }) {
         <div className="logo">
           <div className="bglogo">
             <Image
-              src="/img/logo.png" // Use absolute path for images in the public folder
+              src="/images/logo/logo.png" // Use absolute path for images in the public folder
               alt="medicacom"
               width={150} // Set appropriate width
               height={50} // Set appropriate height

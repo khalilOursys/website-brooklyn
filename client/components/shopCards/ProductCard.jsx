@@ -17,7 +17,6 @@ export const ProductCard = ({ product }) => {
   useEffect(() => {
     setCurrentImage(product.imgSrc);
   }, [product]);
-  console.log("product", product);
 
   return (
     <div className="card-product fl-item" key={product.id}>

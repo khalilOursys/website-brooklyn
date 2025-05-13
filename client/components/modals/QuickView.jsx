@@ -8,7 +8,7 @@ import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Quantity from "../shopDetails/Quantity";
 import { colors, sizeOptions } from "@/data/singleProductOptions";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function QuickView() {
   const {
@@ -20,6 +20,7 @@ export default function QuickView() {
     addToCompareItem,
     isAddedtoCompareItem,
   } = useContextElement();
+
   const [currentColor, setCurrentColor] = useState(colors[0]);
   const [currentSize, setCurrentSize] = useState(sizeOptions[0]);
   const [quantity, setQuantity] = useState(1);
@@ -43,6 +44,10 @@ export default function QuickView() {
       lastBackdrop.style.zIndex = "1057";
     }
   };
+
+  useEffect(() => {
+    setQuantity(1);
+  }, [quickViewItem]);
 
   return (
     <div className="modal fade modalDemo" id="quick_view">
@@ -114,7 +119,7 @@ export default function QuickView() {
                       className="link"
                       href={`/product-detail/${quickViewItem.id}`}
                     >
-                      {quickViewItem.title}
+                      {quickViewItem.name}
                     </Link>
                   </h5>
                 </div>
@@ -123,9 +128,7 @@ export default function QuickView() {
                 </div>
                 <div className="tf-product-description">
                   <p>
-                    Nunc arcu faucibus a et lorem eu a mauris adipiscing conubia
-                    ac aptent ligula facilisis a auctor habitant parturient a
-                    a.Interdum fermentum.
+                    {quickViewItem.description}
                   </p>
                 </div>
                 {/* <div className="tf-product-info-variant-picker">
@@ -201,7 +204,7 @@ export default function QuickView() {
                 </div> */}
                 <div className="tf-product-info-quantity">
                   <div className="quantity-title fw-6">Quantity</div>
-                  <Quantity setQuantity={setQuantity} />
+                  <Quantity setQuantity={setQuantity} quantity={quantity} />
                 </div>
                 <div className="tf-product-info-buy-button">
                   <form onSubmit={(e) => e.preventDefault()} className="">

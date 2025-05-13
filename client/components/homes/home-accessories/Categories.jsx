@@ -7,6 +7,13 @@ import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function Categories() {
+  /*  setInterval(() => {
+     const memory = process.memoryUsage();
+     console.log('Next.js Memory Usage:', {
+       rss: (memory.rss / 1024 / 1024).toFixed(2) + ' MB',
+       heapUsed: (memory.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
+     });
+   }, 5000); */
   return (
     <section>
       <div className="flat-title">

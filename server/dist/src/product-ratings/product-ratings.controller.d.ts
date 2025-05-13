@@ -16,7 +16,7 @@ export declare class ProductRatingsController {
         user: {
             id: string;
             email: string;
-            password: string | null;
+            password: string;
             name: string | null;
             role: import(".prisma/client").$Enums.Role;
             oauthProvider: string | null;

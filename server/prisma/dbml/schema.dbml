@@ -5,7 +5,7 @@
 Table User {
   id String [pk]
   email String [unique, not null]
-  password String
+  password String [not null]
   name String
   role Role [not null, default: 'CLIENT']
   oauthProvider String
@@ -70,6 +70,8 @@ Table Product {
 
 Table BulkProduct {
   id String [pk]
+  name String
+  description String
   productId String [unique, not null]
   product Product [not null]
   bulkPrice Float [not null]
@@ -77,6 +79,8 @@ Table BulkProduct {
   discount Float
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
+  orderItems OrderItem [not null]
+  cartItems CartItem [not null]
 }
 
 Table ProductImage {
@@ -182,6 +186,7 @@ Table Order {
   id String [pk]
   userId String [not null]
   user User [not null]
+  isBulk Int [not null, default: 0]
   total Float [not null]
   status String [not null, default: 'pending']
   address String [not null]
@@ -200,11 +205,13 @@ Table OrderItem {
   orderId String [not null]
   productId String [not null]
   variantId String
+  bulkId String
+  quantity Int [not null]
+  price Float [not null]
   order Order [not null]
   product Product [not null]
   variant ProductVariant
-  quantity Int [not null]
-  price Float [not null]
+  bulk BulkProduct
 }
 
 Table Payment {
@@ -231,9 +238,11 @@ Table CartItem {
   cartId String [not null]
   productId String [not null]
   variantId String
+  bulkId String
   cart Cart [not null]
   product Product [not null]
   variant ProductVariant
+  bulk BulkProduct
   quantity Int [not null]
 }
 
@@ -342,6 +351,8 @@ Ref: OrderItem.productId > Product.id
 
 Ref: OrderItem.variantId > ProductVariant.id
 
+Ref: OrderItem.bulkId > BulkProduct.id
+
 Ref: Payment.orderId > Order.id
 
 Ref: Cart.userId - User.id
@@ -351,6 +362,8 @@ Ref: CartItem.cartId > Cart.id
 Ref: CartItem.productId > Product.id
 
 Ref: CartItem.variantId > ProductVariant.id
+
+Ref: CartItem.bulkId > BulkProduct.id
 
 Ref: Wishlist.userId > User.id
 

@@ -20,7 +20,6 @@ export default function QuickView() {
     addToCompareItem,
     isAddedtoCompareItem,
   } = useContextElement();
-  console.log("quickViewItem", quickViewItem);
   const [currentColor, setCurrentColor] = useState(colors[0]);
   const [currentSize, setCurrentSize] = useState(sizeOptions[0]);
   const [quantity, setQuantity] = useState(1);

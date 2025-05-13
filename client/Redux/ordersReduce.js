@@ -48,14 +48,17 @@ export const editOrder = createAsyncThunk(
 );
 
 export const fetchOrders = createAsyncThunk("order/fetchOrders", async () => {
-  const response = await fetch(`${Configuration.BACK_BASEURL}orders`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Add the Bearer token
-    },
-  });
+  const response = await fetch(
+    `${Configuration.BACK_BASEURL}orders/getOrderType/0`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Add the Bearer token
+      },
+    }
+  );
   return response.json();
 });
 
@@ -77,6 +80,24 @@ export const getOrderById = createAsyncThunk(
   }
 );
 
+//bulk order
+export const fetchOrdersBulk = createAsyncThunk(
+  "order/fetchOrdersBulk",
+  async () => {
+    const response = await fetch(
+      `${Configuration.BACK_BASEURL}orders/getOrderType/1`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+      }
+    );
+    return response.json();
+  }
+);
 // Slice
 const ordersSlice = createSlice({
   name: "orders",

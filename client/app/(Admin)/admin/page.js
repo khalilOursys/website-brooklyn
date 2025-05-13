@@ -79,7 +79,6 @@ export default function Home() {
         loginFetch({ email: login, password: password })
       );
       const data = result.payload;
-      console.log(data);
 
       if (data.message) {
         notifyErr(data.message); // Show error message

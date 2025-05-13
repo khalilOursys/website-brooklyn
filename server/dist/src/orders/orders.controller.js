@@ -24,11 +24,14 @@ let OrdersController = class OrdersController {
     async create(createOrderDto) {
         return await this.ordersService.create(createOrderDto);
     }
-    async findAll() {
-        return await this.ordersService.findAll();
+    async findAll(type) {
+        return await this.ordersService.findAll(type);
     }
     async findOne(id) {
         return await this.ordersService.findOne(id);
+    }
+    async getOrderByIdUser(userId) {
+        return await this.ordersService.getOrdersByUserId(userId);
     }
     async update(id, updateOrderDto) {
         return await this.ordersService.update(id, updateOrderDto);
@@ -46,18 +49,26 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('getOrderType/:type'),
+    __param(0, (0, common_1.Param)('type')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(':id'),
+    (0, common_1.Get)('getOrderById/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], OrdersController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Get)('getOrderByIdUser/:userId'),
+    __param(0, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], OrdersController.prototype, "getOrderByIdUser", null);
 __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),

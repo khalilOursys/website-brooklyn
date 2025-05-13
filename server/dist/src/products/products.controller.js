@@ -63,11 +63,12 @@ let ProductsController = class ProductsController {
         });
         return product;
     }
-    findByCategory(categorySlug, page = 0, limit = 10, brandNames, minPrice, maxPrice) {
+    findByCategory(categorySlug, page = 0, limit = 10, brandNames, minPrice, maxPrice, promotions) {
         return this.productService.findByCategory({
             categorySlug,
             page,
             limit,
+            promotions,
             brandNames: brandNames ? brandNames.split(',') : undefined,
             minPrice: minPrice ? Number(minPrice) : undefined,
             maxPrice: maxPrice ? Number(maxPrice) : undefined,
@@ -78,6 +79,9 @@ let ProductsController = class ProductsController {
             throw new common_1.BadRequestException('Category slug is required');
         }
         return this.productService.getFilterOptions(categorySlug);
+    }
+    async getFilterOptionsPromotion() {
+        return this.productService.getFilterOptionsPromotion();
     }
 };
 exports.ProductsController = ProductsController;
@@ -139,8 +143,9 @@ __decorate([
     __param(3, (0, common_1.Query)('brandNames')),
     __param(4, (0, common_1.Query)('minPrice')),
     __param(5, (0, common_1.Query)('maxPrice')),
+    __param(6, (0, common_1.Query)('promotions')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number, String, Number, Number]),
+    __metadata("design:paramtypes", [String, Number, Number, String, Number, Number, Number]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "findByCategory", null);
 __decorate([
@@ -150,6 +155,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "getFilterOptions", null);
+__decorate([
+    (0, common_1.Get)('getFilterOptionsPromotion'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ProductsController.prototype, "getFilterOptionsPromotion", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [products_service_1.ProductsService])

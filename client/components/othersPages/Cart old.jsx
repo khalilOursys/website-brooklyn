@@ -96,7 +96,6 @@ export default function Cart() {
                         cart-data-title="Price"
                       >
                         <div className="cart-price">
-                          {console.log(elm)}
                           {parseFloat(elm.price).toFixed(3)} TND
                         </div>
                       </td>

@@ -53,12 +53,12 @@ export default function Page() {
 
   const columns = [
     {
-      header: "User",
-      accessorKey: "user.email",
-    },
-    {
       header: "Name",
       accessorKey: "user.name",
+    },
+    {
+      header: "Email",
+      accessorKey: "user.email",
     },
     {
       header: "Total",
@@ -83,11 +83,6 @@ export default function Page() {
       accessorKey: "phoneNumber",
     },
     {
-      header: "Created At",
-      accessorKey: "createdAt",
-      Cell: ({ cell }) => new Date(cell.getValue()).toLocaleDateString(),
-    },
-    {
       accessorKey: "id",
       header: "Actions",
       Cell: ({ cell }) => {
@@ -99,20 +94,12 @@ export default function Page() {
           <div className="d-flex gap-2">
             <div className="actions-right block_action">
               <Button
-                onClick={() => router.push("/orders/details/" + order.id)}
+                onClick={() => router.push("/admin/orders/detail/" + order.id)}
                 variant="info"
                 size="sm"
                 className="text-info btn-link view"
               >
                 <i className="fa fa-eye" />
-              </Button>
-              <Button
-                onClick={() => router.push("/admin/orders/edit/" + order.id)}
-                variant="warning"
-                size="sm"
-                className="text-warning btn-link edit"
-              >
-                <i className="fa fa-edit" />
               </Button>
             </div>
           </div>

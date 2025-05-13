@@ -42,7 +42,15 @@ let BulkProductsService = class BulkProductsService {
     async findOne(id) {
         const bulkProduct = await this.prisma.bulkProduct.findUnique({
             where: { id },
-            include: { product: true },
+            include: {
+                product: {
+                    include: {
+                        category: true,
+                        brand: true,
+                        images: true,
+                    },
+                },
+            },
         });
         if (!bulkProduct) {
             throw new common_1.NotFoundException(`Bulk product with id ${id} not found.`);
@@ -61,6 +69,60 @@ let BulkProductsService = class BulkProductsService {
         return await this.prisma.bulkProduct.delete({
             where: { id },
         });
+    }
+    async findBulkProductsByCategory(options) {
+        const { categorySlug, page = 0, limit = 10, brandNames, promotions, minPrice, maxPrice, } = options;
+        const offset = page * limit;
+        const where = {
+            product: {
+                ...(categorySlug && {
+                    category: {
+                        slug: categorySlug,
+                    },
+                }),
+                ...(brandNames &&
+                    brandNames.length > 0 && {
+                    brand: {
+                        name: {
+                            in: brandNames,
+                        },
+                    },
+                }),
+            },
+            ...((minPrice !== undefined || maxPrice !== undefined) && {
+                bulkPrice: {
+                    ...(minPrice !== undefined && { gte: minPrice }),
+                    ...(maxPrice !== undefined && { lte: maxPrice }),
+                },
+            }),
+            ...(promotions !== undefined &&
+                promotions > -1 && {
+                discount: {
+                    gt: 0,
+                },
+            }),
+        };
+        const [bulkProducts, totalCount] = await this.prisma.$transaction([
+            this.prisma.bulkProduct.findMany({
+                where,
+                skip: offset,
+                take: limit,
+                include: {
+                    product: {
+                        include: {
+                            category: true,
+                            brand: true,
+                            images: true,
+                        },
+                    },
+                },
+            }),
+            this.prisma.bulkProduct.count({ where }),
+        ]);
+        return {
+            bulkProducts,
+            totalCount,
+        };
     }
 };
 exports.BulkProductsService = BulkProductsService;

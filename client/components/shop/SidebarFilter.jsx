@@ -84,7 +84,6 @@ export default function SidebarFilter({ setProducts }) {
         ),
       ],
     ];
-    // console.log(filteredByPrice, "filteredByPrice");
     if (selectedColors.length) {
       filteredArrays = [
         ...filteredArrays,
@@ -98,7 +97,6 @@ export default function SidebarFilter({ setProducts }) {
       ];
     }
 
-    // console.log(filteredByselectedColors, "filteredByselectedColors");
     if (selectedBrands.length) {
       filteredArrays = [
         ...filteredArrays,
@@ -106,7 +104,6 @@ export default function SidebarFilter({ setProducts }) {
       ];
     }
 
-    // console.log(filteredByselectedBrands, "filteredByselectedBrands");
     if (selectedSizes.length) {
       filteredArrays = [
         ...filteredArrays,
@@ -118,7 +115,6 @@ export default function SidebarFilter({ setProducts }) {
       ];
     }
 
-    // console.log(filteredByselectedSizes);
     if (selectedAvailabilities.length) {
       filteredArrays = [
         ...filteredArrays,

@@ -17,17 +17,27 @@ let CartService = class CartService {
         this.prisma = prisma;
     }
     async getCartByUser(userId) {
-        let cart = await this.prisma.cart.findUnique({ where: { userId }, include: { items: true } });
-        if (!cart) {
-            cart = await this.prisma.cart.create({
-                data: { userId },
-                include: { items: true },
-            });
-        }
+        let cart = await this.prisma.cart.findUnique({
+            where: { userId },
+            include: {
+                items: {
+                    include: {
+                        product: {
+                            include: {
+                                images: true,
+                            },
+                        },
+                        bulk: true,
+                    },
+                },
+            },
+        });
         return cart;
     }
     async addCartItem(createCartItemDto) {
-        const cart = await this.prisma.cart.findUnique({ where: { id: createCartItemDto.cartId } });
+        const cart = await this.prisma.cart.findUnique({
+            where: { id: createCartItemDto.cartId },
+        });
         if (!cart) {
             throw new common_1.NotFoundException(`Cart with id ${createCartItemDto.cartId} not found.`);
         }
@@ -36,6 +46,7 @@ let CartService = class CartService {
                 cartId: createCartItemDto.cartId,
                 productId: createCartItemDto.productId,
                 variantId: createCartItemDto.variantId || null,
+                bulkId: createCartItemDto.bulkId,
             },
         });
         if (existingItem) {
@@ -44,11 +55,15 @@ let CartService = class CartService {
                 data: { quantity: existingItem.quantity + createCartItemDto.quantity },
             });
         }
+        console.log(createCartItemDto);
         return await this.prisma.cartItem.create({
             data: {
                 cartId: createCartItemDto.cartId,
                 productId: createCartItemDto.productId,
-                variantId: createCartItemDto.variantId,
+                bulkId: createCartItemDto.bulkId,
+                variantId: createCartItemDto.variantId
+                    ? createCartItemDto.variantId
+                    : null,
                 quantity: createCartItemDto.quantity,
             },
         });
@@ -58,6 +73,7 @@ let CartService = class CartService {
         if (!cartItem) {
             throw new common_1.NotFoundException(`Cart item with id ${id} not found.`);
         }
+        console.log(updateCartItemDto);
         return await this.prisma.cartItem.update({
             where: { id },
             data: updateCartItemDto,

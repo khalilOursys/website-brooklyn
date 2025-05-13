@@ -18,6 +18,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
+], CreateBulkProductDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
 ], CreateBulkProductDto.prototype, "productId", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),

@@ -47,4 +47,14 @@ export class CategoriesController {
   async getStructuredCategories() {
     return this.categoriesService.getCategoriesStructured();
   }
+
+  @Get('getAllParent')
+  async getAllParent() {
+    return this.categoriesService.findAllParent();
+  }
+
+  @Get('getAllChildren')
+  async getAllChildren() {
+    return this.categoriesService.findAllChildren();
+  }
 }

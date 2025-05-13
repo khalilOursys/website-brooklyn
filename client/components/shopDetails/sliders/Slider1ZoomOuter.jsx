@@ -210,6 +210,7 @@ export default function Slider1ZoomOuter({
     const zoomElements = document.querySelectorAll(".tf-image-zoom");
 
     const handleMouseOver = (event) => {
+
       const parent = event.target.closest(".section-image-zoom");
       if (parent) {
         parent.classList.add("zoom-active");
@@ -235,7 +236,7 @@ export default function Slider1ZoomOuter({
         element.removeEventListener("mouseleave", handleMouseLeave);
       });
     };
-  }, []); // Empty dependency array to run only once on mount
+  }, [updatedImages]); // Empty dependency array to run only once on mount
 
   return (
     <>
@@ -286,11 +287,7 @@ export default function Slider1ZoomOuter({
           thumbs={{ swiper: thumbsSwiper }}
           modules={[Thumbs, Navigation]}
           onSwiper={(swiper) => (swiperRef.current = swiper)}
-          onSlideChange={(swiper) => {
-            if (updatedImages[swiper.activeIndex]?.dataValue) {
-              handleColor(updatedImages[swiper.activeIndex].dataValue);
-            }
-          }}
+
         >
           {updatedImages.map((slide, index) => (
             <SwiperSlide key={index}>

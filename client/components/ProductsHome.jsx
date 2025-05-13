@@ -5,27 +5,55 @@ import Shopcard28 from "@/components/shopCards/ProductCard28";
 import ProductCard33 from "./shopCards/ProductCard33";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
+import Configuration from "@/configuration";
 
 export default function ProductsHome() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [discountedProducts, setDiscountedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const api = Configuration.BACK_BASEURL;
 
   useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
     async function fetchProducts() {
       try {
-        const response = await fetch("http://localhost:3001/products/findByDiscountAndFeatured"); // Replace with your actual API URL
+        const response = await fetch(`${api}products/findByDiscountAndFeatured`,
+          {
+            signal: controller.signal,
+            cache: 'no-store' // Disable caching
+          }
+        );
+
+        if (!isMounted) return;
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
-        setFeaturedProducts(data.featuredProducts);
-        setDiscountedProducts(data.discountedProducts);
+        if (isMounted) {
+          setFeaturedProducts(data.featuredProducts);
+          setDiscountedProducts(data.discountedProducts);
+          /* setError(null); */
+        }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        if (isMounted && error.name !== 'AbortError') {
+          console.error("Error fetching products:", error);
+          /* setError("Failed to load products. Please try again."); */
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     }
 
     fetchProducts();
+
+    return () => {
+      isMounted = false;
+      controller.abort(); // Cancel the request if component unmounts
+    };
   }, []);
 
   return (

@@ -24,6 +24,10 @@ __decorate([
     __metadata("design:type", String)
 ], OrderItemDto.prototype, "variantId", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], OrderItemDto.prototype, "bulkId", void 0);
+__decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], OrderItemDto.prototype, "quantity", void 0);
@@ -44,6 +48,11 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateOrderDto.prototype, "address", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], CreateOrderDto.prototype, "isBulk", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),

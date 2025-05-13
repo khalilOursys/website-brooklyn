@@ -66,4 +66,38 @@ export declare class CategoriesController {
             text: string;
         }[];
     }[]>;
+    getAllParent(): Promise<({
+        children: {
+            id: string;
+            name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            slug: string | null;
+            description: string | null;
+            bannerColor: string;
+            bannerText: string;
+            parentId: string | null;
+        }[];
+    } & {
+        id: string;
+        name: string;
+        createdAt: Date;
+        updatedAt: Date;
+        slug: string | null;
+        description: string | null;
+        bannerColor: string;
+        bannerText: string;
+        parentId: string | null;
+    })[]>;
+    getAllChildren(): Promise<{
+        id: string;
+        name: string;
+        createdAt: Date;
+        updatedAt: Date;
+        slug: string | null;
+        description: string | null;
+        bannerColor: string;
+        bannerText: string;
+        parentId: string | null;
+    }[]>;
 }

@@ -17,7 +17,9 @@ export default function Sidebar({
   maxPrice,
   price,
   setPrice,
+  brands
 }) {
+
   const availabilities = [
     { id: 1, isAvailable: true, text: "Available", count: 14 },
     { id: 2, isAvailable: false, text: "Out of Stock", count: 2 },
@@ -74,7 +76,6 @@ export default function Sidebar({
         </div> */}
 
         {/* brand */}
-        {console.log(selectedBrand)}
         <form
           onSubmit={(e) => e.preventDefault()}
           action="#"
@@ -89,12 +90,12 @@ export default function Sidebar({
               aria-expanded="true"
               aria-controls="availability"
             >
-              <span>categories</span>
+              <span>Brands</span>
               <span className="icon icon-arrow-up" />
             </div>
             <div id="categories" className="collapse show">
               <ul className="tf-filter-group current-scrollbar mb_36">
-                {categories.map((cat) => (
+                {brands.map((cat) => (
                   <li
                     key={cat.id}
                     className="list-item d-flex gap-12 align-items-center"

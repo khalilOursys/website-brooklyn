@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 export default function Quantity({ setQuantity = (value) => { }, quantity }) {
   const [count, setCount] = useState(quantity);
-  console.log(quantity);
 
   /* useEffect(() => {
     setQuantity(count);

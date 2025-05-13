@@ -39,6 +39,12 @@ let CategoriesController = class CategoriesController {
     async getStructuredCategories() {
         return this.categoriesService.getCategoriesStructured();
     }
+    async getAllParent() {
+        return this.categoriesService.findAllParent();
+    }
+    async getAllChildren() {
+        return this.categoriesService.findAllChildren();
+    }
 };
 exports.CategoriesController = CategoriesController;
 __decorate([
@@ -82,6 +88,18 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "getStructuredCategories", null);
+__decorate([
+    (0, common_1.Get)('getAllParent'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "getAllParent", null);
+__decorate([
+    (0, common_1.Get)('getAllChildren'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "getAllChildren", null);
 exports.CategoriesController = CategoriesController = __decorate([
     (0, common_1.Controller)('categories'),
     __metadata("design:paramtypes", [categories_service_1.CategoriesService])

@@ -15,18 +15,24 @@ class CreateBulkClientRequestDto {
 }
 exports.CreateBulkClientRequestDto = CreateBulkClientRequestDto;
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
-], CreateBulkClientRequestDto.prototype, "userId", void 0);
+], CreateBulkClientRequestDto.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateBulkClientRequestDto.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateBulkClientRequestDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateBulkClientRequestDto.prototype, "storeName", void 0);
 __decorate([
-    (0, class_validator_1.IsUrl)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateBulkClientRequestDto.prototype, "legalDocs", void 0);
 //# sourceMappingURL=create-bulk-client-request.dto.js.map

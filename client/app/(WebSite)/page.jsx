@@ -21,6 +21,7 @@ export default function Home() {
       <Features bgColor="" />
       <Categories />
       {/* correct data product in this project (ProductsHome/fetchByCatagory/detailProduct ...) */}
+      {/* modify the logic profile api BE/FE */}
       <ProductsHome />
       <Brands />
       <ShopGram />

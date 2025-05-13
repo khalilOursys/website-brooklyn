@@ -20,14 +20,16 @@ export default function Productcard23({ product }) {
           <Image
             className="lazyload img-product"
             alt="image-product"
-            src={currentImage}
+            src={product.images[0].url}
             width={720}
             height={1005}
           />
           <Image
             className="lazyload img-hover"
             alt="image-product"
-            src={product.imgHoverSrc}
+            src={
+              product.images[1] ? product.images[1].url : product.images[0].url
+            }
             width={720}
             height={1005}
           />
@@ -35,11 +37,11 @@ export default function Productcard23({ product }) {
       </div>
       <div className="card-product-info">
         <a href="#" className="title link">
-          {product.title}
+          {product.name}
         </a>
         <span className="price">{product.price.toFixed(3)} TND</span>
         <p className="description">
-          Le lorem ipsum est, en imprimerie, une suite de mots sans signification utilisée à titre provisoire pour calibrer une mise en page, le texte définitif venant remplacer le faux-texte dès qu'il est prêt ou que la mise en page est achevée. Généralement, on utilise un texte en faux latin, le Lorem ipsum ou Lipsum.
+          {product.description}
         </p>
         {/* {product.colors && (
           <ul className="list-color-product">
@@ -67,7 +69,7 @@ export default function Productcard23({ product }) {
         <div className="list-product-btn">
           <a
             href="#quick_add"
-            onClick={() => setQuickAddItem(product.id)}
+            onClick={() => setQuickAddItem(product)}
             data-bs-toggle="modal"
             className="box-icon quick-add style-3 hover-tooltip"
           >

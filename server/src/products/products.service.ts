@@ -44,7 +44,12 @@ export class ProductsService {
 
   async findAll() {
     return await this.prisma.product.findMany({
-      orderBy: { createdAt: 'desc' },
+      include: {
+        images: true,
+        attributes: true,
+        category: true,
+        brand: true,
+      },
     });
   }
 
@@ -170,6 +175,7 @@ export class ProductsService {
     categorySlug?: string;
     page?: number;
     limit?: number;
+    promotions?: number;
     brandNames?: string[];
     minPrice?: number;
     maxPrice?: number;
@@ -179,6 +185,7 @@ export class ProductsService {
       page = 0,
       limit = 10,
       brandNames,
+      promotions,
       minPrice,
       maxPrice,
     } = options;
@@ -204,6 +211,13 @@ export class ProductsService {
           ...(maxPrice !== undefined && { lte: maxPrice }),
         },
       }),
+      // Add promotion filter if promotions > 0
+      ...(promotions !== undefined &&
+        promotions > -1 && {
+          discount: {
+            gt: 0, // This will filter products where promotions > 0
+          },
+        }),
     };
 
     const [products, totalCount] = await this.prisma.$transaction([
@@ -261,14 +275,117 @@ export class ProductsService {
     };
   } */
   async getFilterOptions(categorySlug: string) {
-    // Get distinct brands first
+    // Get distinct brands (including those with bulk products)
+    const brands = await this.prisma.brand.findMany({
+      where: {
+        OR: [
+          {
+            products: {
+              some: {
+                category: {
+                  slug: categorySlug,
+                },
+              },
+            },
+          },
+          {
+            products: {
+              some: {
+                bulkProduct: {
+                  isNot: null,
+                },
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        _count: {
+          select: {
+            products: {
+              where: {
+                OR: [
+                  {
+                    category: {
+                      slug: categorySlug,
+                    },
+                  },
+                  {
+                    bulkProduct: {
+                      isNot: null,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // Get price range (including bulk prices)
+    if (categorySlug === 'bulkproduct') {
+      const priceAggregates = await this.prisma.$queryRaw<
+        {
+          minprice: number;
+          maxprice: number;
+        }[]
+      >`
+        SELECT 
+          MIN(LEAST(COALESCE(bp."bulkPrice"))) as minPrice,
+          MAX(GREATEST(COALESCE(bp."bulkPrice"))) as maxPrice
+        FROM "Product" p
+        LEFT JOIN "BulkProduct" bp ON p.id = bp."productId"
+        JOIN "Category" c ON p."categoryId" = c.id
+      `;
+
+      return {
+        brands: brands.map((brand) => ({
+          id: brand.id,
+          name: brand.name,
+          productCount: brand._count.products,
+        })),
+        priceRange: {
+          minPrice: priceAggregates[0].minprice || 0,
+          maxPrice: priceAggregates[0].maxprice || 10000,
+        },
+      };
+    }
+    const priceAggregates = await this.prisma.$queryRaw<
+      {
+        minprice: number;
+        maxprice: number;
+      }[]
+    >`
+    SELECT 
+      MIN(LEAST(p.price, COALESCE(bp."bulkPrice", p.price))) as minPrice,
+      MAX(GREATEST(p.price, COALESCE(bp."bulkPrice", p.price))) as maxPrice
+    FROM "Product" p
+    LEFT JOIN "BulkProduct" bp ON p.id = bp."productId"
+    JOIN "Category" c ON p."categoryId" = c.id
+    WHERE c.slug = ${categorySlug}
+  `;
+
+    return {
+      brands: brands.map((brand) => ({
+        id: brand.id,
+        name: brand.name,
+        productCount: brand._count.products,
+      })),
+      priceRange: {
+        minPrice: priceAggregates[0].minprice || 0,
+        maxPrice: priceAggregates[0].maxprice || 10000,
+      },
+    };
+  }
+
+  async getFilterOptionsPromotion() {
+    // Get distinct brands that have products with discount > 0
     const brands = await this.prisma.brand.findMany({
       where: {
         products: {
           some: {
-            category: {
-              slug: categorySlug,
-            },
+            discount: { gt: 0 }, // Only products with actual discounts
           },
         },
       },
@@ -277,9 +394,7 @@ export class ProductsService {
           select: {
             products: {
               where: {
-                category: {
-                  slug: categorySlug,
-                },
+                discount: { gt: 0 }, // Count only discounted products
               },
             },
           },
@@ -287,18 +402,21 @@ export class ProductsService {
       },
     });
 
-    // Get price range
+    // Get price range for discounted products only
     const priceAggregates = await this.prisma.product.aggregate({
       where: {
-        category: {
-          slug: categorySlug,
-        },
+        discount: { gt: 0 }, // Only consider products with discount > 0
       },
       _min: {
         price: true,
+        discount: true,
       },
       _max: {
         price: true,
+        discount: true,
+      },
+      _avg: {
+        discount: true,
       },
     });
 
@@ -311,6 +429,11 @@ export class ProductsService {
       priceRange: {
         minPrice: priceAggregates._min.price || 0,
         maxPrice: priceAggregates._max.price || 10000,
+      },
+      discountInfo: {
+        minDiscount: priceAggregates._min.discount || 0,
+        maxDiscount: priceAggregates._max.discount || 0,
+        avgDiscount: priceAggregates._avg.discount || 0,
       },
     };
   }

@@ -1,6 +1,8 @@
 "use client";
+import Configuration from "@/configuration";
 import { allProducts } from "@/data/products";
 import { openCartModal } from "@/utlis/openCartModal";
+import { useRouter } from "next/navigation";
 // import { openCart } from "@/utlis/toggleCart";
 import React, { useEffect } from "react";
 import { useContext, useState } from "react";
@@ -10,11 +12,15 @@ export const useContextElement = () => {
 };
 
 export default function Context({ children }) {
+  const api = Configuration.BACK_BASEURL;
+
   const [cartProducts, setCartProducts] = useState([]);
   const [wishList, setWishList] = useState([1, 2, 3]);
   const [compareItem, setCompareItem] = useState([1, 2, 3]);
   const [quickViewItem, setQuickViewItem] = useState(allProducts[0]);
   const [quickAddItem, setQuickAddItem] = useState(1);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
 
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
@@ -113,6 +119,55 @@ export default function Context({ children }) {
     localStorage.setItem("wishlist", JSON.stringify(wishList));
   }, [wishList]);
 
+  // Fetch user profile when token changes
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchUserProfile = async () => {
+      const token = localStorage.getItem("x-access-token");
+      if (!token) return;
+
+      try {
+        const profileResponse = await fetch(`${api}auth/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+          cache: 'no-store' // Disable caching
+        });
+
+        console.log(token);
+        if (!isMounted) return;
+
+        if (profileResponse.status === 401) {
+          localStorage.removeItem("x-access-token");
+          handleUnauthorized();
+          return;
+        }
+
+        if (!profileResponse.ok) {
+          throw new Error("Failed to fetch profile");
+        }
+
+        const userData = await profileResponse.json();
+        if (isMounted) setUser(userData);
+      } catch (error) {
+        console.error("Profile fetch error:", error);
+        if (isMounted) handleUnauthorized();
+      }
+    };
+
+    fetchUserProfile();
+
+    return () => {
+      isMounted = false; // Cleanup
+    };
+  }, []);
+
+  const handleUnauthorized = () => {
+    /* localStorage.removeItem("x-access-token");
+    setUser(null); */
+    window.location.reload();
+    // You might want to redirect to login here
+  };
+
   const contextElement = {
     cartProducts,
     setCartProducts,
@@ -133,6 +188,8 @@ export default function Context({ children }) {
     compareItem,
     setCompareItem,
     updateQuantity,
+    user,
+    setUser
   };
   return (
     <dataContext.Provider value={contextElement}>

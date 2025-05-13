@@ -3,12 +3,13 @@ import Link from "next/link";
 import DetailsOuterZoom from "@/components/shopDetails/DetailsOuterZoom";
 import Footer2 from "@/components/footers/Footer2";
 import Header22 from "@/components/headers/Header22";
+import Configuration from "@/configuration";
 
 // Function to fetch product data from the backend
 async function getProductById(id) {
-  console.log(id);
+  const api = Configuration.BACK_BASEURL;
   try {
-    const response = await fetch(`http://localhost:3001/products/getProductById/${id}`); // Replace with your backend URL
+    const response = await fetch(`${api}products/getProductById/${id}`); // Replace with your backend URL
     if (!response.ok) {
       throw new Error(`Failed to fetch product: ${response.statusText}`);
     }
@@ -47,7 +48,6 @@ export default async function page({ params }) {
 
   // Fetch the product data from the backend
   const product = await getProductById(id);
-  console.log(product);
 
   // If the product is not found, display a fallback or redirect
   if (!product) {

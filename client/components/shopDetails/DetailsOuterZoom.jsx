@@ -17,7 +17,6 @@ import { useContextElement } from "@/context/Context";
 import { openCartModal } from "@/utlis/openCartModal";
 
 export default function DetailsOuterZoom({ product = allProducts[0] }) {
-  console.log(product);
 
   const [currentColor, setCurrentColor] = useState(colors[0]);
   const [currentSize, setCurrentSize] = useState(sizeOptions[1]);
@@ -138,7 +137,7 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                   </div> */}
                   <div className="tf-product-info-quantity">
                     <div className="quantity-title fw-6">Quantity</div>
-                    <Quantity setQuantity={setQuantity} />
+                    <Quantity setQuantity={setQuantity} quantity={quantity} />
                   </div>
                   <div className="tf-product-info-buy-button">
                     <form onSubmit={(e) => e.preventDefault()} className="">

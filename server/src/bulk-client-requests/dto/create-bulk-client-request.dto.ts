@@ -1,15 +1,25 @@
-import { IsString, IsNotEmpty, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsUrl,
+  IsEmail,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateBulkClientRequestDto {
-  @IsString()
-  @IsNotEmpty()
-  userId: string;
+  @IsEmail()
+  email: string;
 
   @IsString()
-  @IsNotEmpty()
+  password: string;
+
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @IsString()
   storeName: string;
 
-  @IsUrl()
-  @IsNotEmpty()
-  legalDocs: string; // URL to the uploaded legal documents
+  @IsString()
+  legalDocs: string;
 }

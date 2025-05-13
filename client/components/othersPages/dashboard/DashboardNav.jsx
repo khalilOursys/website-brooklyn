@@ -4,9 +4,7 @@ import { usePathname } from "next/navigation";
 const accountLinks = [
   { href: "/my-account", label: "Dashboard" },
   { href: "/my-account-orders", label: "Orders" },
-  { href: "/my-account-address", label: "Addresses" },
   { href: "/my-account-edit", label: "Account Details" },
-  { href: "/my-account-wishlist", label: "Wishlist" },
 ];
 
 export default function DashboardNav() {
@@ -17,19 +15,18 @@ export default function DashboardNav() {
         <li key={index}>
           <Link
             href={link.href}
-            className={`my-account-nav-item ${
-              pathname == link.href ? "active" : ""
-            }`}
+            className={`my-account-nav-item ${pathname == link.href ? "active" : ""
+              }`}
           >
             {link.label}
           </Link>
         </li>
       ))}
-      <li>
+      {/* <li>
         <Link href={`/login`} className="my-account-nav-item">
           Logout
         </Link>
-      </li>
+      </li> */}
     </ul>
   );
 }

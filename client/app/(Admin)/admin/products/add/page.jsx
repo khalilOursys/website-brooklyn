@@ -11,11 +11,13 @@ import Footer from "@/components/Footer/Footer";
 import { addProduct } from "@/Redux/productsReduce"; // Assuming you have a productsReducer
 import { useDropzone } from "react-dropzone"; // Import useDropzone for the ImageUpload component
 import dynamic from "next/dynamic";
+import Configuration from "@/configuration";
 const Select = dynamic(() => import('react-select'), {
   ssr: false, // Disable SSR for react-select
 });
 
 export default function Page() {
+  const api = Configuration.BACK_BASEURL;
   const notify = (type, msg) => {
     if (type === 1)
       toast.success(<strong><i className="fas fa-check-circle"></i>{msg}</strong>);
@@ -48,7 +50,7 @@ export default function Page() {
   // Fetch brands and categories on component mount
   const fetchBrands = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:3001/brands");
+      const response = await fetch(`${api}brands`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch brands");
@@ -70,7 +72,7 @@ export default function Page() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:3001/categories");
+      const response = await fetch(`${api}categories/getAllChildren`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch categories");
@@ -105,7 +107,7 @@ export default function Page() {
       const formData = new FormData();
       files.forEach((file) => formData.append("images", file));
 
-      const response = await fetch("http://localhost:3001/products/upload", {
+      const response = await fetch(`${api}products/upload`, {
         method: "POST",
         body: formData,
       });

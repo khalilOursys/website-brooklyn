@@ -1,24 +1,38 @@
 "use client";
 import Link from "next/link";
-import React from "react";
-
-import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { products1 } from "@/data/products";
-import { ProductCard } from "../shopCards/ProductCard";
-import { Navigation } from "swiper/modules";
-import {
-  allHomepages,
-  blogLinks,
-  demoItems,
-  pages,
-  productDetailPages,
-  productsPages,
-} from "@/data/menu";
+import React, { useEffect, useState } from "react";
+import { allHomepages } from "@/data/menu";
 import { usePathname } from "next/navigation";
+import { useContextElement } from "@/context/Context";
+import Configuration from "@/configuration";
 
 export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
+  const { user } = useContextElement();
+  const api = Configuration.BACK_BASEURL;
   const pathname = usePathname();
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${api}categories/structured`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        setCategories(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   const isMenuActive = (menuItem) => {
     let active = false;
     if (menuItem.href?.includes("/")) {
@@ -59,6 +73,15 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
 
     return active;
   };
+
+  /* if (loading) {
+    return <div>Loading menu...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading menu: {error}</div>;
+  } */
+
   return (
     <>
       <li className="menu-item">
@@ -72,17 +95,26 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
       </li>
       <li className="menu-item">
         <a
-          href="/home-02"
-          className={`item-link ${Linkfs} ${textColor} 
-            } `}
+          href="/promotions"
+          className={`item-link ${Linkfs} ${textColor}`}
         >
-          Home 2
+          promotions
         </a>
       </li>
+      {user?.role === "BULK_CLIENT" && user !== null && (
+        <li className="menu-item">
+          <a
+            href="/bulkproduct"
+            className={`item-link ${Linkfs} ${textColor}`}
+          >
+            Bulk-Product
+          </a>
+        </li>
+      )}
       <li className="menu-item">
         <a
           href="#"
-          className={`item-link ${Linkfs} ${textColor} ${isMenuActive(productsPages) ? "activeMenu" : ""
+          className={`item-link ${Linkfs} ${textColor} ${isMenuActive(categories) ? "activeMenu" : ""
             } `}
         >
           Shop
@@ -91,7 +123,7 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
         <div className="sub-menu mega-menu">
           <div className="container">
             <div className="row">
-              {productsPages.map((menu, index) => (
+              {categories.map((menu, index) => (
                 <div className="col-lg-2" key={index}>
                   <div className="mega-menu-item">
                     <div className="menu-heading">{menu.heading}</div>
@@ -113,73 +145,6 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
               ))}
             </div>
           </div>
-        </div>
-      </li>
-      <li className="menu-item position-relative">
-        <a
-          href="#"
-          /* className={`item-link ${Linkfs} ${textColor}  ${isMenuActive(pages) ? "activeMenu" : ""
-            }`} */
-          className={`item-link ${Linkfs} ${textColor}`}
-        >
-          Pages
-          <i className="icon icon-arrow-down" />
-        </a>
-        <div className="sub-menu submenu-default">
-          <ul className="menu-list">
-            {pages.map((item, index) => (
-              <li key={index} className={item.links ? "menu-item-2 " : ""}>
-                {item.href.includes("#") ? (
-                  <a
-                    href={item.href}
-                  /* className={`${item.className} ${isMenuActive(item.links) ? "activeMenu" : ""
-                    }`} */
-                  >
-                    {item.text}
-                  </a>
-                ) : (
-                  <Link
-                    href={item.href}
-                    /* className={`${item.className}  ${isMenuActive(item) ? "activeMenu" : ""
-                      }`} */
-                    style={{ position: "relative" }}
-                  >
-                    {item.text}{" "}
-                    {item.label && (
-                      <div className="demo-label">
-                        <span className="demo-new">{item.label}</span>
-                      </div>
-                    )}
-                  </Link>
-                )}
-
-                {item.links && (
-                  <div className="sub-menu submenu-default">
-                    <ul className="menu-list">
-                      {item.links.map((subItem, subIndex) => (
-                        <li key={subIndex}>
-                          <Link
-                            href={subItem.href}
-                          /* className={`${subItem.className} ${isMenuActive(subItem) ? "activeMenu" : ""
-                            }`} */
-                          >
-                            {subItem.text}
-                            {subItem.label && (
-                              <div className="demo-label">
-                                <span className="demo-new">
-                                  {subItem.label}
-                                </span>
-                              </div>
-                            )}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
         </div>
       </li>
     </>

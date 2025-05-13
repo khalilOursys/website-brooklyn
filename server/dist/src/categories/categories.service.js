@@ -65,6 +65,23 @@ let CategoriesService = class CategoriesService {
             })),
         }));
     }
+    async findAllChildren() {
+        return await this.prisma.category.findMany({
+            where: {
+                parentId: {
+                    not: null,
+                },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
+    async findAllParent() {
+        return await this.prisma.category.findMany({
+            where: { parentId: null },
+            include: { children: true },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
 };
 exports.CategoriesService = CategoriesService;
 exports.CategoriesService = CategoriesService = __decorate([

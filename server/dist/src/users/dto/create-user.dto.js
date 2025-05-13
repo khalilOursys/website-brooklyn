@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserDto = void 0;
+const client_1 = require("@prisma/client");
 const class_validator_1 = require("class-validator");
 class CreateUserDto {
 }
@@ -28,4 +29,9 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsEnum)(client_1.Role),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "role", void 0);
 //# sourceMappingURL=create-user.dto.js.map

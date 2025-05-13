@@ -51,7 +51,16 @@ let UsersService = class UsersService {
         return { accessToken: token };
     }
     async findOne(id) {
-        const user = await this.prisma.user.findUnique({ where: { id } });
+        const user = await this.prisma.user.findUnique({
+            where: { id },
+            include: {
+                cart: {
+                    include: {
+                        items: true,
+                    },
+                },
+            },
+        });
         if (!user) {
             throw new Error(`User with id ${id} not found`);
         }
@@ -85,7 +94,8 @@ let UsersService = class UsersService {
                 throw new common_1.NotFoundException(`User with ID ${userId} not found`);
             }
             if (!updateUserDto.password || updateUserDto.password.trim() === '') {
-                updateUserDto.password = existingUser.password;
+                updateUserDto.password =
+                    existingUser.password || updateUserDto.password;
             }
             else {
                 const saltRounds = 10;

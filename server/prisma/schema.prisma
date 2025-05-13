@@ -22,7 +22,7 @@ enum Role {
 model User {
   id                   String              @id @default(uuid())
   email                String              @unique
-  password             String?
+  password             String
   name                 String?
   role                 Role                @default(CLIENT)
   oauthProvider        String?
@@ -88,6 +88,8 @@ model Product {
 
 model BulkProduct {
   id          String    @id @default(uuid())
+  name           String?
+  description    String?
   productId   String    @unique
   product     Product   @relation("BulkProductRelation", fields: [productId], references: [id])
   bulkPrice   Float
@@ -95,6 +97,8 @@ model BulkProduct {
   discount    Float?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  orderItems  OrderItem[]  
+  cartItems   CartItem[]
 }
 
 
@@ -199,6 +203,7 @@ model Order {
   id             String         @id @default(uuid())
   userId         String
   user           User           @relation(fields: [userId], references: [id])
+  isBulk         Int            @default(0)
   total          Float
   status         String         @default("pending")
   address        String
@@ -217,11 +222,14 @@ model OrderItem {
   orderId   String
   productId String
   variantId String?
+  bulkId    String?
+  quantity  Int
+  price     Float
+  
   order     Order           @relation(fields: [orderId], references: [id])
   product   Product         @relation(fields: [productId], references: [id])
   variant   ProductVariant? @relation(fields: [variantId], references: [id])
-  quantity  Int
-  price     Float
+  bulk      BulkProduct?    @relation(fields: [bulkId], references: [id])
 }
 
 model Payment {
@@ -248,9 +256,11 @@ model CartItem {
   cartId    String
   productId String
   variantId String?
+  bulkId    String?
   cart      Cart            @relation(fields: [cartId], references: [id])
   product   Product         @relation(fields: [productId], references: [id])
   variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  bulk      BulkProduct? @relation(fields: [bulkId], references: [id])
   quantity  Int
 }
 
@@ -285,6 +295,7 @@ model ProductBundle {
   products  BundleProduct[]
   createdAt DateTime        @default(now())
   expiresAt DateTime?
+  img       String?
 }
 
 model BundleProduct {

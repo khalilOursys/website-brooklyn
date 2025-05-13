@@ -57,7 +57,16 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        cart: {
+          include: {
+            items: true,
+          },
+        },
+      },
+    });
     if (!user) {
       throw new Error(`User with id ${id} not found`);
     }
@@ -97,7 +106,8 @@ export class UsersService {
 
       // If no new password is provided, retain the old password
       if (!updateUserDto.password || updateUserDto.password.trim() === '') {
-        updateUserDto.password = existingUser.password;
+        updateUserDto.password =
+          existingUser.password || updateUserDto.password;
       } else {
         // Hash the new password if provided
         const saltRounds = 10; // Number of salt rounds for hashing

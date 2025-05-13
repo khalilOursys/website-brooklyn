@@ -2,8 +2,13 @@
 import { useContextElement } from "@/context/Context";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 export default function Cart() {
   const { cartProducts, setCartProducts, totalPrice } = useContextElement();
+
+  const [token, setToken] = useState(null);
+  const router = useRouter();
   const setQuantity = (id, quantity) => {
     if (quantity >= 1) {
       const item = cartProducts.filter((elm) => elm.id == id)[0];
@@ -16,6 +21,18 @@ export default function Cart() {
   };
   const removeItem = (id) => {
     setCartProducts((pre) => [...pre.filter((elm) => elm.id != id)]);
+  };
+  useEffect(() => {
+    const savedToken = localStorage.getItem("x-access-token"); // or whatever key you use
+    setToken(savedToken);
+  }, []);
+
+  const handleCheckout = () => {
+    if (token) {
+      router.push("/checkout"); // go to checkout page
+    } else {
+      router.push("/login"); // or wherever your login page is
+    }
   };
   return (
     <section className="flat-spacing-11">
@@ -252,18 +269,23 @@ export default function Cart() {
                   </label>
                 </div>
                 <div className="cart-checkout-btn">
-                  <Link
-                    href={`/checkout`}
-                    className="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
-                  >
-                    <span>Check out</span>
-                  </Link>
-                  {/* <Link
-                    href="#login"
-                    className="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
-                  >
-                    <span>Check out</span>
-                  </Link> */}
+                  {token ? (
+                    <Link
+                      href={"/checkout"}
+                      className="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
+                    >
+                      <span>Proceed to Checkout</span>
+                    </Link>
+                  ) : (
+
+                    <a
+                      href="#login"
+                      data-bs-toggle="modal"
+                      className="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
+                    >
+                      <span>Login to Checkout</span>
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

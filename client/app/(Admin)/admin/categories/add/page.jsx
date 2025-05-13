@@ -1,6 +1,6 @@
 "use client"; // Mark this as a Client Component
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'; // Updated import for Next.js 14
 import { toast, ToastContainer } from "react-toastify";
@@ -9,6 +9,11 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
 import { addCategory } from "@/Redux/categoriesReduce";
+import dynamic from "next/dynamic";
+import Configuration from "@/configuration";
+const Select = dynamic(() => import('react-select'), {
+  ssr: false, // Disable SSR for react-select
+});
 
 export default function Page() {
   const notify = (type, msg) => {
@@ -20,12 +25,15 @@ export default function Page() {
 
   const dispatch = useDispatch();
   const router = useRouter();
+  const api = Configuration.BACK_BASEURL;
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [bannerColor, setBannerColor] = useState("#FF6B6B");
   const [bannerText, setBannerText] = useState("#FF6B6B");
+  const [parentId, setParentId] = useState(null);
+  const [categories, setCategories] = useState([]);
 
   // Function to generate slug
   const generateSlug = (input) => {
@@ -56,6 +64,7 @@ export default function Page() {
 
     dispatch(
       addCategory({
+        parentId: parentId ? parentId.value : null,
         name,
         slug,
         description,
@@ -65,15 +74,41 @@ export default function Page() {
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         notify(1, "Category added successfully!");
-        /* setTimeout(() => {
+        setTimeout(() => {
           router.push("/admin/categories");
-        }, 1500); */
+        }, 1500);
       } else if (action.meta.requestStatus === "rejected") {
         notify(2, action.payload.message || "An error occurred");
       }
     });
   };
 
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      const response = await fetch(`${api}categories/getAllParent`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+
+      const data = await response.json();
+
+      const categoryOptions = data.map(category => ({
+        value: category.id,
+        label: category.name,
+      }));
+
+      setCategories(categoryOptions);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      notify(2, "Failed to fetch categories");
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
   return (
     <>
       <div className="wrapper">
@@ -128,7 +163,18 @@ export default function Page() {
                               </Col>
                             </Row>
                             <Row>
-                              <Col md="12">
+                              <Col md="6">
+                                <Form.Group>
+                                  <label>Category </label>
+                                  <Select
+                                    options={categories}
+                                    value={parentId}
+                                    onChange={(selectedOption) => setParentId(selectedOption)}
+                                    placeholder="Select Category"
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col md="6">
                                 <Form.Group>
                                   <label>Description* </label>
                                   <Form.Control

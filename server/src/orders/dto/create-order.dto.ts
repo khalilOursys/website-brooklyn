@@ -16,6 +16,9 @@ class OrderItemDto {
   @IsOptional() // Allow variantId to be optional
   variantId?: string;
 
+  @IsOptional() // Allow variantId to be optional
+  bulkId?: string;
+
   @IsNumber()
   quantity: number;
 
@@ -31,6 +34,10 @@ export class CreateOrderDto {
   @IsString()
   @IsNotEmpty()
   address: string;
+
+  @IsOptional()
+  @IsNumber()
+  isBulk: number;
 
   @IsString()
   @IsNotEmpty()

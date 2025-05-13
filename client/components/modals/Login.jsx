@@ -1,12 +1,72 @@
 "use client";
-import React from "react";
+import Configuration from "@/configuration";
+import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Login() {
+  const notify = (type, msg) => {
+    if (type === 1)
+      toast.success(<strong><i className="fas fa-check-circle"></i>{msg}</strong>);
+    else
+      toast.error(<strong><i className="fas fa-exclamation-circle"></i>{msg}</strong>);
+  };
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent default form submission
+
+    if (!login.trim()) {
+      notify(2, "Email cannot be empty."); // Show error message
+      return;
+    }
+    if (!password.trim()) {
+      notify(2, "Password cannot be empty."); // Show error message
+      return;
+    }
+
+    try {
+      const response = await fetch(`${Configuration.BACK_BASEURL}auth/login`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: login, password }),
+      });
+
+      const data = await response.json(); // <-- you forgot to parse the response!
+
+      if (data.message) {
+        notify(2, data.message); // Show error message (added 2 as level like your other notify calls)
+      } else {
+        localStorage.setItem("x-access-token", data.access_token); // Save token
+        setTimeout(() => {
+          window.location.reload(); // Updated navigation
+        }, 1500);
+      }
+    } catch (error) {
+      console.error(error);
+      notify(2, "An error occurred during login."); // Handle unexpected errors
+    }
+  };
+
+  // Handle login input change
+  const handleLoginChange = (event) => {
+    setLogin(event.target.value);
+  };
+
+  // Handle password input change
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
   return (
     <div
       className="modal modalCentered fade form-sign-in modal-part-content"
       id="login"
     >
+      <ToastContainer />
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="header">
@@ -18,7 +78,6 @@ export default function Login() {
           </div>
           <div className="tf-login-form">
             <form
-              onSubmit={(e) => e.preventDefault()}
               className=""
               acceptCharset="utf-8"
             >
@@ -29,7 +88,7 @@ export default function Login() {
                   type="email"
                   name=""
                   required
-                  autoComplete="abc@xyz.com"
+                  onChange={handleLoginChange}
                 />
                 <label className="tf-field-label" htmlFor="">
                   Email *
@@ -42,6 +101,7 @@ export default function Login() {
                   type="password"
                   name=""
                   required
+                  onChange={handlePasswordChange}
                   autoComplete="current-password"
                 />
                 <label className="tf-field-label" htmlFor="">
@@ -60,7 +120,8 @@ export default function Login() {
               <div className="bottom">
                 <div className="w-100">
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit}
                     className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
                   >
                     <span>Log in</span>

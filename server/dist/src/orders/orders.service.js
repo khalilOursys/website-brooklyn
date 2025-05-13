@@ -23,27 +23,41 @@ let OrdersService = class OrdersService {
         if (!user) {
             throw new common_1.BadRequestException(`User with id ${createOrderDto.userId} does not exist.`);
         }
-        return await this.prisma.order.create({
-            data: {
-                userId: createOrderDto.userId,
-                address: createOrderDto.address,
-                phoneNumber: createOrderDto.phoneNumber,
-                discountCodeId: createOrderDto.discountCodeId,
-                total: createOrderDto.total,
-                orderItems: {
-                    create: createOrderDto.orderItems.map((item) => ({
-                        productId: item.productId,
-                        variantId: item.variantId,
-                        quantity: item.quantity,
-                        price: item.price,
-                    })),
+        return await this.prisma.$transaction(async (prisma) => {
+            const order = await prisma.order.create({
+                data: {
+                    userId: createOrderDto.userId,
+                    address: createOrderDto.address,
+                    phoneNumber: createOrderDto.phoneNumber,
+                    discountCodeId: createOrderDto.discountCodeId,
+                    total: createOrderDto.total,
+                    isBulk: createOrderDto.isBulk,
+                    orderItems: {
+                        create: createOrderDto.orderItems.map((item) => ({
+                            productId: item.productId,
+                            variantId: item.variantId,
+                            bulkId: item.bulkId,
+                            quantity: item.quantity,
+                            price: item.price,
+                        })),
+                    },
                 },
-            },
-            include: { orderItems: true },
+                include: { orderItems: true },
+            });
+            const cart = await prisma.cart.findUnique({
+                where: { userId: createOrderDto.userId },
+            });
+            if (cart) {
+                await prisma.cartItem.deleteMany({
+                    where: { cartId: cart.id },
+                });
+            }
+            return order;
         });
     }
-    async findAll() {
+    async findAll(isBulk) {
         return await this.prisma.order.findMany({
+            where: { isBulk },
             orderBy: { createdAt: 'desc' },
             include: { orderItems: true, user: true },
         });
@@ -51,7 +65,19 @@ let OrdersService = class OrdersService {
     async findOne(id) {
         const order = await this.prisma.order.findUnique({
             where: { id },
-            include: { orderItems: true, user: true },
+            include: {
+                orderItems: {
+                    include: {
+                        product: {
+                            include: {
+                                images: true,
+                            },
+                        },
+                        variant: true,
+                    },
+                },
+                user: true,
+            },
         });
         if (!order) {
             throw new common_1.NotFoundException(`Order with id ${id} not found.`);
@@ -70,6 +96,27 @@ let OrdersService = class OrdersService {
         return await this.prisma.order.delete({
             where: { id },
         });
+    }
+    async getOrdersByUserId(userId) {
+        const orders = await this.prisma.order.findMany({
+            where: { userId },
+            include: {
+                orderItems: {
+                    include: {
+                        product: true,
+                        variant: true,
+                    },
+                },
+                user: true,
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+        if (!orders || orders.length === 0) {
+            throw new common_1.NotFoundException(`No orders found for user with ID ${userId}.`);
+        }
+        return orders;
     }
 };
 exports.OrdersService = OrdersService;

@@ -85,7 +85,6 @@ export default function ShopFilter({ setProducts, products = products1 }) {
         ),
       ],
     ];
-    // console.log(filteredByPrice, "filteredByPrice");
     if (selectedColors.length) {
       filteredArrays = [
         ...filteredArrays,
@@ -99,7 +98,6 @@ export default function ShopFilter({ setProducts, products = products1 }) {
       ];
     }
 
-    // console.log(filteredByselectedColors, "filteredByselectedColors");
     if (selectedBrands.length) {
       filteredArrays = [
         ...filteredArrays,
@@ -107,7 +105,6 @@ export default function ShopFilter({ setProducts, products = products1 }) {
       ];
     }
 
-    // console.log(filteredByselectedBrands, "filteredByselectedBrands");
     if (selectedSizes.length) {
       filteredArrays = [
         ...filteredArrays,
@@ -119,7 +116,6 @@ export default function ShopFilter({ setProducts, products = products1 }) {
       ];
     }
 
-    // console.log(filteredByselectedSizes);
     if (selectedAvailabilities.length) {
       filteredArrays = [
         ...filteredArrays,

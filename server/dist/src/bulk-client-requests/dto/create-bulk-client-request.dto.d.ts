@@ -1,5 +1,7 @@
 export declare class CreateBulkClientRequestDto {
-    userId: string;
+    email: string;
+    password: string;
+    name?: string;
     storeName: string;
     legalDocs: string;
 }

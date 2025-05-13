@@ -10,8 +10,10 @@ import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
 import { addBrand } from "@/Redux/brandsReduce";
 import { useDropzone } from "react-dropzone";
+import Configuration from "@/configuration";
 
 export default function Page() {
+  const api = Configuration.BACK_BASEURL;
   const notify = (type, msg) => {
     if (type === 1)
       toast.success(<strong><i className="fas fa-check-circle"></i> {msg}</strong>);
@@ -52,7 +54,7 @@ export default function Page() {
       if (action.meta.requestStatus === "fulfilled") {
         notify(1, "Brand added successfully!");
         setTimeout(() => {
-          router.push("/admin/brands");
+          window.location.replace("/admin/brands");
         }, 1500);
       } else {
         notify(2, action.payload?.message || "An error occurred");
@@ -66,7 +68,7 @@ export default function Page() {
       const formData = new FormData();
       formData.append("image", file); // Send only one file
 
-      const response = await fetch("http://localhost:3001/brands/upload", {
+      const response = await fetch(`${api}brands/upload`, {
         method: "POST",
         body: formData,
       });

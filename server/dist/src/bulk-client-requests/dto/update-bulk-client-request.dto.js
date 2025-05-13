@@ -9,24 +9,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateBulkClientRequestDto = void 0;
+exports.UpdateUserBulkRequestDto = void 0;
 const class_validator_1 = require("class-validator");
-class UpdateBulkClientRequestDto {
+class UpdateUserBulkRequestDto {
 }
-exports.UpdateBulkClientRequestDto = UpdateBulkClientRequestDto;
+exports.UpdateUserBulkRequestDto = UpdateUserBulkRequestDto;
 __decorate([
+    (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateUserBulkRequestDto.prototype, "email", void 0);
+__decorate([
     (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], UpdateBulkClientRequestDto.prototype, "status", void 0);
-__decorate([
     (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateUserBulkRequestDto.prototype, "password", void 0);
+__decorate([
     (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], UpdateBulkClientRequestDto.prototype, "reviewedById", void 0);
-__decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
-], UpdateBulkClientRequestDto.prototype, "reviewedAt", void 0);
+], UpdateUserBulkRequestDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateUserBulkRequestDto.prototype, "storeName", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateUserBulkRequestDto.prototype, "legalDocs", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], UpdateUserBulkRequestDto.prototype, "status", void 0);
 //# sourceMappingURL=update-bulk-client-request.dto.js.map

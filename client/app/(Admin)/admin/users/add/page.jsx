@@ -25,7 +25,7 @@ export default function Page() {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("USER");
+  const [role, setRole] = useState("CLIENT");
 
   const submitForm = async (event) => {
 
@@ -48,7 +48,7 @@ export default function Page() {
     // If all validations pass, proceed with form submission
     dispatch(
       addUser({
-        fullname,
+        name: fullname,
         email,
         password,
         role,

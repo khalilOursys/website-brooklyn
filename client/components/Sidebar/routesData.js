@@ -25,8 +25,26 @@ const routesData = [
         role: ["admin"], // Roles allowed to access this route
       },
       {
+        path: "/admin/bulkProducts",
+        name: "Bulk Product",
+        icon: "fab fa-product-hunt",
+        role: ["admin"], // Roles allowed to access this route
+      },
+      {
+        path: "/admin/productBundles",
+        name: "Bundle Product",
+        icon: "fab fa-product-hunt",
+        role: ["admin"], // Roles allowed to access this route
+      },
+      {
         path: "/admin/users",
         name: "Users",
+        icon: "fas fa-users",
+        role: ["admin"],
+      },
+      {
+        path: "/admin/bulkClientRequests",
+        name: "Bulk Client Requests",
         icon: "fas fa-users",
         role: ["admin"],
       },

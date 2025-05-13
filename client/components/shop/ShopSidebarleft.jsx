@@ -5,10 +5,13 @@ import { layouts, sortingOptions } from "@/data/shop";
 import ProductGrid from "./ProductGrid";
 import Pagination from "../common/Pagination";
 import Sorting from "./Sorting";
+import Configuration from "@/configuration";
 
 export default function ShopSidebarleft({ slug }) {
+  const api = Configuration.BACK_BASEURL;
+
   const [gridItems, setGridItems] = useState(3);
-  const [data, setData] = useState(["khalil"]);
+  const [brands, setBrands] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [selectedAvailabilities, setSelectedAvailabilities] = useState([]);
   const [finalSorted, setFinalSorted] = useState([]);
@@ -23,12 +26,11 @@ export default function ShopSidebarleft({ slug }) {
   // Function to fetch products from the API
   const fetchProducts = async () => {
     try {
-      const url = new URL("http://localhost:3001/products/search");
+      const url = new URL(`${api}products/search`);
       url.searchParams.append("categorySlug", slug);
       if (selectedBrand.length > 0) {
         url.searchParams.append("brandNames", selectedBrand.map(b => b.name).join(','));
       }
-      console.log("minPrice", price);
 
       if (price[0] > 0) url.searchParams.append("minPrice", (price[0]).toString());
       if (price[1] < 10000) url.searchParams.append("maxPrice", (price[1]).toString());
@@ -48,16 +50,71 @@ export default function ShopSidebarleft({ slug }) {
       setIsLoading(false);
     }
   };
+  const fetchBulkproduct = async () => {
+    try {
+      const url = new URL(`${api}bulkProducts/search`);
+      /* url.searchParams.append("categorySlug", slug); */
+      if (selectedBrand.length > 0) {
+        url.searchParams.append("brandNames", selectedBrand.map(b => b.name).join(','));
+      }
+
+      if (price[0] > 0) url.searchParams.append("minPrice", (price[0]).toString());
+      if (price[1] < 10000) url.searchParams.append("maxPrice", (price[1]).toString());
+      url.searchParams.append("page", (currentPage - 1).toString());
+      url.searchParams.append("limit", itemsPerPage.toString());
+
+      const response = await fetch(url.toString());
+      if (!response.ok) throw new Error("Failed to fetch products");
+
+      const data = await response.json();
+      setFilteredProducts(data.bulkProducts);
+      setFinalSorted(data.bulkProducts);
+      setTotalCount(data.totalCount);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const fetchFilterOption = async () => {
+    try {
+      const url = new URL(`${api}products/filter-options`);
+      url.searchParams.append("categorySlug", slug);
+
+      const response = await fetch(url.toString());
+      if (!response.ok) throw new Error("Failed to fetch products");
+
+      /* const data = await response.json(); */
+      const { brands, priceRange } = await response.json();
+      setMinPrice(priceRange.minPrice);
+      setMaxPrice(priceRange.maxPrice);
+      setPrice([priceRange.minPrice, priceRange.maxPrice]);
+      const brandsArray = brands.map((item, index) => ({
+        id: item.id,
+        name: item.name,
+        count: item.productCount,
+        className: index === 0 ? "current" : ""
+      }));
+      setBrands(brandsArray);
+
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   useEffect(() => {
-    if (slug) fetchProducts();
+    if (slug !== "bulkproduct") fetchProducts();
+    else fetchBulkproduct();
   }, [slug, selectedBrand, minPrice, maxPrice, currentPage, itemsPerPage, price]);
 
+  useEffect(() => {
+    fetchFilterOption();
+  }, [slug]);
+
   // Log selectedBrand and selectedAvailabilities for debugging
-  /* useEffect(() => {
-    console.log("selectedBrand", selectedBrand);
-    console.log("selectedAvailabilities", selectedAvailabilities);
-  }, [selectedBrand, selectedAvailabilities]); */
 
   // Handle page change for pagination
   const handlePageChange = (page) => {
@@ -86,7 +143,6 @@ export default function ShopSidebarleft({ slug }) {
             </ul>
             <div className="tf-control-sorting d-flex justify-content-end">
               <div className="tf-dropdown-sort" data-bs-toggle="dropdown">
-                {console.log(filteredProducts)}
                 <Sorting setFinalSorted={setFinalSorted} products={filteredProducts} />
               </div>
             </div>
@@ -97,13 +153,14 @@ export default function ShopSidebarleft({ slug }) {
               setSelectedBrand={setSelectedBrand}
               selectedAvailabilities={selectedAvailabilities}
               setSelectedAvailabilities={setSelectedAvailabilities}
+              brands={brands}
               minPrice={minPrice}
               maxPrice={maxPrice}
               price={price}
               setPrice={setPrice}
             />
             <div className="tf-shop-content">
-              <ProductGrid allproducts={finalSorted} gridItems={gridItems} />
+              <ProductGrid allproducts={finalSorted} gridItems={gridItems} slug={slug} />
               {finalSorted.length ? (
                 <ul className="tf-pagination-wrap tf-pagination-list">
                   <Pagination

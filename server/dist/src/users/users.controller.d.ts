@@ -22,7 +22,7 @@ export declare class UsersController {
     create(createUserDto: CreateUserDto): Promise<{
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
@@ -44,7 +44,7 @@ export declare class UsersController {
     } & {
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
@@ -66,7 +66,7 @@ export declare class UsersController {
     } & {
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
@@ -77,7 +77,7 @@ export declare class UsersController {
     updateUser(id: string, updateUserDto: UpdateUserDto): Promise<{
         id: string;
         email: string;
-        password: string | null;
+        password: string;
         name: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;

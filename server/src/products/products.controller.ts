@@ -91,11 +91,13 @@ export class ProductsController {
     @Query('brandNames') brandNames?: string,
     @Query('minPrice') minPrice?: number,
     @Query('maxPrice') maxPrice?: number,
+    @Query('promotions') promotions?: number,
   ) {
     return this.productService.findByCategory({
       categorySlug,
       page,
       limit,
+      promotions,
       brandNames: brandNames ? brandNames.split(',') : undefined,
       minPrice: minPrice ? Number(minPrice) : undefined,
       maxPrice: maxPrice ? Number(maxPrice) : undefined,
@@ -107,5 +109,10 @@ export class ProductsController {
       throw new BadRequestException('Category slug is required');
     }
     return this.productService.getFilterOptions(categorySlug);
+  }
+
+  @Get('getFilterOptionsPromotion')
+  async getFilterOptionsPromotion() {
+    return this.productService.getFilterOptionsPromotion();
   }
 }

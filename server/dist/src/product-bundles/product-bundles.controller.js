@@ -17,9 +17,16 @@ const common_1 = require("@nestjs/common");
 const product_bundles_service_1 = require("./product-bundles.service");
 const create_product_bundle_dto_1 = require("./dto/create-product-bundle.dto");
 const update_product_bundle_dto_1 = require("./dto/update-product-bundle.dto");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_config_1 = require("../config/multer.config");
 let ProductBundlesController = class ProductBundlesController {
     constructor(productBundlesService) {
         this.productBundlesService = productBundlesService;
+    }
+    async uploadImages(file) {
+        const hostUrl = process.env.imagePath || 'http://localhost:3001';
+        const imageUrl = `${hostUrl}/${file.path.replace(/\\/g, '/')}`;
+        return { url: imageUrl };
     }
     async create(createProductBundleDto) {
         return await this.productBundlesService.create(createProductBundleDto);
@@ -39,6 +46,14 @@ let ProductBundlesController = class ProductBundlesController {
 };
 exports.ProductBundlesController = ProductBundlesController;
 __decorate([
+    (0, common_1.Post)('upload'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', multer_config_1.multerConfigBundle)),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ProductBundlesController.prototype, "uploadImages", null);
+__decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -52,7 +67,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductBundlesController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(':id'),
+    (0, common_1.Get)('getProductBundlesById/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -74,7 +89,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductBundlesController.prototype, "remove", null);
 exports.ProductBundlesController = ProductBundlesController = __decorate([
-    (0, common_1.Controller)('product-bundles'),
+    (0, common_1.Controller)('productBundles'),
     __metadata("design:paramtypes", [product_bundles_service_1.ProductBundlesService])
 ], ProductBundlesController);
 //# sourceMappingURL=product-bundles.controller.js.map

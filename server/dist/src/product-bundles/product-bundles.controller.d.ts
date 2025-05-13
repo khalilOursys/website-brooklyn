@@ -4,6 +4,9 @@ import { UpdateProductBundleDto } from './dto/update-product-bundle.dto';
 export declare class ProductBundlesController {
     private readonly productBundlesService;
     constructor(productBundlesService: ProductBundlesService);
+    uploadImages(file: Express.Multer.File): Promise<{
+        url: string;
+    }>;
     create(createProductBundleDto: CreateProductBundleDto): Promise<{
         products: {
             id: string;

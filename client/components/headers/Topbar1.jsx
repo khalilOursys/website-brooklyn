@@ -47,41 +47,24 @@ export default function Topbar1() {
             </li>
           </ul>
           <div className="text-center overflow-hidden">
-            {/* <Swiper
-              dir="ltr"
-              className="swiper tf-sw-top_bar"
-              slidesPerView={1}
-              modules={[Autoplay]}
-              speed={1000}
-              autoplay={{
-                delay: 2000,
-              }}
-              loop
-            >
-              <SwiperSlide className="swiper-slide">
-                <p className="top-bar-text fw-5">
-                  Spring Fashion Sale{" "}
-                  <Link
-                    href={`/shop-default`}
-                    title="all collection"
-                    className="tf-btn btn-line"
-                  >
-                    Shop now
-                    <i className="icon icon-arrow1-top-left" />
-                  </Link>
-                </p>
-              </SwiperSlide>
-              <SwiperSlide className="swiper-slide">
-                <p className="top-bar-text fw-5">
-                  Summer sale discount off 70%
-                </p>
-              </SwiperSlide>
-              <SwiperSlide className="swiper-slide">
-                <p className="top-bar-text fw-5">
-                  Time to refresh your wardrobe.
-                </p>
-              </SwiperSlide>
-            </Swiper> */}
+            <p className="top-bar-text fw-5">
+              Register as
+              <a
+                href="#registerBulkClient"
+                data-bs-toggle="modal"
+                className="tf-btn btn-line"
+              >
+                <span className="text">Wholesaler</span>
+              </a>
+              {/* <Link
+                href={`/shop-default`}
+                title="all collection"
+                className="tf-btn btn-line"
+              >
+                Wholesaler
+                <i className="icon icon-arrow1-top-left" />
+              </Link> */}
+            </p>
           </div>
           <div className="top-bar-language tf-cur justify-content-end">
             {/* <div className="tf-currencies">

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
@@ -9,23 +13,41 @@ export class CartService {
 
   // Get the cart for a user. Each user has a unique cart.
   async getCartByUser(userId: string) {
-    let cart = await this.prisma.cart.findUnique({ where: { userId }, include: { items: true } });
+    let cart = await this.prisma.cart.findUnique({
+      where: { userId },
+      include: {
+        items: {
+          include: {
+            product: {
+              include: {
+                images: true,
+              },
+            },
+            bulk: true,
+          },
+        },
+      },
+    });
     // Optionally, if a cart doesn't exist, create one automatically.
-    if (!cart) {
+    /* if (!cart) {
       cart = await this.prisma.cart.create({
         data: { userId },
         include: { items: true },
       });
-    }
+    } */
     return cart;
   }
 
   // Add an item to the cart.
   async addCartItem(createCartItemDto: CreateCartItemDto) {
     // Check if the cart exists
-    const cart = await this.prisma.cart.findUnique({ where: { id: createCartItemDto.cartId } });
+    const cart = await this.prisma.cart.findUnique({
+      where: { id: createCartItemDto.cartId },
+    });
     if (!cart) {
-      throw new NotFoundException(`Cart with id ${createCartItemDto.cartId} not found.`);
+      throw new NotFoundException(
+        `Cart with id ${createCartItemDto.cartId} not found.`,
+      );
     }
 
     // Optionally: Validate the product exists here
@@ -36,6 +58,7 @@ export class CartService {
         cartId: createCartItemDto.cartId,
         productId: createCartItemDto.productId,
         variantId: createCartItemDto.variantId || null,
+        bulkId: createCartItemDto.bulkId,
       },
     });
 
@@ -43,15 +66,20 @@ export class CartService {
       // If the item exists, update the quantity instead
       return await this.prisma.cartItem.update({
         where: { id: existingItem.id },
+        /* data: { quantity: createCartItemDto.quantity }, */
         data: { quantity: existingItem.quantity + createCartItemDto.quantity },
       });
     }
+    console.log(createCartItemDto);
 
     return await this.prisma.cartItem.create({
       data: {
         cartId: createCartItemDto.cartId,
         productId: createCartItemDto.productId,
-        variantId: createCartItemDto.variantId,
+        bulkId: createCartItemDto.bulkId,
+        variantId: createCartItemDto.variantId
+          ? createCartItemDto.variantId
+          : null,
         quantity: createCartItemDto.quantity,
       },
     });
@@ -63,6 +91,8 @@ export class CartService {
     if (!cartItem) {
       throw new NotFoundException(`Cart item with id ${id} not found.`);
     }
+    console.log(updateCartItemDto);
+
     return await this.prisma.cartItem.update({
       where: { id },
       data: updateCartItemDto,

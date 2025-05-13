@@ -1,12 +1,28 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
 import Image from "next/image";
 import Link from "next/link";
 import { products44 } from "@/data/products";
 import CartLength from "../common/CartLength";
+import { useContextElement } from "@/context/Context";
 
 export default function Header0() {
+  const [token, setToken] = useState(null);
+  const { user } = useContextElement();
+
+  const [totalBulk, setTotalBulk] = useState(0);
+  useEffect(() => {
+    // This code runs only on the client
+    const storedToken = localStorage.getItem("x-access-token");
+    setToken(storedToken);
+  }, []);
+  useEffect(() => {
+    // This code runs only on the client
+    if (user) {
+      setTotalBulk(user.cart ? user.cart.items.length : 0)
+    }
+  }, [user]);
   return (
     <header
       id="header"
@@ -250,13 +266,30 @@ export default function Header0() {
                     </a>
                   </li>
                   <li className="nav-account">
-                    <a
+                    {!token ? <a
                       href="#login"
                       data-bs-toggle="modal"
                       className="nav-icon-item align-items-center gap-10 text-white"
                     >
                       <i className="icon icon-account" />
                       <span className="text">Login</span>
+                    </a> : <a
+                      href="/my-account-edit"
+                      className="nav-icon-item align-items-center gap-10 text-white"
+                    >
+                      <i className="icon icon-account" />
+                      <span className="text">my account</span>
+                    </a>}
+                  </li>
+                  <li className="nav-cart cart-lg line-left-1">
+                    <a
+                      href="/cart-bulk"
+                      className="nav-icon-item text-white"
+                    >
+                      <i className="fas fa-wallet"></i>
+                      <span className="count-box">
+                        {totalBulk}
+                      </span>
                     </a>
                   </li>
                   <li className="nav-cart cart-lg line-left-1">

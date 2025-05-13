@@ -54,7 +54,39 @@ export declare class ProductsService {
         averageRating: number | null;
         ratingCount: number;
     }>;
-    findAll(): Promise<{
+    findAll(): Promise<({
+        category: {
+            id: string;
+            name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            slug: string | null;
+            description: string | null;
+            bannerColor: string;
+            bannerText: string;
+            parentId: string | null;
+        };
+        brand: {
+            id: string;
+            name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            description: string | null;
+            img: string | null;
+        };
+        images: {
+            id: string;
+            url: string;
+            isPrimary: boolean;
+            productId: string;
+        }[];
+        attributes: {
+            id: string;
+            key: string;
+            value: string;
+            productId: string;
+        }[];
+    } & {
         id: string;
         name: string;
         createdAt: Date;
@@ -70,7 +102,7 @@ export declare class ProductsService {
         brandId: string;
         averageRating: number | null;
         ratingCount: number;
-    }[]>;
+    })[]>;
     findOne(id: string): Promise<{
         category: {
             id: string;
@@ -281,6 +313,7 @@ export declare class ProductsService {
         categorySlug?: string;
         page?: number;
         limit?: number;
+        promotions?: number;
         brandNames?: string[];
         minPrice?: number;
         maxPrice?: number;
@@ -339,6 +372,22 @@ export declare class ProductsService {
         priceRange: {
             minPrice: number;
             maxPrice: number;
+        };
+    }>;
+    getFilterOptionsPromotion(): Promise<{
+        brands: {
+            id: string;
+            name: string;
+            productCount: number;
+        }[];
+        priceRange: {
+            minPrice: number;
+            maxPrice: number;
+        };
+        discountInfo: {
+            minDiscount: number;
+            maxDiscount: number;
+            avgDiscount: number;
         };
     }>;
 }

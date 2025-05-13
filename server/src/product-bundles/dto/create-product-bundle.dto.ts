@@ -1,4 +1,12 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional, IsArray, ValidateNested, IsDateString } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsArray,
+  ValidateNested,
+  IsDateString,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class BundleItemDto {
@@ -21,6 +29,9 @@ export class CreateProductBundleDto {
   @IsOptional()
   @IsDateString()
   expiresAt?: string;
+
+  @IsOptional() // Allow variantId to be optional
+  img?: string;
 
   @IsArray()
   @ValidateNested({ each: true })
