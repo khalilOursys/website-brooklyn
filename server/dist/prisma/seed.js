@@ -13,6 +13,7 @@ async function main() {
         prisma.orderItem.deleteMany(),
         prisma.order.deleteMany(),
         prisma.discountCode.deleteMany(),
+        prisma.ratingImage.deleteMany(),
         prisma.productRating.deleteMany(),
         prisma.productAttribute.deleteMany(),
         prisma.productVariant.deleteMany(),
@@ -31,8 +32,24 @@ async function main() {
         prisma.user.create({ data: { email: 'bulk@techstore.com', password: 'hashedpassword123', name: 'Bulk Buyer', role: client_1.Role.BULK_CLIENT } }),
     ]);
     const categories = await Promise.all([
-        prisma.category.create({ data: { name: 'Laptops', bannerColor: '#FF6B6B', bannerText: 'Latest Laptops' } }),
-        prisma.category.create({ data: { name: 'Smartphones', bannerColor: '#4ECDC4', bannerText: 'New Smartphones' } }),
+        prisma.category.create({
+            data: {
+                name: 'Laptops',
+                slug: 'laptops',
+                description: 'All the latest laptops',
+                bannerColor: '#FF6B6B',
+                bannerText: 'Latest Laptops',
+            },
+        }),
+        prisma.category.create({
+            data: {
+                name: 'Smartphones',
+                slug: 'smartphones',
+                description: 'Trending smartphones',
+                bannerColor: '#4ECDC4',
+                bannerText: 'New Smartphones',
+            },
+        }),
     ]);
     const brands = await Promise.all([
         prisma.brand.create({ data: { name: 'TechTrend' } }),
@@ -50,11 +67,25 @@ async function main() {
             specs: { ram: '16GB', cpu: 'i7', storage: '1TB SSD' },
             categoryId: categories[0].id,
             brandId: brands[0].id,
-            images: { create: [{ url: 'https://example.com/laptop-pro.jpg', isPrimary: true }] },
-            variants: { create: [{ name: 'Silver', stock: 30, price: 1299.99 }, { name: 'Black', stock: 20, price: 1349.99 }] },
-            attributes: { create: [{ key: 'RAM', value: '16GB' }, { key: 'Storage', value: '1TB SSD' }] },
+            images: {
+                create: [{ url: 'https://example.com/laptop-pro.jpg', isPrimary: true }],
+            },
+            variants: {
+                create: [
+                    { name: 'Silver', stock: 30, price: 1299.99 },
+                    { name: 'Black', stock: 20, price: 1349.99 },
+                ],
+            },
+            attributes: {
+                create: [
+                    { key: 'RAM', value: '16GB' },
+                    { key: 'Storage', value: '1TB SSD' },
+                ],
+            },
         },
-        include: { variants: true },
+        include: {
+            variants: true,
+        },
     });
     await prisma.bulkProduct.create({
         data: {
@@ -62,6 +93,8 @@ async function main() {
             bulkPrice: 1099.99,
             minQuantity: 10,
             discount: 5,
+            name: 'Bulk Pack - Laptop Pro',
+            description: 'Buy in bulk and save!',
         },
     });
     const smartphone = await prisma.product.create({
@@ -73,14 +106,25 @@ async function main() {
             isBulk: false,
             categoryId: categories[1].id,
             brandId: brands[1].id,
-            images: { create: [{ url: 'https://example.com/smartphone-x.jpg', isPrimary: true }] },
+            images: {
+                create: [{ url: 'https://example.com/smartphone-x.jpg', isPrimary: true }],
+            },
         },
     });
     await prisma.discountCode.create({
-        data: { code: 'WELCOME10', discount: 10, expiresAt: new Date('2025-12-31') },
+        data: {
+            code: 'WELCOME10',
+            discount: 10,
+            expiresAt: new Date('2025-12-31'),
+        },
     });
     await prisma.bulkClientRequest.create({
-        data: { userId: users[2].id, storeName: 'Bulk Tech Shop', legalDocs: 'https://example.com/docs.pdf', status: 'pending' },
+        data: {
+            userId: users[2].id,
+            storeName: 'Bulk Tech Shop',
+            legalDocs: 'https://example.com/docs.pdf',
+            status: 'pending',
+        },
     });
     const order = await prisma.order.create({
         data: {
@@ -104,26 +148,38 @@ async function main() {
     await prisma.cart.create({
         data: {
             userId: users[1].id,
-            items: { create: [{ productId: smartphone.id, quantity: 1 }] },
+            items: {
+                create: [
+                    {
+                        productId: smartphone.id,
+                        quantity: 1,
+                    },
+                ],
+            },
         },
     });
     await prisma.wishlist.create({
-        data: { userId: users[1].id, productId: laptop.id },
+        data: {
+            userId: users[1].id,
+            productId: laptop.id,
+        },
     });
-    await prisma.productRating.create({
+    const rating = await prisma.productRating.create({
         data: {
             productId: laptop.id,
             userId: users[1].id,
             rating: 4,
             comment: 'Great laptop!',
-            images: { create: [{ url: 'https://example.com/review-image.jpg' }] },
+            images: {
+                create: [{ url: 'https://example.com/review-image.jpg' }],
+            },
         },
     });
-    console.log('Database seeded successfully!');
+    console.log('✅ Database seeded successfully!');
 }
 main()
     .catch((e) => {
-    console.error(e);
+    console.error('❌ Seeding error:', e);
     process.exit(1);
 })
     .finally(async () => {

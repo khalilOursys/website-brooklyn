@@ -281,6 +281,7 @@ Table ProductBundle {
   products BundleProduct [not null]
   createdAt DateTime [default: `now()`, not null]
   expiresAt DateTime
+  img String
 }
 
 Table BundleProduct {

@@ -11,6 +11,7 @@ import Footer from "@/components/Footer/Footer";
 import { addProduct, editProduct } from "@/Redux/productsReduce"; // Assuming you have a productsReducer
 import { useDropzone } from "react-dropzone"; // Import useDropzone for the ImageUpload component
 import dynamic from "next/dynamic";
+import Configuration from "@/configuration";
 const Select = dynamic(() => import('react-select'), {
   ssr: false, // Disable SSR for react-select
 });
@@ -26,6 +27,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const router = useRouter(); // Updated hook
   const { id } = useParams();
+  const api = Configuration.BACK_BASEURL;
 
   // State declarations for product fields
   const [name, setName] = useState("");

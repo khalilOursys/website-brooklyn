@@ -15,6 +15,7 @@ export declare class ProductBundlesService {
         id: string;
         name: string;
         createdAt: Date;
+        img: string | null;
         discount: number;
         expiresAt: Date | null;
     }>;
@@ -29,6 +30,7 @@ export declare class ProductBundlesService {
         id: string;
         name: string;
         createdAt: Date;
+        img: string | null;
         discount: number;
         expiresAt: Date | null;
     })[]>;
@@ -43,6 +45,7 @@ export declare class ProductBundlesService {
         id: string;
         name: string;
         createdAt: Date;
+        img: string | null;
         discount: number;
         expiresAt: Date | null;
     }>;
@@ -57,6 +60,7 @@ export declare class ProductBundlesService {
         id: string;
         name: string;
         createdAt: Date;
+        img: string | null;
         discount: number;
         expiresAt: Date | null;
     }>;
@@ -64,6 +68,7 @@ export declare class ProductBundlesService {
         id: string;
         name: string;
         createdAt: Date;
+        img: string | null;
         discount: number;
         expiresAt: Date | null;
     }>;
