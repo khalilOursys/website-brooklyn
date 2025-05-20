@@ -17,9 +17,16 @@ const common_1 = require("@nestjs/common");
 const categories_service_1 = require("./categories.service");
 const create_category_dto_1 = require("./dto/create-category.dto");
 const update_category_dto_1 = require("./dto/update-category.dto");
+const multer_config_1 = require("../config/multer.config");
+const platform_express_1 = require("@nestjs/platform-express");
 let CategoriesController = class CategoriesController {
     constructor(categoriesService) {
         this.categoriesService = categoriesService;
+    }
+    async uploadImages(file) {
+        const hostUrl = process.env.imagePath || 'http://localhost:3001';
+        const imageUrl = `${hostUrl}/${file.path.replace(/\\/g, '/')}`;
+        return { url: imageUrl };
     }
     async create(createCategoryDto) {
         return await this.categoriesService.create(createCategoryDto);
@@ -47,6 +54,14 @@ let CategoriesController = class CategoriesController {
     }
 };
 exports.CategoriesController = CategoriesController;
+__decorate([
+    (0, common_1.Post)('upload'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', multer_config_1.multerConfigCategory)),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "uploadImages", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),

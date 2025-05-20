@@ -11,28 +11,62 @@ export declare class CategoriesService {
         updatedAt: Date;
         slug: string | null;
         description: string | null;
+        bgUrl: string | null;
+        iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
     }>;
-    findAll(): Promise<{
+    findAll(): Promise<({
+        parent: {
+            id: string;
+            name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            slug: string | null;
+            description: string | null;
+            bgUrl: string | null;
+            iconUrl: string | null;
+            bannerColor: string;
+            bannerText: string;
+            parentId: string | null;
+        } | null;
+    } & {
         id: string;
         name: string;
         createdAt: Date;
         updatedAt: Date;
         slug: string | null;
         description: string | null;
+        bgUrl: string | null;
+        iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
-    }[]>;
+    })[]>;
     findOne(id: string): Promise<{
+        parent: {
+            id: string;
+            name: string;
+            createdAt: Date;
+            updatedAt: Date;
+            slug: string | null;
+            description: string | null;
+            bgUrl: string | null;
+            iconUrl: string | null;
+            bannerColor: string;
+            bannerText: string;
+            parentId: string | null;
+        } | null;
+    } & {
         id: string;
         name: string;
         createdAt: Date;
         updatedAt: Date;
         slug: string | null;
         description: string | null;
+        bgUrl: string | null;
+        iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
@@ -44,6 +78,8 @@ export declare class CategoriesService {
         updatedAt: Date;
         slug: string | null;
         description: string | null;
+        bgUrl: string | null;
+        iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
@@ -55,6 +91,8 @@ export declare class CategoriesService {
         updatedAt: Date;
         slug: string | null;
         description: string | null;
+        bgUrl: string | null;
+        iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
@@ -73,6 +111,8 @@ export declare class CategoriesService {
         updatedAt: Date;
         slug: string | null;
         description: string | null;
+        bgUrl: string | null;
+        iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
@@ -85,6 +125,8 @@ export declare class CategoriesService {
             updatedAt: Date;
             slug: string | null;
             description: string | null;
+            bgUrl: string | null;
+            iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
             parentId: string | null;
@@ -96,6 +138,8 @@ export declare class CategoriesService {
         updatedAt: Date;
         slug: string | null;
         description: string | null;
+        bgUrl: string | null;
+        iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
         parentId: string | null;

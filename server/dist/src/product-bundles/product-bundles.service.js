@@ -30,9 +30,12 @@ let ProductBundlesService = class ProductBundlesService {
                 data: {
                     name: createProductBundleDto.name,
                     discount: createProductBundleDto.discount,
-                    expiresAt: createProductBundleDto.expiresAt ? new Date(createProductBundleDto.expiresAt) : null,
+                    img: createProductBundleDto.img,
+                    expiresAt: createProductBundleDto.expiresAt
+                        ? new Date(createProductBundleDto.expiresAt)
+                        : null,
                     products: {
-                        create: createProductBundleDto.products.map(item => ({
+                        create: createProductBundleDto.products.map((item) => ({
                             product: { connect: { id: item.productId } },
                             quantity: item.quantity,
                         })),
@@ -71,7 +74,9 @@ let ProductBundlesService = class ProductBundlesService {
             data: {
                 name: updateProductBundleDto.name,
                 discount: updateProductBundleDto.discount,
-                expiresAt: updateProductBundleDto.expiresAt ? new Date(updateProductBundleDto.expiresAt) : undefined,
+                expiresAt: updateProductBundleDto.expiresAt
+                    ? new Date(updateProductBundleDto.expiresAt)
+                    : undefined,
             },
             include: { products: true },
         });

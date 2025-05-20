@@ -101,7 +101,7 @@ export default function Home() {
             <div className="img-log">
               <Image
                 src="/img/logo.png" // Use absolute path for images in the public folder
-                alt="medicacom"
+                alt="oursys"
                 width={150} // Set appropriate width
                 height={50} // Set appropriate height
               />

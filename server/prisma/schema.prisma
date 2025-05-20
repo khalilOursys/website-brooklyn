@@ -169,6 +169,8 @@ model Category {
   name        String    @unique
   slug        String?
   description String?
+  bgUrl String?
+  iconUrl String?
   bannerColor String
   bannerText  String
   products    Product[]

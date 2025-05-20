@@ -11,6 +11,8 @@ import Footer from "@/components/Footer/Footer";
 import { addCategory } from "@/Redux/categoriesReduce";
 import dynamic from "next/dynamic";
 import Configuration from "@/configuration";
+import { useDropzone } from "react-dropzone";
+
 const Select = dynamic(() => import('react-select'), {
   ssr: false, // Disable SSR for react-select
 });
@@ -34,6 +36,14 @@ export default function Page() {
   const [bannerText, setBannerText] = useState("#FF6B6B");
   const [parentId, setParentId] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [iconUrl, setIconUrl] = useState("");
+  const [bgUrl, setBgUrl] = useState("");
+  const [iconPreview, setIconPreview] = useState(null);
+  const [bgPreview, setBgPreview] = useState(null);
+  const [iconFile, setIconFile] = useState(null);
+  const [bgFile, setBgFile] = useState(null);
+  const [isUploadingIcon, setIsUploadingIcon] = useState(false);
+  const [isUploadingBg, setIsUploadingBg] = useState(false);
 
   // Function to generate slug
   const generateSlug = (input) => {
@@ -69,7 +79,9 @@ export default function Page() {
         slug,
         description,
         bannerText,
-        bannerColor
+        bannerColor,
+        iconUrl,
+        bgUrl
       })
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
@@ -82,7 +94,6 @@ export default function Page() {
       }
     });
   };
-
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -106,9 +117,88 @@ export default function Page() {
     }
   }, []);
 
+  const uploadIcon = async (file) => {
+    setIsUploadingIcon(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await fetch(`${api}categories/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Icon upload failed");
+
+      const { url } = await response.json();
+      setIconUrl(url);
+      notify(1, "Icon uploaded successfully!");
+    } catch (error) {
+      console.error("Upload error:", error);
+      notify(2, "Failed to upload icon. Please try again.");
+    } finally {
+      setIsUploadingIcon(false);
+    }
+  };
+
+  const uploadBackground = async (file) => {
+    setIsUploadingBg(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await fetch(`${api}categories/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error("Background upload failed");
+
+      const { url } = await response.json();
+      setBgUrl(url);
+      notify(1, "Background uploaded successfully!");
+    } catch (error) {
+      console.error("Upload error:", error);
+      notify(2, "Failed to upload background. Please try again.");
+    } finally {
+      setIsUploadingBg(false);
+    }
+  };
+
+  const onDropIcon = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length === 0) return;
+    const file = acceptedFiles[0];
+    setIconFile(file);
+    setIconPreview(URL.createObjectURL(file));
+    uploadIcon(file);
+  }, []);
+
+  const onDropBg = useCallback((acceptedFiles) => {
+    if (acceptedFiles.length === 0) return;
+    const file = acceptedFiles[0];
+    setBgFile(file);
+    setBgPreview(URL.createObjectURL(file));
+    uploadBackground(file);
+  }, []);
+
+  const { getRootProps: getIconRootProps, getInputProps: getIconInputProps, isDragActive: isDragActiveIcon } = useDropzone({
+    onDrop: onDropIcon,
+    accept: { 'image/*': ['.jpeg', '.jpg', '.png', '.svg'] },
+    maxFiles: 1,
+    disabled: isUploadingIcon,
+  });
+
+  const { getRootProps: getBgRootProps, getInputProps: getBgInputProps, isDragActive: isDragActiveBg } = useDropzone({
+    onDrop: onDropBg,
+    accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
+    maxFiles: 1,
+    disabled: isUploadingBg,
+  });
+
   useEffect(() => {
     fetchCategories();
   }, [fetchCategories]);
+
   return (
     <>
       <div className="wrapper">
@@ -185,6 +275,64 @@ export default function Page() {
                                     type="text"
                                     onChange={(e) => setDescription(e.target.value)}
                                   />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col md="6">
+                                <Form.Group>
+                                  <label>Icon Image</label>
+                                  <div
+                                    {...getIconRootProps()}
+                                    className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
+                                      ${isDragActiveIcon ? 'border-primary bg-primary bg-opacity-10' : 'border-secondary'}
+                                      ${isUploadingIcon ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                  >
+                                    <input {...getIconInputProps()} />
+                                    <p className="text-muted">
+                                      {isUploadingIcon ? 'Uploading...' :
+                                        isDragActiveIcon ? 'Drop the icon here' :
+                                          'Drag & drop an icon, or click to select'}
+                                    </p>
+                                  </div>
+                                  {iconPreview && (
+                                    <div className="mt-4 text-center">
+                                      <img
+                                        src={iconPreview}
+                                        alt="Icon Preview"
+                                        className="img-fluid rounded"
+                                        style={{ height: '100px' }}
+                                      />
+                                    </div>
+                                  )}
+                                </Form.Group>
+                              </Col>
+                              <Col md="6">
+                                <Form.Group>
+                                  <label>Background Image</label>
+                                  <div
+                                    {...getBgRootProps()}
+                                    className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
+                                      ${isDragActiveBg ? 'border-primary bg-primary bg-opacity-10' : 'border-secondary'}
+                                      ${isUploadingBg ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                  >
+                                    <input {...getBgInputProps()} />
+                                    <p className="text-muted">
+                                      {isUploadingBg ? 'Uploading...' :
+                                        isDragActiveBg ? 'Drop the background here' :
+                                          'Drag & drop a background, or click to select'}
+                                    </p>
+                                  </div>
+                                  {bgPreview && (
+                                    <div className="mt-4 text-center">
+                                      <img
+                                        src={bgPreview}
+                                        alt="Background Preview"
+                                        className="img-fluid rounded"
+                                        style={{ height: '100px' }}
+                                      />
+                                    </div>
+                                  )}
                                 </Form.Group>
                               </Col>
                             </Row>

@@ -29,11 +29,19 @@ let CategoriesService = class CategoriesService {
     }
     async findAll() {
         return await this.prisma.category.findMany({
+            include: {
+                parent: true,
+            },
             orderBy: { createdAt: 'desc' },
         });
     }
     async findOne(id) {
-        const category = await this.prisma.category.findUnique({ where: { id } });
+        const category = await this.prisma.category.findUnique({
+            where: { id },
+            include: {
+                parent: true,
+            },
+        });
         if (!category) {
             throw new common_1.NotFoundException(`Category with id ${id} not found.`);
         }

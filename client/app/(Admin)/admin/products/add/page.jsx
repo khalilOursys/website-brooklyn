@@ -32,7 +32,6 @@ export default function Page() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
-  const [bulkPrice, setBulkPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [isFeatured, setIsFeatured] = useState(false);
   const [stock, setStock] = useState(0);
@@ -295,18 +294,6 @@ export default function Page() {
                                     onChange={(e) => setPrice(parseFloat(e.target.value))}
                                   />
                                   <div className="error"></div>
-                                </Form.Group>
-                              </Col>
-                              <Col className="pl-1" md="6">
-                                <Form.Group>
-                                  <label>Bulk Price </label>
-                                  <Form.Control
-                                    value={bulkPrice}
-                                    placeholder="Bulk Price"
-                                    name="bulkPrice"
-                                    type="number"
-                                    onChange={(e) => setBulkPrice(parseFloat(e.target.value))}
-                                  />
                                 </Form.Group>
                               </Col>
                             </Row>

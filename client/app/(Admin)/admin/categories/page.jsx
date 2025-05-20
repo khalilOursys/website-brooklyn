@@ -43,6 +43,10 @@ export default function Page() {
       accessorKey: "description",
     },
     {
+      header: "Parent",
+      accessorKey: "parent.name",
+    },
+    {
       accessorKey: "id",
       header: "actions",
       Cell: ({ cell }) => (

@@ -43,4 +43,12 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateCategoryDto.prototype, "parentId", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateCategoryDto.prototype, "iconUrl", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateCategoryDto.prototype, "bgUrl", void 0);
 //# sourceMappingURL=create-category.dto.js.map

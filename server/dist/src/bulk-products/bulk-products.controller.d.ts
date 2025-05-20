@@ -53,6 +53,8 @@ export declare class BulkProductsController {
                 updatedAt: Date;
                 slug: string | null;
                 description: string | null;
+                bgUrl: string | null;
+                iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
                 parentId: string | null;
@@ -131,6 +133,8 @@ export declare class BulkProductsController {
                     updatedAt: Date;
                     slug: string | null;
                     description: string | null;
+                    bgUrl: string | null;
+                    iconUrl: string | null;
                     bannerColor: string;
                     bannerText: string;
                     parentId: string | null;

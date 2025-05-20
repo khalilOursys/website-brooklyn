@@ -25,8 +25,8 @@ class Footer extends Component {
         <Container fluid>
           <nav>
             <p className="copyright text-center">
-              <a href="https://www.medicacom.tn/fr/">
-                © {new Date().getFullYear()} medicacom
+              <a href="https://www.oursys.tn/fr/">
+                © {new Date().getFullYear()} oursys
               </a>
             </p>
           </nav>

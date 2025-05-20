@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateProductBundleDto } from './dto/create-product-bundle.dto';
 import { UpdateProductBundleDto } from './dto/update-product-bundle.dto';
@@ -14,7 +18,9 @@ export class ProductBundlesService {
         where: { id: item.productId },
       });
       if (!productExists) {
-        throw new BadRequestException(`Product with id ${item.productId} does not exist.`);
+        throw new BadRequestException(
+          `Product with id ${item.productId} does not exist.`,
+        );
       }
     }
 
@@ -24,9 +30,12 @@ export class ProductBundlesService {
         data: {
           name: createProductBundleDto.name,
           discount: createProductBundleDto.discount,
-          expiresAt: createProductBundleDto.expiresAt ? new Date(createProductBundleDto.expiresAt) : null,
+          img: createProductBundleDto.img,
+          expiresAt: createProductBundleDto.expiresAt
+            ? new Date(createProductBundleDto.expiresAt)
+            : null,
           products: {
-            create: createProductBundleDto.products.map(item => ({
+            create: createProductBundleDto.products.map((item) => ({
               product: { connect: { id: item.productId } },
               quantity: item.quantity,
             })),
@@ -36,7 +45,9 @@ export class ProductBundlesService {
       });
     } catch (error: any) {
       if (error.code === 'P2003') {
-        throw new BadRequestException('Foreign key constraint violated. Ensure all product IDs are valid.');
+        throw new BadRequestException(
+          'Foreign key constraint violated. Ensure all product IDs are valid.',
+        );
       }
       throw error;
     }
@@ -68,7 +79,9 @@ export class ProductBundlesService {
       data: {
         name: updateProductBundleDto.name,
         discount: updateProductBundleDto.discount,
-        expiresAt: updateProductBundleDto.expiresAt ? new Date(updateProductBundleDto.expiresAt) : undefined,
+        expiresAt: updateProductBundleDto.expiresAt
+          ? new Date(updateProductBundleDto.expiresAt)
+          : undefined,
         // Note: Updating bundle items is more complex and not handled here.
       },
       include: { products: true },

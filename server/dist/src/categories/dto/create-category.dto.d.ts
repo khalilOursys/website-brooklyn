@@ -5,4 +5,6 @@ export declare class CreateCategoryDto {
     description?: string;
     slug: string;
     parentId?: string;
+    iconUrl?: string;
+    bgUrl?: string;
 }

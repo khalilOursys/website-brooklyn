@@ -152,6 +152,8 @@ Table Category {
   name String [unique, not null]
   slug String
   description String
+  bgUrl String
+  iconUrl String
   bannerColor String [not null]
   bannerText String [not null]
   products Product [not null]
