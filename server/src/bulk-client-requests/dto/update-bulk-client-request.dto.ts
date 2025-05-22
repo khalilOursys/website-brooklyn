@@ -13,6 +13,14 @@ export class UpdateUserBulkRequestDto {
   @IsOptional()
   name?: string;
 
+  @IsOptional()
+  @IsString()
+  firstName?: string;
+
+  @IsOptional()
+  @IsString()
+  lastName?: string;
+
   @IsString()
   @IsOptional()
   storeName?: string;

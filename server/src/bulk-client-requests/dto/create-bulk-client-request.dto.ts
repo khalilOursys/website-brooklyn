@@ -17,6 +17,14 @@ export class CreateBulkClientRequestDto {
   @IsOptional()
   name?: string;
 
+  @IsOptional()
+  @IsString()
+  firstName?: string;
+
+  @IsOptional()
+  @IsString()
+  lastName?: string;
+
   @IsString()
   storeName: string;
 

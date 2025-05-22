@@ -7,6 +7,8 @@ Table User {
   email String [unique, not null]
   password String [not null]
   name String
+  firstName String
+  lastName String
   role Role [not null, default: 'CLIENT']
   oauthProvider String
   oauthId String
