@@ -13,6 +13,8 @@ export declare class UsersService {
         email: string;
         password: string;
         name: string | null;
+        firstName: string | null;
+        lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
         oauthId: string | null;
@@ -42,6 +44,8 @@ export declare class UsersService {
         email: string;
         password: string;
         name: string | null;
+        firstName: string | null;
+        lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
         oauthId: string | null;
@@ -53,6 +57,8 @@ export declare class UsersService {
         email: string;
         password: string;
         name: string | null;
+        firstName: string | null;
+        lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
         oauthId: string | null;
@@ -75,6 +81,8 @@ export declare class UsersService {
         email: string;
         password: string;
         name: string | null;
+        firstName: string | null;
+        lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
         oauthId: string | null;
@@ -97,6 +105,8 @@ export declare class UsersService {
         email: string;
         password: string;
         name: string | null;
+        firstName: string | null;
+        lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
         oauthId: string | null;
@@ -108,6 +118,8 @@ export declare class UsersService {
         email: string;
         password: string;
         name: string | null;
+        firstName: string | null;
+        lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
         oauthProvider: string | null;
         oauthId: string | null;

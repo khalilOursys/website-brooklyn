@@ -32,6 +32,9 @@ let UsersService = class UsersService {
                 email: createUserDto.email,
                 password: hashedPassword,
                 name: createUserDto.name,
+                firstName: createUserDto.firstName,
+                lastName: createUserDto.lastName,
+                role: createUserDto.role,
             },
         });
     }

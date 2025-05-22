@@ -18,6 +18,8 @@ export declare class ProductRatingsController {
             email: string;
             password: string;
             name: string | null;
+            firstName: string | null;
+            lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
             oauthProvider: string | null;
             oauthId: string | null;

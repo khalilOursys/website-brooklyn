@@ -55,7 +55,7 @@ function AdminNavbar({ users }) {
                   variant="default"
                   className="m-0"
                 >
-                  <span className="no-icon">blablabla</span>
+                  <span className="no-icon">Admin </span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
                   <Dropdown.Item href="#" onClick={() => router.push("/admin")}>

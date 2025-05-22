@@ -24,6 +24,8 @@ let BulkClientRequestsService = class BulkClientRequestsService {
                 email: data.email,
                 password: hashedPassword,
                 name: data.name,
+                firstName: data.firstName,
+                lastName: data.lastName,
                 role: 'BULK_CLIENT',
                 bulkRequests: {
                     create: {
