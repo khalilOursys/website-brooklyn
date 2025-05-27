@@ -8,7 +8,7 @@ export const allHomepages = [
     name: "Home Fashion 01",
   },
   {
-    href: "/home-multi-brand",
+    href: "/home2",
     imgSrc: "/images/demo/home-multi-brand.jpg",
     alt: "home-multi-brand",
 

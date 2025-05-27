@@ -71,7 +71,7 @@ export class ProductBundlesService {
     return bundle;
   }
 
-  async update(id: string, updateProductBundleDto: UpdateProductBundleDto) {
+  /* async update(id: string, updateProductBundleDto: UpdateProductBundleDto) {
     // Ensure the bundle exists first
     await this.findOne(id);
     return await this.prisma.productBundle.update({
@@ -86,6 +86,37 @@ export class ProductBundlesService {
       },
       include: { products: true },
     });
+  } */
+  async update(id: string, createProductBundleDto: CreateProductBundleDto) {
+    // Vérifier que le bundle existe
+    await this.findOne(id);
+
+    // Supprimer les anciens produits du bundle
+    await this.prisma.bundleProduct.deleteMany({
+      where: { bundleId: id },
+    });
+
+    // Mettre à jour les infos du bundle principal
+    const updatedBundle = await this.prisma.productBundle.update({
+      where: { id },
+      data: {
+        name: createProductBundleDto.name,
+        discount: createProductBundleDto.discount,
+        expiresAt: createProductBundleDto.expiresAt
+          ? new Date(createProductBundleDto.expiresAt)
+          : undefined,
+        img: createProductBundleDto.img,
+        products: {
+          create: createProductBundleDto.products.map((p) => ({
+            product: { connect: { id: p.productId } },
+            quantity: p.quantity,
+          })),
+        },
+      },
+      include: { products: true },
+    });
+
+    return updatedBundle;
   }
 
   async remove(id: string) {

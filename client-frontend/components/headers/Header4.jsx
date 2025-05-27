@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,14 +7,31 @@ import LanguageSelect from "../common/LanguageSelect";
 import CurrencySelect from "../common/CurrencySelect";
 import CartLength from "../common/CartLength";
 import WishlistLength from "../common/WishlistLength";
+import { useContextElement } from "@/context/Context";
 export default function Header4() {
+  const [token, setToken] = useState(null);
+  const { user } = useContextElement();
+  var role = user ? user.role : "";
+
+  const [totalBulk, setTotalBulk] = useState(0);
+  useEffect(() => {
+    // This code runs only on the client
+    const storedToken = localStorage.getItem("x-access-token");
+    setToken(storedToken);
+  }, []);
+  useEffect(() => {
+    // This code runs only on the client
+    if (user) {
+      setTotalBulk(user.cart ? user.cart.items.length : 0)
+    }
+  }, [user]);
   return (
     <header id="header" className="header-default header-style-2">
       <div className="main-header line">
         <div className="container-full px_15 lg-px_40">
           <div className="row wrapper-header align-items-center">
             <div className="col-xl-5 tf-md-hidden">
-              <div className="tf-cur">
+              {/* <div className="tf-cur">
                 <div className="tf-currencies">
                   <CurrencySelect topStart />
                 </div>
@@ -25,6 +43,19 @@ export default function Header4() {
                     topStart
                   />
                 </div>
+              </div> */}
+
+              <div className="overflow-hidden">
+                <p className="top-bar-text">
+                  Register as
+                  <a
+                    href="#registerBulkClient"
+                    data-bs-toggle="modal"
+                    className="tf-btn btn-line"
+                  >
+                    <span className="text">Wholesaler</span>
+                  </a>
+                </p>
               </div>
             </div>
             <div className="col-md-4 col-3 tf-lg-hidden">
@@ -52,8 +83,8 @@ export default function Header4() {
                 <Image
                   alt="logo"
                   className="logo"
-                  src="/images/logo/logo@2x.png"
-                  width={273}
+                  src="/images/logo/logo3.png"
+                  width={400}
                   height={42}
                 />
               </Link>
@@ -70,7 +101,37 @@ export default function Header4() {
                     <i className="icon icon-search" />
                   </a>
                 </li>
+
                 <li className="nav-account">
+                  {!token ? <a
+                    href="#login"
+                    data-bs-toggle="modal"
+                    className="nav-icon-item align-items-center gap-10 bg-transparent border-0"
+                  >
+                    <i className="icon icon-account" />
+                  </a> : <a
+                    href="/my-account-edit"
+                    className="nav-icon-item align-items-center gap-10 bg-transparent border-0"
+                  >
+                    <i className="icon icon-account" />
+                  </a>}
+                </li>
+                {token ? (
+                  <li className="nav-account">
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem("x-access-token");
+                        setToken(null);
+                        // Optional: reload page or update user context
+                        window.location.reload(); // or navigate to home
+                      }}
+                      className="nav-icon-item align-items-center gap-10 bg-transparent border-0"
+                    >
+                      <i className="fas fa-sign-out-alt" />
+                    </button>
+                  </li>
+                ) : ("")}
+                {/* <li className="nav-account">
                   <a
                     href="#login"
                     data-bs-toggle="modal"
@@ -78,15 +139,16 @@ export default function Header4() {
                   >
                     <i className="icon icon-account" />
                   </a>
-                </li>
-                <li className="nav-wishlist">
-                  <Link href={`/wishlist`} className="nav-icon-item">
-                    <i className="icon icon-heart" />
-                    <span className="count-box">
-                      <WishlistLength />
-                    </span>
-                  </Link>
-                </li>
+                </li> */}
+
+                {role === "BULK_CLIENT" && (
+                  <li className="nav-cart cart-lg line-left-1">
+                    <a href="/cart-bulk" className="nav-icon-item">
+                      <i className="fas fa-wallet"></i>
+                      <span className="count-box">{totalBulk}</span>
+                    </a>
+                  </li>
+                )}
                 <li className="nav-cart">
                   <a
                     href="#shoppingCart"

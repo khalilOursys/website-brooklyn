@@ -56,14 +56,6 @@ export default function Topbar1() {
               >
                 <span className="text">Wholesaler</span>
               </a>
-              {/* <Link
-                href={`/shop-default`}
-                title="all collection"
-                className="tf-btn btn-line"
-              >
-                Wholesaler
-                <i className="icon icon-arrow1-top-left" />
-              </Link> */}
             </p>
           </div>
           <div className="top-bar-language tf-cur justify-content-end">

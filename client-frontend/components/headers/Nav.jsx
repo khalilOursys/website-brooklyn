@@ -95,6 +95,14 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
       </li>
       <li className="menu-item">
         <a
+          href="/home2"
+          className={`item-link ${Linkfs} ${textColor}`}
+        >
+          Home 2
+        </a>
+      </li>
+      <li className="menu-item">
+        <a
           href="/promotions"
           className={`item-link ${Linkfs} ${textColor}`}
         >

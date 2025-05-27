@@ -47,7 +47,7 @@ export class ProductBundlesController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateProductBundleDto: UpdateProductBundleDto,
+    @Body() updateProductBundleDto: CreateProductBundleDto,
   ) {
     return await this.productBundlesService.update(id, updateProductBundleDto);
   }

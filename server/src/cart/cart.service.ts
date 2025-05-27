@@ -70,7 +70,6 @@ export class CartService {
         data: { quantity: existingItem.quantity + createCartItemDto.quantity },
       });
     }
-    console.log(createCartItemDto);
 
     return await this.prisma.cartItem.create({
       data: {
@@ -91,7 +90,6 @@ export class CartService {
     if (!cartItem) {
       throw new NotFoundException(`Cart item with id ${id} not found.`);
     }
-    console.log(updateCartItemDto);
 
     return await this.prisma.cartItem.update({
       where: { id },

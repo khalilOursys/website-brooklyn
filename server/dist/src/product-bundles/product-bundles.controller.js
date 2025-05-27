@@ -16,7 +16,6 @@ exports.ProductBundlesController = void 0;
 const common_1 = require("@nestjs/common");
 const product_bundles_service_1 = require("./product-bundles.service");
 const create_product_bundle_dto_1 = require("./dto/create-product-bundle.dto");
-const update_product_bundle_dto_1 = require("./dto/update-product-bundle.dto");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_config_1 = require("../config/multer.config");
 let ProductBundlesController = class ProductBundlesController {
@@ -78,7 +77,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_product_bundle_dto_1.UpdateProductBundleDto]),
+    __metadata("design:paramtypes", [String, create_product_bundle_dto_1.CreateProductBundleDto]),
     __metadata("design:returntype", Promise)
 ], ProductBundlesController.prototype, "update", null);
 __decorate([

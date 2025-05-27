@@ -67,19 +67,30 @@ let ProductBundlesService = class ProductBundlesService {
         }
         return bundle;
     }
-    async update(id, updateProductBundleDto) {
+    async update(id, createProductBundleDto) {
         await this.findOne(id);
-        return await this.prisma.productBundle.update({
+        await this.prisma.bundleProduct.deleteMany({
+            where: { bundleId: id },
+        });
+        const updatedBundle = await this.prisma.productBundle.update({
             where: { id },
             data: {
-                name: updateProductBundleDto.name,
-                discount: updateProductBundleDto.discount,
-                expiresAt: updateProductBundleDto.expiresAt
-                    ? new Date(updateProductBundleDto.expiresAt)
+                name: createProductBundleDto.name,
+                discount: createProductBundleDto.discount,
+                expiresAt: createProductBundleDto.expiresAt
+                    ? new Date(createProductBundleDto.expiresAt)
                     : undefined,
+                img: createProductBundleDto.img,
+                products: {
+                    create: createProductBundleDto.products.map((p) => ({
+                        product: { connect: { id: p.productId } },
+                        quantity: p.quantity,
+                    })),
+                },
             },
             include: { products: true },
         });
+        return updatedBundle;
     }
     async remove(id) {
         await this.findOne(id);

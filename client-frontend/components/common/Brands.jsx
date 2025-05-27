@@ -46,6 +46,11 @@ export default function Brands({ parentClass = "flat-spacing-1" }) {
     <section className={parentClass}>
       <div className="container">
         <div className="wrap-carousel wrap-shop-gram">
+          <div className="flat-title">
+            <span className="title fw-6 wow fadeInUp font-readex-pro text_black-3">
+              Our brands
+            </span>
+          </div>
           <Swiper
             dir="ltr"
             className="swiper tf-sw-brand"

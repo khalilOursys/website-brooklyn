@@ -1,6 +1,5 @@
 import { PrismaService } from '../prisma.service';
 import { CreateProductBundleDto } from './dto/create-product-bundle.dto';
-import { UpdateProductBundleDto } from './dto/update-product-bundle.dto';
 export declare class ProductBundlesService {
     private readonly prisma;
     constructor(prisma: PrismaService);
@@ -49,7 +48,7 @@ export declare class ProductBundlesService {
         discount: number;
         expiresAt: Date | null;
     }>;
-    update(id: string, updateProductBundleDto: UpdateProductBundleDto): Promise<{
+    update(id: string, createProductBundleDto: CreateProductBundleDto): Promise<{
         products: {
             id: string;
             productId: string;

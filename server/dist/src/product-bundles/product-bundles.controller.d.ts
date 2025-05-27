@@ -1,6 +1,5 @@
 import { ProductBundlesService } from './product-bundles.service';
 import { CreateProductBundleDto } from './dto/create-product-bundle.dto';
-import { UpdateProductBundleDto } from './dto/update-product-bundle.dto';
 export declare class ProductBundlesController {
     private readonly productBundlesService;
     constructor(productBundlesService: ProductBundlesService);
@@ -52,7 +51,7 @@ export declare class ProductBundlesController {
         discount: number;
         expiresAt: Date | null;
     }>;
-    update(id: string, updateProductBundleDto: UpdateProductBundleDto): Promise<{
+    update(id: string, updateProductBundleDto: CreateProductBundleDto): Promise<{
         products: {
             id: string;
             productId: string;

@@ -39,7 +39,6 @@ let ProductsController = class ProductsController {
         return productImages;
     }
     create(createProductDto) {
-        console.log(createProductDto);
         return this.productService.create(createProductDto);
     }
     findAll() {

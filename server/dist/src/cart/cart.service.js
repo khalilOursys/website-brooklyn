@@ -55,7 +55,6 @@ let CartService = class CartService {
                 data: { quantity: existingItem.quantity + createCartItemDto.quantity },
             });
         }
-        console.log(createCartItemDto);
         return await this.prisma.cartItem.create({
             data: {
                 cartId: createCartItemDto.cartId,
@@ -73,7 +72,6 @@ let CartService = class CartService {
         if (!cartItem) {
             throw new common_1.NotFoundException(`Cart item with id ${id} not found.`);
         }
-        console.log(updateCartItemDto);
         return await this.prisma.cartItem.update({
             where: { id },
             data: updateCartItemDto,

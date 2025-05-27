@@ -45,10 +45,10 @@ export default function Login() {
       } else {
         localStorage.setItem("x-access-token", data.access_token); // Save token
         setTimeout(() => {
-          if (data.user.role === "ADMIN")
+          /* if (data.user.role === "ADMIN")
             window.location.replace("/admin/users");
-          else
-            window.location.reload(); // Updated navigation
+          else */
+          window.location.reload(); // Updated navigation
         }, 1500);
       }
     } catch (error) {

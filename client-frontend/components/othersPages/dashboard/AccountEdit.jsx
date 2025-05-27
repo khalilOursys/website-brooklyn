@@ -8,7 +8,8 @@ export default function AccountEdit() {
 
   const { user, setUser } = useContextElement();
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: "",
+    lastName: "",
     email: '',
     password: '',
   });
@@ -20,7 +21,8 @@ export default function AccountEdit() {
   useEffect(() => {
     if (user) {
       setFormData({
-        name: user.name || '',
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
         email: user.email || '',
         password: '',
       });
@@ -44,13 +46,14 @@ export default function AccountEdit() {
     try {
       // Prepare the data to send
       const updateData = {
-        name: formData.name.trim(),
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         email: formData.email,
         password: formData.password // Only include password if it's not empty
       };
 
       // Call your API endpoint
-      const response = await fetch(`${api}users` + user.id, {
+      const response = await fetch(`${api}users/` + user.id, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -108,15 +111,34 @@ export default function AccountEdit() {
               type="text"
               id="property1"
               required
-              name="name"
-              value={formData.name}
+              name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
             />
             <label
               className="tf-field-label fw-4 text_black-2"
               htmlFor="property1"
             >
-              Full name
+              First name
+            </label>
+          </div>
+
+          <div className="tf-field style-1 mb_15">
+            <input
+              className="tf-field-input tf-input"
+              placeholder=" "
+              type="text"
+              id="property1"
+              required
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+            />
+            <label
+              className="tf-field-label fw-4 text_black-2"
+              htmlFor="property1"
+            >
+              Last name
             </label>
           </div>
           <div className="tf-field style-1 mb_15">

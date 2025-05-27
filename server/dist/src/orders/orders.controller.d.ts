@@ -107,6 +107,17 @@ export declare class OrdersController {
                 stock: number;
                 productId: string;
             } | null;
+            bulk: {
+                id: string;
+                name: string | null;
+                createdAt: Date;
+                updatedAt: Date;
+                description: string | null;
+                discount: number | null;
+                productId: string;
+                bulkPrice: number;
+                minQuantity: number;
+            } | null;
         } & {
             id: string;
             price: number;

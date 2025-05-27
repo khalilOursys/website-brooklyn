@@ -17,9 +17,9 @@ export const metadata = {
 export default function Home() {
   return (
     <>
-      {/* <Topbar1 />
-      <Header0 /> */}
-      <Header4 />
+      {/* <Header4 /> */}
+      <Topbar1 />
+      <Header0 />
       <Hero />
       <Features bgColor="" />
       <Categories />

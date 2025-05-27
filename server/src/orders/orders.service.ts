@@ -113,6 +113,7 @@ export class OrdersService {
                 images: true,
               },
             },
+            bulk: true, // Include bulk if needed
             variant: true, // Include variant if needed
           },
         },

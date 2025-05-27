@@ -99,7 +99,7 @@ export default function ProductsHome() {
         <div className="container">
           <div className="flat-title">
             <span className="title fw-6 wow fadeInUp font-readex-pro text_black-3">
-              Featured Products
+              Our Top Picks
             </span>
           </div>
           <div className="wrap-carousel">
