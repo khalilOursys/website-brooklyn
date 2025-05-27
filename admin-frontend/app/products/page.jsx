@@ -1,9 +1,9 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marquer ceci comme un composant client
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { fetchProducts } from "@/Redux/productsReduce";
 import { useDispatch } from "react-redux";
-import { useRouter } from 'next/navigation'; // Updated import for Next.js 14
+import { useRouter } from 'next/navigation'; // Importation mise à jour pour Next.js 14
 import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +16,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  // Fonction de notification
   const notify = (type, msg) => {
     if (type === 1)
       toast.success(
@@ -33,26 +34,27 @@ export default function Page() {
       );
   };
 
+  // Définition des colonnes du tableau
   const columns = [
     {
-      header: "Name",
+      header: "Nom",
       accessorKey: "name",
     },
     {
-      header: "Price",
+      header: "Prix",
       accessorKey: "price",
     },
     {
-      header: "Category",
+      header: "Catégorie",
       accessorKey: "category.name",
     },
     {
-      header: "brand",
+      header: "Marque",
       accessorKey: "brand.name",
     },
     {
       accessorKey: "id",
-      header: "actions",
+      header: "Actions",
       Cell: ({ cell }) => (
         <div className="actions-right block_action">
           <Button
@@ -70,6 +72,7 @@ export default function Page() {
     },
   ];
 
+  // Récupérer les produits
   const getProduct = useCallback(async () => {
     const response = await dispatch(fetchProducts());
     setEntities(response.payload);
@@ -79,6 +82,7 @@ export default function Page() {
     getProduct();
   }, [getProduct]);
 
+  // Composant tableau
   function ListTable({ list }) {
     return (
       <MaterialReactTable
@@ -95,6 +99,7 @@ export default function Page() {
     );
   }
 
+  // Aller à la page d'ajout
   function ajouter() {
     router.push("/products/add");
   }
@@ -108,7 +113,7 @@ export default function Page() {
           <div className="content">
             <Container fluid>
               <ToastContainer />
-              <br></br>
+              <br />
               <Row>
                 <Col md="8">
                   <Button
@@ -121,11 +126,11 @@ export default function Page() {
                     <span className="btn-label">
                       <i className="fas fa-plus"></i>
                     </span>
-                    Ajouter un product
+                    Ajouter un produit
                   </Button>
                 </Col>
                 <Col md="12">
-                  <h4 className="title">Liste des products</h4>
+                  <h4 className="title">Liste des produits</h4>
                   <Card>
                     <Card.Body>
                       <ListTable list={entities} />

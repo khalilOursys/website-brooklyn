@@ -1,9 +1,9 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marquer ceci comme un composant client
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { fetchBulkProducts } from "@/Redux/bulkProductsReduce";
 import { useDispatch } from "react-redux";
-import { useRouter } from 'next/navigation'; // Updated import for Next.js 14
+import { useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
 import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,21 +35,21 @@ export default function Page() {
 
   const columns = [
     {
-      header: "Name",
+      header: "Nom",
       accessorKey: "name",
     },
     {
-      header: "Product",
+      header: "Produit",
       accessorKey: "product",
       Cell: ({ cell }) => cell.row.original.product.name,
     },
     {
-      header: "Quantity",
+      header: "Quantité",
       accessorKey: "minQuantity",
     },
     {
       accessorKey: "id",
-      header: "actions",
+      header: "Actions",
       Cell: ({ cell }) => (
         <div className="actions-right block_action">
           <Button
@@ -84,7 +84,7 @@ export default function Page() {
     getBulkProduct();
   }, [getBulkProduct]);
 
-  function ListTable({ list }) {
+  function TableListe({ list }) {
     return (
       <MaterialReactTable
         columns={columns}
@@ -127,14 +127,14 @@ export default function Page() {
                     <span className="btn-label">
                       <i className="fas fa-plus"></i>
                     </span>
-                    Ajouter un bulk Product
+                    Ajouter un produit en gros
                   </Button>
                 </Col>
                 <Col md="12">
-                  <h4 className="title">Liste des bulk Products</h4>
+                  <h4 className="title">Liste des produit en gros</h4>
                   <Card>
                     <Card.Body>
-                      <ListTable list={entities} />
+                      <TableListe list={entities} />
                     </Card.Body>
                   </Card>
                 </Col>

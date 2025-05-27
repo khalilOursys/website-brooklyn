@@ -1,255 +1,327 @@
-"use client"; // Mark this as a Client Component
-import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useParams, useRouter } from 'next/navigation'; // Updated import for Next.js 14
+"use client";
+import { Button, Card, Container, Row, Col, Form, Table } from "react-bootstrap";
+import React, { useState, useCallback, useEffect } from "react";
+import { useParams, useRouter } from 'next/navigation';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
-import { addBulkProduct, editBulkProduct, getBulkProductById } from "@/Redux/bulkProductsReduce";
-import dynamic from "next/dynamic";
-import { fetchProducts } from "@/Redux/productsReduce";
-const Select = dynamic(() => import('react-select'), {
-  ssr: false, // Disable SSR for react-select
-});
+import { useDropzone } from "react-dropzone";
+import Select from 'react-select';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Configuration from "@/configuration";
 
-export default function Page() {
+export default function UpdateProductBundle() {
   const notify = (type, msg) => {
     if (type === 1)
-      toast.success(<strong><i className="fas fa-check-circle"></i>{msg}</strong>);
+      toast.success(<strong><i className="fas fa-check-circle"></i> {msg}</strong>);
     else
-      toast.error(<strong><i className="fas fa-exclamation-circle"></i>{msg}</strong>);
+      toast.error(<strong><i className="fas fa-exclamation-circle"></i> {msg}</strong>);
   };
 
-  const dispatch = useDispatch();
-  const router = useRouter(); // Updated hook
-  const { id } = useParams(); // Use `useParams` if you're using dynamic routes
+  const router = useRouter();
+  const params = useParams();
+  const bundleId = params?.id;
+  const api = Configuration.BACK_BASEURL;
 
-  // State declarations
-  const [name, setName] = useState("");
-  const [minQuantity, setMinQuantity] = useState("");
-  const [bulkPrice, setBulkPrice] = useState("");
-  const [discount, setDiscount] = useState(0);
-  const [productId, setProductId] = useState(null); // Use null for react-select
+  const [formData, setFormData] = useState({
+    name: "",
+    discount: 0,
+    expiresAt: null,
+    img: "",
+    products: []
+  });
+
   const [products, setProducts] = useState([]);
-
-  const submitForm = async () => {
-    // Validation conditions
-    if (!name || name.trim() === "") {
-      notify(2, "Name is required");
-      return;
-    }
-
-    if (
-      minQuantity === undefined ||
-      minQuantity === null ||
-      String(minQuantity).trim() === "" ||
-      isNaN(Number(minQuantity))
-    ) {
-      notify(2, "Quantity is required and must be a number");
-      return;
-    }
-
-
-    if (
-      bulkPrice === undefined ||
-      bulkPrice === null ||
-      String(bulkPrice).trim() === "" ||
-      isNaN(Number(bulkPrice))
-    ) {
-      notify(2, "bulk Price is required and must be a number");
-      return;
-    }
-
-
-    // If all validations pass, proceed with form submission
-    dispatch(
-      editBulkProduct({
-        id,
-        name,
-        minQuantity,
-        bulkPrice,
-        productId: productId.value, // Extract value from react-select
-        discount
-      })
-    ).then((action) => {
-      if (action.meta.requestStatus === "fulfilled") {
-        notify(1, "Modification avec succes");
-        setTimeout(() => {
-          router.push("/bulkProducts"); // Updated navigation
-        }, 1500);
-      } else if (action.meta.requestStatus === "rejected") {
-        notify(2, action.payload.message || "Une erreur est survenue");
-      }
-    });
-  };
-
-  const listeBulkProduct = () => {
-    router.push("/bulkProducts"); // Updated navigation
-  };
-
-  const getProducts = useCallback(async () => {
-    try {
-      const response = await dispatch(fetchProducts());
-
-      const data = await response.payload;
-
-      const prodOptions = data.map(prod => ({
-        value: prod.id,
-        label: prod.name,
-      }));
-
-      setProducts(prodOptions);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      notify(2, "Failed to fetch products");
-    }
-  }, [dispatch]);
-
-  const fetchBulk = useCallback(
-    async (id) => {
-      const response = await dispatch(getBulkProductById(id));
-      const data = response.payload;
-
-      setBulkPrice(data.bulkPrice);
-      setName(data.name);
-      setDiscount(data.discount);
-      setMinQuantity(data.minQuantity)
-      setProductId({
-        value: data.product.id,
-        label: data.product.name,
-      })
-    },
-    [dispatch]
-  );
+  const [imageFile, setImageFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
-    getProducts();
-    fetchBulk(id);
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`${api}products`);
+        const data = await res.json();
+        setProducts(data.map(p => ({ value: p.id, label: p.name })));
+      } catch (err) {
+        notify(2, "Échec du chargement des produits");
+      }
+    };
+
+    const fetchBundle = async () => {
+      try {
+        const res = await fetch(`${api}productBundles/getProductBundlesById/${bundleId}`);
+        const data = await res.json();
+
+        setFormData({
+          name: data.name,
+          discount: data.discount,
+          expiresAt: data.expiresAt ? new Date(data.expiresAt) : null,
+          img: data.img,
+          products: data.products.map(p => ({
+            productId: p.productId,
+            quantity: p.quantity
+          }))
+        });
+
+        if (data.img) setPreview(data.img);
+      } catch (err) {
+        notify(2, "Échec du chargement du pack");
+      }
+    };
+
+    if (bundleId) {
+      fetchProducts();
+      fetchBundle();
+    }
+  }, [bundleId]);
+
+  const uploadFile = async (file) => {
+    setIsUploading(true);
+    try {
+      const form = new FormData();
+      form.append("image", file);
+
+      const res = await fetch(`${api}productBundles/upload`, {
+        method: "POST",
+        body: form
+      });
+
+      const { url } = await res.json();
+      setFormData(prev => ({ ...prev, img: url }));
+      notify(1, "Image mise à jour !");
+    } catch (e) {
+      notify(2, "Erreur lors de l'upload");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const onDrop = useCallback((acceptedFiles) => {
+    if (!acceptedFiles.length) return;
+    const file = acceptedFiles[0];
+    setImageFile(file);
+    setPreview(URL.createObjectURL(file));
+    uploadFile(file);
   }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
+    maxFiles: 1,
+    disabled: isUploading,
+  });
+
+  const updateProductLine = (index, field, value) => {
+    const updated = [...formData.products];
+    updated[index][field] = value;
+    setFormData(prev => ({ ...prev, products: updated }));
+  };
+
+  const removeProductFromBundle = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      products: prev.products.filter((_, i) => i !== index)
+    }));
+  };
+
+  const addProductToBundle = () => {
+    setFormData(prev => ({
+      ...prev,
+      products: [...prev.products, { productId: null, quantity: 1 }]
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.name.trim()) {
+      notify(2, "Le nom est requis");
+      return;
+    }
+
+    if (formData.products.length === 0 || formData.products.some(p => !p.productId)) {
+      notify(2, "Veuillez ajouter au moins un produit valide au pack");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${api}productBundles/${bundleId}`, {
+        method: "PUT",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          expiresAt: formData.expiresAt ? formData.expiresAt.toISOString() : null
+        })
+      });
+
+      if (!response.ok) throw new Error("Erreur lors de la mise à jour");
+
+      notify(1, "Pack mis à jour avec succès !");
+      setTimeout(() => {
+        router.push("/productBundles");
+      }, 1500);
+    } catch (err) {
+      notify(2, err.message || "Échec de mise à jour");
+    }
+  };
 
   return (
     <>
       <div className="wrapper">
-        <Sidebar bulkProducts={null} routes={[]} />
+        <Sidebar brands={null} routes={[]} />
         <div className="main-panel">
-          <AdminNavbar bulkProducts={null} />
-
+          <AdminNavbar brands={null} />
           <div className="content">
             <Container fluid>
               <ToastContainer />
-              <div className="section-image">
-                <Container>
-                  <Row>
-                    <Col md="12">
-                      <Button onClick={listeBulkProduct} variant="info">
-                        <i className="fas fa-list"></i> Retour à la liste
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
-                      <Form>
-                        <Card>
-                          <Card.Header>
-                            <Card.Title as="h4">{"Ajouter bulk Products"}</Card.Title>
-                          </Card.Header>
-                          <Card.Body>
-                            <Row>
-                              <Col className="pr-1" md="6">
-                                <Form.Group>
-                                  <label>Name* </label>
-                                  <Form.Control
-                                    value={name}
-                                    placeholder="name"
-                                    name="name"
-                                    className="required"
-                                    type="text"
-                                    onChange={(e) => setName(e.target.value)}
-                                  />
-                                  <div className="error"></div>
-                                </Form.Group>
-                              </Col>
-                              <Col className="pl-1" md="6">
-                                <Form.Group>
-                                  <label>Price* </label>
-                                  <Form.Control
-                                    value={bulkPrice}
-                                    placeholder="bulkPrice"
-                                    name="bulkPrice"
-                                    className="required"
-                                    type="text"
-                                    onChange={(e) => setBulkPrice(e.target.value)}
-                                  />
-                                  <div className="error"></div>
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col className="pr-1" md="6">
-                                <Form.Group>
-                                  <label>Product* </label>
-                                  <Select
-                                    options={products}
-                                    value={productId}
-                                    onChange={(selectedOption) => setProductId(selectedOption)}
-                                    placeholder="Select Product"
-                                  />
-                                </Form.Group>
-                              </Col>
-                              <Col className="pl-1" md="6">
-                                <Form.Group>
-                                  <label>MinQuantity* </label>
-                                  <Form.Control
-                                    value={minQuantity}
-                                    placeholder="MinQuantity"
-                                    name="MinQuantity"
-                                    className="required"
-                                    type="text"
-                                    onChange={(e) => setMinQuantity(e.target.value)}
-                                  />
-                                  <div className="error"></div>
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col className="pr-1" md="6">
-                                <Form.Group>
-                                  <label>Discount* </label>
-                                  <Form.Control
-                                    value={discount}
-                                    placeholder="discount"
-                                    name="discount"
-                                    className="required"
-                                    type="number"
-                                    onChange={(e) => setDiscount(e.target.value)}
-                                  />
-                                  <div className="error"></div>
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                            <Button className="btn-fill pull-right" type="button" variant="info" onClick={submitForm}>
-                              Enregistrer
-                            </Button>
-                            <div className="clearfix"></div>
-                          </Card.Body>
-                        </Card>
-                      </Form>
-                    </Col>
-                  </Row>
-                </Container>
-              </div>
+              <Container>
+                <Row>
+                  <Col md="12">
+                    <Button onClick={() => router.push("/productBundles")} variant="info">
+                      <i className="fas fa-list"></i> Retour à la liste
+                    </Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md="12">
+                    <Form onSubmit={handleSubmit}>
+                      <Card>
+                        <Card.Header>
+                          <Card.Title as="h4">Modifier le Pack</Card.Title>
+                        </Card.Header>
+                        <Card.Body>
+                          <Row>
+                            <Col md="6">
+                              <Form.Group className="mb-3">
+                                <label>Nom*</label>
+                                <Form.Control
+                                  type="text"
+                                  value={formData.name}
+                                  onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                  required
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col md="6">
+                              <Form.Group className="mb-3">
+                                <label>Remise {/* (%) */}</label>
+                                <Form.Control
+                                  type="number"
+                                  value={formData.discount}
+                                  min="0"
+                                  max="100"
+                                  onChange={e => setFormData({ ...formData, discount: parseFloat(e.target.value) })}
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Row>
+
+                          <Row>
+                            <Col md="6">
+                              <Form.Group className="mb-3">
+                                <label>Date d'expiration</label>
+                                <DatePicker
+                                  selected={formData.expiresAt}
+                                  onChange={date => setFormData({ ...formData, expiresAt: date })}
+                                  isClearable
+                                  className="form-control"
+                                  placeholderText="Sélectionner une date"
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col md="12">
+                              <Form.Group className="mb-3">
+                                <label>Image</label>
+                                <div {...getRootProps()}
+                                  className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
+                                    ${isDragActive ? 'border-primary bg-primary bg-opacity-10' : 'border-secondary'}
+                                    ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                  <input {...getInputProps()} />
+
+                                  <p className="text-muted">{isUploading ? "Téléversement..." : isDragActive ? "Déposez ici" : "Cliquez ou glissez une image"}</p>
+                                </div>
+                                {preview && (
+                                  <div className="mt-4 text-center">
+                                    <img
+                                      src={preview}
+                                      alt="Aperçu"
+                                      className="img-fluid rounded"
+                                      style={{ height: '200px' }}
+                                    />
+                                  </div>
+                                )}
+                              </Form.Group>
+                            </Col>
+                          </Row>
+
+                          <Card className="mb-4">
+                            <Card.Header>
+                              <Card.Title as="h5">Produits</Card.Title>
+                            </Card.Header>
+                            <Card.Body>
+                              <Button variant="secondary" onClick={addProductToBundle}>
+                                + Ajouter un produit
+                              </Button>
+
+                              <Table striped bordered hover className="mt-3">
+                                <thead>
+                                  <tr>
+                                    <th>Produit</th>
+                                    <th>Quantité</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {formData.products.map((item, index) => (
+                                    <tr key={index}>
+                                      <td>
+                                        <Select
+                                          options={products}
+                                          value={products.find(p => p.value === item.productId) || null}
+                                          onChange={(selected) =>
+                                            updateProductLine(index, 'productId', selected ? selected.value : null)
+                                          }
+                                          placeholder="Sélectionner un produit"
+                                        />
+                                      </td>
+                                      <td>
+                                        <Form.Control
+                                          type="number"
+                                          min="1"
+                                          value={item.quantity}
+                                          onChange={(e) =>
+                                            updateProductLine(index, 'quantity', parseInt(e.target.value) || 1)
+                                          }
+                                        />
+                                      </td>
+                                      <td>
+                                        <Button variant="danger" onClick={() => removeProductFromBundle(index)}>
+                                          Supprimer
+                                        </Button>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </Table>
+                            </Card.Body>
+                          </Card>
+
+                          <Button className="btn-fill pull-right" type="submit" variant="info">
+                            Mettre à jour
+                          </Button>
+                          <div className="clearfix"></div>
+                        </Card.Body>
+                      </Card>
+                    </Form>
+                  </Col>
+                </Row>
+              </Container>
             </Container>
           </div>
           <Footer />
-          <div
-            className="close-layer"
-            onClick={() =>
-              document.documentElement.classList.toggle("nav-open")
-            }
-          />
         </div>
       </div>
     </>

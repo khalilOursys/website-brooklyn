@@ -1,4 +1,4 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marque ce composant comme un composant client
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -24,7 +24,7 @@ export default function Page() {
   const router = useRouter();
   const { id } = useParams();
 
-  // State declarations
+  // Déclarations d'état
   const [fullname, setFullname] = useState("");
   const [legalDocs, setLegalDocs] = useState("");
   const [storeName, setStoreName] = useState("");
@@ -43,7 +43,7 @@ export default function Page() {
         setStoreName(data.bulkRequests?.storeName || "");
         setLegalDocs(data.bulkRequests?.legalDocs || "");
       } catch (error) {
-        notify(2, "Failed to fetch user data");
+        notify(2, "Échec de la récupération des données utilisateur");
       } finally {
         setLoading(false);
       }
@@ -63,21 +63,21 @@ export default function Page() {
 
   const handleDownloadDocument = () => {
     if (!legalDocs) {
-      notify(2, "No document available to download");
+      notify(2, "Aucun document disponible à télécharger");
       return;
     }
 
     try {
-      // Assuming legalDocs is a URL to the document
+      // Supposons que legalDocs est une URL vers le document
       const link = document.createElement('a');
       link.href = legalDocs;
       link.target = '_blank';
-      link.download = `document_${fullname || 'user'}.pdf`; // You can adjust the filename
+      link.download = `document_${fullname || 'utilisateur'}.pdf`; // Vous pouvez ajuster le nom du fichier
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (error) {
-      notify(2, "Failed to download document");
+      notify(2, "Échec du téléchargement du document");
     }
   };
 
@@ -105,16 +105,16 @@ export default function Page() {
                       <Form>
                         <Card>
                           <Card.Header>
-                            <Card.Title as="h4">{id ? "Détail utilisateur" : "Ajouter utilisateur"}</Card.Title>
+                            <Card.Title as="h4">{id ? "Détails de l'utilisateur" : "Ajouter un utilisateur"}</Card.Title>
                           </Card.Header>
                           <Card.Body>
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Nom et Prenom* </label>
+                                  <label>Nom et Prénom* </label>
                                   <Form.Control
                                     value={fullname}
-                                    placeholder="fullname"
+                                    placeholder="Nom complet"
                                     name="fullname"
                                     className="required"
                                     type="text"
@@ -141,10 +141,10 @@ export default function Page() {
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Store name* </label>
+                                  <label>Nom du magasin* </label>
                                   <Form.Control
                                     value={storeName}
-                                    placeholder="role"
+                                    placeholder="Rôle"
                                     className="required"
                                     name="role"
                                     readOnly
@@ -157,7 +157,7 @@ export default function Page() {
                                   <label>Document </label>
                                   <div className="d-flex align-items-center">
                                     {/* <Form.Control
-                                      value={legalDocs ? "Document available" : "No document"}
+                                      value={legalDocs ? "Document disponible" : "Aucun document"}
                                       placeholder="Document"
                                       className="required"
                                       readOnly
@@ -169,7 +169,7 @@ export default function Page() {
                                         onClick={handleDownloadDocument}
                                         disabled={loading}
                                       >
-                                        <i className="fas fa-download"></i> Download
+                                        <i className="fas fa-download"></i> Télécharger
                                       </Button>
                                     )}
                                   </div>

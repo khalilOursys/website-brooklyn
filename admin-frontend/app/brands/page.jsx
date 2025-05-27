@@ -1,9 +1,9 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marquer ceci comme un composant client
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { fetchBrands } from "@/Redux/brandsReduce";
 import { useDispatch } from "react-redux";
-import { useRouter } from 'next/navigation'; // Updated import for Next.js 14
+import { useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
 import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -35,7 +35,7 @@ export default function Page() {
 
   const columns = [
     {
-      header: "Name",
+      header: "Nom",
       accessorKey: "name",
     },
     {
@@ -44,7 +44,7 @@ export default function Page() {
     },
     {
       accessorKey: "id",
-      header: "actions",
+      header: "Actions",
       Cell: ({ cell }) => (
         <div className="actions-right block_action">
           <Button
@@ -79,7 +79,7 @@ export default function Page() {
     getBrand();
   }, [getBrand]);
 
-  function ListTable({ list }) {
+  function TableauListe({ list }) {
     return (
       <MaterialReactTable
         columns={columns}
@@ -121,14 +121,14 @@ export default function Page() {
                     <span className="btn-label">
                       <i className="fas fa-plus"></i>
                     </span>
-                    Ajouter un brand
+                    Ajouter une marque
                   </Button>
                 </Col>
                 <Col md="12">
-                  <h4 className="title">Liste des brands</h4>
+                  <h4 className="title">Liste des marques</h4>
                   <Card>
                     <Card.Body>
-                      <ListTable list={entities} />
+                      <TableauListe list={entities} />
                     </Card.Body>
                   </Card>
                 </Col>

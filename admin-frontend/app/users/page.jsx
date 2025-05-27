@@ -1,9 +1,9 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marque ce composant comme un composant client
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { fetchUsers } from "@/Redux/usersReduce";
 import { useDispatch } from "react-redux";
-import { useRouter } from 'next/navigation'; // Updated import for Next.js 14
+import { useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
 import MaterialReactTable from "material-react-table";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,7 +39,7 @@ export default function Page() {
       accessorKey: "firstName",
     },
     {
-      header: "Prenom",
+      header: "Prénom",
       accessorKey: "lastName",
     },
     {
@@ -47,13 +47,13 @@ export default function Page() {
       accessorKey: "email",
     },
     {
-      header: "Role",
+      header: "Rôle",
       accessorKey: "role",
       Cell: ({ cell }) => cell.row.original.role,
     },
     {
       accessorKey: "id",
-      header: "actions",
+      header: "Actions",
       Cell: ({ cell }) => (
         <div className="actions-right block_action">
           <Button
@@ -79,14 +79,14 @@ export default function Page() {
     },
   ];
 
-  const getUser = useCallback(async () => {
+  const getUsers = useCallback(async () => {
     const response = await dispatch(fetchUsers());
     setEntities(response.payload);
   }, [dispatch]);
 
   useEffect(() => {
-    getUser();
-  }, [getUser]);
+    getUsers();
+  }, [getUsers]);
 
   function ListTable({ list }) {
     return (

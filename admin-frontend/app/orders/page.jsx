@@ -35,13 +35,15 @@ export default function Page() {
   };
 
   const updateOrderStatus = async (orderId, newStatus) => {
-
     try {
+      setLoadingStates(prev => ({ ...prev, [orderId]: true }));
       await dispatch(editOrder({ id: orderId, status: newStatus })).unwrap();
-      notify(1, `Order status updated to ${newStatus}`);
-      getOrders(); // Refresh the orders list
+      notify(1, `Statut de la commande mis à jour en ${newStatus}`);
+      getOrders(); // Actualiser la liste des commandes
     } catch (error) {
-      notify(2, error.message || 'Failed to update order status');
+      notify(2, error.message || 'Échec de la mise à jour du statut');
+    } finally {
+      setLoadingStates(prev => ({ ...prev, [orderId]: false }));
     }
   };
 
@@ -53,7 +55,7 @@ export default function Page() {
 
   const columns = [
     {
-      header: "Name",
+      header: "Nom",
       accessorKey: "user.name",
     },
     {
@@ -66,30 +68,27 @@ export default function Page() {
       Cell: ({ cell }) => `${cell.getValue().toFixed(3)} TND`,
     },
     {
-      header: "Status",
+      header: "Statut",
       accessorKey: "status",
       Cell: ({ cell }) => (
         <span className={`badge bg-${getStatusBadgeColor(cell.getValue())}`}>
-          {cell.getValue()}
+          {translateStatus(cell.getValue())}
         </span>
       ),
     },
     {
-      header: "Address",
+      header: "Adresse",
       accessorKey: "address",
     },
     {
-      header: "Phone",
+      header: "Téléphone",
       accessorKey: "phoneNumber",
     },
     {
       accessorKey: "id",
-      header: "Actions",
+      header: "Détails",
       Cell: ({ cell }) => {
         const order = cell.row.original;
-        const nextStatus = getNextStatus(order.status);
-        const isProcessing = loadingStates[order.id];
-
         return (
           <div className="d-flex gap-2">
             <div className="actions-right block_action">
@@ -117,15 +116,14 @@ export default function Page() {
         return (
           <div className="d-flex gap-2">
             <div className="actions-right block_action">
-
-              {nextStatus && (
+              {nextStatus && nextStatus !== order.status && (
                 <Button
                   onClick={() => updateOrderStatus(order.id, nextStatus)}
                   variant="success"
                   size="sm"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? 'Processing...' : nextStatus}
+                  {isProcessing ? 'Traitement...' : translateStatus(nextStatus)}
                 </Button>
               )}
 
@@ -135,7 +133,7 @@ export default function Page() {
                 size="sm"
                 disabled={isProcessing}
               >
-                Cancel
+                Annuler
               </Button>
             </div>
           </div>
@@ -143,6 +141,17 @@ export default function Page() {
       },
     },
   ];
+
+  const translateStatus = (status) => {
+    const translations = {
+      'pending': 'En attente',
+      'processing': 'En traitement',
+      'shipped': 'Expédiée',
+      'completed': 'Terminée',
+      'cancelled': 'Annulée'
+    };
+    return translations[status] || status;
+  };
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
@@ -157,10 +166,10 @@ export default function Page() {
 
   const getOrders = useCallback(async () => {
     try {
-      const response = await dispatch(fetchOrders());
+      const response = await dispatch(fetchOrders({ isBulk: 0 }));
       setEntities(response.payload);
     } catch (error) {
-      notify(2, "Failed to load orders");
+      notify(2, "Échec du chargement des commandes");
     }
   }, [dispatch]);
 
@@ -197,7 +206,7 @@ export default function Page() {
 
               <Row>
                 <Col md="12">
-                  <h4 className="title">Orders List</h4>
+                  <h4 className="title">Liste des Commandes</h4>
                   <Card>
                     <Card.Body>
                       <ListTable list={entities} />

@@ -1,19 +1,19 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marque ce composant comme un composant client
 import { Button, Card, Container, Row, Col, Form, Table } from "react-bootstrap";
 import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useParams, useRouter } from 'next/navigation'; // Updated import for Next.js 14
+import { useParams, useRouter } from 'next/navigation';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
-import { addProduct, editProduct } from "@/Redux/productsReduce"; // Assuming you have a productsReducer
-import { useDropzone } from "react-dropzone"; // Import useDropzone for the ImageUpload component
+import { addProduct, editProduct } from "@/Redux/productsReduce";
+import { useDropzone } from "react-dropzone";
 import dynamic from "next/dynamic";
 import Configuration from "@/configuration";
 const Select = dynamic(() => import('react-select'), {
-  ssr: false, // Disable SSR for react-select
+  ssr: false,
 });
 
 export default function Page() {
@@ -25,32 +25,31 @@ export default function Page() {
   };
 
   const dispatch = useDispatch();
-  const router = useRouter(); // Updated hook
+  const router = useRouter();
   const { id } = useParams();
   const api = Configuration.BACK_BASEURL;
 
-  // State declarations for product fields
+  // États pour les champs du produit
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
-  const [bulkPrice, setBulkPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [isFeatured, setIsFeatured] = useState(false);
   const [stock, setStock] = useState(0);
-  const [images, setImages] = useState([]); // Array of up to 3 image paths
-  const [categoryId, setCategoryId] = useState(null); // Use null for react-select
-  const [brandId, setBrandId] = useState(null); // Use null for react-select
+  const [images, setImages] = useState([]);
+  const [categoryId, setCategoryId] = useState(null);
+  const [brandId, setBrandId] = useState(null);
 
-  // State for product attributes
+  // États pour les attributs
   const [attributes, setAttributes] = useState([{ key: "", value: "" }]);
 
-  // State for brands and categories
+  // États pour les marques et catégories
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  // ImageUpload component logic
+  // Gestion des images
   const [previews, setPreviews] = useState([]);
-  const [isUploading, setIsUploading] = useState(false); // State for upload loading
+  const [isUploading, setIsUploading] = useState(false);
 
   const uploadFiles = async (files) => {
     setIsUploading(true);
@@ -63,13 +62,13 @@ export default function Page() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Image upload failed");
-      var data = await (response.json());
+      if (!response.ok) throw new Error("Échec du téléchargement des images");
+      const data = await response.json();
       setImages(data);
-      notify(1, "Images uploaded successfully!");
+      notify(1, "Images téléchargées avec succès !");
     } catch (error) {
-      console.error("Upload error:", error);
-      notify(2, "Failed to upload images. Please try again.");
+      console.error("Erreur de téléchargement :", error);
+      notify(2, "Échec du téléchargement des images. Veuillez réessayer.");
     } finally {
       setIsUploading(false);
     }
@@ -78,9 +77,6 @@ export default function Page() {
   const onDrop = useCallback((acceptedFiles) => {
     const newPreviews = acceptedFiles.map(file => URL.createObjectURL(file));
     setPreviews(newPreviews);
-    /* setUploadedFiles(acceptedFiles); */
-
-    // Upload files immediately after they are selected
     uploadFiles(acceptedFiles);
   }, []);
 
@@ -91,7 +87,7 @@ export default function Page() {
     disabled: isUploading,
   });
 
-  // Handle attribute changes
+  // Gestion des attributs
   const handleAttributeChange = (index, field, value) => {
     const updatedAttributes = [...attributes];
     updatedAttributes[index][field] = value;
@@ -110,7 +106,7 @@ export default function Page() {
     }
   };
 
-  // Helper function to handle number input changes
+  // Fonction utilitaire pour les champs numériques
   const handleNumberChange = (e, setter) => {
     const value = e.target.value;
     setter(value === "" ? 0 : parseFloat(value));
@@ -119,40 +115,39 @@ export default function Page() {
   const submitForm = async (event) => {
     event.preventDefault();
 
-    // Validation conditions
+    // Validations
     if (!name || name.trim() === "") {
-      notify(2, "Product name is required");
+      notify(2, "Le nom du produit est requis");
       return;
     }
 
     if (!description || description.trim() === "") {
-      notify(2, "Product description is required");
+      notify(2, "La description du produit est requise");
       return;
     }
 
     if (price <= 0) {
-      notify(2, "Price must be greater than 0");
+      notify(2, "Le prix doit être supérieur à 0");
       return;
     }
 
     if (stock < 0) {
-      notify(2, "Stock cannot be negative");
+      notify(2, "Le stock ne peut pas être négatif");
       return;
     }
 
     if (!categoryId) {
-      notify(2, "Category is required");
+      notify(2, "La catégorie est requise");
       return;
     }
 
-    // Validate attributes
     const invalidAttributes = attributes.some(attr => !attr.key.trim() || !attr.value.trim());
     if (invalidAttributes) {
-      notify(2, "All attributes must have both key and value");
+      notify(2, "Tous les attributs doivent avoir une clé et une valeur");
       return;
     }
 
-    // If all validations pass, proceed with form submission
+    // Soumission
     dispatch(
       editProduct({
         id,
@@ -163,90 +158,72 @@ export default function Page() {
         isFeatured,
         stock,
         images,
-        categoryId: categoryId.value, // Extract value from react-select
-        brandId: brandId ? brandId.value : null, // Extract value from react-select (optional)
-        attributes: attributes.filter(attr => attr.key.trim() && attr.value.trim()) // Only include valid attributes
+        categoryId: categoryId.value,
+        brandId: brandId ? brandId.value : null,
+        attributes: attributes.filter(attr => attr.key.trim() && attr.value.trim())
       })
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        notify(1, "Product added successfully!");
+        notify(1, "Produit modifié avec succès !");
         setTimeout(() => {
-          router.push("/products"); // Redirect to products list
+          router.push("/products");
         }, 1500);
       } else if (action.meta.requestStatus === "rejected") {
-        notify(2, action.payload.message || "An error occurred");
+        notify(2, action.payload.message || "Une erreur est survenue");
       }
     });
   };
 
   const listProducts = () => {
-    router.push("/products"); // Redirect to products list
+    router.push("/products");
   };
 
-
-  // Fetch brands and categories on component mount
+  // Récupération des marques et catégories
   const fetchBrands = useCallback(async () => {
     try {
       const response = await fetch(`${api}brands`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch brands");
-      }
-
+      if (!response.ok) throw new Error("Échec de la récupération des marques");
       const data = await response.json();
-
-      const brandOptions = data.map(brand => ({
+      setBrands(data.map(brand => ({
         value: brand.id,
         label: brand.name,
-      }));
-
-      setBrands(brandOptions);
+      })));
     } catch (error) {
-      console.error("Error fetching brands:", error);
-      notify(2, "Failed to fetch brands");
+      console.error("Erreur:", error);
+      notify(2, "Échec de la récupération des marques");
     }
   }, []);
 
   const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch(`${api}categories/getAllChildren`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch categories");
-      }
-
+      if (!response.ok) throw new Error("Échec de la récupération des catégories");
       const data = await response.json();
-
-      const categoryOptions = data.map(category => ({
+      setCategories(data.map(category => ({
         value: category.id,
         label: category.name,
-      }));
-
-      setCategories(categoryOptions);
+      })));
     } catch (error) {
-      console.error("Error fetching categories:", error);
-      notify(2, "Failed to fetch categories");
+      console.error("Erreur:", error);
+      notify(2, "Échec de la récupération des catégories");
     }
   }, []);
 
   const getProductById = useCallback(async () => {
     try {
       const response = await fetch(`${api}products/getProductById/${id}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch product");
-      }
-
+      if (!response.ok) throw new Error("Échec de la récupération du produit");
       const data = await response.json();
 
-      // Update basic product info
+      // Mise à jour des informations de base
       setDescription(data.description);
       setName(data.name);
-      setDiscount(data.discount ? data.discount : 0);
+      setDiscount(data.discount || 0);
       setPrice(data.price);
       setStock(data.stock);
+      setIsFeatured(data.isFeatured || false);
 
-      // Set brand and category
+      // Marque et catégorie
       setBrandId({
         value: data.brand.id,
         label: data.brand.name,
@@ -257,34 +234,34 @@ export default function Page() {
         label: data.category.name,
       });
 
-      // Format and set attributes
+      // Attributs
       const formattedAttributes = data.attributes.map(attr => ({
         key: attr.key,
         value: attr.value
       }));
       setAttributes(formattedAttributes);
 
-      // Handle images
+      // Images
       const imageUrls = data.images.map(image => image.url);
       setPreviews(imageUrls);
 
       const formattedImages = data.images.map((image, index) => ({
         url: image.url,
-        isPrimary: index === 0 // Set first image as primary
+        isPrimary: index === 0
       }));
       setImages(formattedImages);
 
     } catch (error) {
-      console.error("Error fetching product:", error);
-      notify(2, "Failed to fetch product");
+      console.error("Erreur:", error);
+      notify(2, "Échec de la récupération du produit");
     }
   }, [id]);
 
   useEffect(() => {
-    getProductById(id);
+    if (id) getProductById();
     fetchBrands();
     fetchCategories();
-  }, [fetchBrands, fetchCategories, getProductById]);
+  }, [fetchBrands, fetchCategories, getProductById, id]);
 
   return (
     <>
@@ -301,7 +278,7 @@ export default function Page() {
                   <Row>
                     <Col md="12">
                       <Button onClick={listProducts} variant="info">
-                        <i className="fas fa-list"></i> Back to Product List
+                        <i className="fas fa-list"></i> Retour à la liste des produits
                       </Button>
                     </Col>
                   </Row>
@@ -310,22 +287,21 @@ export default function Page() {
                       <Form onSubmit={submitForm}>
                         <Card>
                           <Card.Header>
-                            <Card.Title as="h4">{"Add Product"}</Card.Title>
+                            <Card.Title as="h4">{id ? "Modifier le produit" : "Ajouter un produit"}</Card.Title>
                           </Card.Header>
                           <Card.Body>
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Product Name* </label>
+                                  <label>Nom du produit* </label>
                                   <Form.Control
                                     value={name}
-                                    placeholder="Product Name"
+                                    placeholder="Nom du produit"
                                     name="name"
                                     className="required"
                                     type="text"
                                     onChange={(e) => setName(e.target.value)}
                                   />
-                                  <div className="error"></div>
                                 </Form.Group>
                               </Col>
                               <Col className="pl-1" md="6">
@@ -339,40 +315,41 @@ export default function Page() {
                                     type="text"
                                     onChange={(e) => setDescription(e.target.value)}
                                   />
-                                  <div className="error"></div>
                                 </Form.Group>
                               </Col>
                             </Row>
+
+                            {/* Nouvelle ligne pour le prix, remise et en vedette */}
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Price* </label>
+                                  <label>Prix* </label>
                                   <Form.Control
                                     value={price}
-                                    placeholder="Price"
+                                    placeholder="Prix"
                                     name="price"
                                     className="required"
                                     type="number"
                                     onChange={(e) => handleNumberChange(e, setPrice)}
                                   />
-                                  <div className="error"></div>
                                 </Form.Group>
                               </Col>
-                            </Row>
-                            <Row>
-                              <Col className="pr-1" md="6">
+                              <Col className="px-1" md="6">
                                 <Form.Group>
-                                  <label>Discount </label>
+                                  <label>Remise </label>
                                   <Form.Control
                                     value={discount}
-                                    placeholder="Discount"
+                                    placeholder="Remise"
                                     name="discount"
                                     type="number"
                                     onChange={(e) => handleNumberChange(e, setDiscount)}
                                   />
                                 </Form.Group>
                               </Col>
-                              <Col className="pl-1" md="6">
+                            </Row>
+
+                            <Row>
+                              <Col className="pr-1" md="6">
                                 <Form.Group>
                                   <label>Stock* </label>
                                   <Form.Control
@@ -385,43 +362,59 @@ export default function Page() {
                                   />
                                 </Form.Group>
                               </Col>
+                              <Col className="pr-1" md="6">
+                                <Form.Group>
+                                  <label>En vedette </label>
+                                  <div className="form-group">
+                                    <label className="switch">
+                                      <input
+                                        type="checkbox"
+                                        id="featured-switch"
+                                        checked={isFeatured}
+                                        onChange={(e) => setIsFeatured(e.target.checked)}
+                                      />
+                                      <span className="slider round"></span>
+                                    </label>
+                                  </div>
+                                </Form.Group>
+                              </Col>
                             </Row>
+
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Category* </label>
+                                  <label>Catégorie* </label>
                                   <Select
                                     options={categories}
                                     value={categoryId}
-                                    onChange={(selectedOption) => setCategoryId(selectedOption)}
-                                    placeholder="Select Category"
+                                    onChange={setCategoryId}
+                                    placeholder="Sélectionner une catégorie"
                                   />
                                 </Form.Group>
                               </Col>
                               <Col className="pl-1" md="6">
                                 <Form.Group>
-                                  <label>Brand </label>
+                                  <label>Marque </label>
                                   <Select
                                     options={brands}
                                     value={brandId}
-                                    onChange={(selectedOption) => setBrandId(selectedOption)}
-                                    placeholder="Select Brand"
+                                    onChange={setBrandId}
+                                    placeholder="Sélectionner une marque"
                                     isClearable
                                   />
                                 </Form.Group>
                               </Col>
                             </Row>
 
-                            {/* Product Attributes Section */}
+                            {/* Attributs du produit */}
                             <Row>
                               <Col md="12">
-                                {/* Attribute Table */}
-                                <h5 className="mt-4">Product Attributes</h5>
+                                <h5 className="mt-4">Attributs du produit</h5>
                                 <Table bordered>
                                   <thead>
                                     <tr>
-                                      <th>Key</th>
-                                      <th>Value</th>
+                                      <th>Clé</th>
+                                      <th>Valeur</th>
                                       <th>Actions</th>
                                     </tr>
                                   </thead>
@@ -435,10 +428,11 @@ export default function Page() {
                                     ))}
                                   </tbody>
                                 </Table>
-                                <Button variant="success" onClick={addAttribute}>+ Add Attribute</Button>
+                                <Button variant="success" onClick={addAttribute}>+ Ajouter un attribut</Button>
                               </Col>
                             </Row>
 
+                            {/* Téléchargement d'images */}
                             <Row>
                               <Col md="12">
                                 <Form.Group>
@@ -450,9 +444,9 @@ export default function Page() {
                                   >
                                     <input {...getInputProps()} />
                                     <p className="text-muted">
-                                      {isUploading ? 'Uploading...' :
-                                        isDragActive ? 'Drop images here' :
-                                          'Drag & drop product images (max 4), or click to select'}
+                                      {isUploading ? 'Téléchargement en cours...' :
+                                        isDragActive ? 'Déposez les images ici' :
+                                          'Glissez-déposez les images du produit (max 4), ou cliquez pour sélectionner'}
                                     </p>
                                   </div>
                                   {previews.length > 0 && (
@@ -461,12 +455,12 @@ export default function Page() {
                                         <div key={preview} className="col-6 col-md-3 mb-4 position-relative">
                                           <img
                                             src={preview}
-                                            alt={`Preview ${index + 1}`}
+                                            alt={`Aperçu ${index + 1}`}
                                             className="img-fluid rounded"
                                             style={{ width: '100%', height: '200px', objectFit: 'cover' }}
                                           />
                                           <span className="position-absolute bottom-0 start-0 badge bg-dark bg-opacity-75 text-white m-2">
-                                            {index === 0 ? 'Primary' : `Image ${index + 1}`}
+                                            {index === 0 ? 'Principale' : `Image ${index + 1}`}
                                           </span>
                                         </div>
                                       ))}
@@ -475,9 +469,10 @@ export default function Page() {
                                 </Form.Group>
                               </Col>
                             </Row>
-                            <br></br>
+
+                            <br />
                             <Button className="btn-fill pull-right" type="submit" variant="info">
-                              Save Product
+                              {id ? "Mettre à jour" : "Enregistrer"}
                             </Button>
                             <div className="clearfix"></div>
                           </Card.Body>
@@ -490,12 +485,6 @@ export default function Page() {
             </Container>
           </div>
           <Footer />
-          <div
-            className="close-layer"
-            onClick={() =>
-              document.documentElement.classList.toggle("nav-open")
-            }
-          />
         </div>
       </div>
     </>

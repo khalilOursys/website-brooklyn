@@ -8,21 +8,17 @@ import { Button, Card, Form, Col, Row } from "react-bootstrap";
 import Image from "next/image"; // Use Next.js Image component
 import { loginFetch } from "@/Redux/usersReduce";
 import "react-toastify/dist/ReactToastify.css";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
   const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
+
   const [cardClasses, setCardClasses] = useState("card-hidden");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Show error notification
-  /* const notifyErr = (msg) =>
-    toast.error(
-      <strong>
-        <i className="fas fa-exclamation-circle"></i>
-        {msg}
-      </strong>
-    ); */
   const notifyErr = (msg) => {
     toast.error(
       <strong>
@@ -34,62 +30,61 @@ export default function Home() {
 
   // Animate card appearance
   useEffect(() => {
+    i18n.changeLanguage("en");
     setTimeout(() => {
       setCardClasses("");
     }, 1000);
   }, []);
 
-  // Handle login input change
   const handleLoginChange = (event) => {
     setLogin(event.target.value);
   };
 
-  // Handle password input change
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
 
-  // Handle Enter key press
   const handleEnterKeyPress = (event) => {
     if (event.charCode === 13) {
-      event.preventDefault(); // Prevent form submission
+      event.preventDefault();
       handleSubmit();
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (event) => {
     if (event) {
-      event.preventDefault(); // Prevent default form submission
+      event.preventDefault();
     }
 
-    // Check if login (email) or password is empty
     if (!login.trim()) {
-      notifyErr("Email cannot be empty."); // Show error message
+      notifyErr(t("loginPage.email") + " " + t("loginPage.error"));
       return;
     }
     if (!password.trim()) {
-      notifyErr("Password cannot be empty."); // Show error message
+      notifyErr(t("loginPage.password") + " " + t("loginPage.error"));
       return;
     }
 
-    window.location.replace("/users"); // Redirect to profile page
-    /* try {
+    setIsLoading(true);
+
+    try {
       const result = await dispatch(
         loginFetch({ email: login, password: password })
       );
       const data = result.payload;
 
       if (data.message) {
-        notifyErr(data.message); // Show error message
+        notifyErr(data.message);
       } else {
-        localStorage.setItem("x-access-token", data.access_token); // Save token to localStorage
-        localStorage.setItem("user", data.user); // Save token to localStorage
-        window.location.replace("/users"); // Redirect to profile page
+        localStorage.setItem("x-access-token", data.access_token);
+        localStorage.setItem("user", data.user);
+        window.location.replace("/users");
       }
     } catch (error) {
-      notifyErr("An error occurred during login."); // Handle unexpected errors
-    } */
+      notifyErr(t("loginPage.error"));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -100,10 +95,10 @@ export default function Home() {
           <Col className="hiddenMobile" lg="3" md="4" sm="4" xs="3">
             <div className="img-log">
               <Image
-                src="/images/logo.png" // Use absolute path for images in the public folder
+                src="/images/logo.png"
                 alt="oursys"
-                width={150} // Set appropriate width
-                height={50} // Set appropriate height
+                width={150}
+                height={50}
               />
             </div>
           </Col>
@@ -114,17 +109,19 @@ export default function Home() {
                   <Form className="form">
                     <Card className={`card-login ${cardClasses}`}>
                       <Card.Header>
-                        <h3 className="header text-center">Connectez-vous</h3>
+                        <h3 className="header text-center">
+                          {t("loginPage.title")}
+                        </h3>
                         <br />
                         <p className="header text-center">
-                          Connectez-vous pour accéder à votre espace
+                          {t("loginPage.title")}
                         </p>
                       </Card.Header>
                       <Card.Body>
                         <Form.Group>
-                          <label>Login</label>
+                          <label>{t("loginPage.email")}</label>
                           <Form.Control
-                            placeholder="Login"
+                            placeholder={t("loginPage.email")}
                             type="text"
                             value={login}
                             onChange={handleLoginChange}
@@ -132,9 +129,9 @@ export default function Home() {
                           />
                         </Form.Group>
                         <Form.Group>
-                          <label>Mot de passe</label>
+                          <label>{t("loginPage.password")}</label>
                           <Form.Control
-                            placeholder="Password"
+                            placeholder={t("loginPage.password")}
                             type="password"
                             value={password}
                             onChange={handlePasswordChange}
@@ -148,8 +145,11 @@ export default function Home() {
                           type="button"
                           variant="success"
                           onClick={handleSubmit}
+                          disabled={isLoading}
                         >
-                          Connexion
+                          {isLoading
+                            ? t("loginPage.loading")
+                            : t("loginPage.submit")}
                         </Button>
                       </Card.Footer>
                     </Card>

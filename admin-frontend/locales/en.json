@@ -1,0 +1,65 @@
+{
+  "petInfo": {
+    "title": "Pet Information",
+    "labels": {
+      "title": "Pet Information",
+      "name": "Name",
+      "species": "Species",
+      "breed": "Breed",
+      "age": "Age",
+      "years": "years"
+    },
+    "ownerInfo": {
+      "title": "Owner Information",
+      "name": "Owner's Name",
+      "tel": "Tel",
+      "email": "Email"
+    },
+    "buttons": {
+      "sendLocation": "Send Current Location",
+      "sendingLocation": "Sending Location..."
+    },
+    "loading": "Loading pet information...",
+    "error": {
+      "notFound": "Pet information not found or tagCode not linked to a pet.",
+      "noPetInfo": "No information found for this pet.",
+      "failedToSendLocation": "Failed to send location.",
+      "locationAccessDenied": "Location access denied.",
+      "geolocationNotSupported": "Geolocation is not supported by your browser."
+    },
+    "success": {
+      "locationSent": "Location sent successfully!"
+    }
+  },
+  "loginPage": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Login",
+    "loading": "Logging in...",
+    "error": "Login failed. Please check your email and password.",
+    "roleError": "You can't access the admin dashboard."
+  },
+  "home": {
+    "title": "Welcome to the Pet Tag Management System",
+    "subtitle": "Efficiently generate and manage pet tags with ease.",
+    "button": "Get Started"
+  },
+  "tagGenerator": {
+    "title": "Generate Tags",
+    "subtitle": "Generate a specified number of QR codes to be used as tags for pets.",
+    "inputLabel": "Enter Number of Tags",
+    "inputHelperText": "Specify the number of QR codes you want to generate.",
+    "generateButton": "Generate Tags",
+    "downloadButton": "Download QR Codes as PDF",
+    "downloadFilename": "qr_codes.pdf",
+    "error": {
+      "invalidNumber": "Please enter a valid number greater than zero",
+      "serverError": "Failed to generate tag. Please try again later."
+    }
+  },
+  "logout": "Logout",
+  "login": "Login",
+  "generateTags": "Generate Tags",
+  "appTitle": "Pet Tag Manager"
+}

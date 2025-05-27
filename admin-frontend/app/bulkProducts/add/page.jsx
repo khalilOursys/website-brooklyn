@@ -1,8 +1,8 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marque ce composant comme un composant Client
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useParams, useRouter } from 'next/navigation'; // Updated import for Next.js 14
+import { useParams, useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
@@ -12,7 +12,7 @@ import { addBulkProduct } from "@/Redux/bulkProductsReduce";
 import dynamic from "next/dynamic";
 import { fetchProducts } from "@/Redux/productsReduce";
 const Select = dynamic(() => import('react-select'), {
-  ssr: false, // Disable SSR for react-select
+  ssr: false, // Désactive SSR pour react-select
 });
 
 export default function Page() {
@@ -24,48 +24,49 @@ export default function Page() {
   };
 
   const dispatch = useDispatch();
-  const router = useRouter(); // Updated hook
+  const router = useRouter(); // Hook mis à jour
 
-  // State declarations
+  // Déclarations d'état
   const [name, setName] = useState("");
   const [minQuantity, setMinQuantity] = useState("");
   const [bulkPrice, setBulkPrice] = useState("");
   const [discount, setDiscount] = useState(0);
-  const [productId, setProductId] = useState(null); // Use null for react-select
+  const [productId, setProductId] = useState(null); // Utilise null pour react-select
   const [products, setProducts] = useState([]);
 
   const submitForm = async () => {
 
-    // Validation conditions
+    // Conditions de validation
     if (!name || name.trim() === "") {
-      notify(2, "Name is required");
+      notify(2, "Le nom est requis");
       return;
     }
 
     if (!minQuantity || minQuantity.trim() === "") {
-      notify(2, "Quantity is required");
+      notify(2, "La quantité est requise");
       return;
     }
 
     if (!bulkPrice || bulkPrice.trim() === "") {
-      notify(2, "Price is required");
+      notify(2, "Le prix est requis");
       return;
     }
 
-    // If all validations pass, proceed with form submission
+    // Si toutes les validations passent, procéder à la soumission du formulaire
     dispatch(
       addBulkProduct({
         name: name,
         minQuantity,
         bulkPrice,
-        productId: productId.value, // Extract value from react-select
+        productId: productId.value, // Extrait la valeur de react-select
         discount
       })
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        notify(1, "Insertion avec succes");
+        /* notify(1, "Insertion réussie"); */
+        notify(1, "Produit en gros ajoutée avec succès !");
         setTimeout(() => {
-          router.push("/bulkProducts"); // Updated navigation
+          router.push("/bulkProducts"); // Navigation mise à jour
         }, 1500);
       } else if (action.meta.requestStatus === "rejected") {
         notify(2, action.payload.message || "Une erreur est survenue");
@@ -74,7 +75,7 @@ export default function Page() {
   };
 
   const listeBulkProduct = () => {
-    router.push("/bulkProducts"); // Updated navigation
+    router.push("/bulkProducts"); // Navigation mise à jour
   };
 
   const getProducts = useCallback(async () => {
@@ -90,8 +91,8 @@ export default function Page() {
 
       setProducts(prodOptions);
     } catch (error) {
-      console.error("Error fetching products:", error);
-      notify(2, "Failed to fetch products");
+      console.error("Erreur lors de la récupération des produits:", error);
+      notify(2, "Échec de la récupération des produits");
     }
   }, [dispatch]);
 
@@ -123,16 +124,16 @@ export default function Page() {
                       <Form>
                         <Card>
                           <Card.Header>
-                            <Card.Title as="h4">{"Ajouter bulk Products"}</Card.Title>
+                            <Card.Title as="h4">{"Ajouter des produits en gros"}</Card.Title>
                           </Card.Header>
                           <Card.Body>
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Name* </label>
+                                  <label>Nom* </label>
                                   <Form.Control
                                     value={name}
-                                    placeholder="name"
+                                    placeholder="Nom"
                                     name="name"
                                     className="required"
                                     type="text"
@@ -143,10 +144,10 @@ export default function Page() {
                               </Col>
                               <Col className="pl-1" md="6">
                                 <Form.Group>
-                                  <label>Price* </label>
+                                  <label>Prix* </label>
                                   <Form.Control
                                     value={bulkPrice}
-                                    placeholder="bulkPrice"
+                                    placeholder="Prix en gros"
                                     name="bulkPrice"
                                     className="required"
                                     type="text"
@@ -159,21 +160,21 @@ export default function Page() {
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Product* </label>
+                                  <label>Produit* </label>
                                   <Select
                                     options={products}
                                     value={productId}
                                     onChange={(selectedOption) => setProductId(selectedOption)}
-                                    placeholder="Select Product"
+                                    placeholder="Sélectionner un produit"
                                   />
                                 </Form.Group>
                               </Col>
                               <Col className="pl-1" md="6">
                                 <Form.Group>
-                                  <label>MinQuantity* </label>
+                                  <label>Quantité minimale* </label>
                                   <Form.Control
                                     value={minQuantity}
-                                    placeholder="MinQuantity"
+                                    placeholder="Quantité minimale"
                                     name="MinQuantity"
                                     className="required"
                                     type="text"
@@ -186,10 +187,10 @@ export default function Page() {
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Discount* </label>
+                                  <label>Remise* </label>
                                   <Form.Control
                                     value={discount}
-                                    placeholder="discount"
+                                    placeholder="Remise"
                                     name="discount"
                                     className="required"
                                     type="number"

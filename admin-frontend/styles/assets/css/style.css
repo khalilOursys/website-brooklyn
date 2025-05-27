@@ -880,3 +880,7 @@ div#basic-navbar-nav {
   border: 1px dotted #fff;
   margin-top: 20px;
 }
+
+.react-datepicker-wrapper {
+  width: 100%;
+}

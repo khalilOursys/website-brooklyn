@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
-import { editBulkClientRequests, fetchBulkClientRequests } from "@/Redux/bulkClientRequestsReduce";
+import { editOrder, fetchOrders } from "@/Redux/ordersReduce";
 
 export default function Page() {
   const [entities, setEntities] = useState([]);
@@ -34,59 +34,66 @@ export default function Page() {
       );
   };
 
-  const updateBulkClientRequestsStatus = async (bulkClientRequestsId, newStatus) => {
+  const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      await dispatch(editBulkClientRequests({ id: bulkClientRequestsId, status: newStatus })).unwrap();
-      notify(1, `Statut mis à jour vers ${newStatus}`);
-      getBulkClientRequests(); // Rafraîchir la liste
+      setLoadingStates(prev => ({ ...prev, [orderId]: true }));
+      await dispatch(editOrder({ id: orderId, status: newStatus })).unwrap();
+      notify(1, `Statut de la commande mis à jour en ${newStatus}`);
+      getOrders(); // Actualiser la liste des commandes
     } catch (error) {
       notify(2, error.message || 'Échec de la mise à jour du statut');
+    } finally {
+      setLoadingStates(prev => ({ ...prev, [orderId]: false }));
     }
   };
 
   const getNextStatus = (currentStatus) => {
-    const statusFlow = ['en attente', 'approuvée'];
+    const statusFlow = ['pending', 'processing', 'shipped', 'completed'];
     const currentIndex = statusFlow.indexOf(currentStatus);
     return currentIndex < statusFlow.length - 1 ? statusFlow[currentIndex + 1] : currentStatus;
   };
 
   const columns = [
     {
-      header: "Email utilisateur",
+      header: "Nom",
+      accessorKey: "user.name",
+    },
+    {
+      header: "Email",
       accessorKey: "user.email",
     },
     {
-      header: "Prénom",
-      accessorKey: "user.firstName",
-    },
-    {
-      header: "Nom",
-      accessorKey: "user.lastName",
-    },
-    {
-      header: "Nom du magasin",
-      accessorKey: "storeName",
+      header: "Total",
+      accessorKey: "total",
+      Cell: ({ cell }) => `${cell.getValue().toFixed(3)} TND`,
     },
     {
       header: "Statut",
       accessorKey: "status",
       Cell: ({ cell }) => (
         <span className={`badge bg-${getStatusBadgeColor(cell.getValue())}`}>
-          {cell.getValue()}
+          {translateStatus(cell.getValue())}
         </span>
       ),
     },
     {
+      header: "Adresse",
+      accessorKey: "address",
+    },
+    {
+      header: "Téléphone",
+      accessorKey: "phoneNumber",
+    },
+    {
       accessorKey: "id",
-      header: "Actions",
+      header: "Détails",
       Cell: ({ cell }) => {
-        const bulkClientRequests = cell.row.original;
-
+        const order = cell.row.original;
         return (
           <div className="d-flex gap-2">
             <div className="actions-right block_action">
               <Button
-                onClick={() => router.push("/bulkClientRequests/detail/" + bulkClientRequests.user.id)}
+                onClick={() => router.push("/ordersBulks/detail/" + order.id)}
                 variant="info"
                 size="sm"
                 className="text-info btn-link view"
@@ -100,29 +107,28 @@ export default function Page() {
     },
     {
       accessorKey: "change",
-      header: "Changer le statut",
+      header: "Actions",
       Cell: ({ cell }) => {
-        const bulkClientRequests = cell.row.original;
-        const nextStatus = getNextStatus(bulkClientRequests.status);
-        const isProcessing = loadingStates[bulkClientRequests.id];
+        const order = cell.row.original;
+        const nextStatus = getNextStatus(order.status);
+        const isProcessing = loadingStates[order.id];
 
         return (
           <div className="d-flex gap-2">
             <div className="actions-right block_action">
-
-              {nextStatus && (
+              {nextStatus && nextStatus !== order.status && (
                 <Button
-                  onClick={() => updateBulkClientRequestsStatus(bulkClientRequests.id, nextStatus)}
+                  onClick={() => updateOrderStatus(order.id, nextStatus)}
                   variant="success"
                   size="sm"
                   disabled={isProcessing}
                 >
-                  {isProcessing ? 'Traitement...' : nextStatus}
+                  {isProcessing ? 'Traitement...' : translateStatus(nextStatus)}
                 </Button>
               )}
 
               <Button
-                onClick={() => updateBulkClientRequestsStatus(bulkClientRequests.id, 'annulé')}
+                onClick={() => updateOrderStatus(order.id, 'cancelled')}
                 variant="danger"
                 size="sm"
                 disabled={isProcessing}
@@ -136,31 +142,42 @@ export default function Page() {
     },
   ];
 
+  const translateStatus = (status) => {
+    const translations = {
+      'pending': 'En attente',
+      'processing': 'En traitement',
+      'shipped': 'Expédiée',
+      'completed': 'Terminée',
+      'cancelled': 'Annulée'
+    };
+    return translations[status] || status;
+  };
+
   const getStatusBadgeColor = (status) => {
     switch (status) {
-      case 'approuvée': return 'success';
+      case 'completed': return 'success';
       case 'processing': return 'info';
       case 'shipped': return 'primary';
-      case 'en attente': return 'warning';
-      case 'annulé': return 'danger';
+      case 'pending': return 'warning';
+      case 'cancelled': return 'danger';
       default: return 'secondary';
     }
   };
 
-  const getBulkClientRequests = useCallback(async () => {
+  const getOrders = useCallback(async () => {
     try {
-      const response = await dispatch(fetchBulkClientRequests());
+      const response = await dispatch(fetchOrders({ isBulk: 1 }));
       setEntities(response.payload);
     } catch (error) {
-      notify(2, "Échec du chargement des demandes groupées de clients");
+      notify(2, "Échec du chargement des commandes");
     }
   }, [dispatch]);
 
   useEffect(() => {
-    getBulkClientRequests();
-  }, [getBulkClientRequests]);
+    getOrders();
+  }, [getOrders]);
 
-  function TableauListe({ list }) {
+  function ListTable({ list }) {
     return (
       <MaterialReactTable
         columns={columns}
@@ -179,9 +196,9 @@ export default function Page() {
   return (
     <>
       <div className="wrapper">
-        <Sidebar bulkClientRequestss={null} routes={[]} />
+        <Sidebar orders={null} routes={[]} />
         <div className="main-panel">
-          <AdminNavbar bulkClientRequestss={null} />
+          <AdminNavbar orders={null} />
           <div className="content">
             <Container fluid>
               <ToastContainer />
@@ -189,10 +206,10 @@ export default function Page() {
 
               <Row>
                 <Col md="12">
-                  <h4 className="title">Liste des demandes des clients grossistes</h4>
+                  <h4 className="title">Liste des Commandes</h4>
                   <Card>
                     <Card.Body>
-                      <TableauListe list={entities} />
+                      <ListTable list={entities} />
                     </Card.Body>
                   </Card>
                 </Col>

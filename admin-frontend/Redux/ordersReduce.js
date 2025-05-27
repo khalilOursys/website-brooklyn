@@ -47,20 +47,24 @@ export const editOrder = createAsyncThunk(
   }
 );
 
-export const fetchOrders = createAsyncThunk("order/fetchOrders", async () => {
-  const response = await fetch(
-    `${Configuration.BACK_BASEURL}orders/getOrderType/0`,
-    {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Bearer token
-      },
-    }
-  );
-  return response.json();
-});
+export const fetchOrders = createAsyncThunk(
+  "order/fetchOrders",
+  async (actions) => {
+    let { isBulk } = actions;
+    const response = await fetch(
+      `${Configuration.BACK_BASEURL}orders/getOrderType/${isBulk}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+      }
+    );
+    return response.json();
+  }
+);
 
 export const getOrderById = createAsyncThunk(
   "orders/getOrderById",

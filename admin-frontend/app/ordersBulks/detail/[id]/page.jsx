@@ -209,11 +209,11 @@ export default function Page() {
                                         {order.orderItems?.map((item, index) => (
                                           <tr key={index}>
                                             <td>
-                                              {item.product?.name || `ID Produit : ${item.productId}`}
-                                              {item.variant && ` (${item.variant.name})`}
+                                              {order.isBulk === 0 ? item.product?.name : item.bulk?.name}
+                                              {/* {item.variant && ` (${item.variant.name})`} */}
                                             </td>
                                             <td>{item.quantity}</td>
-                                            <td>{item.product.price} TND</td>
+                                            <td>{order.isBulk === 0 ? item.product.price : item.bulk?.bulkPrice} TND</td>
                                             <td>{item.price} TND</td>
                                           </tr>
                                         ))}

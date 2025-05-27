@@ -1,0 +1,39 @@
+{
+  "loginPage": {
+    "title": "Connexion",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "loading": "Connexion en cours...",
+    "error": "Échec de la connexion. Veuillez vérifier votre e-mail et votre mot de passe.",
+    "roleError": "Vous n'avez pas accès au tableau de bord administrateur."
+  },
+  "brandManagement": {
+    "title": "Ajouter une marque",
+    "backToList": "Retour à la liste des marques",
+    "form": {
+      "name": "Nom de la marque*",
+      "namePlaceholder": "Nom de la marque",
+      "description": "Description*",
+      "descriptionPlaceholder": "Description",
+      "imageUpload": {
+        "dragDrop": "Glissez-déposez une image ici",
+        "clickToSelect": "Glissez-déposez une image ici ou cliquez pour sélectionner",
+        "uploading": "Téléchargement en cours...",
+        "success": "Image téléchargée avec succès !",
+        "error": "Échec du téléchargement de l'image."
+      },
+      "submit": "Enregistrer la marque"
+    },
+    "notifications": {
+      "success": "Marque ajoutée avec succès !",
+      "error": {
+        "nameRequired": "Le nom de la marque est obligatoir",
+        "descriptionRequired": "La description est obligatoire",
+        "uploadFailed": "Échec du téléchargement de l'image. Veuillez réessayer."
+      }
+    }
+  },
+  "logout": "Déconnexion",
+  "login": "Connexion"
+}

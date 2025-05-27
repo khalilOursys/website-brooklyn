@@ -1,8 +1,8 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marque ceci comme un composant client
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from 'next/navigation'; // Updated import for Next.js 14
+import { useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
@@ -27,20 +27,20 @@ export default function Page() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
-  const [preview, setPreview] = useState(null); // Single image preview
-  const [imageFile, setImageFile] = useState(null); // Store selected file
+  const [preview, setPreview] = useState(null); // Aperçu d'une seule image
+  const [imageFile, setImageFile] = useState(null); // Stocker le fichier sélectionné
   const [isUploading, setIsUploading] = useState(false);
 
   const submitForm = async (event) => {
     event.preventDefault();
 
     if (!name.trim()) {
-      notify(2, "Brand name is required");
+      notify(2, "Le nom de la marque est requis");
       return;
     }
 
     if (!description.trim()) {
-      notify(2, "Brand description is required");
+      notify(2, "La description de la marque est requise");
       return;
     }
 
@@ -48,16 +48,16 @@ export default function Page() {
       addBrand({
         name,
         description,
-        img: image, // Include uploaded image URL
+        img: image, // Inclure l'URL de l'image téléchargée
       })
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        notify(1, "Brand added successfully!");
+        notify(1, "Marque ajoutée avec succès !");
         setTimeout(() => {
           window.location.replace("/brands");
         }, 1500);
       } else {
-        notify(2, action.payload?.message || "An error occurred");
+        notify(2, action.payload?.message || "Une erreur est survenue");
       }
     });
   };
@@ -66,22 +66,22 @@ export default function Page() {
     setIsUploading(true);
     try {
       const formData = new FormData();
-      formData.append("image", file); // Send only one file
+      formData.append("image", file); // Envoyer un seul fichier
 
       const response = await fetch(`${api}brands/upload`, {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Image upload failed");
+      if (!response.ok) throw new Error("Échec du téléchargement de l'image");
 
       const { url } = await response.json();
       setImage(url);
-      /* const { imageUrl } = await response.json(); // Expect single image URL */
-      notify(1, "Image uploaded successfully!");
+      /* const { imageUrl } = await response.json(); // Attendre une seule URL d'image */
+      notify(1, "Image téléchargée avec succès !");
     } catch (error) {
-      console.error("Upload error:", error);
-      notify(2, "Failed to upload image. Please try again.");
+      console.error("Erreur de téléchargement :", error);
+      notify(2, "Échec du téléchargement de l'image. Veuillez réessayer.");
       return null;
     } finally {
       setIsUploading(false);
@@ -92,21 +92,21 @@ export default function Page() {
 
     if (acceptedFiles.length === 0) return;
     if (acceptedFiles.length > 1) {
-      notify(2, "Please select only one image");
+      notify(2, "Veuillez sélectionner une seule image");
       return;
     }
-    const file = acceptedFiles[0]; // Take only one file
+    const file = acceptedFiles[0]; // Prendre un seul fichier
     setImageFile(file);
-    setPreview(URL.createObjectURL(file)); // Show preview
+    setPreview(URL.createObjectURL(file)); // Afficher l'aperçu
 
-    // Upload file immediately
+    // Télécharger le fichier immédiatement
     uploadFile(file);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'image/*': ['.jpeg', '.jpg', '.png'] },
-    maxFiles: 2, // Only one file allowed
+    maxFiles: 2, // Un seul fichier autorisé
     disabled: isUploading,
   });
 
@@ -124,7 +124,7 @@ export default function Page() {
                   <Row>
                     <Col md="12">
                       <Button onClick={() => router.push("/brands")} variant="info">
-                        <i className="fas fa-list"></i> Back to Brand List
+                        <i className="fas fa-list"></i> Retour à la liste des marques
                       </Button>
                     </Col>
                   </Row>
@@ -133,16 +133,16 @@ export default function Page() {
                       <Form onSubmit={submitForm}>
                         <Card>
                           <Card.Header>
-                            <Card.Title as="h4">Add Brand</Card.Title>
+                            <Card.Title as="h4">Ajouter une marque</Card.Title>
                           </Card.Header>
                           <Card.Body>
                             <Row>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Brand Name* </label>
+                                  <label>Nom de la marque* </label>
                                   <Form.Control
                                     value={name}
-                                    placeholder="Brand Name"
+                                    placeholder="Nom de la marque"
                                     name="name"
                                     className="required"
                                     type="text"
@@ -175,16 +175,16 @@ export default function Page() {
                                   >
                                     <input {...getInputProps()} />
                                     <p className="text-muted">
-                                      {isUploading ? 'Uploading...' :
-                                        isDragActive ? 'Drop an image here' :
-                                          'Drag & drop an image, or click to select'}
+                                      {isUploading ? 'Téléchargement en cours...' :
+                                        isDragActive ? 'Déposez une image ici' :
+                                          'Glissez-déposez une image, ou cliquez pour sélectionner'}
                                     </p>
                                   </div>
                                   {preview && (
                                     <div className="mt-4 text-center">
                                       <img
                                         src={preview}
-                                        alt="Preview"
+                                        alt="Aperçu"
                                         className="img-fluid rounded"
                                         style={{ height: '200px' }}
                                       />
@@ -195,7 +195,7 @@ export default function Page() {
                             </Row>
                             <br />
                             <Button className="btn-fill pull-right" type="submit" variant="info">
-                              Save Brand
+                              Enregistrer la marque
                             </Button>
                             <div className="clearfix"></div>
                           </Card.Body>

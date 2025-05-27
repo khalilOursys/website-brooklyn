@@ -1,8 +1,8 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marquer ce composant comme un composant client
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from 'next/navigation'; // Updated import for Next.js 14
+import { useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
@@ -14,7 +14,7 @@ import Configuration from "@/configuration";
 import { useDropzone } from "react-dropzone";
 
 const Select = dynamic(() => import('react-select'), {
-  ssr: false, // Disable SSR for react-select
+  ssr: false, // Désactiver le SSR pour react-select
 });
 
 export default function Page() {
@@ -45,14 +45,14 @@ export default function Page() {
   const [isUploadingIcon, setIsUploadingIcon] = useState(false);
   const [isUploadingBg, setIsUploadingBg] = useState(false);
 
-  // Function to generate slug
+  // Fonction pour générer un slug
   const generateSlug = (input) => {
     return input
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Remove accents
-      .replace(/[^a-z0-9 ]/g, "") // Remove special characters
-      .replace(/\s+/g, "-"); // Replace spaces with dashes
+      .replace(/[\u0300-\u036f]/g, "") // Supprimer les accents
+      .replace(/[^a-z0-9 ]/g, "") // Supprimer les caractères spéciaux
+      .replace(/\s+/g, "-"); // Remplacer les espaces par des tirets
   };
 
   useEffect(() => {
@@ -63,12 +63,12 @@ export default function Page() {
     event.preventDefault();
 
     if (!name || name.trim() === "") {
-      notify(2, "Category name is required");
+      notify(2, "Le nom de la catégorie est requis");
       return;
     }
 
     if (!description || description.trim() === "") {
-      notify(2, "Category description is required");
+      notify(2, "La description de la catégorie est requise");
       return;
     }
 
@@ -85,12 +85,12 @@ export default function Page() {
       })
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        notify(1, "Category added successfully!");
+        notify(1, "Catégorie ajoutée avec succès !");
         setTimeout(() => {
           router.push("/categories");
         }, 1500);
       } else if (action.meta.requestStatus === "rejected") {
-        notify(2, action.payload.message || "An error occurred");
+        notify(2, action.payload.message || "Une erreur s'est produite");
       }
     });
   };
@@ -100,7 +100,7 @@ export default function Page() {
       const response = await fetch(`${api}categories/getAllParent`);
 
       if (!response.ok) {
-        throw new Error("Failed to fetch categories");
+        throw new Error("Échec du chargement des catégories");
       }
 
       const data = await response.json();
@@ -112,12 +112,18 @@ export default function Page() {
 
       setCategories(categoryOptions);
     } catch (error) {
-      console.error("Error fetching categories:", error);
-      notify(2, "Failed to fetch categories");
+      console.error("Erreur lors du chargement des catégories :", error);
+      notify(2, "Échec du chargement des catégories");
     }
   }, []);
 
   const uploadIcon = async (file) => {
+    // Check file size (max 2MB)
+    /* const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+    if (file.size > maxSize) {
+      notify(2, "Icon image must be less than 2MB");
+      return;
+    } */
     setIsUploadingIcon(true);
     try {
       const formData = new FormData();
@@ -128,20 +134,28 @@ export default function Page() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Icon upload failed");
+      if (!response.ok) throw new Error("Échec du téléversement de l'icône");
 
       const { url } = await response.json();
       setIconUrl(url);
-      notify(1, "Icon uploaded successfully!");
+      setIconPreview(url);
+      notify(1, "Icône téléversée avec succès !");
     } catch (error) {
-      console.error("Upload error:", error);
-      notify(2, "Failed to upload icon. Please try again.");
+      console.error("Erreur de téléversement :", error);
+      notify(2, "Échec du téléversement de l'icône. Veuillez réessayer.");
+      setIconPreview(null);
     } finally {
       setIsUploadingIcon(false);
     }
   };
 
   const uploadBackground = async (file) => {
+    // Check file size (max 2MB)
+    /* const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+    if (file.size > maxSize) {
+      notify(2, "Icon image must be less than 2MB");
+      return;
+    } */
     setIsUploadingBg(true);
     try {
       const formData = new FormData();
@@ -152,14 +166,14 @@ export default function Page() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Background upload failed");
+      if (!response.ok) throw new Error("Échec du téléversement du fond");
 
       const { url } = await response.json();
       setBgUrl(url);
-      notify(1, "Background uploaded successfully!");
+      notify(1, "Image de fond téléversée avec succès !");
     } catch (error) {
-      console.error("Upload error:", error);
-      notify(2, "Failed to upload background. Please try again.");
+      console.error("Erreur de téléversement :", error);
+      notify(2, "Échec du téléversement du fond. Veuillez réessayer.");
     } finally {
       setIsUploadingBg(false);
     }
@@ -169,7 +183,7 @@ export default function Page() {
     if (acceptedFiles.length === 0) return;
     const file = acceptedFiles[0];
     setIconFile(file);
-    setIconPreview(URL.createObjectURL(file));
+    /* setIconPreview(URL.createObjectURL(file)); */
     uploadIcon(file);
   }, []);
 
@@ -214,7 +228,7 @@ export default function Page() {
                   <Row>
                     <Col md="12">
                       <Button onClick={() => router.push("/categories")} variant="info">
-                        <i className="fas fa-list"></i> Back to Category List
+                        <i className="fas fa-list"></i> Retour à la liste des catégories
                       </Button>
                     </Col>
                   </Row>
@@ -223,16 +237,16 @@ export default function Page() {
                       <Form onSubmit={submitForm}>
                         <Card>
                           <Card.Header>
-                            <Card.Title as="h4">Add Category</Card.Title>
+                            <Card.Title as="h4">Ajouter une catégorie</Card.Title>
                           </Card.Header>
                           <Card.Body>
                             <Row>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Category Name* </label>
+                                  <label>Nom de la catégorie* </label>
                                   <Form.Control
                                     value={name}
-                                    placeholder="Category Name"
+                                    placeholder="Nom de la catégorie"
                                     name="name"
                                     className="required"
                                     type="text"
@@ -242,7 +256,7 @@ export default function Page() {
                               </Col>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Slug (Auto-generated) </label>
+                                  <label>Slug (généré automatiquement)</label>
                                   <Form.Control
                                     value={slug}
                                     name="slug"
@@ -255,18 +269,18 @@ export default function Page() {
                             <Row>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Category </label>
+                                  <label>Catégorie parente</label>
                                   <Select
                                     options={categories}
                                     value={parentId}
                                     onChange={(selectedOption) => setParentId(selectedOption)}
-                                    placeholder="Select Category"
+                                    placeholder="Sélectionner une catégorie"
                                   />
                                 </Form.Group>
                               </Col>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Description* </label>
+                                  <label>Description*</label>
                                   <Form.Control
                                     value={description}
                                     placeholder="Description"
@@ -281,7 +295,7 @@ export default function Page() {
                             <Row>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Icon Image</label>
+                                  <label>Image d'icône</label>
                                   <div
                                     {...getIconRootProps()}
                                     className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
@@ -290,16 +304,16 @@ export default function Page() {
                                   >
                                     <input {...getIconInputProps()} />
                                     <p className="text-muted">
-                                      {isUploadingIcon ? 'Uploading...' :
-                                        isDragActiveIcon ? 'Drop the icon here' :
-                                          'Drag & drop an icon, or click to select'}
+                                      {isUploadingIcon ? 'Téléversement en cours...' :
+                                        isDragActiveIcon ? 'Déposez l’icône ici' :
+                                          'Glissez-déposez une icône ou cliquez pour sélectionner'}
                                     </p>
                                   </div>
                                   {iconPreview && (
                                     <div className="mt-4 text-center">
                                       <img
                                         src={iconPreview}
-                                        alt="Icon Preview"
+                                        alt="Aperçu de l'icône"
                                         className="img-fluid rounded"
                                         style={{ height: '100px' }}
                                       />
@@ -309,7 +323,7 @@ export default function Page() {
                               </Col>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Background Image</label>
+                                  <label>Image d’arrière-plan</label>
                                   <div
                                     {...getBgRootProps()}
                                     className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
@@ -318,16 +332,16 @@ export default function Page() {
                                   >
                                     <input {...getBgInputProps()} />
                                     <p className="text-muted">
-                                      {isUploadingBg ? 'Uploading...' :
-                                        isDragActiveBg ? 'Drop the background here' :
-                                          'Drag & drop a background, or click to select'}
+                                      {isUploadingBg ? 'Téléversement en cours...' :
+                                        isDragActiveBg ? 'Déposez le fond ici' :
+                                          'Glissez-déposez un fond ou cliquez pour sélectionner'}
                                     </p>
                                   </div>
                                   {bgPreview && (
                                     <div className="mt-4 text-center">
                                       <img
                                         src={bgPreview}
-                                        alt="Background Preview"
+                                        alt="Aperçu du fond"
                                         className="img-fluid rounded"
                                         style={{ height: '100px' }}
                                       />
@@ -336,9 +350,9 @@ export default function Page() {
                                 </Form.Group>
                               </Col>
                             </Row>
-                            <br></br>
+                            <br />
                             <Button className="btn-fill pull-right" type="submit" variant="info">
-                              Save Category
+                              Enregistrer la catégorie
                             </Button>
                             <div className="clearfix"></div>
                           </Card.Body>

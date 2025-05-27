@@ -1,70 +1,70 @@
 const routesData = [
-  /* {
-    path: "/users",
-    name: "Users",
-    icon: "fas fa-users",
-    role: ["admin"],
-  }, */
   {
     path: "/orders",
-    name: "Orders",
-    icon: "fas fa-users",
+    name: "Commandes",
+    icon: "fas fa-shopping-cart",
+    role: ["admin"],
+  },
+  {
+    path: "/ordersBulks",
+    name: "Commandes en gros",
+    icon: "fas fa-pallet",
     role: ["admin"],
   },
   {
     path: "/admin",
-    name: "Settings",
+    name: "Paramètres",
     icon: "fas fa-cog",
     role: ["admin", "user"],
-    collapse: true, // This route has nested routes
+    collapse: true, // Cette route contient des sous-routes
     views: [
       {
         path: "/products",
-        name: "product",
+        name: "Produits",
         icon: "fab fa-product-hunt",
-        role: ["admin"], // Roles allowed to access this route
+        role: ["admin"],
       },
       {
         path: "/bulkProducts",
-        name: "Bulk Product",
-        icon: "fab fa-product-hunt",
-        role: ["admin"], // Roles allowed to access this route
+        name: "Produits en gros",
+        icon: "fas fa-boxes",
+        role: ["admin"],
       },
-      /* {
+      {
         path: "/productBundles",
-        name: "Bundle Product",
-        icon: "fab fa-product-hunt",
-        role: ["admin"], // Roles allowed to access this route
-      }, */
+        name: "Packs produits",
+        icon: "fas fa-box-open",
+        role: ["admin"],
+      },
       {
         path: "/users",
-        name: "Users",
+        name: "Utilisateurs",
         icon: "fas fa-users",
         role: ["admin"],
       },
       {
         path: "/bulkClientRequests",
-        name: "Bulk Client Requests",
-        icon: "fas fa-users",
+        name: "Demandes clients (gros)",
+        icon: "fas fa-handshake",
         role: ["admin"],
       },
       {
         path: "/brands",
-        name: "Brands",
-        icon: "fas fa-signature",
+        name: "Marques",
+        icon: "fas fa-tags",
         role: ["admin"],
       },
       {
         path: "/categories",
-        name: "Categories",
-        icon: "fas fa-file-alt",
+        name: "Catégories",
+        icon: "fas fa-list-alt",
         role: ["admin"],
       },
     ],
   },
   {
     path: "/",
-    name: "Logout",
+    name: "Déconnexion",
     icon: "fas fa-sign-out-alt",
     role: ["admin", "user"],
   },

@@ -1,4 +1,4 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Composant client
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -22,7 +22,6 @@ export default function Page() {
   const router = useRouter();
   const { id } = useParams();
 
-  // State declarations matching the DTO
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -48,23 +47,21 @@ export default function Page() {
     }
   }, [id, fetchUser]);
 
-  const submitForm = async (event) => {
-    // Validation conditions matching DTO
+  const submitForm = async () => {
     if (!email || !validateEmail(email)) {
-      notify(2, "Please enter a valid email address");
+      notify(2, "Veuillez entrer une adresse e-mail valide");
       return;
     }
 
     if (password && password.length < 6) {
-      notify(2, "Password must be at least 6 characters long");
+      notify(2, "Le mot de passe doit contenir au moins 6 caractères");
       return;
     }
 
-    // Prepare user data according to DTO
     const userData = {
       id,
       email,
-      password: password || "", // Only include password if it's provided
+      password: password || "",
       firstName: firstName || "",
       lastName: lastName || "",
       role: role || "MANAGER",
@@ -74,17 +71,16 @@ export default function Page() {
       editUser(userData)
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        notify(1, "User updated successfully");
+        notify(1, "Utilisateur modifié avec succès");
         setTimeout(() => {
           router.push("/users");
         }, 1500);
       } else if (action.meta.requestStatus === "rejected") {
-        notify(2, action.payload.message || "An error occurred");
+        notify(2, action.payload.message || "Une erreur s'est produite");
       }
     });
   };
 
-  // Helper function to validate email
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
@@ -94,8 +90,7 @@ export default function Page() {
     router.push("/users");
   };
 
-  // Define role options
-  const roleOptions = ["MANAGER", "ADMIN"];
+  const roleOptions = ["MANAGER", "ADMIN", "CLIENT"];
 
   return (
     <>
@@ -112,7 +107,7 @@ export default function Page() {
                   <Row>
                     <Col md="12">
                       <Button onClick={listeUser} variant="info">
-                        <i className="fas fa-list"></i> Back to list
+                        <i className="fas fa-list"></i> Retour à la liste
                       </Button>
                     </Col>
                   </Row>
@@ -121,16 +116,16 @@ export default function Page() {
                       <Form>
                         <Card>
                           <Card.Header>
-                            <Card.Title as="h4">{"Edit User"}</Card.Title>
+                            <Card.Title as="h4">Modifier l'utilisateur</Card.Title>
                           </Card.Header>
                           <Card.Body>
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>First Name</label>
+                                  <label>Prénom</label>
                                   <Form.Control
                                     value={firstName}
-                                    placeholder="First Name"
+                                    placeholder="Prénom"
                                     name="firstName"
                                     type="text"
                                     onChange={(e) => setFirstName(e.target.value)}
@@ -139,10 +134,10 @@ export default function Page() {
                               </Col>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Last Name</label>
+                                  <label>Nom</label>
                                   <Form.Control
                                     value={lastName}
-                                    placeholder="Last Name"
+                                    placeholder="Nom"
                                     name="lastName"
                                     type="text"
                                     onChange={(e) => setLastName(e.target.value)}
@@ -167,10 +162,10 @@ export default function Page() {
                               </Col>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Password</label>
+                                  <label>Mot de passe</label>
                                   <Form.Control
                                     value={password}
-                                    placeholder="Password (leave blank to keep current)"
+                                    placeholder="Mot de passe (laisser vide pour ne pas le changer)"
                                     name="password"
                                     type="password"
                                     onChange={(e) => setPassword(e.target.value)}
@@ -182,7 +177,7 @@ export default function Page() {
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Role</label>
+                                  <label>Rôle</label>
                                   <Form.Select
                                     value={role}
                                     onChange={(e) => setRole(e.target.value)}
@@ -202,7 +197,7 @@ export default function Page() {
                               variant="info"
                               onClick={submitForm}
                             >
-                              Save
+                              Enregistrer
                             </Button>
                             <div className="clearfix"></div>
                           </Card.Body>

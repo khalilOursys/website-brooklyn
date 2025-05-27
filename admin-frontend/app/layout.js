@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import { store } from "@/store";
 import { Providers } from "./providers";
+/* import "../i18n"; */
 
 // RootLayout component
 export default function RootLayout({ children }) {

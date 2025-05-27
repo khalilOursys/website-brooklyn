@@ -1,3 +1,4 @@
+// Full code with translations only
 "use client";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useState, useCallback, useEffect } from "react";
@@ -46,7 +47,6 @@ export default function Page() {
   const [isUploadingIcon, setIsUploadingIcon] = useState(false);
   const [isUploadingBg, setIsUploadingBg] = useState(false);
 
-  // Function to generate slug
   const generateSlug = (input) => {
     return input
       .toLowerCase()
@@ -64,12 +64,12 @@ export default function Page() {
     event.preventDefault();
 
     if (!name.trim()) {
-      notify(2, "Category name is required");
+      notify(2, "Le nom de la catégorie est requis");
       return;
     }
 
     if (!description.trim()) {
-      notify(2, "Category description is required");
+      notify(2, "La description de la catégorie est requise");
       return;
     }
 
@@ -87,21 +87,20 @@ export default function Page() {
       })
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        notify(1, "Category updated successfully!");
+        notify(1, "Catégorie mise à jour avec succès !");
         setTimeout(() => {
           router.push("/categories");
         }, 1500);
       } else {
-        notify(2, action.payload?.message || "An error occurred");
+        notify(2, action.payload?.message || "Une erreur s'est produite");
       }
     });
   };
 
   const uploadIcon = async (file) => {
-    // Check file size (max 2MB)
-    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+    const maxSize = 3 * 1024 * 1024;
     if (file.size > maxSize) {
-      notify(2, "Icon image must be less than 2MB");
+      notify(2, "L'image de l'icône doit être inférieure à 3 Mo");
       return;
     }
 
@@ -115,24 +114,25 @@ export default function Page() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Icon upload failed");
+      if (!response.ok) throw new Error("Échec du téléchargement de l'icône");
 
       const { url } = await response.json();
       setIconUrl(url);
-      notify(1, "Icon uploaded successfully!");
+      setIconPreview(url);
+      notify(1, "Icône téléchargée avec succès !");
     } catch (error) {
-      console.error("Upload error:", error);
-      notify(2, "Failed to upload icon. Please try again.");
+      setIconPreview(null);
+      console.error("Erreur de téléchargement :", error);
+      notify(2, "Échec du téléchargement de l'icône. Veuillez réessayer.");
     } finally {
       setIsUploadingIcon(false);
     }
   };
 
   const uploadBackground = async (file) => {
-    // Check file size (max 2MB)
-    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+    const maxSize = 3 * 1024 * 1024;
     if (file.size > maxSize) {
-      notify(2, "Background image must be less than 2MB");
+      notify(2, "L'image de fond doit être inférieure à 3 Mo");
       return;
     }
 
@@ -146,14 +146,16 @@ export default function Page() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Background upload failed");
+      if (!response.ok) throw new Error("Échec du téléchargement de l'arrière-plan");
 
       const { url } = await response.json();
       setBgUrl(url);
-      notify(1, "Background uploaded successfully!");
+      setBgPreview(url);
+      notify(1, "Arrière-plan téléchargé avec succès !");
     } catch (error) {
-      console.error("Upload error:", error);
-      notify(2, "Failed to upload background. Please try again.");
+      console.error("Erreur de téléchargement :", error);
+      setBgPreview(null);
+      notify(2, "Échec du téléchargement de l'arrière-plan. Veuillez réessayer.");
     } finally {
       setIsUploadingBg(false);
     }
@@ -163,7 +165,7 @@ export default function Page() {
     if (acceptedFiles.length === 0) return;
     const file = acceptedFiles[0];
     setIconFile(file);
-    setIconPreview(URL.createObjectURL(file));
+    /* setIconPreview(URL.createObjectURL(file)); */
     uploadIcon(file);
   }, []);
 
@@ -171,7 +173,7 @@ export default function Page() {
     if (acceptedFiles.length === 0) return;
     const file = acceptedFiles[0];
     setBgFile(file);
-    setBgPreview(URL.createObjectURL(file));
+    /* setBgPreview(URL.createObjectURL(file)); */
     uploadBackground(file);
   }, []);
 
@@ -192,7 +194,7 @@ export default function Page() {
   const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch(`${api}categories/getAllParent`);
-      if (!response.ok) throw new Error("Failed to fetch categories");
+      if (!response.ok) throw new Error("Échec de la récupération des catégories");
       const data = await response.json();
       const categoryOptions = data.map(category => ({
         value: category.id,
@@ -200,8 +202,8 @@ export default function Page() {
       }));
       setCategories(categoryOptions);
     } catch (error) {
-      console.error("Error fetching categories:", error);
-      notify(2, "Failed to fetch categories");
+      console.error("Erreur lors de la récupération des catégories :", error);
+      notify(2, "Impossible de récupérer les catégories");
     }
   }, []);
 
@@ -221,12 +223,12 @@ export default function Page() {
       if (data.parentId) {
         setParentId({
           value: data.parentId,
-          label: data.parent.name || "Parent Category"
+          label: data.parent.name || "Catégorie parente"
         });
       }
     } catch (error) {
-      console.error("Error fetching category:", error);
-      notify(2, "Failed to fetch category data");
+      console.error("Erreur lors de la récupération de la catégorie :", error);
+      notify(2, "Impossible de récupérer les données de la catégorie");
     }
   }, [dispatch]);
 
@@ -251,7 +253,7 @@ export default function Page() {
                   <Row>
                     <Col md="12">
                       <Button onClick={() => router.push("/categories")} variant="info">
-                        <i className="fas fa-list"></i> Back to Category List
+                        <i className="fas fa-list"></i> Retour à la liste des catégories
                       </Button>
                     </Col>
                   </Row>
@@ -260,16 +262,16 @@ export default function Page() {
                       <Form onSubmit={submitForm}>
                         <Card>
                           <Card.Header>
-                            <Card.Title as="h4">Update Category</Card.Title>
+                            <Card.Title as="h4">Mettre à jour la catégorie</Card.Title>
                           </Card.Header>
                           <Card.Body>
                             <Row>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Category Name* </label>
+                                  <label>Nom de la catégorie* </label>
                                   <Form.Control
                                     value={name}
-                                    placeholder="Category Name"
+                                    placeholder="Nom de la catégorie"
                                     name="name"
                                     className="required"
                                     type="text"
@@ -279,7 +281,7 @@ export default function Page() {
                               </Col>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Slug (Auto-generated) </label>
+                                  <label>Slug (généré automatiquement) </label>
                                   <Form.Control
                                     value={slug}
                                     name="slug"
@@ -292,12 +294,12 @@ export default function Page() {
                             <Row>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Parent Category</label>
+                                  <label>Catégorie parente</label>
                                   <Select
                                     options={categories}
                                     value={parentId}
                                     onChange={(selectedOption) => setParentId(selectedOption)}
-                                    placeholder="Select Parent Category"
+                                    placeholder="Sélectionner une catégorie parente"
                                   />
                                 </Form.Group>
                               </Col>
@@ -315,32 +317,10 @@ export default function Page() {
                                 </Form.Group>
                               </Col>
                             </Row>
-                            {/* <Row>
-                              <Col md="6">
-                                <Form.Group>
-                                  <label>Banner Color</label>
-                                  <Form.Control
-                                    type="color"
-                                    value={bannerColor}
-                                    onChange={(e) => setBannerColor(e.target.value)}
-                                  />
-                                </Form.Group>
-                              </Col>
-                              <Col md="6">
-                                <Form.Group>
-                                  <label>Banner Text Color</label>
-                                  <Form.Control
-                                    type="color"
-                                    value={bannerText}
-                                    onChange={(e) => setBannerText(e.target.value)}
-                                  />
-                                </Form.Group>
-                              </Col>
-                            </Row> */}
                             <Row>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Icon Image</label>
+                                  <label>Image d'icône</label>
                                   <div
                                     {...getIconRootProps()}
                                     className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
@@ -349,18 +329,18 @@ export default function Page() {
                                   >
                                     <input {...getIconInputProps()} />
                                     <p className="text-muted">
-                                      {isUploadingIcon ? 'Uploading...' :
-                                        isDragActiveIcon ? 'Drop the icon here' :
-                                          'Drag & drop an icon, or click to select'}
+                                      {isUploadingIcon ? 'Téléchargement...' :
+                                        isDragActiveIcon ? 'Déposez l’icône ici' :
+                                          'Glissez-déposez une icône, ou cliquez pour sélectionner'}
                                     </p>
                                   </div>
                                   {(iconPreview || iconUrl) && (
                                     <div className="mt-4 text-center">
                                       <img
                                         src={iconPreview || iconUrl}
-                                        alt="Icon Preview"
+                                        alt="Aperçu de l’icône"
                                         className="img-fluid rounded"
-                                        style={{ height: '100px' }}
+                                        style={{ height: '100%' }}
                                       />
                                     </div>
                                   )}
@@ -368,7 +348,7 @@ export default function Page() {
                               </Col>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Background Image</label>
+                                  <label>Image d’arrière-plan</label>
                                   <div
                                     {...getBgRootProps()}
                                     className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
@@ -377,16 +357,16 @@ export default function Page() {
                                   >
                                     <input {...getBgInputProps()} />
                                     <p className="text-muted">
-                                      {isUploadingBg ? 'Uploading...' :
-                                        isDragActiveBg ? 'Drop the background here' :
-                                          'Drag & drop a background, or click to select'}
+                                      {isUploadingBg ? 'Téléchargement...' :
+                                        isDragActiveBg ? 'Déposez l’arrière-plan ici' :
+                                          'Glissez-déposez un arrière-plan, ou cliquez pour sélectionner'}
                                     </p>
                                   </div>
                                   {(bgPreview || bgUrl) && (
                                     <div className="mt-4 text-center">
                                       <img
                                         src={bgPreview || bgUrl}
-                                        alt="Background Preview"
+                                        alt="Aperçu de l’arrière-plan"
                                         className="img-fluid rounded"
                                         style={{ height: '100px' }}
                                       />
@@ -397,7 +377,7 @@ export default function Page() {
                             </Row>
                             <br />
                             <Button className="btn-fill pull-right" type="submit" variant="info">
-                              Update Category
+                              Mettre à jour la catégorie
                             </Button>
                             <div className="clearfix"></div>
                           </Card.Body>

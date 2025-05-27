@@ -1,4 +1,4 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marquer ce composant comme un composant client
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -21,7 +21,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // State declarations matching the DTO
+  // États correspondant au DTO
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -29,18 +29,18 @@ export default function Page() {
   const [role, setRole] = useState("MANAGER");
 
   const submitForm = async (event) => {
-    // Validation conditions matching DTO
+    // Validation selon les champs du DTO
     if (!email || !validateEmail(email)) {
-      notify(2, "Please enter a valid email address");
+      notify(2, "Veuillez entrer une adresse e-mail valide");
       return;
     }
 
     if (!password || password.length < 6) {
-      notify(2, "Password must be at least 6 characters long");
+      notify(2, "Le mot de passe doit contenir au moins 6 caractères");
       return;
     }
 
-    // Prepare user data according to DTO
+    // Préparer les données utilisateur
     const userData = {
       email,
       password,
@@ -53,17 +53,17 @@ export default function Page() {
       addUser(userData)
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        notify(1, "User created successfully");
+        notify(1, "Utilisateur créé avec succès");
         setTimeout(() => {
           router.push("/users");
         }, 1500);
       } else if (action.meta.requestStatus === "rejected") {
-        notify(2, action.payload.message || "An error occurred");
+        notify(2, action.payload.message || "Une erreur s'est produite");
       }
     });
   };
 
-  // Helper function to validate email
+  // Fonction utilitaire de validation email
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
@@ -73,8 +73,7 @@ export default function Page() {
     router.push("/users");
   };
 
-  // Define role options (you might want to import these from your prisma client)
-  const roleOptions = ["MANAGER", "ADMIN"];
+  const roleOptions = ["MANAGER", "ADMIN", "CLIENT"];
 
   return (
     <>
@@ -91,7 +90,7 @@ export default function Page() {
                   <Row>
                     <Col md="12">
                       <Button onClick={listeUser} variant="info">
-                        <i className="fas fa-list"></i> Back to list
+                        <i className="fas fa-list"></i> Retour à la liste
                       </Button>
                     </Col>
                   </Row>
@@ -100,16 +99,16 @@ export default function Page() {
                       <Form>
                         <Card>
                           <Card.Header>
-                            <Card.Title as="h4">{"Add User"}</Card.Title>
+                            <Card.Title as="h4">Ajouter un utilisateur</Card.Title>
                           </Card.Header>
                           <Card.Body>
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>First Name</label>
+                                  <label>Prénom</label>
                                   <Form.Control
                                     value={firstName}
-                                    placeholder="First Name"
+                                    placeholder="Prénom"
                                     name="firstName"
                                     type="text"
                                     onChange={(e) => setFirstName(e.target.value)}
@@ -118,10 +117,10 @@ export default function Page() {
                               </Col>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Last Name</label>
+                                  <label>Nom</label>
                                   <Form.Control
                                     value={lastName}
-                                    placeholder="Last Name"
+                                    placeholder="Nom"
                                     name="lastName"
                                     type="text"
                                     onChange={(e) => setLastName(e.target.value)}
@@ -132,10 +131,10 @@ export default function Page() {
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>E-mail*</label>
+                                  <label>Email*</label>
                                   <Form.Control
                                     value={email}
-                                    placeholder="E-mail"
+                                    placeholder="Adresse e-mail"
                                     name="email"
                                     className="required"
                                     type="email"
@@ -146,10 +145,10 @@ export default function Page() {
                               </Col>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Password*</label>
+                                  <label>Mot de passe*</label>
                                   <Form.Control
                                     value={password}
-                                    placeholder="Password (min 6 chars)"
+                                    placeholder="Mot de passe (min 6 caractères)"
                                     className="required"
                                     name="password"
                                     type="password"
@@ -163,7 +162,7 @@ export default function Page() {
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Role</label>
+                                  <label>Rôle</label>
                                   <Form.Select
                                     value={role}
                                     onChange={(e) => setRole(e.target.value)}
@@ -183,7 +182,7 @@ export default function Page() {
                               variant="info"
                               onClick={submitForm}
                             >
-                              Save
+                              Enregistrer
                             </Button>
                             <div className="clearfix"></div>
                           </Card.Body>

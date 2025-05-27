@@ -1,7 +1,6 @@
 "use client"; // Mark this as a Client Component
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
-import { fetchBulkProducts } from "@/Redux/bulkProductsReduce";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'; // Updated import for Next.js 14
 import MaterialReactTable from "material-react-table";
@@ -10,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
+import { fetchProductBundles } from "@/Redux/bundleProductsReduce";
 
 export default function Page() {
   const [entities, setEntities] = useState([]);
@@ -38,14 +38,14 @@ export default function Page() {
       header: "Name",
       accessorKey: "name",
     },
-    {
+    /* {
       header: "Product",
       accessorKey: "product",
-      Cell: ({ cell }) => cell.row.original.product.name,
-    },
+      Cell: ({ cell }) => cell.row.original.products.name,
+    }, */
     {
-      header: "Quantity",
-      accessorKey: "minQuantity",
+      header: "price",
+      accessorKey: "discount",
     },
     {
       accessorKey: "id",
@@ -54,7 +54,7 @@ export default function Page() {
         <div className="actions-right block_action">
           <Button
             onClick={() => {
-              router.push("/bulkProducts/edit/" + cell.row.original.id);
+              router.push("/productBundles/edit/" + cell.row.original.id);
             }}
             variant="warning"
             size="sm"
@@ -63,7 +63,7 @@ export default function Page() {
             <i className="fa fa-edit" />
           </Button>
           <Button
-            onClick={() => router.push("/bulkProducts/detail/" + cell.row.original.id)}
+            onClick={() => router.push("/productBundles/detail/" + cell.row.original.id)}
             variant="info"
             size="sm"
             className="text-info btn-link view"
@@ -76,7 +76,7 @@ export default function Page() {
   ];
 
   const getBulkProduct = useCallback(async () => {
-    const response = await dispatch(fetchBulkProducts());
+    const response = await dispatch(fetchProductBundles());
     setEntities(response.payload);
   }, [dispatch]);
 
@@ -101,15 +101,15 @@ export default function Page() {
   }
 
   function ajouter() {
-    router.push("/bulkProducts/add");
+    router.push("/productBundles/add");
   }
 
   return (
     <>
       <div className="wrapper">
-        <Sidebar bulkProducts={null} routes={[]} />
+        <Sidebar productBundles={null} routes={[]} />
         <div className="main-panel">
-          <AdminNavbar bulkProducts={null} />
+          <AdminNavbar productBundles={null} />
           <div className="content">
             <Container fluid>
               <ToastContainer />
@@ -127,11 +127,11 @@ export default function Page() {
                     <span className="btn-label">
                       <i className="fas fa-plus"></i>
                     </span>
-                    Ajouter un bulk Product
+                    Ajouter un pack
                   </Button>
                 </Col>
                 <Col md="12">
-                  <h4 className="title">Liste des bulk Products</h4>
+                  <h4 className="title">Liste des packs</h4>
                   <Card>
                     <Card.Body>
                       <ListTable list={entities} />

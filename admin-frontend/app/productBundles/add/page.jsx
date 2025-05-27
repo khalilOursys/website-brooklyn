@@ -36,23 +36,20 @@ export default function CreateProductBundle() {
   const [imageFile, setImageFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
 
-  // Fetch products for the dropdown
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(`${api}products`);
-        if (!response.ok) throw new Error('Failed to fetch products');
+        if (!response.ok) throw new Error('Échec du chargement des produits');
         const data = await response.json();
         setProducts(data.map(product => ({
           value: product.id,
           label: product.name
         })));
       } catch (error) {
-        console.error('Error fetching products:', error);
-        notify(2, 'Failed to load products');
+        console.error('Erreur:', error);
+        notify(2, 'Échec du chargement des produits');
       }
     };
     fetchProducts();
@@ -62,17 +59,17 @@ export default function CreateProductBundle() {
     event.preventDefault();
 
     if (!formData.name.trim()) {
-      notify(2, "Bundle name is required");
+      notify(2, "Le nom du pack est requis");
       return;
     }
 
     if (formData.discount < 0 || formData.discount > 100) {
-      notify(2, "Discount must be between 0 and 100");
+      notify(2, "La remise doit être entre 0 et 100");
       return;
     }
 
-    if (formData.products.length === 0) {
-      notify(2, "Please add at least one product to the bundle");
+    if (formData.products.length === 0 || formData.products.some(p => !p.productId)) {
+      notify(2, "Veuillez ajouter au moins un produit valide au pack");
       return;
     }
 
@@ -90,16 +87,16 @@ export default function CreateProductBundle() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create bundle');
+        throw new Error(errorData.message || 'Échec de la création du pack');
       }
 
-      notify(1, "Product bundle created successfully!");
-      /* setTimeout(() => {
+      notify(1, "Pack créé avec succès !");
+      setTimeout(() => {
         router.push("/productBundles");
-      }, 1500); */
+      }, 1500);
     } catch (error) {
-      console.error('Error creating bundle:', error);
-      notify(2, error.message || 'An error occurred while creating the bundle');
+      console.error('Erreur:', error);
+      notify(2, error.message || 'Une erreur est survenue lors de la création');
     }
   };
 
@@ -114,15 +111,14 @@ export default function CreateProductBundle() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error("Image upload failed");
+      if (!response.ok) throw new Error("Échec de l'upload");
 
       const { url } = await response.json();
       setFormData(prev => ({ ...prev, img: url }));
-      notify(1, "Image uploaded successfully!");
+      notify(1, "Image téléchargée avec succès !");
     } catch (error) {
-      console.error("Upload error:", error);
-      notify(2, "Failed to upload image. Please try again.");
-      return null;
+      console.error("Erreur upload:", error);
+      notify(2, "Échec de l'upload de l'image");
     } finally {
       setIsUploading(false);
     }
@@ -144,39 +140,25 @@ export default function CreateProductBundle() {
   });
 
   const addProductToBundle = () => {
-    if (!selectedProduct || quantity < 1) {
-      notify(2, "Please select a product and enter a valid quantity");
-      return;
-    }
-
-    const productExists = formData.products.some(
-      item => item.productId === selectedProduct.value
-    );
-
-    if (productExists) {
-      notify(2, "This product is already in the bundle");
-      return;
-    }
-
     setFormData(prev => ({
       ...prev,
-      products: [
-        ...prev.products,
-        {
-          productId: selectedProduct.value,
-          quantity: quantity
-        }
-      ]
+      products: [...prev.products, { productId: null, quantity: 1 }]
     }));
-
-    setSelectedProduct(null);
-    setQuantity(1);
   };
 
-  const removeProductFromBundle = (productId) => {
+  const removeProductFromBundle = (indexToRemove) => {
     setFormData(prev => ({
       ...prev,
-      products: prev.products.filter(item => item.productId !== productId)
+      products: prev.products.filter((_, index) => index !== indexToRemove)
+    }));
+  };
+
+  const updateProductLine = (index, field, value) => {
+    const updated = [...formData.products];
+    updated[index][field] = value;
+    setFormData(prev => ({
+      ...prev,
+      products: updated
     }));
   };
 
@@ -189,183 +171,161 @@ export default function CreateProductBundle() {
           <div className="content">
             <Container fluid>
               <ToastContainer />
-              <div className="section-image">
-                <Container>
-                  <Row>
-                    <Col md="12">
-                      <Button onClick={() => router.push("/productBundles")} variant="info">
-                        <i className="fas fa-list"></i> Back to Bundle List
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col md="12">
-                      <Form onSubmit={submitForm}>
-                        <Card>
-                          <Card.Header>
-                            <Card.Title as="h4">Create Product Bundle</Card.Title>
-                          </Card.Header>
-                          <Card.Body>
-                            <Row>
-                              <Col md="6">
-                                <Form.Group className="mb-3">
-                                  <label>Bundle Name*</label>
-                                  <Form.Control
-                                    value={formData.name}
-                                    placeholder="Bundle Name"
-                                    required
-                                    type="text"
-                                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                                  />
-                                </Form.Group>
-                              </Col>
-                              <Col md="6">
-                                <Form.Group className="mb-3">
-                                  <label>Discount (%)*</label>
-                                  <Form.Control
-                                    value={formData.discount}
-                                    placeholder="0"
-                                    required
-                                    type="number"
-                                    min="0"
-                                    max="100"
-                                    onChange={(e) => setFormData(prev => ({ ...prev, discount: parseFloat(e.target.value) }))}
-                                  />
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col md="6">
-                                <Form.Group className="mb-3">
-                                  <label>Expiration Date</label>
-                                  <DatePicker
-                                    selected={formData.expiresAt}
-                                    onChange={(date) => setFormData(prev => ({ ...prev, expiresAt: date }))}
-                                    minDate={new Date()}
-                                    isClearable
-                                    className="form-control"
-                                    placeholderText="Select expiration date"
-                                  />
-                                </Form.Group>
-                              </Col>
-                              <Col md="6">
-                                <Form.Group className="mb-3">
-                                  <label>Bundle Image</label>
-                                  <div
-                                    {...getRootProps()}
-                                    className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
-                                      ${isDragActive ? 'border-primary bg-primary bg-opacity-10' : 'border-secondary'}
-                                      ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                  >
-                                    <input {...getInputProps()} />
-                                    <p className="text-muted">
-                                      {isUploading ? 'Uploading...' :
-                                        isDragActive ? 'Drop an image here' :
-                                          'Drag & drop an image, or click to select'}
-                                    </p>
+              <Container>
+                <Row>
+                  <Col md="12">
+                    <Button onClick={() => router.push("/productBundles")} variant="info">
+                      <i className="fas fa-list"></i> Retour à la liste
+                    </Button>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md="12">
+                    <Form onSubmit={submitForm}>
+                      <Card>
+                        <Card.Header>
+                          <Card.Title as="h4">Créer un pack</Card.Title>
+                        </Card.Header>
+                        <Card.Body>
+                          <Row>
+                            <Col md="6">
+                              <Form.Group className="mb-3">
+                                <label>Nom du pack*</label>
+                                <Form.Control
+                                  value={formData.name}
+                                  placeholder="Nom du pack"
+                                  type="text"
+                                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col md="6">
+                              <Form.Group className="mb-3">
+                                <label>Remise {/* (%) */}</label>
+                                <Form.Control
+                                  value={formData.discount}
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  onChange={(e) => setFormData(prev => ({ ...prev, discount: parseFloat(e.target.value) }))}
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col md="6">
+                              <Form.Group className="mb-3">
+                                <label>Date d'expiration</label>
+                                <DatePicker
+                                  selected={formData.expiresAt}
+                                  onChange={(date) => setFormData(prev => ({ ...prev, expiresAt: date }))}
+                                  minDate={new Date()}
+                                  isClearable
+                                  className="form-control"
+                                  placeholderText="Sélectionner une date"
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col md="12">
+                              <Form.Group className="mb-3">
+                                <label>Image du pack</label>
+                                <div
+                                  {...getRootProps()}
+                                  className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
+                                    ${isDragActive ? 'border-primary bg-primary bg-opacity-10' : 'border-secondary'}
+                                    ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                >
+                                  <input {...getInputProps()} />
+                                  <p className="text-muted">
+                                    {isUploading
+                                      ? "Téléversement en cours..."
+                                      : isDragActive
+                                        ? "Déposez l'image ici"
+                                        : "Glissez-déposez une image ou cliquez pour choisir"}
+                                  </p>
+                                </div>
+                                {preview && (
+                                  <div className="mt-4 text-center">
+                                    <img
+                                      src={preview}
+                                      alt="Aperçu"
+                                      className="img-fluid rounded"
+                                      style={{ height: '200px' }}
+                                    />
                                   </div>
-                                  {preview && (
-                                    <div className="mt-4 text-center">
-                                      <img
-                                        src={preview}
-                                        alt="Preview"
-                                        className="img-fluid rounded"
-                                        style={{ height: '200px' }}
-                                      />
-                                    </div>
-                                  )}
-                                </Form.Group>
-                              </Col>
-                            </Row>
+                                )}
+                              </Form.Group>
+                            </Col>
+                          </Row>
 
-                            <Row>
-                              <Col md="12">
-                                <Card className="mb-4">
-                                  <Card.Header>
-                                    <Card.Title as="h5">Bundle Products</Card.Title>
-                                  </Card.Header>
-                                  <Card.Body>
-                                    <Row>
-                                      <Col md="6">
-                                        <Form.Group className="mb-3">
-                                          <label>Select Product</label>
+                          <Card className="mb-4">
+                            <Card.Header>
+                              <Card.Title as="h5">Produits</Card.Title>
+                            </Card.Header>
+                            <Card.Body>
+                              <Button variant="secondary" onClick={addProductToBundle}>
+                                + Ajouter produit
+                              </Button>
+
+                              {formData.products.length > 0 && (
+                                <Table striped bordered hover className="mt-4">
+                                  <thead>
+                                    <tr>
+                                      <th>Produit</th>
+                                      <th>Quantité</th>
+                                      <th>Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {formData.products.map((item, index) => (
+                                      <tr key={index}>
+                                        <td>
                                           <Select
                                             options={products}
-                                            value={selectedProduct}
-                                            onChange={setSelectedProduct}
-                                            placeholder="Search products..."
+                                            value={products.find(p => p.value === item.productId) || null}
+                                            onChange={(selected) =>
+                                              updateProductLine(index, 'productId', selected ? selected.value : null)
+                                            }
+                                            placeholder="Sélectionner un produit"
                                           />
-                                        </Form.Group>
-                                      </Col>
-                                      <Col md="3">
-                                        <Form.Group className="mb-3">
-                                          <label>Quantity</label>
+                                        </td>
+                                        <td>
                                           <Form.Control
                                             type="number"
                                             min="1"
-                                            value={quantity}
-                                            onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                                            value={item.quantity}
+                                            onChange={(e) =>
+                                              updateProductLine(index, 'quantity', parseInt(e.target.value) || 1)
+                                            }
                                           />
-                                        </Form.Group>
-                                      </Col>
-                                      <Col md="3" className="d-flex align-items-end">
-                                        <Button
-                                          variant="primary"
-                                          onClick={addProductToBundle}
-                                          disabled={!selectedProduct}
-                                        >
-                                          Add Product
-                                        </Button>
-                                      </Col>
-                                    </Row>
+                                        </td>
+                                        <td>
+                                          <Button
+                                            variant="danger"
+                                            size="sm"
+                                            onClick={() => removeProductFromBundle(index)}
+                                          >
+                                            Supprimer
+                                          </Button>
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </Table>
+                              )}
+                            </Card.Body>
+                          </Card>
 
-                                    {formData.products.length > 0 && (
-                                      <Table striped bordered hover className="mt-4">
-                                        <thead>
-                                          <tr>
-                                            <th>Product</th>
-                                            <th>Quantity</th>
-                                            <th>Action</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          {formData.products.map((item, index) => {
-                                            const product = products.find(p => p.value === item.productId);
-                                            return (
-                                              <tr key={index}>
-                                                <td>{product?.label || 'Unknown Product'}</td>
-                                                <td>{item.quantity}</td>
-                                                <td>
-                                                  <Button
-                                                    variant="danger"
-                                                    size="sm"
-                                                    onClick={() => removeProductFromBundle(item.productId)}
-                                                  >
-                                                    Remove
-                                                  </Button>
-                                                </td>
-                                              </tr>
-                                            );
-                                          })}
-                                        </tbody>
-                                      </Table>
-                                    )}
-                                  </Card.Body>
-                                </Card>
-                              </Col>
-                            </Row>
-
-                            <Button className="btn-fill pull-right" type="submit" variant="info">
-                              Create Bundle
-                            </Button>
-                            <div className="clearfix"></div>
-                          </Card.Body>
-                        </Card>
-                      </Form>
-                    </Col>
-                  </Row>
-                </Container>
-              </div>
+                          <Button className="btn-fill pull-right" type="submit" variant="info">
+                            Créer le pack
+                          </Button>
+                          <div className="clearfix"></div>
+                        </Card.Body>
+                      </Card>
+                    </Form>
+                  </Col>
+                </Row>
+              </Container>
             </Container>
           </div>
           <Footer />
