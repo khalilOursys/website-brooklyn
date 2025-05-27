@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone', //creates minmimal build
   images: {
     unoptimized: true,
   },

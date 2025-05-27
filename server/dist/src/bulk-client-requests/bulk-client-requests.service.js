@@ -11,14 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BulkClientRequestsService = void 0;
 const common_1 = require("@nestjs/common");
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 const prisma_service_1 = require("../prisma.service");
 let BulkClientRequestsService = class BulkClientRequestsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
     async createUserWithBulkRequest(data) {
-        const hashedPassword = await bcrypt.hash(data.password, 10);
+        const hashedPassword = await bcryptjs.hash(data.password, 10);
         return this.prisma.user.create({
             data: {
                 email: data.email,
@@ -58,7 +58,7 @@ let BulkClientRequestsService = class BulkClientRequestsService {
         if (data.name)
             updateData.name = data.name;
         if (data.password) {
-            updateData.password = await bcrypt.hash(data.password, 10);
+            updateData.password = await bcryptjs.hash(data.password, 10);
         }
         if (data.storeName)
             bulkUpdateData.storeName = data.storeName;

@@ -1,6 +1,6 @@
 // src/BulkClientRequests/BulkClientRequests.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import * as bcryptjs from 'bcryptjs';
 import { CreateBulkClientRequestDto } from './dto/create-bulk-client-request.dto';
 import { PrismaService } from 'src/prisma.service';
 import { UpdateUserBulkRequestDto } from './dto/update-bulk-client-request.dto';
@@ -11,7 +11,7 @@ export class BulkClientRequestsService {
 
   // CREATE
   async createUserWithBulkRequest(data: CreateBulkClientRequestDto) {
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const hashedPassword = await bcryptjs.hash(data.password, 10);
 
     return this.prisma.user.create({
       data: {
@@ -60,7 +60,7 @@ export class BulkClientRequestsService {
     if (data.email) updateData.email = data.email;
     if (data.name) updateData.name = data.name;
     if (data.password) {
-      updateData.password = await bcrypt.hash(data.password, 10);
+      updateData.password = await bcryptjs.hash(data.password, 10);
     }
     if (data.storeName) bulkUpdateData.storeName = data.storeName;
     if (data.legalDocs) bulkUpdateData.legalDocs = data.legalDocs;

@@ -1,0 +1,42 @@
+# Build stage
+FROM node:18-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Copy next.config.mjs
+COPY next.config.mjs ./
+
+
+# Build the Next.js app with standalone output
+RUN npm run build
+
+# Production stage
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Set environment to production
+ENV NODE_ENV=production
+
+# Copy the standalone output and static files from the builder stage
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+
+
+# Expose the port (Next.js typically uses 3000)
+EXPOSE 3000
+
+# Start the application
+CMD ["node", "server.js"]

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
-const bcrypt = require("bcrypt");
+const bcryptjs = require("bcryptjs");
 const jwt_1 = require("@nestjs/jwt");
 let UsersService = class UsersService {
     constructor(prisma, jwtService) {
@@ -26,7 +26,7 @@ let UsersService = class UsersService {
         if (existingUser) {
             throw new common_1.ConflictException('Email already in use');
         }
-        const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+        const hashedPassword = await bcryptjs.hash(createUserDto.password, 10);
         return await this.prisma.user.create({
             data: {
                 email: createUserDto.email,
@@ -45,7 +45,7 @@ let UsersService = class UsersService {
         if (!user || !user.password) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
-        const isMatch = await bcrypt.compare(loginDto.password, user.password);
+        const isMatch = await bcryptjs.compare(loginDto.password, user.password);
         if (!isMatch) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
@@ -102,7 +102,7 @@ let UsersService = class UsersService {
             }
             else {
                 const saltRounds = 10;
-                updateUserDto.password = await bcrypt.hash(updateUserDto.password, saltRounds);
+                updateUserDto.password = await bcryptjs.hash(updateUserDto.password, saltRounds);
             }
             return await this.prisma.user.update({
                 where: { id: userId },

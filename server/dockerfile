@@ -1,0 +1,43 @@
+# Build stage
+FROM node:18-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install all dependencies (including devDependencies for building)
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Build the Nest.js app
+RUN npm run build
+
+# Production stage
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy compiled files and necessary folders from builder stage
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/uploads ./uploads
+COPY --from=builder /app/prisma ./prisma  
+
+
+# Expose the port your app runs on
+EXPOSE 3001
+
+
+# Run Prisma migrations and start the application
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start:prod"]
+
+

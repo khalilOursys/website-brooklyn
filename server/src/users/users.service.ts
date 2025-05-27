@@ -7,7 +7,7 @@ import {
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import * as bcrypt from 'bcrypt';
+import * as bcryptjs from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/UpdateUserDto';
@@ -28,7 +28,7 @@ export class UsersService {
       throw new ConflictException('Email already in use');
     }
     // Hash the password using bcrypt
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const hashedPassword = await bcryptjs.hash(createUserDto.password, 10);
     return await this.prisma.user.create({
       data: {
         email: createUserDto.email,
@@ -49,7 +49,7 @@ export class UsersService {
       throw new UnauthorizedException('Invalid credentials');
     }
     // Compare the incoming password with the hashed password
-    const isMatch = await bcrypt.compare(loginDto.password, user.password);
+    const isMatch = await bcryptjs.compare(loginDto.password, user.password);
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -114,7 +114,7 @@ export class UsersService {
       } else {
         // Hash the new password if provided
         const saltRounds = 10; // Number of salt rounds for hashing
-        updateUserDto.password = await bcrypt.hash(
+        updateUserDto.password = await bcryptjs.hash(
           updateUserDto.password,
           saltRounds,
         );
