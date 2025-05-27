@@ -8,11 +8,9 @@ import { Button, Card, Form, Col, Row } from "react-bootstrap";
 import Image from "next/image"; // Use Next.js Image component
 import { loginFetch } from "@/Redux/usersReduce";
 import "react-toastify/dist/ReactToastify.css";
-import { useTranslation } from "react-i18next";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { t, i18n } = useTranslation();
 
   const [cardClasses, setCardClasses] = useState("card-hidden");
   const [login, setLogin] = useState("");
@@ -30,7 +28,7 @@ export default function Home() {
 
   // Animate card appearance
   useEffect(() => {
-    i18n.changeLanguage("en");
+    /* i18n.changeLanguage("en"); */
     setTimeout(() => {
       setCardClasses("");
     }, 1000);
@@ -109,19 +107,15 @@ export default function Home() {
                   <Form className="form">
                     <Card className={`card-login ${cardClasses}`}>
                       <Card.Header>
-                        <h3 className="header text-center">
-                          {t("loginPage.title")}
-                        </h3>
+                        <h3 className="header text-center">Connexion</h3>
                         <br />
-                        <p className="header text-center">
-                          {t("loginPage.title")}
-                        </p>
+                        <p className="header text-center">Connexion</p>
                       </Card.Header>
                       <Card.Body>
                         <Form.Group>
-                          <label>{t("loginPage.email")}</label>
+                          <label>E-mail</label>
                           <Form.Control
-                            placeholder={t("loginPage.email")}
+                            placeholder="E-mail"
                             type="text"
                             value={login}
                             onChange={handleLoginChange}
@@ -129,9 +123,9 @@ export default function Home() {
                           />
                         </Form.Group>
                         <Form.Group>
-                          <label>{t("loginPage.password")}</label>
+                          <label>Mot de passe</label>
                           <Form.Control
-                            placeholder={t("loginPage.password")}
+                            placeholder={"Mot de passe"}
                             type="password"
                             value={password}
                             onChange={handlePasswordChange}
@@ -147,9 +141,7 @@ export default function Home() {
                           onClick={handleSubmit}
                           disabled={isLoading}
                         >
-                          {isLoading
-                            ? t("loginPage.loading")
-                            : t("loginPage.submit")}
+                          {isLoading ? "Connexion en cours..." : "Se connecter"}
                         </Button>
                       </Card.Footer>
                     </Card>
