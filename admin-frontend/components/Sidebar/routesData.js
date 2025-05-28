@@ -12,6 +12,48 @@ const routesData = [
     role: ["admin"],
   },
   {
+    path: "/products",
+    name: "Produits",
+    icon: "fab fa-product-hunt",
+    role: ["admin"],
+  },
+  {
+    path: "/bulkProducts",
+    name: "Produits en gros",
+    icon: "fas fa-boxes",
+    role: ["admin"],
+  },
+  {
+    path: "/productBundles",
+    name: "Packs produits",
+    icon: "fas fa-box-open",
+    role: ["admin"],
+  },
+  {
+    path: "/users",
+    name: "Utilisateurs",
+    icon: "fas fa-users",
+    role: ["admin"],
+  },
+  {
+    path: "/bulkClientRequests",
+    name: "Demandes clients (gros)",
+    icon: "fas fa-handshake",
+    role: ["admin"],
+  },
+  {
+    path: "/brands",
+    name: "Marques",
+    icon: "fas fa-tags",
+    role: ["admin"],
+  },
+  {
+    path: "/categories",
+    name: "Catégories",
+    icon: "fas fa-list-alt",
+    role: ["admin"],
+  },
+  /* {
     path: "/admin",
     name: "Paramètres",
     icon: "fas fa-cog",
@@ -61,7 +103,7 @@ const routesData = [
         role: ["admin"],
       },
     ],
-  },
+  }, */
   {
     path: "/",
     name: "Déconnexion",

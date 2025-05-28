@@ -238,18 +238,6 @@ export default function Footer2({ bgColor = "background-black" }) {
                       </div>
                       <div id="subscribe-msg" />
                     </form>
-                    <div className="tf-cur">
-                      <div className="tf-currencies">
-                        <CurrencySelect light />
-                      </div>
-                      <div className="tf-languages">
-                        <LanguageSelect
-                          parentClassName={
-                            "image-select center style-default type-languages color-white"
-                          }
-                        />
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
