@@ -46,6 +46,9 @@ let CategoriesController = class CategoriesController {
     async getStructuredCategories() {
         return this.categoriesService.getCategoriesStructured();
     }
+    async getCategoriesStructuredMobile() {
+        return this.categoriesService.getCategoriesStructuredMobile();
+    }
     async getAllParent() {
         return this.categoriesService.findAllParent();
     }
@@ -103,6 +106,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "getStructuredCategories", null);
+__decorate([
+    (0, common_1.Get)('structuredMobile'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "getCategoriesStructuredMobile", null);
 __decorate([
     (0, common_1.Get)('getAllParent'),
     __metadata("design:type", Function),
