@@ -1,40 +1,86 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
-import LanguageSelect from "../common/LanguageSelect";
-import CurrencySelect from "../common/CurrencySelect";
-import { navItems } from "@/data/menu";
 import { usePathname } from "next/navigation";
+import { useContextElement } from "@/context/Context";
+/* import { navItems } from "@/data/menu"; */
 export default function MobileMenu() {
+  const { categories, user } = useContextElement();
   const pathname = usePathname();
+
+  // Initialize Bootstrap when component mounts
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !window.bootstrap) {
+      import('bootstrap').then((bootstrap) => {
+        window.bootstrap = bootstrap;
+      });
+    }
+  }, []);
+
+  const handleRegisterClick = () => {
+    // Close mobile menu
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenu) {
+      if (window.bootstrap) {
+        const bsOffcanvas = window.bootstrap.Offcanvas.getInstance(mobileMenu);
+        if (bsOffcanvas) {
+          bsOffcanvas.hide();
+        }
+      }
+      // Fallback method
+      const closeBtn = mobileMenu.querySelector('[data-bs-dismiss="offcanvas"]');
+      closeBtn?.click();
+    }
+
+    // Open registration modal after slight delay
+    setTimeout(() => {
+      const registerModal = document.getElementById('registerBulkClient');
+      if (registerModal && window.bootstrap) {
+        let modal = window.bootstrap.Modal.getInstance(registerModal);
+        if (!modal) {
+          modal = new window.bootstrap.Modal(registerModal);
+        }
+        modal.show();
+      }
+    }, 150);
+  };
+
+  const navItems = [
+    {
+      id: "dropdown-menu-two",
+      label: "Shop",
+      links: categories,
+    }
+  ];
+
   const isMenuActive = (menuItem) => {
     let active = false;
     if (menuItem.href?.includes("/")) {
-      if (menuItem.href?.split("/")[1] == pathname.split("/")[1]) {
+      if (menuItem.href?.split("/")[1] === pathname.split("/")[1]) {
         active = true;
       }
     }
     if (menuItem.links) {
       menuItem.links?.forEach((elm2) => {
         if (elm2.href?.includes("/")) {
-          if (elm2.href?.split("/")[1] == pathname.split("/")[1]) {
+          if (elm2.href?.split("/")[1] === pathname.split("/")[1]) {
             active = true;
           }
         }
         if (elm2.links) {
           elm2.links.forEach((elm3) => {
-            if (elm3.href.split("/")[1] == pathname.split("/")[1]) {
+            if (elm3.href.split("/")[1] === pathname.split("/")[1]) {
               active = true;
             }
           });
         }
       });
     }
-
     return active;
   };
+
   return (
-    <div className="offcanvas offcanvas-start canvas-mb" id="mobileMenu">
+    <div className="offcanvas offcanvas-start canvas-mb" id="mobileMenu" tabIndex="-1">
       <span
         className="icon-close icon-close-popup"
         data-bs-dismiss="offcanvas"
@@ -43,13 +89,39 @@ export default function MobileMenu() {
       <div className="mb-canvas-content">
         <div className="mb-body">
           <ul className="nav-ul-mb" id="wrapper-menu-navigation">
+            <li className="nav-mb-item">
+              <a href="/" className="mb-menu-link">
+                Home
+              </a>
+            </li>
+            <li className="nav-mb-item">
+              <a href="/home2" className="mb-menu-link">
+                Home 2
+              </a>
+            </li>
+            <li className="nav-mb-item">
+              <a
+                href="/promotions"
+                className={`mb-menu-link`}
+              >
+                promotions
+              </a>
+            </li>
+            {user?.role === "BULK_CLIENT" && user !== null && (
+              <li className="nav-mb-item">
+                <a
+                  href="/bulkproduct"
+                  className={`mb-menu-link`}
+                >
+                  Bulk-Product
+                </a>
+              </li>
+            )}
             {navItems.map((item, i) => (
               <li key={i} className="nav-mb-item">
                 <a
                   href={`#${item.id}`}
-                  className={`collapsed mb-menu-link current ${
-                    isMenuActive(item) ? "activeMenu" : ""
-                  }`}
+                  className={`collapsed mb-menu-link current ${isMenuActive(item) ? "activeMenu" : ""}`}
                   data-bs-toggle="collapse"
                   aria-expanded="true"
                   aria-controls={item.id}
@@ -65,9 +137,7 @@ export default function MobileMenu() {
                           <>
                             <a
                               href={`#${subItem.id}`}
-                              className={`sub-nav-link collapsed  ${
-                                isMenuActive(subItem) ? "activeMenu" : ""
-                              }`}
+                              className={`sub-nav-link collapsed ${isMenuActive(subItem) ? "activeMenu" : ""}`}
                               data-bs-toggle="collapse"
                               aria-expanded="true"
                               aria-controls={subItem.id}
@@ -81,11 +151,7 @@ export default function MobileMenu() {
                                   <li key={i3}>
                                     <Link
                                       href={innerItem.href}
-                                      className={`sub-nav-link  ${
-                                        isMenuActive(innerItem)
-                                          ? "activeMenu"
-                                          : ""
-                                      }`}
+                                      className={`sub-nav-link ${isMenuActive(innerItem) ? "activeMenu" : ""}`}
                                     >
                                       {innerItem.label}
                                       {innerItem.demoLabel && (
@@ -102,9 +168,7 @@ export default function MobileMenu() {
                         ) : (
                           <Link
                             href={subItem.href}
-                            className={`sub-nav-link ${
-                              isMenuActive(subItem) ? "activeMenu" : ""
-                            }`}
+                            className={`sub-nav-link ${isMenuActive(subItem) ? "activeMenu" : ""}`}
                           >
                             {subItem.label}
                             {subItem.demoLabel && (
@@ -120,60 +184,25 @@ export default function MobileMenu() {
                 </div>
               </li>
             ))}
-            <li className="nav-mb-item">
-              <a
-                href="https://themeforest.net/item/ecomus-ultimate-html5-template/53417990?s_rank=3"
-                className="mb-menu-link"
-              >
-                Buy now
-              </a>
-            </li>
           </ul>
           <div className="mb-other-content">
-            <div className="d-flex group-icon">
-              <Link href={`/wishlist`} className="site-nav-icon">
-                <i className="icon icon-heart" />
-                Wishlist
+            {/* <div className="d-flex group-icon">
+              <Link href={`/login`} className="site-nav-icon">
+                <i className="icon icon-account" />
+                Login
               </Link>
-              <Link href={`/home-search`} className="site-nav-icon">
-                <i className="icon icon-search" />
-                Search
-              </Link>
-            </div>
-            <div className="mb-notice">
-              <Link href={`/contact-1`} className="text-need">
-                Need help ?
-              </Link>
-            </div>
-            <ul className="mb-info">
-              <li>
-                Address: 1234 Fashion Street, Suite 567, <br />
-                New York, NY 10001
-              </li>
-              <li>
-                Email: <b>info@fashionshop.com</b>
-              </li>
-              <li>
-                Phone: <b>(212) 555-1234</b>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="mb-bottom">
-          <Link href={`/login`} className="site-nav-icon">
-            <i className="icon icon-account" />
-            Login
-          </Link>
-          <div className="bottom-bar-language">
-            <div className="tf-currencies">
-              <CurrencySelect />
-            </div>
-            <div className="tf-languages">
-              <LanguageSelect
-                parentClassName={
-                  "image-select center style-default type-languages"
-                }
-              />
+            </div> */}
+
+            <div className="overflow-hidden">
+              <p className="top-bar-text">
+                Register as
+                <button
+                  className="tf-btn btn-line"
+                  onClick={handleRegisterClick}
+                >
+                  <span className="text">Wholesaler</span>
+                </button>
+              </p>
             </div>
           </div>
         </div>

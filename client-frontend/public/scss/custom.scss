@@ -367,3 +367,36 @@ a.logo-header {
 .logo-header img {
   width: 100%;
 }
+
+.password-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 10;
+}
+
+.password-toggle i {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.password-toggle:hover i {
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}

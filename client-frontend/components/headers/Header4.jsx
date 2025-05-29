@@ -58,7 +58,7 @@ export default function Header4() {
                 </p>
               </div>
             </div>
-            <div className="col-md-4 col-3 tf-lg-hidden">
+            <div className="col-md-4 col-2 tf-lg-hidden">
               <a
                 href="#mobileMenu"
                 data-bs-toggle="offcanvas"
@@ -89,7 +89,7 @@ export default function Header4() {
                 />
               </Link>
             </div>
-            <div className="col-xl-5 col-md-4 col-3">
+            <div className="col-xl-5 col-md-4 col-4">
               <ul className="nav-icon d-flex justify-content-end align-items-center gap-20">
                 <li className="nav-search">
                   <a
@@ -117,7 +117,7 @@ export default function Header4() {
                   </a>}
                 </li>
                 {token ? (
-                  <li className="nav-account">
+                  <li>
                     <button
                       onClick={() => {
                         localStorage.removeItem("x-access-token");

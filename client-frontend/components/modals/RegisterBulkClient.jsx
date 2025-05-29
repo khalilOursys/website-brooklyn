@@ -18,9 +18,25 @@ export default function RegisterBulkClient() {
   const [legalDoc, setLegalDoc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState("");
+
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "email") {
+      if (!validateEmail(value) && value.length > 0) {
+        setEmailError("Please enter a valid email address");
+      } else {
+        setEmailError("");
+      }
+    }
+
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -30,16 +46,32 @@ export default function RegisterBulkClient() {
     }
   };
 
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
+
+    // Validate email before submission
+    if (!validateEmail(formData.email)) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+
+    // Combined password validation in one condition
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(formData.password)) {
+      setError("Password must be at least 8 characters with uppercase, lowercase, number, and special character");
+      return;
+    }
 
     if (!legalDoc) {
       setError("Please upload a legal document");
-      setIsLoading(false);
       return;
     }
+
+    setIsLoading(true);
+    setError("");
 
     try {
       const formDataToSend = new FormData();
@@ -62,8 +94,6 @@ export default function RegisterBulkClient() {
         throw new Error(errorData.message || "Registration failed");
       }
 
-      // Registration successful - redirect or show success message
-      /* router.push("/my-account"); */
       const responseLogin = await fetch(`${api}auth/login`, {
         method: "POST",
         headers: {
@@ -73,21 +103,21 @@ export default function RegisterBulkClient() {
         body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
 
-      const data = await responseLogin.json(); // <-- you forgot to parse the response!
+      const data = await responseLogin.json();
 
       if (data.message) {
-        // notify(2, data.message); // Show error message (added 2 as level like your other notify calls)
+        // notify(2, data.message);
       } else {
-        localStorage.setItem("x-access-token", data.access_token); // Save token
+        localStorage.setItem("x-access-token", data.access_token);
         setTimeout(() => {
-          window.location.reload(); // Updated navigation
+          window.location.reload();
         }, 1500);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
-    } finally {
+    }/*  finally {
       setIsLoading(false);
-    }
+    } */
   };
 
   return (
@@ -126,7 +156,7 @@ export default function RegisterBulkClient() {
               </div>
               <div className="tf-field style-1">
                 <input
-                  className="tf-field-input tf-input"
+                  className={`tf-field-input tf-input ${emailError ? 'is-invalid' : ''}`}
                   placeholder=" "
                   type="email"
                   required
@@ -135,18 +165,42 @@ export default function RegisterBulkClient() {
                   onChange={handleInputChange}
                 />
                 <label className="tf-field-label">Email *</label>
+                {emailError && <div className="invalid-feedback">{emailError}</div>}
               </div>
               <div className="tf-field style-1">
-                <input
-                  className="tf-field-input tf-input"
-                  placeholder=" "
-                  type="password"
-                  required
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                />
-                <label className="tf-field-label">Password *</label>
+                <div className="password-input-wrapper">
+                  <input
+                    className="tf-field-input tf-input"
+                    placeholder=" "
+                    type={showPassword ? "text" : "password"}
+                    required
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                  />
+                  <label className="tf-field-label">Password *</label>
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={toggleShowPassword}
+                  >
+                    {showPassword ? (
+                      <i className="fas fa-eye-slash"></i>
+                    ) : (
+                      <i className="fas fa-eye"></i>
+                    )}
+                  </button>
+                </div>
+                <div className="password-requirements">
+                  <p>Password must contain:</p>
+                  <ul>
+                    <li className={formData.password.length >= 8 ? "valid" : ""}>At least 8 characters</li>
+                    <li className={/[A-Z]/.test(formData.password) ? "valid" : ""}>One uppercase letter</li>
+                    <li className={/[a-z]/.test(formData.password) ? "valid" : ""}>One lowercase letter</li>
+                    <li className={/[0-9]/.test(formData.password) ? "valid" : ""}>One number</li>
+                    <li className={/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? "valid" : ""}>One special character</li>
+                  </ul>
+                </div>
               </div>
               <div className="tf-field style-1">
                 <input
@@ -176,7 +230,7 @@ export default function RegisterBulkClient() {
                   <button
                     type="submit"
                     className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
-                    disabled={isLoading}
+                    disabled={isLoading || emailError}
                   >
                     {isLoading ? "Processing..." : "Register"}
                   </button>

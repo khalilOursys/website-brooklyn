@@ -15,6 +15,7 @@ export default function Context({ children }) {
   const api = Configuration.BACK_BASEURL;
 
   const [cartProducts, setCartProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [wishList, setWishList] = useState([1, 2, 3]);
   const [compareItem, setCompareItem] = useState([1, 2, 3]);
   const [quickViewItem, setQuickViewItem] = useState(allProducts[0]);
@@ -30,6 +31,23 @@ export default function Context({ children }) {
     setTotalPrice(subtotal);
   }, [cartProducts]);
 
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${api}categories/structuredMobile`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        setCategories(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   const addProductToCart = (item, qty) => {
 
     if (!cartProducts.filter((elm) => elm.id == item.id)[0]) {
@@ -189,7 +207,8 @@ export default function Context({ children }) {
     setCompareItem,
     updateQuantity,
     user,
-    setUser
+    setUser,
+    categories
   };
   return (
     <dataContext.Provider value={contextElement}>
