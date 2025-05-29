@@ -73,6 +73,20 @@ let CategoriesService = class CategoriesService {
             })),
         }));
     }
+    async getCategoriesStructuredMobile() {
+        const categories = await this.prisma.category.findMany({
+            where: { parentId: null },
+            include: { children: true },
+        });
+        return categories.map((category) => ({
+            id: category.id,
+            label: category.name,
+            links: category.children.map((child) => ({
+                href: `/category/${child.slug || child.name.toLowerCase().replace(/\s+/g, '-')}`,
+                label: child.name,
+            })),
+        }));
+    }
     async findAllChildren() {
         return await this.prisma.category.findMany({
             where: {

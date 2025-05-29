@@ -61,6 +61,10 @@ export class CategoriesController {
   async getStructuredCategories() {
     return this.categoriesService.getCategoriesStructured();
   }
+  @Get('structuredMobile')
+  async getCategoriesStructuredMobile() {
+    return this.categoriesService.getCategoriesStructuredMobile();
+  }
 
   @Get('getAllParent')
   async getAllParent() {
