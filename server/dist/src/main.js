@@ -14,13 +14,18 @@ async function bootstrap() {
         forbidNonWhitelisted: true,
     }));
     app.enableCors({
-        origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'],
+        origin: [
+            'http://localhost:3000',
+            'http://localhost:3001',
+            'http://localhost:3002',
+            'https://brooklyn-store.shop',
+            'https://admin.brooklyn-store.shop',
+        ],
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
     });
     app.use('/uploads', express.static((0, path_1.join)(process.cwd(), 'uploads')));
-    app.useGlobalPipes(new common_1.ValidationPipe());
     await app.listen(3001);
 }
 bootstrap();

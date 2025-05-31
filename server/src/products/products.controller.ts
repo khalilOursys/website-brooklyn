@@ -27,7 +27,8 @@ export class ProductsController {
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Body() body: { productId: string }, // Assuming you're sending productId in the request body
   ) {
-    const hostUrl = 'http://localhost:3001';
+    /* const hostUrl = 'http://localhost:3001'; */
+    const hostUrl = process.env.imagePath || 'http://localhost:3001';
     if (!files || files.length === 0) {
       throw new BadRequestException('No images uploaded.');
     }

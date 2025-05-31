@@ -30,7 +30,7 @@ Table BulkClientRequest {
   user User [not null]
   storeName String [not null]
   legalDocs String [not null]
-  status String [not null, default: 'pending']
+  status String [not null, default: 'en attente']
   reviewedById String
   reviewedBy User
   submittedAt DateTime [default: `now()`, not null]
@@ -192,7 +192,7 @@ Table Order {
   user User [not null]
   isBulk Int [not null, default: 0]
   total Float [not null]
-  status String [not null, default: 'pending']
+  status String [not null, default: 'en attente']
   address String [not null]
   phoneNumber String [not null]
   discountCodeId String

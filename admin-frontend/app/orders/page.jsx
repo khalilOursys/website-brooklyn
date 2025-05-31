@@ -48,7 +48,7 @@ export default function Page() {
   };
 
   const getNextStatus = (currentStatus) => {
-    const statusFlow = ['pending', 'processing', 'shipped', 'completed'];
+    const statusFlow = ['en attente', 'en cours de traitement', 'expédié', 'terminé'];
     const currentIndex = statusFlow.indexOf(currentStatus);
     return currentIndex < statusFlow.length - 1 ? statusFlow[currentIndex + 1] : currentStatus;
   };
@@ -144,22 +144,22 @@ export default function Page() {
 
   const translateStatus = (status) => {
     const translations = {
-      'pending': 'En attente',
-      'processing': 'En traitement',
-      'shipped': 'Expédiée',
-      'completed': 'Terminée',
-      'cancelled': 'Annulée'
+      'pending': 'en attente',
+      'processing': 'en traitement',
+      'shipped': 'expédiée',
+      'completed': 'terminée',
+      'cancelled': 'annulée'
     };
     return translations[status] || status;
   };
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
-      case 'completed': return 'success';
-      case 'processing': return 'info';
-      case 'shipped': return 'primary';
-      case 'pending': return 'warning';
-      case 'cancelled': return 'danger';
+      case 'terminée': return 'success';
+      case 'en traitement': return 'info';
+      case 'expédiée': return 'primary';
+      case 'en attente': return 'warning';
+      case 'annulée': return 'danger';
       default: return 'secondary';
     }
   };

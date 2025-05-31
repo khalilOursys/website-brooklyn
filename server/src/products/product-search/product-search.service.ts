@@ -44,6 +44,12 @@ export class ProductSearchService {
     return await this.prisma.product.findMany({
       where,
       orderBy: { createdAt: 'desc' },
+      include: {
+        images: true,
+        attributes: true,
+        category: true,
+        brand: true,
+      },
     });
   }
 }

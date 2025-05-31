@@ -24,7 +24,7 @@ let ProductsController = class ProductsController {
         this.productService = productService;
     }
     async uploadImages(files, body) {
-        const hostUrl = 'http://localhost:3001';
+        const hostUrl = process.env.imagePath || 'http://localhost:3001';
         if (!files || files.length === 0) {
             throw new common_1.BadRequestException('No images uploaded.');
         }
