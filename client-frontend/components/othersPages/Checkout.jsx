@@ -56,19 +56,30 @@ export default function Checkout() {
 
     // Check if phone number or address is empty
     if (!formData.phoneNumber || !formData.address) {
-      setError('Please provide both phone number and address');
+      setError("Veuillez fournir le numéro de téléphone et l'adresse");
       setIsSubmitting(false);
       return;
     }
 
     try {
       // Prepare order items from cart products
-      const orderItems = cartProducts.map(product => ({
+      /* const orderItems = cartProducts.map(product => ({
         productId: product.id,
         quantity: product.quantity,
         price: parseFloat(product.price) * parseFloat(product.quantity)
-      }));
+      })); */
 
+      const orderItems = cartProducts.map(product => {
+        const discount = parseFloat(product?.discount);
+        const unitPrice = discount && discount !== 0 ? discount : parseFloat(product.price);
+
+        return {
+          productId: product.id,
+          bulkId: product.bulkId,
+          quantity: product.quantity,
+          price: unitPrice * parseFloat(product.quantity)
+        };
+      });
       // Prepare the request body
       const orderData = {
         isBulk: 0,
@@ -116,30 +127,30 @@ export default function Checkout() {
       <div className="container">
         <div className="tf-page-cart-wrap layout-2">
           <div className="tf-page-cart-item">
-            <h5 className="fw-5 mb_20">Billing details</h5>
+            <h5 className="fw-5 mb_20">Détails de facturation</h5>
             <form onSubmit={submitForm} className="form-checkout">
               <div className="box grid-2">
                 <fieldset className="fieldset">
-                  <label htmlFor="first-name">First Name</label>
+                  <label htmlFor="first-name">Nom</label>
                   <input
                     required
                     type="text"
                     id="first-name"
                     name="firstName"
-                    placeholder="First Name"
+                    placeholder="Nom"
                     value={formData.firstName}
                     readOnly
                     onChange={handleInputChange}
                   />
                 </fieldset>
                 <fieldset className="fieldset">
-                  <label htmlFor="last-name">Last Name</label>
+                  <label htmlFor="last-name">Prénom</label>
                   <input
                     required
                     type="text"
                     id="last-name"
                     name="lastName"
-                    placeholder="Last Name"
+                    placeholder="Prénom"
                     value={formData.lastName}
                     readOnly
                     onChange={handleInputChange}
@@ -147,30 +158,30 @@ export default function Checkout() {
                 </fieldset>
               </div>
               <fieldset className="box fieldset">
-                <label htmlFor="address">Address</label>
+                <label htmlFor="address">Adresse</label>
                 <input
                   required
                   type="text"
                   id="address"
                   name="address"
-                  placeholder="Your Address"
+                  placeholder="Your Adresse"
                   value={formData.address}
                   onChange={handleInputChange}
                 />
               </fieldset>
               <fieldset className="box fieldset">
-                <label htmlFor="phone">Phone Number</label>
+                <label htmlFor="phone">Numéro de téléphone</label>
                 <input
                   required
                   type="tel"
                   id="phone"
                   name="phoneNumber"
-                  placeholder="Phone Number"
+                  placeholder="Numéro de téléphone"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
                 />
               </fieldset>
-              <fieldset className="box fieldset">
+              {/* <fieldset className="box fieldset">
                 <label htmlFor="note">Order notes (optional)</label>
                 <textarea
                   name="note"
@@ -179,12 +190,12 @@ export default function Checkout() {
                   value={formData.note}
                   onChange={handleInputChange}
                 />
-              </fieldset>
+              </fieldset> */}
             </form>
           </div>
           <div className="tf-page-cart-footer">
             <div className="tf-cart-footer-inner">
-              <h5 className="fw-5 mb_20">Your order</h5>
+              <h5 className="fw-5 mb_20">Votre commande</h5>
               <form
                 onSubmit={submitForm}
                 className="tf-page-cart-checkout widget-wrap-checkout"
@@ -206,7 +217,18 @@ export default function Checkout() {
                           <p className="name">{elm.name}</p>
                         </div>
                         <span className="price">
-                          {(elm.price * elm.quantity).toFixed(3)} TND
+                          <span className="price">
+                            {elm.discount > 0 ? (
+                              <>
+                                <span style={{ textDecoration: 'line-through', marginRight: '5px', color: '#999' }}>
+                                  {(elm.price * elm.quantity).toFixed(3)} TND
+                                </span>
+                                {(elm.discount * elm.quantity).toFixed(3)} TND
+                              </>
+                            ) : (
+                              (elm.price * elm.quantity).toFixed(3) + ' TND'
+                            )}
+                          </span>
                         </span>
                       </div>
                     </li>
@@ -216,7 +238,7 @@ export default function Checkout() {
                   <div className="container">
                     <div className="row align-items-center mt-5 mb-5">
                       <div className="col-12 fs-18">
-                        Your shop cart is empty
+                        Votre panier est vide
                       </div>
                     </div>
                   </div>
@@ -248,7 +270,7 @@ export default function Checkout() {
                         paymentMethod: 'delivery'
                       }))}
                     />
-                    <label htmlFor="delivery">Cash on delivery</label>
+                    <label htmlFor="delivery">Paiement à la livraison</label>
                   </div>
                   {/* <p className="text_black-2 mb_20">
                     Your personal data will be used to process your order,
@@ -292,7 +314,7 @@ export default function Checkout() {
                 )}
                 {success && (
                   <div className="alert alert-success mb-3">
-                    Order placed successfully!
+                    Commande passée avec succès !
                   </div>
                 )}
 
@@ -301,7 +323,7 @@ export default function Checkout() {
                   className="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center"
                   disabled={isSubmitting || cartProducts.length === 0}
                 >
-                  {isSubmitting ? "Processing..." : "Place order"}
+                  {isSubmitting ? "Processing..." : "Passer commande"}
                 </button>
               </form>
             </div>

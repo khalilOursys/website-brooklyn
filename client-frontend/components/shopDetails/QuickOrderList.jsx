@@ -233,7 +233,7 @@ export default function QuickOrderList() {
                         href={`/view-cart`}
                         className="tf-btn btn-fill animate-hover-btn flex-shrink-0"
                       >
-                        View Cart
+                        Voir le panier
                       </Link>
                     </div>
                     <div className="tf-total-item">

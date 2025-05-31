@@ -29,13 +29,13 @@ export default function AccountAddress() {
                 placeholder=" "
                 type="text"
                 id="firstname"
-                name="first name"
+                name="Nom"
               />
               <label
                 className="tf-field-label fw-4 text_black-2"
                 htmlFor="firstname"
               >
-                First name
+                Nom
               </label>
             </div>
             <div className="tf-field style-1">
@@ -44,13 +44,13 @@ export default function AccountAddress() {
                 placeholder=" "
                 type="text"
                 id="lastname"
-                name="last name"
+                name="Prénom"
               />
               <label
                 className="tf-field-label fw-4 text_black-2"
                 htmlFor="lastname"
               >
-                Last name
+                Prénom
               </label>
             </div>
           </div>
@@ -84,7 +84,7 @@ export default function AccountAddress() {
                 className="tf-field-label fw-4 text_black-2"
                 htmlFor="address"
               >
-                Address
+                Adresse
               </label>
             </div>
           </div>
@@ -343,13 +343,13 @@ export default function AccountAddress() {
                 placeholder=" "
                 type="text"
                 id="firstnameEdit"
-                name="first name"
+                name="Nom"
               />
               <label
                 className="tf-field-label fw-4 text_black-2"
                 htmlFor="firstnameEdit"
               >
-                First name
+                Nom
               </label>
             </div>
             <div className="tf-field style-1">
@@ -358,13 +358,13 @@ export default function AccountAddress() {
                 placeholder=" "
                 type="text"
                 id="lastnameEdit"
-                name="last name"
+                name="Prénom"
               />
               <label
                 className="tf-field-label fw-4 text_black-2"
                 htmlFor="lastnameEdit"
               >
-                Last name
+                Prénom
               </label>
             </div>
           </div>
@@ -398,7 +398,7 @@ export default function AccountAddress() {
                 className="tf-field-label fw-4 text_black-2"
                 htmlFor="addressEdit"
               >
-                Address
+                Adresse
               </label>
             </div>
           </div>

@@ -88,7 +88,7 @@ export default function Footer7({ bgColor = "" }) {
                   <ul>
                     <li>
                       <p>
-                        Address: 1234 Fashion Street, Suite 567, <br />
+                        Adresse: 1234 Fashion Street, Suite 567, <br />
                         New York, NY 10001
                       </p>
                     </li>
@@ -199,9 +199,8 @@ export default function Footer7({ bgColor = "" }) {
                       exclusive content, events and more!
                     </div>
                     <div
-                      className={`tfSubscribeMsg ${
-                        showMessage ? "active" : ""
-                      }`}
+                      className={`tfSubscribeMsg ${showMessage ? "active" : ""
+                        }`}
                     >
                       {success ? (
                         <p style={{ color: "rgb(52, 168, 83)" }}>

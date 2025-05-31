@@ -18,7 +18,7 @@ export default function Categories() {
     <section>
       <div className="flat-title">
         <span className="title wow fadeInUp" data-wow-delay="0s">
-          Shop by category
+          Acheter par catégorie
         </span>
       </div>
       <div className="flat-categories-bg wrap-carousel">

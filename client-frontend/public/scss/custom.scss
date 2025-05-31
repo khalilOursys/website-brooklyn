@@ -393,7 +393,12 @@ a.logo-header {
 .password-toggle:hover i {
   color: #333;
 }
-
+.password-requirements li.valid {
+  color: #28a745; /* green for valid */
+}
+p.top-bar-text span {
+    margin-left: 5px;
+}
 @media (max-width: 768px) {
   .modal-content {
     max-height: 90vh;

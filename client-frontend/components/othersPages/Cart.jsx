@@ -58,7 +58,7 @@ export default function Cart() {
                 d="M10.0899 24C11.3119 22.1928 11.4245 20.2409 10.4277 18.1443C10.1505 19.2691 9.64344 19.9518 8.90645 20.1924C9.59084 18.2379 9.01896 16.1263 7.19079 13.8576C7.15133 16.2007 6.58824 17.9076 5.50148 18.9782C4.00436 20.4517 4.02197 22.1146 5.55428 23.9669C-0.806588 20.5819 -1.70399 16.0418 2.86196 10.347C3.14516 11.7228 3.83141 12.5674 4.92082 12.8809C3.73335 7.84186 4.98274 3.54821 8.66895 0C8.6916 7.87426 11.1062 8.57414 14.1592 12.089C17.4554 16.3071 15.5184 21.1748 10.0899 24Z"
               />
             </svg>
-            <p>These products are limited, checkout within</p>
+            <p>Ces produits sont limités, passez à la caisse</p>
           </div>
           <div
             className="js-countdown timer-count"
@@ -72,9 +72,9 @@ export default function Cart() {
               <table className="tf-table-page-cart">
                 <thead>
                   <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
+                    <th>Produit</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
                     <th>Total</th>
                   </tr>
                 </thead>
@@ -104,7 +104,7 @@ export default function Cart() {
                             className="remove-cart link remove"
                             onClick={() => removeItem(elm.id)}
                           >
-                            Remove
+                            Retirer
                           </span>
                         </div>
                       </td>
@@ -113,7 +113,17 @@ export default function Cart() {
                         cart-data-title="Price"
                       >
                         <div className="cart-price">
-                          {parseFloat(elm.price).toFixed(3)} TND
+                          {/* {parseFloat(elm.price).toFixed(3)} TND */}
+                          {elm.discount > 0 ? (
+                            <>
+                              <span style={{ textDecoration: 'line-through', marginRight: '5px', color: '#999' }}>
+                                {parseFloat(elm.price).toFixed(3)} TND
+                              </span>
+                              {parseFloat(elm.discount).toFixed(3)} TND
+                            </>
+                          ) : (
+                            parseFloat(elm.price).toFixed(3) + ' TND'
+                          )}
                         </div>
                       </td>
                       <td
@@ -174,7 +184,18 @@ export default function Cart() {
                           className="cart-total"
                           style={{ minWidth: "60px" }}
                         >
-                          {(elm.price * elm.quantity).toFixed(3)} TND
+                          {/* {(elm.price * elm.quantity).toFixed(3)} TND */}
+
+                          {elm.discount > 0 ? (
+                            <>
+                              <span style={{ textDecoration: 'line-through', marginRight: '5px', color: '#999' }}>
+                                {(elm.price * elm.quantity).toFixed(3)} TND
+                              </span>
+                              {(elm.discount * elm.quantity).toFixed(3)} TND
+                            </>
+                          ) : (
+                            (elm.price * elm.quantity).toFixed(3) + ' TND'
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -184,10 +205,10 @@ export default function Cart() {
               {!cartProducts.length && (
                 <>
                   <div className="row align-items-center mb-5">
-                    <div className="col-6 fs-18">Your shop cart is empty</div>
+                    <div className="col-6 fs-18">Votre panier est vide</div>
                     <div className="col-6">
                       <Link
-                        href={`/shop-default`}
+                        href={`/`}
                         className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
                         style={{ width: "fit-content" }}
                       >
@@ -197,7 +218,7 @@ export default function Cart() {
                   </div>
                 </>
               )}
-              <div className="tf-page-cart-note">
+              {/*  <div className="tf-page-cart-note">
                 <label htmlFor="cart-note">Add Order Note</label>
                 <textarea
                   name="note"
@@ -205,7 +226,7 @@ export default function Cart() {
                   placeholder="How can we help you?"
                   defaultValue={""}
                 />
-              </div>
+              </div> */}
             </form>
           </div>
           <div className="tf-page-cart-footer">
@@ -231,8 +252,8 @@ export default function Cart() {
                   </span>
                 </div>
                 <div className="tf-progress-msg">
-                  Buy <span className="price fw-6">75.00 TND</span> more to enjoy{" "}
-                  <span className="fw-6">Free Shipping</span>
+                  Achetez <span className="price fw-6">75.00 TND</span> de plus pour profiter de la
+                  <span className="fw-6 mr-1 ms-1">livraison gratuite</span>
                 </div>
               </div>
               <div className="tf-page-cart-checkout">
@@ -249,16 +270,15 @@ export default function Cart() {
                   </label>
                 </div> */}
                 <div className="tf-cart-totals-discounts">
-                  <h3>Subtotal</h3>
+                  <h3>Total</h3>
                   <span className="total-value">
                     {totalPrice.toFixed(3)} TND
                   </span>
                 </div>
                 <p className="tf-cart-tax">
-                  Taxes and <Link href={`/shipping-delivery`}>shipping</Link> calculated
-                  at checkout
+                  Taxes et frais de port calculés au moment du paiement
                 </p>
-                <div className="cart-checkbox">
+                {/* <div className="cart-checkbox">
                   <input
                     type="checkbox"
                     className="tf-check"
@@ -267,14 +287,14 @@ export default function Cart() {
                   <label htmlFor="check-agree" className="fw-4">
                     I agree with the terms and conditions
                   </label>
-                </div>
+                </div> */}
                 <div className="cart-checkout-btn">
                   {token ? (
                     <Link
                       href={"/checkout"}
                       className="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
                     >
-                      <span>Proceed to Checkout</span>
+                      <span>Passer à la caisse</span>
                     </Link>
                   ) : (
 
@@ -283,7 +303,7 @@ export default function Cart() {
                       data-bs-toggle="modal"
                       className="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
                     >
-                      <span>Login to Checkout</span>
+                      <span>Connectez-vous pour payer</span>
                     </a>
                   )}
                 </div>

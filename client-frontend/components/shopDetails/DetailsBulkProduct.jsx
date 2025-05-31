@@ -148,7 +148,7 @@ export default function DetailsBulkProduct({ product = allProducts[0] }) {
                           <span>Adding to cart...</span>
                         ) : (
                           <span className="tf-qty-price">
-                            Add to cart {(product.discount || product.bulkPrice * quantity).toFixed(2)} TND
+                            Ajouter au panier {(product.discount || product.bulkPrice * quantity).toFixed(2)} TND
                           </span>
                         )}
                       </a>

@@ -6,7 +6,7 @@ import Link from "next/link";
 import LanguageSelect from "../common/LanguageSelect";
 import CurrencySelect from "../common/CurrencySelect";
 import { aboutLinks, footerLinks, paymentImages } from "@/data/footerLinks";
-export default function Footer2({ bgColor = "background-black" }) {
+export default function Footer2({ bgColor = "" }) {
   useEffect(() => {
     const headings = document.querySelectorAll(".footer-heading-moblie");
 
@@ -77,13 +77,21 @@ export default function Footer2({ bgColor = "background-black" }) {
                 <div className="footer-infor">
                   <div className="footer-logo">
                     <Link href={`/`} className="logo-header">
-                      BROOKLYN
+                      {/* BROOKLYN */}
+
+                      <Image
+                        alt="logo"
+                        className="logo"
+                        src="/images/logo/logo.png"
+                        width={273}
+                        height={42}
+                      />
                     </Link>
                   </div>
                   <ul>
                     <li>
                       <p>
-                        Address: Teniour(Ceinture de Kaied Mhamed  <br />
+                        Adresse: Teniour(Ceinture de Kaied Mhamed  <br />
                         vers Teniour)
                       </p>
                     </li>

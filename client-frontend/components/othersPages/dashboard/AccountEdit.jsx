@@ -17,7 +17,7 @@ export default function AccountEdit() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  // Initialize form data when user context is available
+  // Initialiser les données du formulaire quand le contexte utilisateur est disponible
   useEffect(() => {
     if (user) {
       setFormData({
@@ -44,15 +44,15 @@ export default function AccountEdit() {
     setSuccess(false);
 
     try {
-      // Prepare the data to send
+      // Préparer les données à envoyer
       const updateData = {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        password: formData.password // Only include password if it's not empty
+        password: formData.password // Inclure le mot de passe uniquement s'il n'est pas vide
       };
 
-      // Call your API endpoint
+      // Appel de l'API
       const response = await fetch(`${api}users/` + user.id, {
         method: 'PUT',
         headers: {
@@ -63,19 +63,19 @@ export default function AccountEdit() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update user');
+        throw new Error(errorData.message || 'Échec de la mise à jour de l’utilisateur');
       }
 
       var updatedUser = await response.json();
       updatedUser.cart = user.cart;
-      // Update context with new user data
+      // Mettre à jour le contexte avec les nouvelles données utilisateur
       setUser(updatedUser);
       setSuccess(true);
 
-      // Clear password field after successful update
+      // Réinitialiser le champ mot de passe après mise à jour
       setFormData(prev => ({ ...prev, password: '' }));
 
-      // Hide success message after 3 seconds
+      // Masquer le message de succès après 3 secondes
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       setError(err.message);
@@ -100,7 +100,7 @@ export default function AccountEdit() {
           )}
           {success && (
             <div className="alert alert-success mb-3">
-              Profile updated successfully!
+              Profil mis à jour avec succès !
             </div>
           )}
 
@@ -119,7 +119,7 @@ export default function AccountEdit() {
               className="tf-field-label fw-4 text_black-2"
               htmlFor="property1"
             >
-              First name
+              Prénom
             </label>
           </div>
 
@@ -138,7 +138,7 @@ export default function AccountEdit() {
               className="tf-field-label fw-4 text_black-2"
               htmlFor="property1"
             >
-              Last name
+              Nom
             </label>
           </div>
           <div className="tf-field style-1 mb_15">
@@ -160,7 +160,7 @@ export default function AccountEdit() {
               Email
             </label>
           </div>
-          <h6 className="mb_20">Password Change</h6>
+          <h6 className="mb_20">Changement de mot de passe</h6>
           <div className="tf-field style-1 mb_30">
             <input
               className="tf-field-input tf-input"
@@ -176,7 +176,7 @@ export default function AccountEdit() {
               className="tf-field-label fw-4 text_black-2"
               htmlFor="property4"
             >
-              Password (leave blank to keep current)
+              Mot de passe (laissez vide pour ne pas changer)
             </label>
           </div>
           <div className="mb_20">
@@ -185,7 +185,7 @@ export default function AccountEdit() {
               className="tf-btn w-100 radius-3 btn-fill animate-hover-btn justify-content-center"
               disabled={loading}
             >
-              {loading ? 'Updating...' : 'Save Changes'}
+              {loading ? 'Mise à jour en cours...' : 'Enregistrer les modifications'}
             </button>
           </div>
         </form>

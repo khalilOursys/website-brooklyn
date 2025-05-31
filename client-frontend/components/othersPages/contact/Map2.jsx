@@ -22,7 +22,7 @@ export default function Map2() {
               <h5 className="mb_20">Visit Our Store</h5>
               <div className="mb_20">
                 <p className="mb_15">
-                  <strong>Address</strong>
+                  <strong>Adresse</strong>
                 </p>
                 <p>66 Mott St, New York, New York, Zip Code: 10006, AS</p>
               </div>

@@ -29,14 +29,14 @@ export default function Register() {
                   placeholder=" "
                   type="text"
                   id="property1"
-                  name="first name"
+                  name="Nom"
                   required
                 />
                 <label
                   className="tf-field-label fw-4 text_black-2"
                   htmlFor="property1"
                 >
-                  First name
+                  Nom
                 </label>
               </div>
               <div className="tf-field style-1 mb_15">
@@ -45,14 +45,14 @@ export default function Register() {
                   placeholder=" "
                   type="text"
                   id="property2"
-                  name="last name"
+                  name="Prénom"
                   required
                 />
                 <label
                   className="tf-field-label fw-4 text_black-2"
                   htmlFor="property2"
                 >
-                  Last name
+                  Prénom
                 </label>
               </div>
               <div className="tf-field style-1 mb_15">

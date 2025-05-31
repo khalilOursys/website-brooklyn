@@ -90,7 +90,7 @@ export default function Sidebar({
               aria-expanded="true"
               aria-controls="availability"
             >
-              <span>Brands</span>
+              <span>Marques</span>
               <span className="icon icon-arrow-up" />
             </div>
             <div id="categories" className="collapse show">
@@ -129,7 +129,7 @@ export default function Sidebar({
           id="facet-filter-form"
           className="facet-filter-form"
         >
-          <div className="widget-facet">
+          {/* <div className="widget-facet">
             <div
               className="facet-title"
               data-bs-target="#availability"
@@ -166,7 +166,7 @@ export default function Sidebar({
                 ))}
               </ul>
             </div>
-          </div>
+          </div> */}
           <div className="widget-facet wrap-price">
             <div
               className="facet-title"
@@ -175,7 +175,7 @@ export default function Sidebar({
               aria-expanded="true"
               aria-controls="price"
             >
-              <span>Price</span>
+              <span>Prix</span>
               <span className="icon icon-arrow-up" />
             </div>
             <div id="price" className="collapse show">
@@ -190,7 +190,7 @@ export default function Sidebar({
                   id="slider"
                 />
                 <div className="box-title-price">
-                  <span className="title-price">Price :</span>
+                  <span className="title-price">Prix :</span>
                   <div className="caption-price">
                     <div>
                       <span className="min-price">{price[0]} TND</span>

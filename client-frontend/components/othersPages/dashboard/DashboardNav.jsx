@@ -3,8 +3,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 const accountLinks = [
   /* { href: "/my-account", label: "Dashboard" }, */
-  { href: "/my-account-orders", label: "Orders" },
-  { href: "/my-account-edit", label: "Account Details" },
+  { href: "/my-account-orders", label: "Commandes" },
+  { href: "/my-account-edit", label: "Détails du compte" },
 ];
 
 export default function DashboardNav() {

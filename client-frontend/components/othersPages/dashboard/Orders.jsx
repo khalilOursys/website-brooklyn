@@ -1,4 +1,4 @@
-"use client"; // Mark this as a Client Component
+"use client"; // Marque ce composant comme un Client Component
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,14 +15,14 @@ export default function Orders() {
     const fetchData = async () => {
       const token = localStorage.getItem("x-access-token");
 
-      // No token case
+      // Cas où il n'y a pas de token
       if (!token) {
         router.push("/");
         return;
       }
 
       try {
-        // Step 1: Fetch user profile to get userId
+        // Étape 1 : Récupérer le profil utilisateur pour obtenir l'userId
         `${api}auth/profile`
         const profileResponse = await fetch(`${api}auth/profile`, {
           headers: {
@@ -30,30 +30,30 @@ export default function Orders() {
           },
         });
 
-        // Handle unauthorized (401)
+        // Gérer le cas non autorisé (401)
         if (profileResponse.status === 401) {
           handleUnauthorized();
           return;
         }
 
         if (!profileResponse.ok) {
-          throw new Error(`Profile fetch failed: ${profileResponse.status}`);
+          throw new Error(`Échec de la récupération du profil : ${profileResponse.status}`);
         }
 
         const profileData = await profileResponse.json();
         const userId = profileData.id;
 
-        // Step 2: Fetch orders using userId
+        // Étape 2 : Récupérer les commandes avec l'userId
         const ordersResponse = await fetch(`${api}orders/getOrderByIdUser/${userId}`);
 
-        // Handle unauthorized (401) for orders endpoint
+        // Gérer le cas non autorisé (401) pour l'endpoint des commandes
         if (ordersResponse.status === 401) {
           handleUnauthorized();
           return;
         }
 
         if (!ordersResponse.ok) {
-          throw new Error(`Orders fetch failed: ${ordersResponse.status}`);
+          throw new Error(`Échec de la récupération des commandes : ${ordersResponse.status}`);
         }
 
         const ordersData = await ordersResponse.json();
@@ -77,7 +77,7 @@ export default function Orders() {
     return (
       <div className="loading-container">
         <div className="spinner"></div>
-        <p>Loading your orders...</p>
+        <p>Chargement de vos commandes...</p>
       </div>
     );
   }
@@ -85,13 +85,13 @@ export default function Orders() {
   /* if (error) {
     return (
       <div className="error-container">
-        <h3>Error loading orders</h3>
+        <h3>Erreur lors du chargement des commandes</h3>
         <p>{error}</p>
         <button
           onClick={() => window.location.reload()}
           className="retry-btn"
         >
-          Try Again
+          Réessayer
         </button>
       </div>
     );
@@ -100,10 +100,10 @@ export default function Orders() {
   if (!orders.length) {
     return (
       <div className="empty-orders">
-        <h3>No orders found</h3>
-        <p>You haven't placed any orders yet.</p>
+        <h3>Aucune commande trouvée</h3>
+        <p>Vous n'avez passé aucune commande pour le moment.</p>
         <Link href="/products" className="shop-btn">
-          Start Shopping
+          Commencer vos achats
         </Link>
       </div>
     );
@@ -112,13 +112,13 @@ export default function Orders() {
   return (
     <div className="my-account-content account-order">
       <div className="wrap-account-order">
-        <h2>Your Order History</h2>
+        <h2>Votre historique de commandes</h2>
         <table>
           <thead>
             <tr>
-              <th className="fw-6">Order</th>
+              <th className="fw-6">Commande</th>
               <th className="fw-6">Date</th>
-              <th className="fw-6">Status</th>
+              <th className="fw-6">Statut</th>
               <th className="fw-6">Total</th>
               <th className="fw-6">Actions</th>
             </tr>
@@ -127,7 +127,7 @@ export default function Orders() {
             {orders.map((order) => (
               <tr key={order.id} className="tf-order-item">
                 <td>#{order.id.slice(0, 8)}</td>
-                <td>{new Date(order.createdAt).toLocaleDateString("en-US", {
+                <td>{new Date(order.createdAt).toLocaleDateString("fr-FR", {
                   year: 'numeric',
                   month: 'short',
                   day: 'numeric'
@@ -138,7 +138,7 @@ export default function Orders() {
                   </span>
                 </td>
                 <td>
-                  {order.total.toFixed(3)} TND for {order.orderItems.length} item
+                  {order.total.toFixed(3)} TND pour {order.orderItems.length} article
                   {order.orderItems.length !== 1 ? 's' : ''}
                 </td>
                 <td>
@@ -146,7 +146,7 @@ export default function Orders() {
                     href={`/my-account-orders-details/${order.id}`}
                     className="view-btn"
                   >
-                    View Details
+                    Voir les détails
                   </Link>
                 </td>
               </tr>

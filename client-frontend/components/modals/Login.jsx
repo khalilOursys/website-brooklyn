@@ -13,18 +13,19 @@ export default function Login() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // État pour afficher/cacher le mot de passe
 
-  // Handle form submission
+  // Gestion de la soumission du formulaire
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
     setIsLoading(true);
 
     if (!login.trim()) {
-      notify(2, "Email cannot be empty."); // Show error message
+      notify(2, "L'email ne peut pas être vide.");
       return;
     }
     if (!password.trim()) {
-      notify(2, "Password cannot be empty."); // Show error message
+      notify(2, "Le mot de passe ne peut pas être vide.");
       return;
     }
 
@@ -38,56 +39,40 @@ export default function Login() {
         body: JSON.stringify({ email: login, password }),
       });
 
-      const data = await response.json(); // <-- you forgot to parse the response!
+      const data = await response.json();
 
       if (data.message) {
-        notify(2, data.message); // Show error message (added 2 as level like your other notify calls)
+        notify(2, data.message);
       } else {
-        localStorage.setItem("x-access-token", data.access_token); // Save token
+        localStorage.setItem("x-access-token", data.access_token);
         setTimeout(() => {
-          /* if (data.user.role === "ADMIN")
-            window.location.replace("/admin/users");
-          else */
-          window.location.reload(); // Updated navigation
+          window.location.reload();
         }, 1500);
       }
     } catch (error) {
       console.error(error);
-      notify(2, "An error occurred during login."); // Handle unexpected errors
+      notify(2, "Une erreur est survenue lors de la connexion.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handle login input change
-  const handleLoginChange = (event) => {
-    setLogin(event.target.value);
+  // Basculer l'affichage du mot de passe
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
-  // Handle password input change
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
   return (
-    <div
-      className="modal modalCentered fade form-sign-in modal-part-content"
-      id="login"
-    >
+    <div className="modal modalCentered fade form-sign-in modal-part-content" id="login">
       <ToastContainer />
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="header">
-            <div className="demo-title">Log in</div>
-            <span
-              className="icon-close icon-close-popup"
-              data-bs-dismiss="modal"
-            />
+            <div className="demo-title">Connexion</div>
+            <span className="icon-close icon-close-popup" data-bs-dismiss="modal" />
           </div>
           <div className="tf-login-form">
-            <form
-              className=""
-              acceptCharset="utf-8"
-            >
+            <form className="" acceptCharset="utf-8">
               <div className="tf-field style-1">
                 <input
                   className="tf-field-input tf-input"
@@ -95,25 +80,38 @@ export default function Login() {
                   type="email"
                   name=""
                   required
-                  onChange={handleLoginChange}
+                  onChange={(e) => setLogin(e.target.value)}
                 />
                 <label className="tf-field-label" htmlFor="">
                   Email *
                 </label>
               </div>
               <div className="tf-field style-1">
-                <input
-                  className="tf-field-input tf-input"
-                  placeholder=" "
-                  type="password"
-                  name=""
-                  required
-                  onChange={handlePasswordChange}
-                  autoComplete="current-password"
-                />
-                <label className="tf-field-label" htmlFor="">
-                  Password *
-                </label>
+                <div className="password-input-wrapper">
+                  <input
+                    className="tf-field-input tf-input"
+                    placeholder=" "
+                    type={showPassword ? "text" : "password"}
+                    name=""
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                  />
+                  <label className="tf-field-label" htmlFor="">
+                    Mot de passe *
+                  </label>
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={toggleShowPassword}
+                  >
+                    {showPassword ? (
+                      <i className="fas fa-eye-slash"></i>
+                    ) : (
+                      <i className="fas fa-eye"></i>
+                    )}
+                  </button>
+                </div>
               </div>
               <div>
                 <a
@@ -121,7 +119,7 @@ export default function Login() {
                   data-bs-toggle="modal"
                   className="btn-link link"
                 >
-                  Forgot your password?
+                  Mot de passe oublié ?
                 </a>
               </div>
               <div className="bottom">
@@ -132,7 +130,7 @@ export default function Login() {
                     className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
                     disabled={isLoading}
                   >
-                    <span>Log in</span>
+                    <span>{isLoading ? "Connexion..." : "Se connecter"}</span>
                   </button>
                 </div>
                 <div className="w-100">
@@ -141,7 +139,7 @@ export default function Login() {
                     data-bs-toggle="modal"
                     className="btn-link fw-6 w-100 link"
                   >
-                    New customer? Create your account
+                    Nouveau client ? Créez votre compte
                     <i className="icon icon-arrow1-top-left" />
                   </a>
                 </div>

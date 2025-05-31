@@ -90,7 +90,7 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
           className={`item-link ${Linkfs} ${textColor} ${isMenuActive(allHomepages) ? "activeMenu" : ""
             } `}
         >
-          Home
+          Accueil
         </a>
       </li>
       <li className="menu-item">
@@ -98,7 +98,7 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
           href="/home2"
           className={`item-link ${Linkfs} ${textColor}`}
         >
-          Home 2
+          Accueil 2
         </a>
       </li>
       <li className="menu-item">
@@ -106,7 +106,7 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
           href="/promotions"
           className={`item-link ${Linkfs} ${textColor}`}
         >
-          promotions
+          Promotions
         </a>
       </li>
       {user?.role === "BULK_CLIENT" && user !== null && (
@@ -115,7 +115,7 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
             href="/bulkproduct"
             className={`item-link ${Linkfs} ${textColor}`}
           >
-            Bulk-Product
+            Produit en gros
           </a>
         </li>
       )}
@@ -125,7 +125,7 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
           className={`item-link ${Linkfs} ${textColor} ${isMenuActive(categories) ? "activeMenu" : ""
             } `}
         >
-          Shop
+          Produit
           {isArrow ? <i className="icon icon-arrow-down" /> : ""}
         </a>
         <div className="sub-menu mega-menu">

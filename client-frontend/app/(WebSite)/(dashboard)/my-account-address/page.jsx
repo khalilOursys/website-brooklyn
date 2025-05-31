@@ -5,8 +5,8 @@ import DashboardNav from "@/components/othersPages/dashboard/DashboardNav";
 import React from "react";
 
 export const metadata = {
-  title: "My Accout Address || Ecomus - Ultimate Nextjs Ecommerce Template",
-  description: "Ecomus - Ultimate Nextjs Ecommerce Template",
+  title: "My Accout Adresse || brooklyn-store",
+  description: "brooklyn-store",
 };
 export default function page() {
   return (
@@ -14,7 +14,7 @@ export default function page() {
       <Header2 />
       <div className="tf-page-title">
         <div className="container-full">
-          <div className="heading text-center">My Account Address</div>
+          <div className="heading text-center">My Account Adresse</div>
         </div>
       </div>
       <section className="flat-spacing-11">

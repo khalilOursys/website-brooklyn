@@ -32,7 +32,7 @@ export default function ShopCart() {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="header">
-            <div className="title fw-5">Shopping cart</div>
+            <div className="title fw-5">Panier</div>
             <span
               className="icon-close icon-close-popup"
               data-bs-dismiss="modal"
@@ -60,8 +60,8 @@ export default function ShopCart() {
                 </span>
               </div>
               <div className="tf-progress-msg">
-                Buy <span className="price fw-6">75.00 TND</span> more to enjoy
-                <span className="fw-6">Free Shipping</span>
+                Achetez <span className="price fw-6">75.00 TND</span> de plus pour profiter de la
+                <span className="fw-6 mr-1 ms-1">livraison gratuite</span>
               </div>
             </div>
             <div className="tf-mini-cart-wrap">
@@ -88,7 +88,7 @@ export default function ShopCart() {
                           >
                             {elm.name}
                           </Link>
-                          <div className="meta-variant">Light gray</div>
+                          {/* <div className="meta-variant">Light gray</div> */}
                           <div className="price fw-6">
                             {parseFloat(elm.price).toFixed(3)} TND
                           </div>
@@ -125,7 +125,7 @@ export default function ShopCart() {
                               style={{ cursor: "pointer" }}
                               onClick={() => removeItem(elm.id)}
                             >
-                              Remove
+                              Retirer
                             </div>
                           </div>
                         </div>
@@ -136,7 +136,7 @@ export default function ShopCart() {
                       <div className="container">
                         <div className="row align-items-center mt-5 mb-5">
                           <div className="col-12 fs-18">
-                            Your shop cart is empty
+                            Votre panier est vide
                           </div>
                           <div className="col-12 mt-3">
                             <Link
@@ -156,16 +156,16 @@ export default function ShopCart() {
               <div className="tf-mini-cart-bottom">
                 <div className="tf-mini-cart-bottom-wrap">
                   <div className="tf-cart-totals-discounts">
-                    <div className="tf-cart-total">Subtotal</div>
+                    <div className="tf-cart-total">Total</div>
                     <div className="tf-totals-total-value fw-6">
                       {totalPrice.toFixed(2)} TND
                     </div>
                   </div>
                   <div className="tf-cart-tax">
-                    Taxes and <a href="#">shipping</a> calculated at checkout
+                    Taxes et frais de port calculés au moment du paiement
                   </div>
                   <div className="tf-mini-cart-line" />
-                  <div className="tf-cart-checkbox">
+                  {/* <div className="tf-cart-checkbox">
                     <div className="tf-checkbox-wrapp">
                       <input
                         className=""
@@ -183,19 +183,19 @@ export default function ShopCart() {
                         terms and conditions
                       </a>
                     </label>
-                  </div>
+                  </div> */}
                   <div className="tf-mini-cart-view-checkout">
                     <Link
                       href={`/view-cart`}
                       className="tf-btn btn-outline radius-3 link w-100 justify-content-center"
                     >
-                      View cart
+                      Voir le panier
                     </Link>
                     <Link
                       href={`/checkout`}
                       className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
                     >
-                      <span>Check out</span>
+                      <span>Commander</span>
                     </Link>
                   </div>
                 </div>

@@ -47,13 +47,13 @@ export default function Header4() {
 
               <div className="overflow-hidden">
                 <p className="top-bar-text">
-                  Register as
+                  Inscrivez-vous en tant que
                   <a
                     href="#registerBulkClient"
                     data-bs-toggle="modal"
                     className="tf-btn btn-line"
                   >
-                    <span className="text">Wholesaler</span>
+                    <span className="text">grossiste</span>
                   </a>
                 </p>
               </div>

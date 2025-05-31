@@ -658,7 +658,7 @@ export const pages = [
   },
   {
     href: "/view-cart",
-    text: "View cart",
+    text: "Voir le panier",
     className: "menu-link-text link text_black-2 position-relative",
   },
   {
@@ -1004,7 +1004,7 @@ export const navItems = [
       { href: "/our-store", label: "Our store" },
       { href: "/store-locations", label: "Store locator" },
       { href: "/timeline", label: "Timeline", demoLabel: true },
-      { href: "/view-cart", label: "View cart" },
+      { href: "/view-cart", label: "Voir le panier" },
       { href: "/my-account", label: "My account" },
       { href: "/wishlist", label: "Wishlist" },
       { href: "/terms", label: "Terms and conditions" },

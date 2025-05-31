@@ -290,13 +290,13 @@ export default function Header0() {
                       className="nav-icon-item align-items-center gap-10 text-white"
                     >
                       <i className="icon icon-account" />
-                      <span className="text">Login</span>
+                      {/* <span className="text">Login</span> */}
                     </a> : <a
                       href="/my-account-edit"
                       className="nav-icon-item align-items-center gap-10 text-white"
                     >
                       <i className="icon icon-account" />
-                      <span className="text">my account</span>
+                      {/* <span className="text">my account</span> */}
                     </a>}
                   </li>
                   {token ? (
@@ -311,7 +311,7 @@ export default function Header0() {
                         className="nav-icon-item align-items-center gap-10 text-white bg-transparent border-0"
                       >
                         <i className="fas fa-sign-out-alt" />
-                        <span className="text">Logout</span>
+                        {/* <span className="text">Logout</span> */}
                       </button>
                     </li>
                   ) : ("")}
