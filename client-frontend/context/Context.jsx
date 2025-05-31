@@ -153,7 +153,6 @@ export default function Context({ children }) {
           cache: 'no-store' // Disable caching
         });
 
-        console.log(token);
         if (!isMounted) return;
 
         if (profileResponse.status === 401) {

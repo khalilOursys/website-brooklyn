@@ -101,6 +101,20 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                   <div className="tf-product-info-liveview">
                     <p>{product.description ? product.description : ""}</p>
                   </div>
+                  {/* Add this attributes section */}
+                  {product.attributes && product.attributes.length > 0 && (
+                    <div className="tf-product-info-attributes">
+                      <h6 className="attributes-title">Specifications:</h6>
+                      <ul className="attributes-list">
+                        {product.attributes.map((attr) => (
+                          <li key={attr.id} className="attribute-item">
+                            <span className="attribute-key">{attr.key}:</span>
+                            <span className="attribute-value">{attr.value}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                   {/* <div className="tf-product-info-variant-picker">
                     <div className="variant-picker-item">
                       <div className="variant-picker-label">

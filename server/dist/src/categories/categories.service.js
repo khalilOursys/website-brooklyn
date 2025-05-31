@@ -47,6 +47,18 @@ let CategoriesService = class CategoriesService {
         }
         return category;
     }
+    async findBySlug(slug) {
+        const category = await this.prisma.category.findFirst({
+            where: { slug },
+            include: {
+                parent: true,
+            },
+        });
+        if (!category) {
+            throw new common_1.NotFoundException(`Category with slug "${slug}" not found.`);
+        }
+        return category;
+    }
     async update(id, updateCategoryDto) {
         await this.findOne(id);
         return await this.prisma.category.update({

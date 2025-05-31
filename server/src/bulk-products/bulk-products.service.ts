@@ -49,9 +49,10 @@ export class BulkProductsService {
       include: {
         product: {
           include: {
+            images: true,
+            attributes: true,
             category: true,
             brand: true,
-            images: true,
           },
         },
       },
