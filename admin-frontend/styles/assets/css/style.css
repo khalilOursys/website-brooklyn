@@ -736,8 +736,15 @@ body>.navbar-collapse:before {
 }
 
 .img-log img {
-  width: initial;
+  /* width: initial; */
+  /* height: initial; */
+  width: calc(100% - 50px);
   height: initial;
+  text-align: center;
+  margin: 0 auto;
+  filter: brightness(0) invert(1);
+  -webkit-filter: brightness(0) invert(1);
+  transition: all 0.3s;
 }
 
 .login-page .col-lg-3,
