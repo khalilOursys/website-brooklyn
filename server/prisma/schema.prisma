@@ -47,7 +47,7 @@ model BulkClientRequest {
   user         User      @relation(fields: [userId], references: [id])
   storeName    String
   legalDocs    String
-  status       String    @default("pending")
+  status       String    @default("en attente")
   reviewedById String?
   reviewedBy   User?     @relation("ReviewedBulkRequests", fields: [reviewedById], references: [id])
   submittedAt  DateTime  @default(now())
@@ -209,7 +209,7 @@ model Order {
   user           User           @relation(fields: [userId], references: [id])
   isBulk         Int            @default(0)
   total          Float
-  status         String         @default("pending")
+  status         String         @default("en attente")
   address        String
   phoneNumber    String
   discountCodeId String?
