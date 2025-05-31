@@ -44,6 +44,11 @@ export class CategoriesController {
     return await this.categoriesService.findOne(id);
   }
 
+  @Get('getCategoryBySlug/:slug')
+  async findBySlug(@Param('slug') slug: string) {
+    return await this.categoriesService.findBySlug(slug);
+  }
+
   @Put(':id')
   async update(
     @Param('id') id: string,

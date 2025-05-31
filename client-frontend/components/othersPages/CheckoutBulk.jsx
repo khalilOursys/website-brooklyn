@@ -168,7 +168,6 @@ export default function CheckoutBulk() {
     0
   ); */
   const totalPrice = cartProducts.reduce((accumulator, product) => {
-    console.log(product);
 
     const quantity = parseFloat(product.quantity) || 0;
     const price = parseFloat(product.bulk.bulkPrice) || 0;

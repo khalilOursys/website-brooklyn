@@ -47,7 +47,20 @@ export class CategoriesService {
     }
     return category;
   }
+  async findBySlug(slug: string) {
+    const category = await this.prisma.category.findFirst({
+      where: { slug }, // assumes `slug` is unique
+      include: {
+        parent: true,
+      },
+    });
 
+    if (!category) {
+      throw new NotFoundException(`Category with slug "${slug}" not found.`);
+    }
+
+    return category;
+  }
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     // Ensure the category exists
     await this.findOne(id);

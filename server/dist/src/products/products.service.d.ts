@@ -9,10 +9,10 @@ export declare class ProductsService {
         category: {
             id: string;
             name: string;
+            description: string | null;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -22,28 +22,26 @@ export declare class ProductsService {
         brand: {
             id: string;
             name: string;
+            description: string | null;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string;
             url: string;
             isPrimary: boolean;
-            productId: string;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         price: number;
         stock: number;
@@ -55,15 +53,17 @@ export declare class ProductsService {
         brandId: string;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(): Promise<({
         category: {
             id: string;
             name: string;
+            description: string | null;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -73,28 +73,26 @@ export declare class ProductsService {
         brand: {
             id: string;
             name: string;
+            description: string | null;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string;
             url: string;
             isPrimary: boolean;
-            productId: string;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         price: number;
         stock: number;
@@ -106,15 +104,17 @@ export declare class ProductsService {
         brandId: string;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     })[]>;
     findOne(id: string): Promise<{
         category: {
             id: string;
             name: string;
+            description: string | null;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -124,28 +124,26 @@ export declare class ProductsService {
         brand: {
             id: string;
             name: string;
+            description: string | null;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string;
             url: string;
             isPrimary: boolean;
-            productId: string;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         price: number;
         stock: number;
@@ -157,15 +155,17 @@ export declare class ProductsService {
         brandId: string;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<({
         category: {
             id: string;
             name: string;
+            description: string | null;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -175,28 +175,26 @@ export declare class ProductsService {
         brand: {
             id: string;
             name: string;
+            description: string | null;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string;
             url: string;
             isPrimary: boolean;
-            productId: string;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         price: number;
         stock: number;
@@ -208,12 +206,12 @@ export declare class ProductsService {
         brandId: string;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }) | null>;
     remove(id: string): Promise<{
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         price: number;
         stock: number;
@@ -225,6 +223,8 @@ export declare class ProductsService {
         brandId: string;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findByDiscountAndFeatured(options: {
         page?: number;
@@ -234,10 +234,10 @@ export declare class ProductsService {
             category: {
                 id: string;
                 name: string;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -247,22 +247,20 @@ export declare class ProductsService {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string;
                 url: string;
                 isPrimary: boolean;
-                productId: string;
             }[];
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             price: number;
             stock: number;
@@ -274,15 +272,17 @@ export declare class ProductsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         discountedProducts: ({
             category: {
                 id: string;
                 name: string;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -292,22 +292,20 @@ export declare class ProductsService {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string;
                 url: string;
                 isPrimary: boolean;
-                productId: string;
             }[];
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             price: number;
             stock: number;
@@ -319,6 +317,8 @@ export declare class ProductsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
     }>;
     findByCategory(options: {
@@ -334,10 +334,10 @@ export declare class ProductsService {
             category: {
                 id: string;
                 name: string;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -347,22 +347,26 @@ export declare class ProductsService {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string;
                 url: string;
                 isPrimary: boolean;
+            }[];
+            attributes: {
+                id: string;
                 productId: string;
+                key: string;
+                value: string;
             }[];
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             price: number;
             stock: number;
@@ -374,6 +378,8 @@ export declare class ProductsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         totalCount: number;
     }>;

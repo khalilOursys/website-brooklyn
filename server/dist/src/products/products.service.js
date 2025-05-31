@@ -191,6 +191,7 @@ let ProductsService = class ProductsService {
                     category: true,
                     brand: true,
                     images: true,
+                    attributes: true,
                 },
             }),
             this.prisma.product.count({ where }),

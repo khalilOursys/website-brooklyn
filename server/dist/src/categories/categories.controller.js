@@ -37,6 +37,9 @@ let CategoriesController = class CategoriesController {
     async findOne(id) {
         return await this.categoriesService.findOne(id);
     }
+    async findBySlug(slug) {
+        return await this.categoriesService.findBySlug(slug);
+    }
     async update(id, updateCategoryDto) {
         return await this.categoriesService.update(id, updateCategoryDto);
     }
@@ -85,6 +88,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], CategoriesController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Get)('getCategoryBySlug/:slug'),
+    __param(0, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CategoriesController.prototype, "findBySlug", null);
 __decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),

@@ -15,6 +15,7 @@ import Configuration from "@/configuration";
 export default function DetailsBulkProduct({ product = allProducts[0] }) {
   const api = Configuration.BACK_BASEURL;
 
+
   const { user } = useContextElement();
   var cartId = user?.cart.id;
   const [currentColor, setCurrentColor] = useState(colors[0]);
@@ -133,6 +134,20 @@ export default function DetailsBulkProduct({ product = allProducts[0] }) {
                   <div className="tf-product-info-liveview">
                     <p>{product.description ? product.description : ""}</p>
                   </div>
+                  {/* Add this attributes section */}
+                  {product.product.attributes && product.product.attributes.length > 0 && (
+                    <div className="tf-product-info-attributes">
+                      <h6 className="attributes-title">Specifications:</h6>
+                      <ul className="attributes-list">
+                        {product.product.attributes.map((attr) => (
+                          <li key={attr.id} className="attribute-item">
+                            <span className="attribute-key">{attr.key}:</span>
+                            <span className="attribute-value">{attr.value}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                   <div className="tf-product-info-quantity">
                     <div className="quantity-title fw-6">Quantity</div>
                     <Quantity setQuantity={setQuantity} quantity={quantity} />
