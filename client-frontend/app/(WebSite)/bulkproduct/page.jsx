@@ -1,11 +1,12 @@
 import Footer2 from "@/components/footers/Footer2";
 import Header0 from "@/components/headers/Header0";
+import Header4 from "@/components/headers/Header4";
 import ShopSidebarleft from "@/components/shop/ShopSidebarleft";
 
 export default async function Page() {
   return (
     <>
-      <Header0 />
+      <Header4 />
 
       <div className="tf-page-title">
         <div className="container-full">

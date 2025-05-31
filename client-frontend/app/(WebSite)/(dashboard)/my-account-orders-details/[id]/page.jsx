@@ -11,6 +11,7 @@ import DashboardNav from "@/components/othersPages/dashboard/DashboardNav";
 import OrderDetails from "@/components/othersPages/dashboard/OrderDetails";
 import { useParams } from "next/navigation";
 import Configuration from "@/configuration";
+import Header4 from "@/components/headers/Header4";
 
 export default function OrderPage() {
   const { id } = useParams(); // Use `useParams` if you're using dynamic routes
@@ -102,10 +103,10 @@ export default function OrderPage() {
 
   return (
     <>
-      <Header2 />
+      <Header4 />
       <div className="tf-page-title">
         <div className="container-full">
-          <div className="heading text-center">My Orders</div>
+          <div className="heading text-center">Mes commandes</div>
         </div>
       </div>
       <section className="flat-spacing-11">
@@ -120,7 +121,7 @@ export default function OrderPage() {
           </div>
         </div>
       </section>
-      <Footer1 />
+      <Footer2 />
     </>
   );
 }

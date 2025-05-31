@@ -1,22 +1,20 @@
-import Footer1 from "@/components/footers/Footer1";
 import Footer2 from "@/components/footers/Footer2";
-import Header0 from "@/components/headers/Header0";
-import Header2 from "@/components/headers/Header2";
+import Header4 from "@/components/headers/Header4";
 import AccountEdit from "@/components/othersPages/dashboard/AccountEdit";
 import DashboardNav from "@/components/othersPages/dashboard/DashboardNav";
 import React from "react";
 
 export const metadata = {
-  title: "My Account Edit || Ecomus - Ultimate Nextjs Ecommerce Template",
+  title: "My Account Edit || brooklyn-store",
   description: "Ecomus - Ultimate React Nextjs Ecommerce Template",
 };
 export default function page() {
   return (
     <>
-      <Header0 />
+      <Header4 />
       <div className="tf-page-title">
         <div className="container-full">
-          <div className="heading text-center">My Account Edit</div>
+          <div className="heading text-center">Mon compte Modifier</div>
         </div>
       </div>
       <section className="flat-spacing-11">

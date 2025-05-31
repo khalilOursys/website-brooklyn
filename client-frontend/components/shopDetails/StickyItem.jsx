@@ -53,8 +53,8 @@ export default function StickyItem({ soldOut = false }) {
                   >
                     <span>
                       {isAddedToCartProducts(products4[2].id)
-                        ? "Already Added"
-                        : "Add to cart"}
+                        ? "Déjà ajouté"
+                        : "Ajouter au panier"}
                     </span>
                   </a>
                 )}

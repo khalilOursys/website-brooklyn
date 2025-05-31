@@ -1,5 +1,6 @@
 import Footer2 from "@/components/footers/Footer2";
 import Header0 from "@/components/headers/Header0";
+import Header4 from "@/components/headers/Header4";
 import ShopSidebarleft from "@/components/shop/ShopSidebarleft";
 
 // ✅ Server-Side SEO Metadata
@@ -21,15 +22,15 @@ export default async function Page({ params }) {
   const category = null;
   return (
     <>
-      <Header0 />
+      <Header4 />
 
       <div className="tf-page-title">
         <div className="container-full">
           <div className="row">
             <div className="col-12">
-              <div className="heading text-center">New Arrival</div>
+              <div className="heading text-center">Nouveautés</div>
               <p className="text-center text-2 text_black-2 mt_5">
-                Shop through our latest selection of {slug}
+                Découvrez notre dernière sélection de {slug}
               </p>
             </div>
           </div>

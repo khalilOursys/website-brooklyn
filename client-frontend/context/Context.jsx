@@ -26,7 +26,9 @@ export default function Context({ children }) {
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
     const subtotal = cartProducts.reduce((accumulator, product) => {
-      return accumulator + product.quantity * product.price;
+      const discount = parseFloat(product.discount);
+      const unitPrice = discount && discount !== 0 ? discount : parseFloat(product.price);
+      return accumulator + parseFloat(product.quantity) * unitPrice;
     }, 0);
     setTotalPrice(subtotal);
   }, [cartProducts]);
@@ -42,7 +44,7 @@ export default function Context({ children }) {
         const data = await response.json();
         setCategories(data);
       } catch (err) {
-        setError(err.message);
+        console.log(err.message);
       }
     };
 

@@ -142,7 +142,7 @@ export default function ProductsCard21({ product }) {
           data-bs-toggle="modal"
           className="tf-btn tf-btn-loading"
         >
-          {isAddedToCartProducts(product.id) ? "ALREADY ADDED" : "ADD TO CART"}
+          {isAddedToCartProducts(product.id) ? "Déjà ajouté" : "Ajouter au panier"}
         </a>
       </div>
     </div>

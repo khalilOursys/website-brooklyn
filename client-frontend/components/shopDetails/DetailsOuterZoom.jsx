@@ -150,8 +150,8 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                       >
                         <span>
                           {isAddedToCartProducts(product.id)
-                            ? "Already Added"
-                            : "Add to cart"}
+                            ? "Déjà ajouté"
+                            : "Ajouter au panier"}
                           -
                         </span>
                         <span className="tf-qty-price">

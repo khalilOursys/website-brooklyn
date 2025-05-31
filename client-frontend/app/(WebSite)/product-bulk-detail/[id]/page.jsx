@@ -4,6 +4,7 @@ import Footer2 from "@/components/footers/Footer2";
 import Header22 from "@/components/headers/Header22";
 import DetailsBulkProduct from "@/components/shopDetails/DetailsBulkProduct";
 import Configuration from "@/configuration";
+import Header4 from "@/components/headers/Header4";
 
 // Function to fetch product data from the backend
 async function getProductById(id) {
@@ -31,15 +32,15 @@ export async function generateMetadata({ params }) {
   // If the product is not found, return default metadata
   if (!product) {
     return {
-      title: "Product Not Found || Ecomus - Ultimate Nextjs Ecommerce Template",
-      description: "Ecomus - Ultimate Nextjs Ecommerce Template",
+      title: "Product Not Found || brooklyn-store",
+      description: "brooklyn-store",
     };
   }
 
   // Return dynamic metadata based on the product's name and description
   return {
-    title: `${product.name} || Ecomus - Ultimate Nextjs Ecommerce Template`,
-    description: product.description || "Ecomus - Ultimate Nextjs Ecommerce Template",
+    title: `${product.name} || brooklyn-store`,
+    description: product.description || "brooklyn-store",
   };
 }
 
@@ -61,13 +62,14 @@ export default async function page({ params }) {
 
   return (
     <>
-      <Header22 />
+      <Header4 />
       <div className="tf-breadcrumb">
         <div className="container">
           <div className="tf-breadcrumb-wrap d-flex justify-content-between flex-wrap align-items-center">
             <div className="tf-breadcrumb-list">
               <Link href={`/`} className="text">
-                Home
+
+                Accueil
               </Link>
               <i className="icon icon-arrow-right" />
 

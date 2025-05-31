@@ -80,7 +80,7 @@ export default function QuickAdd() {
                   onClick={() => addProductToCart(item, quantity)}
                 >
                   <span>
-                    {isAddedToCartProducts(item?.id) ? "Already Added - " : "Add to cart - "}
+                    {isAddedToCartProducts(item?.id) ? "Déjà ajouté - " : "Ajouter au panier - "}
                   </span>
                   <span className="tf-qty-price">{item?.price} TND</span>
                 </a>

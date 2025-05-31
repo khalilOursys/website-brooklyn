@@ -20,45 +20,46 @@ export const iconBoxes = [
 export const iconBoxData = [
   {
     iconClass: "icon-shipping",
-    title: "Free Shipping",
-    description: "Free shipping over order $120",
+    title: "Livraison Gratuite",
+    description: "Livraison gratuite à partir de 120 TND d'achat",
   },
   {
     iconClass: "icon-payment fs-22",
-    title: "Flexible Payment",
-    description: "Pay with Multiple Credit Cards",
+    title: "Paiement Flexible",
+    description: "Payez avec plusieurs cartes de crédit",
   },
   {
     iconClass: "icon-return fs-20",
-    title: "14 Day Returns",
-    description: "Within 30 days for an exchange",
+    title: "Retours sous 14 Jours",
+    description: "Échange possible sous 30 jours",
   },
   {
     iconClass: "icon-suport",
-    title: "Premium Support",
-    description: "Outstanding premium support",
+    title: "Support Premium",
+    description: "Support premium exceptionnel",
   },
   {
     iconClass: "icon-shipping",
-    title: "Free Shipping",
-    description: "Free shipping over order $120",
+    title: "Livraison Gratuite",
+    description: "Livraison gratuite à partir de 120 TND d'achat",
   },
   {
     iconClass: "icon-payment fs-22",
-    title: "Flexible Payment",
-    description: "Pay with Multiple Credit Cards",
+    title: "Paiement Flexible",
+    description: "Payez avec plusieurs cartes de crédit",
   },
   {
     iconClass: "icon-return fs-20",
-    title: "14 Day Returns",
-    description: "Within 30 days for an exchange",
+    title: "Retours sous 14 Jours",
+    description: "Échange possible sous 30 jours",
   },
   {
     iconClass: "icon-suport",
-    title: "Premium Support",
-    description: "Outstanding premium support",
+    title: "Support Premium",
+    description: "Support premium exceptionnel",
   },
 ];
+
 export const iconBoxes7 = [
   {
     iconClass: "icon-shipping",

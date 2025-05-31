@@ -96,19 +96,31 @@ export default function CheckoutBulk() {
 
     // Check if phone number or address is empty
     if (!formData.phoneNumber || !formData.address) {
-      setError('Please provide both phone number and address');
+      setError("Veuillez fournir le numéro de téléphone et l'adresse");
       setIsSubmitting(false);
       return;
     }
 
     try {
       // Prepare order items from cart products bulkId
-      const orderItems = cartProducts.map(product => ({
+      /* const orderItems = cartProducts.map(product => ({
         productId: product.productId,
         bulkId: product.bulkId,
         quantity: product.quantity,
         price: parseFloat(product.bulk.bulkPrice) * parseFloat(product.quantity)
-      }));
+      })); */
+
+      const orderItems = cartProducts.map(product => {
+        const discount = parseFloat(product.bulk?.discount);
+        const unitPrice = discount && discount !== 0 ? discount : parseFloat(product.bulkPrice);
+
+        return {
+          productId: product.productId,
+          bulkId: product.bulkId,
+          quantity: product.quantity,
+          price: unitPrice * parseFloat(product.quantity)
+        };
+      });
 
       // Prepare the request body
       const orderData = {
@@ -151,39 +163,50 @@ export default function CheckoutBulk() {
   if (!user) {
     return null;
   }
-  const totalPrice = cartProducts.reduce(
+  /* const totalPrice = cartProducts.reduce(
     (total, item) => total + (item.bulk.bulkPrice * item.quantity),
     0
-  );
+  ); */
+  const totalPrice = cartProducts.reduce((accumulator, product) => {
+    console.log(product);
+
+    const quantity = parseFloat(product.quantity) || 0;
+    const price = parseFloat(product.bulk.bulkPrice) || 0;
+    const discount = parseFloat(product.bulk.discount);
+
+    const unitPrice = !isNaN(discount) && discount !== 0 ? discount : price;
+
+    return accumulator + quantity * unitPrice;
+  }, 0);
   return (
     <section className="flat-spacing-11">
       <div className="container">
         <div className="tf-page-cart-wrap layout-2">
           <div className="tf-page-cart-item">
-            <h5 className="fw-5 mb_20">Billing details</h5>
+            <h5 className="fw-5 mb_20">Détails de facturation</h5>
             <form onSubmit={submitForm} className="form-checkout">
               <div className="box grid-2">
                 <fieldset className="fieldset">
-                  <label htmlFor="first-name">First Name</label>
+                  <label htmlFor="first-name">Nom</label>
                   <input
                     required
                     type="text"
                     id="first-name"
                     name="firstName"
-                    placeholder="First Name"
+                    placeholder="Nom"
                     value={formData.firstName}
                     readOnly
                     onChange={handleInputChange}
                   />
                 </fieldset>
                 <fieldset className="fieldset">
-                  <label htmlFor="last-name">Last Name</label>
+                  <label htmlFor="last-name">Prénom</label>
                   <input
                     required
                     type="text"
                     id="last-name"
                     name="lastName"
-                    placeholder="Last Name"
+                    placeholder="Prénom"
                     value={formData.lastName}
                     readOnly
                     onChange={handleInputChange}
@@ -191,30 +214,30 @@ export default function CheckoutBulk() {
                 </fieldset>
               </div>
               <fieldset className="box fieldset">
-                <label htmlFor="address">Address</label>
+                <label htmlFor="address">Adresse</label>
                 <input
                   required
                   type="text"
                   id="address"
                   name="address"
-                  placeholder="Your Address"
+                  placeholder="Your Adresse"
                   value={formData.address}
                   onChange={handleInputChange}
                 />
               </fieldset>
               <fieldset className="box fieldset">
-                <label htmlFor="phone">Phone Number</label>
+                <label htmlFor="phone">Numéro de téléphone</label>
                 <input
                   required
                   type="tel"
                   id="phone"
                   name="phoneNumber"
-                  placeholder="Phone Number"
+                  placeholder="Numéro de téléphone"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
                 />
               </fieldset>
-              <fieldset className="box fieldset">
+              {/*  <fieldset className="box fieldset">
                 <label htmlFor="note">Order notes (optional)</label>
                 <textarea
                   name="note"
@@ -223,12 +246,12 @@ export default function CheckoutBulk() {
                   value={formData.note}
                   onChange={handleInputChange}
                 />
-              </fieldset>
+              </fieldset> */}
             </form>
           </div>
           <div className="tf-page-cart-footer">
             <div className="tf-cart-footer-inner">
-              <h5 className="fw-5 mb_20">Your order</h5>
+              <h5 className="fw-5 mb_20">Votre commande</h5>
               <form
                 onSubmit={submitForm}
                 className="tf-page-cart-checkout widget-wrap-checkout"
@@ -250,7 +273,17 @@ export default function CheckoutBulk() {
                           <p className="name">{elm.name}</p>
                         </div>
                         <span className="price">
-                          {(elm.bulk.bulkPrice * elm.quantity).toFixed(3)} TND
+                          {elm.bulk.discount > 0 ? (
+                            <>
+                              <span style={{ textDecoration: 'line-through', marginRight: '5px', color: '#999' }}>
+                                {(elm.bulk.bulkPrice * elm.quantity).toFixed(3)} TND
+                              </span>
+                              {(elm.bulk.discount * elm.quantity).toFixed(3)} TND
+                            </>
+                          ) : (
+                            (elm.bulk.bulkPrice * elm.quantity).toFixed(3) + ' TND'
+                          )}
+                          {/* {(elm.bulk.bulkPrice * elm.quantity).toFixed(3)} TND */}
                         </span>
                       </div>
                     </li>
@@ -260,7 +293,7 @@ export default function CheckoutBulk() {
                   <div className="container">
                     <div className="row align-items-center mt-5 mb-5">
                       <div className="col-12 fs-18">
-                        Your shop cart is empty
+                        Votre panier est vide
                       </div>
                     </div>
                   </div>
@@ -292,7 +325,7 @@ export default function CheckoutBulk() {
                         paymentMethod: 'delivery'
                       }))}
                     />
-                    <label htmlFor="delivery">Cash on delivery</label>
+                    <label htmlFor="delivery">Paiement à la livraison</label>
                   </div>
                   {/* <p className="text_black-2 mb_20">
                     Your personal data will be used to process your order,
@@ -336,7 +369,7 @@ export default function CheckoutBulk() {
                 )}
                 {success && (
                   <div className="alert alert-success mb-3">
-                    Order placed successfully!
+                    Commande passée avec succès !
                   </div>
                 )}
 
@@ -345,7 +378,7 @@ export default function CheckoutBulk() {
                   className="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center"
                   disabled={isSubmitting || cartProducts.length === 0}
                 >
-                  {isSubmitting ? "Processing..." : "Place order"}
+                  {isSubmitting ? "Processing..." : "Passer commande"}
                 </button>
               </form>
             </div>

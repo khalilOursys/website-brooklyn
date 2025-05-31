@@ -31,7 +31,7 @@ export default function RegisterBulkClient() {
 
     if (name === "email") {
       if (!validateEmail(value) && value.length > 0) {
-        setEmailError("Please enter a valid email address");
+        setEmailError("Veuillez entrer une adresse email valide");
       } else {
         setEmailError("");
       }
@@ -53,20 +53,18 @@ export default function RegisterBulkClient() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate email before submission
     if (!validateEmail(formData.email)) {
-      setEmailError("Please enter a valid email address");
+      setEmailError("Veuillez entrer une adresse email valide");
       return;
     }
 
-    // Combined password validation in one condition
     if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(formData.password)) {
-      setError("Password must be at least 8 characters with uppercase, lowercase, number, and special character");
+      setError("Le mot de passe doit contenir au moins 8 caractères avec majuscule, minuscule, chiffre et caractère spécial");
       return;
     }
 
     if (!legalDoc) {
-      setError("Please upload a legal document");
+      setError("Veuillez télécharger un document légal");
       return;
     }
 
@@ -91,7 +89,7 @@ export default function RegisterBulkClient() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
+        throw new Error(errorData.message || "Échec de l'inscription");
       }
 
       const responseLogin = await fetch(`${api}auth/login`, {
@@ -114,7 +112,7 @@ export default function RegisterBulkClient() {
         }, 1500);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed");
+      setError(err instanceof Error ? err.message : "Échec de l'inscription");
     }/*  finally {
       setIsLoading(false);
     } */
@@ -125,7 +123,7 @@ export default function RegisterBulkClient() {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="header">
-            <div className="demo-title">Register</div>
+            <div className="demo-title">Inscription</div>
             <span className="icon-close icon-close-popup" data-bs-dismiss="modal" />
           </div>
           <div className="tf-login-form">
@@ -140,7 +138,7 @@ export default function RegisterBulkClient() {
                   value={formData.firstName}
                   onChange={handleInputChange}
                 />
-                <label className="tf-field-label">First name</label>
+                <label className="tf-field-label">Nom</label>
               </div>
               <div className="tf-field style-1">
                 <input
@@ -152,7 +150,7 @@ export default function RegisterBulkClient() {
                   value={formData.lastName}
                   onChange={handleInputChange}
                 />
-                <label className="tf-field-label">Last name</label>
+                <label className="tf-field-label">Prénom</label>
               </div>
               <div className="tf-field style-1">
                 <input
@@ -178,7 +176,7 @@ export default function RegisterBulkClient() {
                     value={formData.password}
                     onChange={handleInputChange}
                   />
-                  <label className="tf-field-label">Password *</label>
+                  <label className="tf-field-label">Mot de passe *</label>
                   <button
                     type="button"
                     className="password-toggle"
@@ -192,13 +190,13 @@ export default function RegisterBulkClient() {
                   </button>
                 </div>
                 <div className="password-requirements">
-                  <p>Password must contain:</p>
+                  <p>Le mot de passe doit contenir :</p>
                   <ul>
-                    <li className={formData.password.length >= 8 ? "valid" : ""}>At least 8 characters</li>
-                    <li className={/[A-Z]/.test(formData.password) ? "valid" : ""}>One uppercase letter</li>
-                    <li className={/[a-z]/.test(formData.password) ? "valid" : ""}>One lowercase letter</li>
-                    <li className={/[0-9]/.test(formData.password) ? "valid" : ""}>One number</li>
-                    <li className={/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? "valid" : ""}>One special character</li>
+                    <li className={formData.password.length >= 8 ? "valid" : ""}>Au moins 8 caractères</li>
+                    <li className={/[A-Z]/.test(formData.password) ? "valid" : ""}>Une lettre majuscule</li>
+                    <li className={/[a-z]/.test(formData.password) ? "valid" : ""}>Une lettre minuscule</li>
+                    <li className={/[0-9]/.test(formData.password) ? "valid" : ""}>Un chiffre</li>
+                    <li className={/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? "valid" : ""}>Un caractère spécial</li>
                   </ul>
                 </div>
               </div>
@@ -212,7 +210,7 @@ export default function RegisterBulkClient() {
                   value={formData.storeName}
                   onChange={handleInputChange}
                 />
-                <label className="tf-field-label">Store Name *</label>
+                <label className="tf-field-label">Nom du magasin *</label>
               </div>
               <div className="tf-field style-1">
                 <input
@@ -232,7 +230,7 @@ export default function RegisterBulkClient() {
                     className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
                     disabled={isLoading || emailError}
                   >
-                    {isLoading ? "Processing..." : "Register"}
+                    {isLoading ? "Traitement..." : "S'inscrire"}
                   </button>
                 </div>
                 <div className="w-100">
@@ -241,7 +239,7 @@ export default function RegisterBulkClient() {
                     data-bs-toggle="modal"
                     className="btn-link fw-6 w-100 link"
                   >
-                    Already have an account? Log in here
+                    Vous avez déjà un compte ? Connectez-vous ici
                     <i className="icon icon-arrow1-top-left" />
                   </a>
                 </div>

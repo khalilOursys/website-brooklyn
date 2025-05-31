@@ -45,7 +45,7 @@ export default function Footer6() {
                   <ul>
                     <li>
                       <p>
-                        Address: 1234 Fashion Street, Suite 567, <br />
+                        Adresse: 1234 Fashion Street, Suite 567, <br />
                         New York, NY 10001
                       </p>
                     </li>

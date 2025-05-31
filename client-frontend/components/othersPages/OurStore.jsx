@@ -21,7 +21,7 @@ export default function OurStore() {
               <h5 className="mb_24">Ecomus Paris</h5>
               <div className="mb_20">
                 <p className="mb_15">
-                  <strong>Address</strong>
+                  <strong>Adresse</strong>
                 </p>
                 <p>66 Mott St, New York, New York, Zip Code: 10006, AS</p>
               </div>
@@ -108,7 +108,7 @@ export default function OurStore() {
               <h5 className="mb_24">Ecomus London</h5>
               <div className="mb_20">
                 <p className="mb_15">
-                  <strong>Address</strong>
+                  <strong>Adresse</strong>
                 </p>
                 <p>66 Mott St, New York, New York, Zip Code: 10006, AS</p>
               </div>
@@ -215,7 +215,7 @@ export default function OurStore() {
               <h5 className="mb_24">Ecomus Dubai</h5>
               <div className="mb_20">
                 <p className="mb_15">
-                  <strong>Address</strong>
+                  <strong>Adresse</strong>
                 </p>
                 <p>66 Mott St, New York, New York, Zip Code: 10006, AS</p>
               </div>

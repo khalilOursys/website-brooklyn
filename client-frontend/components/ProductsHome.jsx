@@ -63,7 +63,7 @@ export default function ProductsHome() {
         <div className="container">
           <div className="flat-title">
             <span className="title fw-6 wow fadeInUp font-readex-pro text_black-3">
-              Special Offers
+              Offres spéciales
             </span>
           </div>
           <div className="wrap-carousel">
@@ -99,7 +99,7 @@ export default function ProductsHome() {
         <div className="container">
           <div className="flat-title">
             <span className="title fw-6 wow fadeInUp font-readex-pro text_black-3">
-              Our Top Picks
+              Nos meilleurs choix
             </span>
           </div>
           <div className="wrap-carousel">

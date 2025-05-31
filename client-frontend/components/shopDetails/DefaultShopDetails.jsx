@@ -189,8 +189,8 @@ export default function DefaultShopDetails({ product }) {
                         <span>
                           {" "}
                           {isAddedToCartProducts(product.id)
-                            ? "Already Added"
-                            : "Add to cart"}{" "}
+                            ? "Déjà ajouté"
+                            : "Ajouter au panier"}{" "}
                           -{" "}
                         </span>
                         <span className="tf-qty-price">

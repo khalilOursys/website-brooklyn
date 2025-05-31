@@ -187,8 +187,8 @@ export default function DetailsMagnifierZoom({ product }) {
                       >
                         <span>
                           {isAddedToCartProducts(product.id)
-                            ? "Already Added"
-                            : "Add to cart"}{" "}
+                            ? "Déjà ajouté"
+                            : "Ajouter au panier"}{" "}
                           -{" "}
                         </span>
                         <span className="tf-qty-price">
@@ -200,9 +200,8 @@ export default function DetailsMagnifierZoom({ product }) {
                         className="tf-product-btn-wishlist hover-tooltip box-icon bg_white wishlist btn-icon-action"
                       >
                         <span
-                          className={`icon icon-heart ${
-                            isAddedtoWishlist(product.id) ? "added" : ""
-                          }`}
+                          className={`icon icon-heart ${isAddedtoWishlist(product.id) ? "added" : ""
+                            }`}
                         />
                         <span className="tooltip">
                           {" "}
@@ -220,9 +219,8 @@ export default function DetailsMagnifierZoom({ product }) {
                         className="tf-product-btn-wishlist hover-tooltip box-icon bg_white compare btn-icon-action"
                       >
                         <span
-                          className={`icon icon-compare ${
-                            isAddedtoCompareItem(product.id) ? "added" : ""
-                          }`}
+                          className={`icon icon-compare ${isAddedtoCompareItem(product.id) ? "added" : ""
+                            }`}
                         />
                         <span className="tooltip">
                           {isAddedtoCompareItem(product.id)

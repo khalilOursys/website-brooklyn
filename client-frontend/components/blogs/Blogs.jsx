@@ -10,7 +10,7 @@ export default function Blogs() {
     <section className="flat-spacing-14">
       <div className="container">
         <div className="flat-title wow fadeInUp" data-wow-delay="0s">
-          <span className="title">Packs</span>
+          <span className="title">Nos packs</span>
         </div>
         <div className="hover-sw-nav view-default hover-sw-3">
           <Swiper

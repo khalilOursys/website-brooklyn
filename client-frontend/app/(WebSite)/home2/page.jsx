@@ -12,7 +12,7 @@ import Header4 from "@/components/headers/Header4";
 
 export const metadata = {
   title: "Home 1 || test",
-  description: "Ecomus - Ultimate Nextjs Ecommerce Template",
+  description: "brooklyn-store",
 };
 export default function Home() {
   return (

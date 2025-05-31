@@ -159,7 +159,7 @@ export default function Shopcard28({ product }) {
           className="tf-btn tf-btn-loading"
           onClick={() => addProductToCart(product.id)}
         >
-          {isAddedToCartProducts(product.id) ? "Already Added" : "Add to cart"}
+          {isAddedToCartProducts(product.id) ? "Déjà ajouté" : "Ajouter au panier"}
         </a> */}
       </div>
     </div>
