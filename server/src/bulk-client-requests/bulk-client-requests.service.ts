@@ -25,7 +25,7 @@ export class BulkClientRequestsService {
           create: {
             storeName: data.storeName,
             legalDocs: data.legalDocs,
-            status: 'pending',
+            status: 'en attente',
           },
         },
       },
@@ -66,7 +66,7 @@ export class BulkClientRequestsService {
     if (data.legalDocs) bulkUpdateData.legalDocs = data.legalDocs;
     if (data.status) {
       bulkUpdateData.status = data.status;
-      if (data.status === 'approved' || data.status === 'rejected') {
+      if (data.status === 'approuvée' || data.status === 'annulé') {
         bulkUpdateData.reviewedAt = new Date();
       }
     }
@@ -109,7 +109,7 @@ export class BulkClientRequestsService {
   ) {
     const updateData: any = { status };
 
-    if (status === 'approved' || status === 'rejected') {
+    if (status === 'approuvée' || status === 'annulé') {
       updateData.reviewedAt = new Date();
       if (reviewedById) {
         updateData.reviewedById = reviewedById;
@@ -161,10 +161,10 @@ export class BulkClientRequestsService {
       data: updateDto,
     });
 
-    // Check if status was changed to 'approved'
+    // Check if status was changed to 'approuvée'
     if (
-      currentRequest.status !== 'approved' &&
-      updatedRequest.status === 'approved'
+      currentRequest.status !== 'approuvée' &&
+      updatedRequest.status === 'approuvée'
     ) {
       // Check if user already has a cart
       const existingCart = await this.prisma.cart.findFirst({

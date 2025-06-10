@@ -49,8 +49,9 @@ export default function Header4() {
                 <p className="top-bar-text">
                   Inscrivez-vous en tant que
                   <a
-                    href="#registerBulkClient"
-                    data-bs-toggle="modal"
+                    href="/registerBulkClient"
+                    /* href="#registerBulkClient"
+                    data-bs-toggle="modal" */
                     className="tf-btn btn-line"
                   >
                     <span className="text">grossiste</span>
@@ -104,8 +105,9 @@ export default function Header4() {
 
                 <li className="nav-account">
                   {!token ? <a
-                    href="#login"
-                    data-bs-toggle="modal"
+                    /* href="#login" */
+                    href="/login"
+                    /*  data-bs-toggle="modal" */
                     className="nav-icon-item align-items-center gap-10 bg-transparent border-0"
                   >
                     <i className="icon icon-account" />
@@ -144,7 +146,8 @@ export default function Header4() {
                 {role === "BULK_CLIENT" && (
                   <li className="nav-cart cart-lg line-left-1">
                     <a href="/cart-bulk" className="nav-icon-item">
-                      <i className="fas fa-wallet"></i>
+                      {/* <i className="fas fa-wallet"></i> */}
+                      <i className="fas fa-pallet"></i>
                       <span className="count-box">{totalBulk}</span>
                     </a>
                   </li>
@@ -155,7 +158,9 @@ export default function Header4() {
                     data-bs-toggle="modal"
                     className="nav-icon-item"
                   >
-                    <i className="icon icon-bag" />
+
+                    <i className="fas fa-shopping-cart"></i>
+                    {/* <i className="icon icon-bag" /> */}
                     <span className="count-box">
                       <CartLength />
                     </span>

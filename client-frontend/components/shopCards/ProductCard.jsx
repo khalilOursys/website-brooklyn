@@ -103,6 +103,19 @@ export const ProductCard = ({ product }) => {
                 <span className="tooltip">Quick View</span>
               </a>
             </div>
+            {product.discount ? (
+              <div className="on-sale-wrap text-end">
+                <div className="on-sale-item">
+                  -
+                  {Math.round(
+                    ((product.price - product.discount) / product.price) * 100
+                  )}
+                  %
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
             {product.countdown && (
               <div className="countdown-box">
                 <div className="js-countdown">
@@ -122,9 +135,20 @@ export const ProductCard = ({ product }) => {
       </div>
       <div className="card-product-info">
         <Link href={`/product-detail/${product.id}`} className="title link">
-          {product.title}
+          {product.name}
         </Link>
-        <span className="price">{product.price.toFixed(3)} TND</span>
+
+        {product.discount ? (
+          <span className="price">
+            <span className="fw-4 text-sale">
+              {product.discount.toFixed(3)} TND
+            </span>{" "}
+            <span className="text_primary">{product.price.toFixed(3)} TND</span>
+          </span>
+        ) : (
+          <span className="price">{product.price.toFixed(3)} TND</span>
+        )}
+        {/* <span className="price">{product.price.toFixed(3)} TND</span> */}
         {/* {product.colors && (
           <ul className="list-color-product">
             {product.colors.map((color, i) => (
