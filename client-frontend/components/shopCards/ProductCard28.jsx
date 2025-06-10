@@ -119,17 +119,40 @@ export default function Shopcard28({ product }) {
             <span className="tooltip">Quick View</span>
           </a>
         </div>
-        {product.preOrder && (
+        {product.discount ? (
+          <div className="on-sale-wrap text-end">
+            <div className="on-sale-item">
+              -
+              {Math.round(
+                ((product.price - product.discount) / product.price) * 100
+              )}
+              %
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+        {/* {product.preOrder && (
           <div className="on-sale-wrap text-end">
             <div className="on-sale-item pre-order">Pre-Order</div>
           </div>
-        )}
+        )} */}
       </div>
       <div className="card-product-info text-center">
         <Link href={`/product-detail/${product.id}`} className="title link">
-          {product.title}
+          {product.name}
         </Link>
-        <span className="price">{parseFloat(product.price).toFixed(3)} TND</span>
+        {product.discount ? (
+          <span className="price">
+            <span className="fw-4 text-sale">
+              {product.discount.toFixed(3)} TND
+            </span>{" "}
+            <span className="text_primary">{product.price.toFixed(3)} TND</span>
+          </span>
+        ) : (
+          <span className="price">{product.price.toFixed(3)} TND</span>
+        )}
+        {/* <span className="price">{parseFloat(product.price).toFixed(3)} TND</span> */}
         {/* {product.colors ? (
           <ul className="list-color-product justify-content-center">
             {product.colors.map((color, index) => (

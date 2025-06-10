@@ -166,26 +166,9 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                           {isAddedToCartProducts(product.id)
                             ? "Déjà ajouté"
                             : "Ajouter au panier"}
-                          -
-                        </span>
-                        <span className="tf-qty-price">
-                          {(product.price * quantity).toFixed(2)} TND
+
                         </span>
                       </a>
-                      {/* <div className="w-100">
-                        <a href="#" className="btns-full">
-                          Buy with
-                          <Image
-                            alt="image"
-                            src="/images/payments/paypal.png"
-                            width={64}
-                            height={18}
-                          />
-                        </a>
-                        <a href="#" className="payment-more-option">
-                          More payment options
-                        </a>
-                      </div> */}
                     </form>
                   </div>
                 </div>

@@ -160,10 +160,10 @@ export default function DetailsBulkProduct({ product = allProducts[0] }) {
                         disabled={isAddingToCart}
                       >
                         {isAddingToCart ? (
-                          <span>Adding to cart...</span>
+                          <span>Déjà ajouté...</span>
                         ) : (
                           <span className="tf-qty-price">
-                            Ajouter au panier {(product.discount || product.bulkPrice * quantity).toFixed(2)} TND
+                            Ajouter au panier {/* {(product.discount || product.bulkPrice * quantity).toFixed(2)} TND */}
                           </span>
                         )}
                       </a>

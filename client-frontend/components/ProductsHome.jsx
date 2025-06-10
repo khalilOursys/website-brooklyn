@@ -89,6 +89,13 @@ export default function ProductsHome() {
                 ))}
               </Swiper>
             )}
+
+            <div className="nav-sw disable-line nav-next-slider nav-next-sell-1 box-icon w_46 round pnbpp21">
+              <span className="icon icon-arrow-left" />
+            </div>
+            <div className="nav-sw disable-line nav-prev-slider nav-prev-sell-1 box-icon w_46 round pnbpn21">
+              <span className="icon icon-arrow-right" />
+            </div>
             <div className="sw-dots style-2 sw-pagination-sell-1 justify-content-center spdp2" />
           </div>
         </div>
