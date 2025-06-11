@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Button, Card, Form, Col, Row } from "react-bootstrap";
+import { Button, Card, Form, Col, Row, InputGroup } from "react-bootstrap";
 import Image from "next/image"; // Use Next.js Image component
 import { loginFetch } from "@/Redux/usersReduce";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +16,7 @@ export default function Home() {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
 
   const notifyErr = (msg) => {
     toast.error(
@@ -55,11 +56,15 @@ export default function Home() {
     }
 
     if (!login.trim()) {
-      notifyErr(t("loginPage.email") + " " + t("loginPage.error"));
+      notifyErr(
+        "Échec de la connexion. Veuillez vérifier votre e-mail et votre mot de passe."
+      );
       return;
     }
     if (!password.trim()) {
-      notifyErr(t("loginPage.password") + " " + t("loginPage.error"));
+      notifyErr(
+        "Échec de la connexion. Veuillez vérifier votre e-mail et votre mot de passe."
+      );
       return;
     }
 
@@ -79,10 +84,16 @@ export default function Home() {
         window.location.replace("/users");
       }
     } catch (error) {
-      notifyErr(t("loginPage.error"));
+      notifyErr(
+        "Échec de la connexion. Veuillez vérifier votre e-mail et votre mot de passe."
+      );
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -124,13 +135,24 @@ export default function Home() {
                         </Form.Group>
                         <Form.Group>
                           <label>Mot de passe</label>
-                          <Form.Control
-                            placeholder={"Mot de passe"}
-                            type="password"
-                            value={password}
-                            onChange={handlePasswordChange}
-                            onKeyPress={handleEnterKeyPress}
-                          />
+                          <InputGroup>
+                            <Form.Control
+                              placeholder={"Mot de passe"}
+                              type={showPassword ? "text" : "password"}
+                              value={password}
+                              onChange={handlePasswordChange}
+                              onKeyPress={handleEnterKeyPress}
+                            />
+                            <InputGroup.Text>
+                              <i
+                                className={`fas ${
+                                  showPassword ? "fa-eye-slash" : "fa-eye"
+                                }`}
+                                onClick={togglePasswordVisibility}
+                                style={{ cursor: "pointer" }}
+                              />
+                            </InputGroup.Text>
+                          </InputGroup>
                         </Form.Group>
                       </Card.Body>
                       <Card.Footer className="text-center">

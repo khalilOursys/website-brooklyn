@@ -7,13 +7,13 @@ export declare class BulkClientRequestsService {
     createUserWithBulkRequest(data: CreateBulkClientRequestDto): Promise<{
         bulkRequests: {
             id: string;
+            userId: string;
             storeName: string;
             legalDocs: string;
             status: string;
+            reviewedById: string | null;
             submittedAt: Date;
             reviewedAt: Date | null;
-            reviewedById: string | null;
-            userId: string;
         } | null;
     } & {
         id: string;
@@ -31,13 +31,13 @@ export declare class BulkClientRequestsService {
     getUserWithBulkRequest(userId: string): Promise<{
         bulkRequests: {
             id: string;
+            userId: string;
             storeName: string;
             legalDocs: string;
             status: string;
+            reviewedById: string | null;
             submittedAt: Date;
             reviewedAt: Date | null;
-            reviewedById: string | null;
-            userId: string;
         } | null;
     } & {
         id: string;
@@ -55,13 +55,13 @@ export declare class BulkClientRequestsService {
     updateUserWithBulkRequest(userId: string, data: UpdateUserBulkRequestDto): Promise<{
         bulkRequests: {
             id: string;
+            userId: string;
             storeName: string;
             legalDocs: string;
             status: string;
+            reviewedById: string | null;
             submittedAt: Date;
             reviewedAt: Date | null;
-            reviewedById: string | null;
-            userId: string;
         } | null;
     } & {
         id: string;
@@ -118,13 +118,13 @@ export declare class BulkClientRequestsService {
         } | null;
     } & {
         id: string;
+        userId: string;
         storeName: string;
         legalDocs: string;
         status: string;
+        reviewedById: string | null;
         submittedAt: Date;
         reviewedAt: Date | null;
-        reviewedById: string | null;
-        userId: string;
     }>;
     findAll(): Promise<({
         user: {
@@ -142,22 +142,22 @@ export declare class BulkClientRequestsService {
         };
     } & {
         id: string;
+        userId: string;
         storeName: string;
         legalDocs: string;
         status: string;
+        reviewedById: string | null;
         submittedAt: Date;
         reviewedAt: Date | null;
-        reviewedById: string | null;
-        userId: string;
     })[]>;
     update(id: string, updateDto: UpdateUserBulkRequestDto): Promise<{
         id: string;
+        userId: string;
         storeName: string;
         legalDocs: string;
         status: string;
+        reviewedById: string | null;
         submittedAt: Date;
         reviewedAt: Date | null;
-        reviewedById: string | null;
-        userId: string;
     }>;
 }

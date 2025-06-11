@@ -106,7 +106,22 @@ function Sidebar({ routes, background, users }) {
             />
           </div>
         </div>
-        <Nav as="ul">{createLinks(routesData)}</Nav>
+        <Nav as="ul">
+          {createLinks(routesData)}
+
+          <Nav.Item as="li">
+            <Nav.Link
+              onClick={() => {
+                localStorage.clear(); // Clear all localStorage data
+                window.location.href = "/";
+              }}
+              style={{ cursor: "pointer" }} // Make it look clickable
+            >
+              <i className="fas fa-sign-out-alt" />
+              <p>Déconnexion</p>
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
       </div>
     </div>
   );
