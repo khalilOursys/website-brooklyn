@@ -7,6 +7,8 @@ export declare class CategoriesService {
     create(createCategoryDto: CreateCategoryDto): Promise<{
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string | null;
         description: string | null;
         bgUrl: string | null;
@@ -14,13 +16,13 @@ export declare class CategoriesService {
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     findAll(): Promise<({
         parent: {
             id: string;
             name: string;
+            createdAt: Date;
+            updatedAt: Date;
             slug: string | null;
             description: string | null;
             bgUrl: string | null;
@@ -28,12 +30,12 @@ export declare class CategoriesService {
             bannerColor: string;
             bannerText: string;
             parentId: string | null;
-            createdAt: Date;
-            updatedAt: Date;
         } | null;
     } & {
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string | null;
         description: string | null;
         bgUrl: string | null;
@@ -41,13 +43,13 @@ export declare class CategoriesService {
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     })[]>;
     findOne(id: string): Promise<{
         parent: {
             id: string;
             name: string;
+            createdAt: Date;
+            updatedAt: Date;
             slug: string | null;
             description: string | null;
             bgUrl: string | null;
@@ -55,12 +57,12 @@ export declare class CategoriesService {
             bannerColor: string;
             bannerText: string;
             parentId: string | null;
-            createdAt: Date;
-            updatedAt: Date;
         } | null;
     } & {
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string | null;
         description: string | null;
         bgUrl: string | null;
@@ -68,13 +70,13 @@ export declare class CategoriesService {
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     findBySlug(slug: string): Promise<{
         parent: {
             id: string;
             name: string;
+            createdAt: Date;
+            updatedAt: Date;
             slug: string | null;
             description: string | null;
             bgUrl: string | null;
@@ -82,12 +84,12 @@ export declare class CategoriesService {
             bannerColor: string;
             bannerText: string;
             parentId: string | null;
-            createdAt: Date;
-            updatedAt: Date;
         } | null;
     } & {
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string | null;
         description: string | null;
         bgUrl: string | null;
@@ -95,12 +97,12 @@ export declare class CategoriesService {
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<{
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string | null;
         description: string | null;
         bgUrl: string | null;
@@ -108,12 +110,12 @@ export declare class CategoriesService {
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string | null;
         description: string | null;
         bgUrl: string | null;
@@ -121,8 +123,6 @@ export declare class CategoriesService {
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     getCategoriesStructured(): Promise<{
         heading: string;
@@ -142,6 +142,8 @@ export declare class CategoriesService {
     findAllChildren(): Promise<{
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string | null;
         description: string | null;
         bgUrl: string | null;
@@ -149,13 +151,13 @@ export declare class CategoriesService {
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }[]>;
     findAllParent(): Promise<({
         children: {
             id: string;
             name: string;
+            createdAt: Date;
+            updatedAt: Date;
             slug: string | null;
             description: string | null;
             bgUrl: string | null;
@@ -163,12 +165,12 @@ export declare class CategoriesService {
             bannerColor: string;
             bannerText: string;
             parentId: string | null;
-            createdAt: Date;
-            updatedAt: Date;
         }[];
     } & {
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         slug: string | null;
         description: string | null;
         bgUrl: string | null;
@@ -176,7 +178,5 @@ export declare class CategoriesService {
         bannerColor: string;
         bannerText: string;
         parentId: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     })[]>;
 }

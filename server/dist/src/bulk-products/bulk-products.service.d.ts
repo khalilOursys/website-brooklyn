@@ -8,25 +8,25 @@ export declare class BulkProductsService {
     create(createBulkProductDto: CreateBulkProductDto): Promise<{
         id: string;
         name: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         description: string | null;
+        discount: number | null;
         productId: string;
         bulkPrice: number;
         minQuantity: number;
-        discount: number | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     findAll(): Promise<({
         product: {
             id: string;
             name: string;
-            description: string | null;
-            discount: number | null;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             price: number;
             stock: number;
             isBulk: boolean;
+            discount: number | null;
             isFeatured: boolean;
             specs: Prisma.JsonValue | null;
             categoryId: string;
@@ -37,23 +37,23 @@ export declare class BulkProductsService {
     } & {
         id: string;
         name: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         description: string | null;
+        discount: number | null;
         productId: string;
         bulkPrice: number;
         minQuantity: number;
-        discount: number | null;
-        createdAt: Date;
-        updatedAt: Date;
     })[]>;
     findOne(id: string): Promise<{
         product: {
             category: {
                 id: string;
                 name: string;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
+                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -63,33 +63,33 @@ export declare class BulkProductsService {
             brand: {
                 id: string;
                 name: string;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
+                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
-                productId: string;
                 url: string;
                 isPrimary: boolean;
+                productId: string;
             }[];
             attributes: {
                 id: string;
-                productId: string;
                 key: string;
                 value: string;
+                productId: string;
             }[];
         } & {
             id: string;
             name: string;
-            description: string | null;
-            discount: number | null;
             createdAt: Date;
             updatedAt: Date;
+            description: string | null;
             price: number;
             stock: number;
             isBulk: boolean;
+            discount: number | null;
             isFeatured: boolean;
             specs: Prisma.JsonValue | null;
             categoryId: string;
@@ -100,35 +100,35 @@ export declare class BulkProductsService {
     } & {
         id: string;
         name: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         description: string | null;
+        discount: number | null;
         productId: string;
         bulkPrice: number;
         minQuantity: number;
-        discount: number | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     update(id: string, updateBulkProductDto: UpdateBulkProductDto): Promise<{
         id: string;
         name: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         description: string | null;
+        discount: number | null;
         productId: string;
         bulkPrice: number;
         minQuantity: number;
-        discount: number | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
         id: string;
         name: string | null;
+        createdAt: Date;
+        updatedAt: Date;
         description: string | null;
+        discount: number | null;
         productId: string;
         bulkPrice: number;
         minQuantity: number;
-        discount: number | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     findBulkProductsByCategory(options: {
         categorySlug?: string;
@@ -144,10 +144,10 @@ export declare class BulkProductsService {
                 category: {
                     id: string;
                     name: string;
-                    description: string | null;
                     createdAt: Date;
                     updatedAt: Date;
                     slug: string | null;
+                    description: string | null;
                     bgUrl: string | null;
                     iconUrl: string | null;
                     bannerColor: string;
@@ -157,27 +157,27 @@ export declare class BulkProductsService {
                 brand: {
                     id: string;
                     name: string;
-                    description: string | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    description: string | null;
                     img: string | null;
                 };
                 images: {
                     id: string;
-                    productId: string;
                     url: string;
                     isPrimary: boolean;
+                    productId: string;
                 }[];
             } & {
                 id: string;
                 name: string;
-                description: string | null;
-                discount: number | null;
                 createdAt: Date;
                 updatedAt: Date;
+                description: string | null;
                 price: number;
                 stock: number;
                 isBulk: boolean;
+                discount: number | null;
                 isFeatured: boolean;
                 specs: Prisma.JsonValue | null;
                 categoryId: string;
@@ -188,13 +188,13 @@ export declare class BulkProductsService {
         } & {
             id: string;
             name: string | null;
+            createdAt: Date;
+            updatedAt: Date;
             description: string | null;
+            discount: number | null;
             productId: string;
             bulkPrice: number;
             minQuantity: number;
-            discount: number | null;
-            createdAt: Date;
-            updatedAt: Date;
         })[];
         totalCount: number;
     }>;

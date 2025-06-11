@@ -8,9 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
-import dynamic from "next/dynamic";
-import { editUser, getUserById } from "@/Redux/usersReduce";
-import { getUserWithBulkRequest } from "@/Redux/bulkClientRequestsReduce";
 import { getOrderById } from "@/Redux/ordersReduce";
 
 export default function Page() {
@@ -213,7 +210,7 @@ export default function Page() {
                                               {/* {item.variant && ` (${item.variant.name})`} */}
                                             </td>
                                             <td>{item.quantity}</td>
-                                            <td>{order.isBulk === 0 ? item.product.price : item.bulk?.bulkPrice} TND</td>
+                                            <td>{item.bulk.discount === 0 ? item.bulk.bulkPrice : item.bulk?.discount} TND</td>
                                             <td>{item.price} TND</td>
                                           </tr>
                                         ))}

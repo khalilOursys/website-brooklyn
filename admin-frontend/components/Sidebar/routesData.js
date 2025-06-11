@@ -104,12 +104,12 @@ const routesData = [
       },
     ],
   }, */
-  {
+  /* {
     path: "/",
     name: "Déconnexion",
     icon: "fas fa-sign-out-alt",
     role: ["admin", "user"],
-  },
+  }, */
 ];
 
 export default routesData;

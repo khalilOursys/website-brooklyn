@@ -1,5 +1,5 @@
 "use client";
-import { Button, Card, Container, Row, Col, Dropdown } from "react-bootstrap";
+import { Button, Card, Container, Row, Col, Dropdown, Nav } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation';
@@ -13,9 +13,21 @@ import { editOrder, fetchOrders } from "@/Redux/ordersReduce";
 
 export default function Page() {
   const [entities, setEntities] = useState([]);
+  const [filteredEntities, setFilteredEntities] = useState([]);
+  const [activeTab, setActiveTab] = useState('all');
   const [loadingStates, setLoadingStates] = useState({});
   const dispatch = useDispatch();
   const router = useRouter();
+
+  // Status constants
+  const STATUS_TABS = [
+    { id: 'all', label: 'Toutes' },
+    { id: 'pending', label: 'En attente' },
+    { id: 'processing', label: 'En cours de traitement' },
+    { id: 'shipped', label: 'Expédié' },
+    { id: 'completed', label: 'Terminé' },
+    { id: 'cancelled', label: 'Annuler' }
+  ];
 
   const notify = (type, msg) => {
     if (type === 1)
@@ -34,12 +46,23 @@ export default function Page() {
       );
   };
 
+  // Filter orders based on active tab
+  useEffect(() => {
+    if (activeTab === 'all') {
+      setFilteredEntities(entities);
+    } else {
+      setFilteredEntities(entities.filter(order =>
+        order.status.toLowerCase() === activeTab.toLowerCase()
+      ));
+    }
+  }, [activeTab, entities]);
+
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
       setLoadingStates(prev => ({ ...prev, [orderId]: true }));
       await dispatch(editOrder({ id: orderId, status: newStatus })).unwrap();
-      notify(1, `Statut de la commande mis à jour en ${newStatus}`);
-      getOrders(); // Actualiser la liste des commandes
+      notify(1, `Statut de la commande mis à jour en ${translateStatus(newStatus)}`);
+      getOrders(); // Refresh orders list
     } catch (error) {
       notify(2, error.message || 'Échec de la mise à jour du statut');
     } finally {
@@ -48,7 +71,7 @@ export default function Page() {
   };
 
   const getNextStatus = (currentStatus) => {
-    const statusFlow = ['en attente', 'en cours de traitement', 'expédié', 'terminé'];
+    const statusFlow = ['pending', 'processing', 'shipped', 'completed'];
     const currentIndex = statusFlow.indexOf(currentStatus);
     return currentIndex < statusFlow.length - 1 ? statusFlow[currentIndex + 1] : currentStatus;
   };
@@ -145,21 +168,21 @@ export default function Page() {
   const translateStatus = (status) => {
     const translations = {
       'pending': 'en attente',
-      'processing': 'en traitement',
-      'shipped': 'expédiée',
-      'completed': 'terminée',
-      'cancelled': 'annulée'
+      'processing': 'en cours de traitement',
+      'shipped': 'expédié',
+      'completed': 'terminé',
+      'cancelled': 'annuler'
     };
     return translations[status] || status;
   };
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
-      case 'terminée': return 'success';
-      case 'en traitement': return 'info';
-      case 'expédiée': return 'primary';
-      case 'en attente': return 'warning';
-      case 'annulée': return 'danger';
+      case 'completed': return 'success';
+      case 'processing': return 'info';
+      case 'shipped': return 'primary';
+      case 'pending': return 'warning';
+      case 'cancelled': return 'danger';
       default: return 'secondary';
     }
   };
@@ -208,8 +231,17 @@ export default function Page() {
                 <Col md="12">
                   <h4 className="title">Liste des Commandes</h4>
                   <Card>
+                    <Card.Header>
+                      <Nav variant="tabs" activeKey={activeTab} onSelect={setActiveTab}>
+                        {STATUS_TABS.map(tab => (
+                          <Nav.Item key={tab.id}>
+                            <Nav.Link eventKey={tab.id}>{tab.label}</Nav.Link>
+                          </Nav.Item>
+                        ))}
+                      </Nav>
+                    </Card.Header>
                     <Card.Body>
-                      <ListTable list={entities} />
+                      <ListTable list={filteredEntities} />
                     </Card.Body>
                   </Card>
                 </Col>
