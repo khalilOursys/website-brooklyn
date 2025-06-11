@@ -66,8 +66,8 @@ export default function DetailsBulkProduct({ product = allProducts[0] }) {
         throw new Error('Failed to add item to cart');
       }
 
-      const result = await response.json();
-
+      //const result = await response.json();
+      window.location.reload();
       // Optionally refresh the cart in your context/state
       // You might want to add a success message here
     } catch (err) {

@@ -62,6 +62,7 @@ let UsersService = class UsersService {
                         items: true,
                     },
                 },
+                bulkRequests: true,
             },
         });
         if (!user) {

@@ -14,17 +14,12 @@ export const metadata = {
 export default function Home() {
   return (
     <>
-      {/* <Topbar1 />
-      <Header0 /> */}
       <Header4 />
       <Hero />
       <Features bgColor="" />
       <Categories />
-      {/* correct data product in this project (ProductsHome/fetchByCatagory/detailProduct ...) */}
-      {/* modify the logic profile api BE/FE */}
       <ProductsHome />
       <Brands />
-      {/* <ShopGram /> */}
       <Blogs />
       <Footer2 />
     </>

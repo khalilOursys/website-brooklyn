@@ -28,17 +28,27 @@ export declare class UsersService {
         cart: ({
             items: {
                 id: string;
+                cartId: string;
                 productId: string;
-                quantity: number;
                 variantId: string | null;
                 bulkId: string | null;
-                cartId: string;
+                quantity: number;
             }[];
         } & {
             id: string;
             updatedAt: Date;
             userId: string;
         }) | null;
+        bulkRequests: {
+            id: string;
+            userId: string;
+            storeName: string;
+            legalDocs: string;
+            status: string;
+            reviewedById: string | null;
+            submittedAt: Date;
+            reviewedAt: Date | null;
+        } | null;
     } & {
         id: string;
         email: string;

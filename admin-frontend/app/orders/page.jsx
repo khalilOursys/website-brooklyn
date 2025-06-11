@@ -20,13 +20,21 @@ export default function Page() {
   const router = useRouter();
 
   // Status constants
-  const STATUS_TABS = [
+  /* const STATUS_TABS = [
     { id: 'all', label: 'Toutes' },
     { id: 'pending', label: 'En attente' },
     { id: 'processing', label: 'En cours de traitement' },
     { id: 'shipped', label: 'Expédié' },
     { id: 'completed', label: 'Terminé' },
     { id: 'cancelled', label: 'Annuler' }
+  ]; */
+  const STATUS_TABS = [
+    { id: 'all', label: 'Toutes' },
+    { id: 'En attente', label: 'En attente' },
+    { id: 'En cours de traitement', label: 'En cours de traitement' },
+    { id: 'Expédié', label: 'Expédié' },
+    { id: 'Terminé', label: 'Terminé' },
+    { id: 'Annuler', label: 'Annuler' }
   ];
 
   const notify = (type, msg) => {
@@ -71,7 +79,8 @@ export default function Page() {
   };
 
   const getNextStatus = (currentStatus) => {
-    const statusFlow = ['pending', 'processing', 'shipped', 'completed'];
+    /* const statusFlow = ['pending', 'processing', 'shipped', 'completed']; */
+    const statusFlow = ['en attente', 'en cours de traitement', 'expédié', 'terminé'];
     const currentIndex = statusFlow.indexOf(currentStatus);
     return currentIndex < statusFlow.length - 1 ? statusFlow[currentIndex + 1] : currentStatus;
   };
@@ -151,7 +160,7 @@ export default function Page() {
               )}
 
               <Button
-                onClick={() => updateOrderStatus(order.id, 'cancelled')}
+                onClick={() => updateOrderStatus(order.id, 'Annuler')}
                 variant="danger"
                 size="sm"
                 disabled={isProcessing}
@@ -178,13 +187,21 @@ export default function Page() {
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
+      case 'en attente': return 'success';
+      case 'en cours de traitement': return 'info';
+      case 'expédié': return 'primary';
+      case 'terminé': return 'warning';
+      case 'Annuler': return 'danger';
+      default: return 'secondary';
+    }
+    /* switch (status) {
       case 'completed': return 'success';
       case 'processing': return 'info';
       case 'shipped': return 'primary';
       case 'pending': return 'warning';
       case 'cancelled': return 'danger';
       default: return 'secondary';
-    }
+    } */
   };
 
   const getOrders = useCallback(async () => {

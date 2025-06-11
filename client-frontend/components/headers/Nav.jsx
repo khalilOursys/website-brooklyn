@@ -109,16 +109,18 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
           Promotions
         </a>
       </li>
-      {user?.role === "BULK_CLIENT" && user !== null && (
-        <li className="menu-item">
-          <a
-            href="/bulkproduct"
-            className={`item-link ${Linkfs} ${textColor}`}
-          >
-            Produit en gros
-          </a>
-        </li>
-      )}
+      {user?.role === "BULK_CLIENT" &&
+        user?.bulkRequests?.status?.toLowerCase() === "approuvée" && (
+          <li className="menu-item">
+            <a
+              href="/bulkproduct"
+              className={`item-link ${Linkfs} ${textColor}`}
+            >
+              Produit en gros
+            </a>
+          </li>
+        )}
+
       <li className="menu-item">
         <a
           href="#"
