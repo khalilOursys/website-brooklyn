@@ -308,11 +308,12 @@ export default function Page() {
                                 <Form.Group>
                                   <label>Description* </label>
                                   <Form.Control
+                                    as="textarea"  // Change this to make it a textarea
+                                    rows={11}       // Add this to set the initial height
                                     value={description}
                                     placeholder="Description"
                                     name="description"
                                     className="required"
-                                    type="text"
                                     onChange={(e) => setDescription(e.target.value)}
                                   />
                                 </Form.Group>
@@ -336,13 +337,13 @@ export default function Page() {
                               </Col>
                               <Col className="px-1" md="6">
                                 <Form.Group>
-                                  <label>Remise </label>
+                                  <label>Prix en remise </label>
                                   <Form.Control
                                     value={discount}
-                                    placeholder="Remise"
+                                    placeholder="Prix en remise"
                                     name="discount"
                                     type="number"
-                                    onChange={(e) => handleNumberChange(e, setDiscount)}
+                                    onChange={(e) => setDiscount(parseFloat(e.target.value))}
                                   />
                                 </Form.Group>
                               </Col>

@@ -1,11 +1,40 @@
 "use client";
 
-import { blogArticles3 } from "@/data/blogs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Link from "next/link";
 import Image from "next/image";
 import { Navigation, Pagination } from "swiper/modules";
+import { useEffect, useState } from "react";
+import Configuration from "@/configuration";
+
 export default function Blogs() {
+  const [bundles, setBundles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const api = Configuration.BACK_BASEURL;
+
+  useEffect(() => {
+    const fetchBundles = async () => {
+      try {
+        const response = await fetch(`${api}productBundles`); // Your API endpoint
+        if (!response.ok) {
+          throw new Error('Failed to fetch bundles');
+        }
+        const data = await response.json();
+        setBundles(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBundles();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <section className="flat-spacing-14">
       <div className="container">
@@ -30,49 +59,50 @@ export default function Blogs() {
             }}
             pagination={{ clickable: true, el: ".spd157" }}
           >
-            {blogArticles3.map((article, index) => (
-              <SwiperSlide key={index}>
+            {bundles.map((bundle, index) => (
+              <SwiperSlide key={bundle.id}>
                 <div
                   className="blog-article-item wow fadeInUp"
-                  data-wow-delay={article.delay}
+                  data-wow-delay={`${0.1 * index}s`} // Dynamic delay based on index
                 >
                   <div className="article-thumb h-460 rounded-0">
-                    {/* <Link href={`/blog-detail/${article.id}`}> */}
                     <Link href={`#`}>
                       <Image
                         className="lazyload"
-                        data-src={article.imgSrc}
-                        alt={article.alt}
-                        src={article.imgSrc}
-                        width={550}
-                        height={354}
+                        data-src={bundle.img}
+                        alt={bundle.name}
+                        src={bundle.img}
+                        width={460}
+                        height={460}
                       />
                     </Link>
                     <div className="article-label">
-                      {/* <Link
-                        href={`/blog-grid`}
-                        className="tf-btn btn-sm animate-hover-btn"
-                      > */}
                       <Link
                         href={`#`}
                         className="tf-btn btn-sm animate-hover-btn"
                       >
-                        Accessories
+                        {/* Prix {bundle.discount} TND */}
+                        {bundle.name}
                       </Link>
                     </div>
                   </div>
                   <div className="article-content">
-                    <div className="article-title">
-                      <Link href={`/blog-detail/${article.id}`}>
-                        {article.title}
+                    {/* <div className="article-title">
+                      <Link href={`#`}>
+                        {bundle.name}
                       </Link>
+                    </div> */}
+                    <div className="article-meta">
+                      <span>Inclut {bundle.products.length} produits</span>
+                      <br></br>
+                      <span>Expire : {new Date(bundle.expiresAt).toLocaleDateString()}</span>
                     </div>
                     <div className="article-btn">
                       <Link
-                        href={`/blog-detail/${article.id}`}
+                        href={`#`}
                         className="tf-btn btn-line fw-6"
                       >
-                        Read more
+                        Voir les détails
                         <i className="icon icon-arrow1-top-left" />
                       </Link>
                     </div>

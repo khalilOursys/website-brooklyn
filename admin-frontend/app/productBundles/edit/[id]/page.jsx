@@ -207,12 +207,12 @@ export default function UpdateProductBundle() {
                             </Col>
                             <Col md="6">
                               <Form.Group className="mb-3">
-                                <label>Remise {/* (%) */}</label>
+                                <label>Prix en remise {/* (%) */}</label>
                                 <Form.Control
                                   type="number"
                                   value={formData.discount}
-                                  min="0"
-                                  max="100"
+                                  /* min="0"
+                                  max="100" */
                                   onChange={e => setFormData({ ...formData, discount: parseFloat(e.target.value) })}
                                 />
                               </Form.Group>

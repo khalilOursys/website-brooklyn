@@ -895,3 +895,7 @@ div#basic-navbar-nav {
 .card-login .input-group-text {
   height: 40px !important;
 }
+
+textarea.required.form-control {
+  height: 100px !important;
+}
