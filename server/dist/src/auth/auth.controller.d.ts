@@ -16,11 +16,11 @@ export declare class AuthController {
         cart: ({
             items: {
                 id: string;
-                cartId: string;
                 productId: string;
+                quantity: number;
                 variantId: string | null;
                 bulkId: string | null;
-                quantity: number;
+                cartId: string;
             }[];
         } & {
             id: string;
