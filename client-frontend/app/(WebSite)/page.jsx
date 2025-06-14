@@ -6,6 +6,7 @@ import Features from "@/components/common/Features";
 import ProductsHome from "@/components/ProductsHome";
 import Blogs from "@/components/blogs/Blogs";
 import Header4 from "@/components/headers/Header4";
+import ShopGram from "@/components/homes/home-accessories/ShopGram";
 
 export const metadata = {
   title: "Home 1 || test",
@@ -20,7 +21,7 @@ export default function Home() {
       <Categories />
       <ProductsHome />
       <Brands />
-      <Blogs />
+      <ShopGram />
       <Footer2 />
     </>
   );

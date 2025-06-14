@@ -9,15 +9,17 @@ import {
 import { Type } from 'class-transformer';
 
 class OrderItemDto {
-  @IsString()
-  @IsNotEmpty()
-  productId: string;
+  @IsOptional()
+  productId?: string | null;
 
   @IsOptional() // Allow variantId to be optional
-  variantId?: string;
+  variantId?: string | null;
 
   @IsOptional() // Allow variantId to be optional
-  bulkId?: string;
+  bulkId?: string | null;
+
+  @IsOptional() // Allow variantId to be optional
+  bundleId?: string | null;
 
   @IsNumber()
   quantity: number;
