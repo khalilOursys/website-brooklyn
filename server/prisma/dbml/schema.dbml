@@ -207,14 +207,16 @@ Table Order {
 Table OrderItem {
   id String [pk]
   orderId String [not null]
-  productId String [not null]
+  productId String
   variantId String
   bulkId String
+  bundleId String
   quantity Int [not null]
   price Float [not null]
   order Order [not null]
-  product Product [not null]
+  product Product
   variant ProductVariant
+  bundle ProductBundle
   bulk BulkProduct
 }
 
@@ -283,6 +285,7 @@ Table ProductBundle {
   name String [not null]
   discount Float [not null]
   products BundleProduct [not null]
+  orderItems OrderItem [not null]
   createdAt DateTime [default: `now()`, not null]
   expiresAt DateTime
   img String
@@ -355,6 +358,8 @@ Ref: OrderItem.orderId > Order.id
 Ref: OrderItem.productId > Product.id
 
 Ref: OrderItem.variantId > ProductVariant.id
+
+Ref: OrderItem.bundleId > ProductBundle.id
 
 Ref: OrderItem.bulkId > BulkProduct.id
 

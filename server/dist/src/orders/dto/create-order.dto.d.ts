@@ -1,7 +1,8 @@
 declare class OrderItemDto {
-    productId: string;
-    variantId?: string;
-    bulkId?: string;
+    productId?: string | null;
+    variantId?: string | null;
+    bulkId?: string | null;
+    bundleId?: string | null;
     quantity: number;
     price: number;
 }

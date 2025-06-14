@@ -224,15 +224,17 @@ model Order {
 model OrderItem {
   id        String          @id @default(uuid())
   orderId   String
-  productId String
+  productId String?
   variantId String?
   bulkId    String?
+  bundleId  String?
   quantity  Int
   price     Float
   
   order     Order           @relation(fields: [orderId], references: [id])
-  product   Product         @relation(fields: [productId], references: [id])
+  product   Product?        @relation(fields: [productId], references: [id])
   variant   ProductVariant? @relation(fields: [variantId], references: [id])
+  bundle    ProductBundle?  @relation(fields: [bundleId], references: [id])
   bulk      BulkProduct?    @relation(fields: [bulkId], references: [id])
 }
 
@@ -297,6 +299,7 @@ model ProductBundle {
   name      String
   discount  Float
   products  BundleProduct[]
+  orderItems     OrderItem[]
   createdAt DateTime        @default(now())
   expiresAt DateTime?
   img       String?

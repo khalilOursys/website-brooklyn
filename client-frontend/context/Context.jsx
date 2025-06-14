@@ -21,6 +21,7 @@ export default function Context({ children }) {
   const [quickViewItem, setQuickViewItem] = useState(allProducts[0]);
   const [quickAddItem, setQuickAddItem] = useState(1);
   const [user, setUser] = useState(null);
+  const [isPacks, setIsPacks] = useState(0);
   const router = useRouter();
 
   const [totalPrice, setTotalPrice] = useState(0);
@@ -209,7 +210,9 @@ export default function Context({ children }) {
     updateQuantity,
     user,
     setUser,
-    categories
+    categories,
+    isPacks,
+    setIsPacks
   };
   return (
     <dataContext.Provider value={contextElement}>

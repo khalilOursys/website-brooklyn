@@ -15,18 +15,21 @@ const class_transformer_1 = require("class-transformer");
 class OrderItemDto {
 }
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
 ], OrderItemDto.prototype, "productId", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], OrderItemDto.prototype, "variantId", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], OrderItemDto.prototype, "bulkId", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], OrderItemDto.prototype, "bundleId", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)

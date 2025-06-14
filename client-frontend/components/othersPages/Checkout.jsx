@@ -74,7 +74,8 @@ export default function Checkout() {
         const unitPrice = discount && discount !== 0 ? discount : parseFloat(product.price);
 
         return {
-          productId: product.id,
+          productId: product.isPacks === 0 ? product.id : null,
+          bundleId: product.isPacks === 1 ? product.id : null,
           bulkId: product.bulkId,
           quantity: product.quantity,
           price: unitPrice * parseFloat(product.quantity)
@@ -89,6 +90,7 @@ export default function Checkout() {
         total: totalPrice,
         orderItems
       };
+      console.log(cartProducts);
 
       // Send the request to your API  `${api}orders`
       const response = await fetch(`${api}orders`, {

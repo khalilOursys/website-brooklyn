@@ -10,6 +10,7 @@ export default function QuickAdd() {
     quickAddItem,
     addProductToCart,
     isAddedToCartProducts,
+    isPacks
   } = useContextElement();
 
   const [item, setItem] = useState(null);
@@ -37,7 +38,8 @@ export default function QuickAdd() {
         category: quickAddItem.category || {},
         brand: quickAddItem.brand || {},
         images: quickAddItem.images || [],
-        quantity: 1
+        quantity: 1,
+        isPacks: quickAddItem.isPacks ? 1 : 0
       });
     }
   }, [quickAddItem]);
@@ -47,6 +49,7 @@ export default function QuickAdd() {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="header">
+            {console.log(item?.isPacks)}
             <span className="icon-close icon-close-popup" data-bs-dismiss="modal" />
           </div>
           <div className="wrap">
