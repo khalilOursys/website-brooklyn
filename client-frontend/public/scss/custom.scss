@@ -512,6 +512,11 @@ p.top-bar-text span {
 .brand2, .brand1 {
     top: 70% !important;
 }
+
+.pack-block .on-sale-wrap.text-end,.pack-block span.price {
+    display: none;
+}
+
 @media (max-width: 768px) {
   .modal-content {
     max-height: 90vh;

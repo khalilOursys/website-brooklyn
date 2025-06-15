@@ -117,6 +117,7 @@ export class OrdersService {
             },
             bulk: true, // Include bulk if needed
             variant: true, // Include variant if needed
+            bundle: true, // Include variant if needed
           },
         },
         user: true,

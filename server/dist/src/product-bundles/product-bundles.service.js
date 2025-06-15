@@ -60,7 +60,19 @@ let ProductBundlesService = class ProductBundlesService {
     async findOne(id) {
         const bundle = await this.prisma.productBundle.findUnique({
             where: { id },
-            include: { products: true },
+            include: {
+                products: {
+                    include: {
+                        product: {
+                            include: {
+                                images: true,
+                                category: true,
+                                brand: true,
+                            },
+                        },
+                    },
+                },
+            },
         });
         if (!bundle) {
             throw new common_1.NotFoundException(`Product bundle with id ${id} not found`);

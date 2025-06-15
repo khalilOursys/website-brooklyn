@@ -1,18 +1,18 @@
 "use client";
 
-import { products1 } from "@/data/products";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ProductCard } from "../shopCards/ProductCard";
 import { Navigation, Pagination } from "swiper/modules";
 
-export default function RecentProducts() {
+export default function RecentProducts({ products }) {
+
   return (
     <section className="flat-spacing-4 pt_0">
       <div className="container">
         <div className="flat-title">
-          <span className="title">Recently Viewed</span>
+          <span className="title">Liste des Produits du Pack</span>
         </div>
-        <div className="hover-sw-nav hover-sw-2">
+        <div className="hover-sw-nav hover-sw-2 pack-block">
           <Swiper
             dir="ltr"
             className="swiper tf-sw-product-sell wrap-sw-over"
@@ -37,9 +37,9 @@ export default function RecentProducts() {
             }}
             pagination={{ clickable: true, el: ".spd308" }}
           >
-            {products1.slice(4, 12).map((product, i) => (
+            {products.map((product, i) => (
               <SwiperSlide key={i} className="swiper-slide">
-                <ProductCard product={product} />
+                <ProductCard product={product.product} />
               </SwiperSlide>
             ))}
           </Swiper>

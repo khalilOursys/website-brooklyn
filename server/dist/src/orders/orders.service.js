@@ -77,6 +77,7 @@ let OrdersService = class OrdersService {
                         },
                         bulk: true,
                         variant: true,
+                        bundle: true,
                     },
                 },
                 user: true,
