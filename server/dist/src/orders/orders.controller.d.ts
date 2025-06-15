@@ -109,6 +109,14 @@ export declare class OrdersController {
                 name: string;
                 stock: number;
             } | null;
+            bundle: {
+                id: string;
+                createdAt: Date;
+                name: string;
+                discount: number;
+                expiresAt: Date | null;
+                img: string | null;
+            } | null;
             bulk: {
                 id: string;
                 createdAt: Date;

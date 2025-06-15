@@ -203,17 +203,44 @@ export default function Page() {
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        {order.orderItems?.map((item, index) => (
-                                          <tr key={index}>
-                                            <td>
-                                              {item.product?.name || `ID Produit : ${item.productId}`}
-                                              {item.variant && ` (${item.variant.name})`}
-                                            </td>
-                                            <td>{item.quantity}</td>
-                                            <td>{item.product.discount === 0 ? item.product.price : item.product.discount} TND</td>
-                                            <td>{item.price} TND</td>
-                                          </tr>
-                                        ))}
+                                        {order.orderItems?.map((item, index) => {
+                                          let name = '';
+                                          let price = 0;
+                                          let displayPrice = 0;
+
+                                          // Handle bundle items
+                                          if (item.bundle) {
+                                            name = item.bundle.name;
+                                            price = item.price;
+                                            displayPrice = item.bundle.discount;
+                                          }
+                                          // Handle product items
+                                          else if (item.product) {
+                                            name = item.product.name;
+                                            price = item.price;
+                                            displayPrice = item.product.discount === 0 ? item.product.price : item.product.discount;
+
+                                            // Append variant name if exists
+                                            if (item.variant) {
+                                              name += ` (${item.variant.name})`;
+                                            }
+                                          }
+                                          // Fallback for items with no product/bundle info
+                                          else {
+                                            name = `ID: ${item.productId || item.bundleId || 'N/A'}`;
+                                            price = item.price;
+                                            displayPrice = item.price / item.quantity; // Calculate unit price
+                                          }
+
+                                          return (
+                                            <tr key={index}>
+                                              <td>{name}</td>
+                                              <td>{item.quantity}</td>
+                                              <td>{displayPrice} TND</td>
+                                              <td>{price} TND</td>
+                                            </tr>
+                                          );
+                                        })}
                                       </tbody>
                                     </Table>
                                   </Col>
