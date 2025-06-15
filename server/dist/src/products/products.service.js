@@ -344,6 +344,51 @@ let ProductsService = class ProductsService {
             },
         };
     }
+    async findByCategoryParent(options) {
+        const { parentCategorySlug, page = 0, limit = 10, brandNames, minPrice, maxPrice, } = options;
+        const offset = page * limit;
+        const where = {
+            ...(parentCategorySlug && {
+                category: {
+                    parent: {
+                        slug: parentCategorySlug,
+                    },
+                },
+            }),
+            ...(brandNames &&
+                brandNames.length > 0 && {
+                brand: {
+                    name: {
+                        in: brandNames,
+                    },
+                },
+            }),
+            ...((minPrice !== undefined || maxPrice !== undefined) && {
+                price: {
+                    ...(minPrice !== undefined && { gte: minPrice }),
+                    ...(maxPrice !== undefined && { lte: maxPrice }),
+                },
+            }),
+        };
+        const [products, totalCount] = await this.prisma.$transaction([
+            this.prisma.product.findMany({
+                where,
+                skip: offset,
+                take: limit,
+                include: {
+                    category: true,
+                    brand: true,
+                    images: true,
+                    attributes: true,
+                },
+            }),
+            this.prisma.product.count({ where }),
+        ]);
+        return {
+            products,
+            totalCount,
+        };
+    }
 };
 exports.ProductsService = ProductsService;
 exports.ProductsService = ProductsService = __decorate([
