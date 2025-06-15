@@ -1,8 +1,8 @@
-"use client"; // Marquer ce composant comme un composant client
+"use client";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
+import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
@@ -14,7 +14,7 @@ import Configuration from "@/configuration";
 import { useDropzone } from "react-dropzone";
 
 const Select = dynamic(() => import('react-select'), {
-  ssr: false, // Désactiver le SSR pour react-select
+  ssr: false,
 });
 
 export default function Page() {
@@ -36,6 +36,7 @@ export default function Page() {
   const [bannerText, setBannerText] = useState("#FF6B6B");
   const [parentId, setParentId] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [parentCategoryDetails, setParentCategoryDetails] = useState(null);
   const [iconUrl, setIconUrl] = useState("");
   const [bgUrl, setBgUrl] = useState("");
   const [iconPreview, setIconPreview] = useState(null);
@@ -45,14 +46,13 @@ export default function Page() {
   const [isUploadingIcon, setIsUploadingIcon] = useState(false);
   const [isUploadingBg, setIsUploadingBg] = useState(false);
 
-  // Fonction pour générer un slug
   const generateSlug = (input) => {
     return input
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Supprimer les accents
-      .replace(/[^a-z0-9 ]/g, "") // Supprimer les caractères spéciaux
-      .replace(/\s+/g, "-"); // Remplacer les espaces par des tirets
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9 ]/g, "")
+      .replace(/\s+/g, "-");
   };
 
   useEffect(() => {
@@ -72,6 +72,10 @@ export default function Page() {
       return;
     }
 
+    // If parent is selected, use parent's icon and bg if not provided
+    const finalIconUrl = iconUrl || (parentCategoryDetails ? parentCategoryDetails.iconUrl : "");
+    const finalBgUrl = bgUrl || (parentCategoryDetails ? parentCategoryDetails.bgUrl : "");
+
     dispatch(
       addCategory({
         parentId: parentId ? parentId.value : null,
@@ -80,8 +84,8 @@ export default function Page() {
         description,
         bannerText,
         bannerColor,
-        iconUrl,
-        bgUrl
+        iconUrl: finalIconUrl,
+        bgUrl: finalBgUrl
       })
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
@@ -108,6 +112,8 @@ export default function Page() {
       const categoryOptions = data.map(category => ({
         value: category.id,
         label: category.name,
+        iconUrl: category.iconUrl,
+        bgUrl: category.bgUrl
       }));
 
       setCategories(categoryOptions);
@@ -117,13 +123,43 @@ export default function Page() {
     }
   }, []);
 
-  const uploadIcon = async (file) => {
-    // Check file size (max 2MB)
-    /* const maxSize = 2 * 1024 * 1024; // 2MB in bytes
-    if (file.size > maxSize) {
-      notify(2, "Icon image must be less than 2MB");
+  const fetchParentDetails = async (parentId) => {
+    if (!parentId) {
+      setParentCategoryDetails(null);
       return;
-    } */
+    }
+
+    try {
+      const response = await fetch(`${api}categories/getCategoryById/${parentId}`);
+      if (!response.ok) throw new Error("Failed to fetch parent details");
+
+      const data = await response.json();
+      setParentCategoryDetails(data);
+
+      // Show parent's icon and bg as preview (but don't set them as the actual values yet)
+      if (data.iconUrl) setIconPreview(data.iconUrl);
+      if (data.bgUrl) setBgPreview(data.bgUrl);
+    } catch (error) {
+      console.error("Error fetching parent details:", error);
+    }
+  };
+
+  const handleParentChange = (selectedOption) => {
+    setParentId(selectedOption);
+    if (selectedOption) {
+      fetchParentDetails(selectedOption.value);
+    } else {
+      // When parent is deselected
+      setParentCategoryDetails(null);
+      setIconPreview(null);
+      setBgPreview(null);
+      // Also clear any inherited values if they weren't overridden
+      if (!iconUrl) setIconUrl("");
+      if (!bgUrl) setBgUrl("");
+    }
+  };
+
+  const uploadIcon = async (file) => {
     setIsUploadingIcon(true);
     try {
       const formData = new FormData();
@@ -150,12 +186,6 @@ export default function Page() {
   };
 
   const uploadBackground = async (file) => {
-    // Check file size (max 2MB)
-    /* const maxSize = 2 * 1024 * 1024; // 2MB in bytes
-    if (file.size > maxSize) {
-      notify(2, "Icon image must be less than 2MB");
-      return;
-    } */
     setIsUploadingBg(true);
     try {
       const formData = new FormData();
@@ -170,10 +200,12 @@ export default function Page() {
 
       const { url } = await response.json();
       setBgUrl(url);
+      setBgPreview(url);
       notify(1, "Image de fond téléversée avec succès !");
     } catch (error) {
       console.error("Erreur de téléversement :", error);
       notify(2, "Échec du téléversement du fond. Veuillez réessayer.");
+      setBgPreview(null);
     } finally {
       setIsUploadingBg(false);
     }
@@ -183,7 +215,6 @@ export default function Page() {
     if (acceptedFiles.length === 0) return;
     const file = acceptedFiles[0];
     setIconFile(file);
-    /* setIconPreview(URL.createObjectURL(file)); */
     uploadIcon(file);
   }, []);
 
@@ -191,7 +222,6 @@ export default function Page() {
     if (acceptedFiles.length === 0) return;
     const file = acceptedFiles[0];
     setBgFile(file);
-    setBgPreview(URL.createObjectURL(file));
     uploadBackground(file);
   }, []);
 
@@ -273,9 +303,17 @@ export default function Page() {
                                   <Select
                                     options={categories}
                                     value={parentId}
-                                    onChange={(selectedOption) => setParentId(selectedOption)}
+                                    onChange={handleParentChange}
                                     placeholder="Sélectionner une catégorie"
+                                    isClearable={true}  // This allows clearing the selection
                                   />
+                                  {parentCategoryDetails && (
+                                    <div className="mt-2">
+                                      <small className="text-muted">
+                                        Parent selectionné: {parentCategoryDetails.name}
+                                      </small>
+                                    </div>
+                                  )}
                                 </Form.Group>
                               </Col>
                               <Col md="6">
@@ -296,6 +334,13 @@ export default function Page() {
                               <Col md="6">
                                 <Form.Group>
                                   <label>Image d'icône</label>
+                                  {parentCategoryDetails && !iconUrl && (
+                                    <div className="alert alert-info mb-3">
+                                      <small>
+                                        <i className="fas fa-info-circle"></i> Cette catégorie héritera de l'icône de son parent si aucune n'est fournie.
+                                      </small>
+                                    </div>
+                                  )}
                                   <div
                                     {...getIconRootProps()}
                                     className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
@@ -305,12 +350,17 @@ export default function Page() {
                                     <input {...getIconInputProps()} />
                                     <p className="text-muted">
                                       {isUploadingIcon ? 'Téléversement en cours...' :
-                                        isDragActiveIcon ? 'Déposez l’icône ici' :
+                                        isDragActiveIcon ? "Déposez l'icône ici" :
                                           'Glissez-déposez une icône ou cliquez pour sélectionner'}
                                     </p>
                                   </div>
                                   {iconPreview && (
                                     <div className="mt-4 text-center">
+                                      <p className="text-muted small mb-2">
+                                        {parentCategoryDetails && !iconUrl ?
+                                          "Prévisualisation de l'icône du parent" :
+                                          "Votre icône téléversée"}
+                                      </p>
                                       <img
                                         src={iconPreview}
                                         alt="Aperçu de l'icône"
@@ -323,7 +373,14 @@ export default function Page() {
                               </Col>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Image d’arrière-plan</label>
+                                  <label>Image d'arrière-plan</label>
+                                  {parentCategoryDetails && !bgUrl && (
+                                    <div className="alert alert-info mb-3">
+                                      <small>
+                                        <i className="fas fa-info-circle"></i> Cette catégorie héritera du fond de son parent si aucun n'est fourni.
+                                      </small>
+                                    </div>
+                                  )}
                                   <div
                                     {...getBgRootProps()}
                                     className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
@@ -339,6 +396,11 @@ export default function Page() {
                                   </div>
                                   {bgPreview && (
                                     <div className="mt-4 text-center">
+                                      <p className="text-muted small mb-2">
+                                        {parentCategoryDetails && !bgUrl ?
+                                          "Prévisualisation du fond du parent" :
+                                          "Votre fond téléversé"}
+                                      </p>
                                       <img
                                         src={bgPreview}
                                         alt="Aperçu du fond"

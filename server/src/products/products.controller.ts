@@ -114,4 +114,23 @@ export class ProductsController {
   async getFilterOptionsPromotion() {
     return this.productService.getFilterOptionsPromotion();
   }
+  // Find products by category name with pagination, optional brand name, and price range filters
+  @Get('findByCategoryParent')
+  findByCategoryParent(
+    @Query('parentCategorySlug') parentCategorySlug?: string,
+    @Query('page', ParseIntPipe) page: number = 0,
+    @Query('limit', ParseIntPipe) limit: number = 10,
+    @Query('brandNames') brandNames?: string,
+    @Query('minPrice') minPrice?: number,
+    @Query('maxPrice') maxPrice?: number,
+  ) {
+    return this.productService.findByCategoryParent({
+      parentCategorySlug,
+      page,
+      limit,
+      brandNames: brandNames ? brandNames.split(',') : undefined,
+      minPrice: minPrice ? Number(minPrice) : undefined,
+      maxPrice: maxPrice ? Number(maxPrice) : undefined,
+    });
+  }
 }

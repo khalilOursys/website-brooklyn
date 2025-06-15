@@ -438,4 +438,67 @@ export class ProductsService {
       },
     };
   }
+  async findByCategoryParent(options: {
+    parentCategorySlug?: string; // Add new parameter for parent category slug
+    page?: number;
+    limit?: number;
+    brandNames?: string[];
+    minPrice?: number;
+    maxPrice?: number;
+  }) {
+    const {
+      parentCategorySlug, // Destructure the new parameter
+      page = 0,
+      limit = 10,
+      brandNames,
+      minPrice,
+      maxPrice,
+    } = options;
+    const offset = page * limit;
+
+    const where: Prisma.ProductWhereInput = {
+      // Add parent category filter
+      ...(parentCategorySlug && {
+        category: {
+          parent: {
+            slug: parentCategorySlug,
+          },
+        },
+      }),
+      ...(brandNames &&
+        brandNames.length > 0 && {
+          brand: {
+            name: {
+              in: brandNames,
+            },
+          },
+        }),
+      ...((minPrice !== undefined || maxPrice !== undefined) && {
+        price: {
+          ...(minPrice !== undefined && { gte: minPrice }),
+          ...(maxPrice !== undefined && { lte: maxPrice }),
+        },
+      }),
+    };
+
+    const [products, totalCount] = await this.prisma.$transaction([
+      this.prisma.product.findMany({
+        where,
+        skip: offset,
+        take: limit,
+        include: {
+          category: true,
+          brand: true,
+          images: true,
+          attributes: true,
+        },
+      }),
+      this.prisma.product.count({ where }),
+    ]);
+
+    return {
+      products,
+      totalCount,
+    };
+  }
 }

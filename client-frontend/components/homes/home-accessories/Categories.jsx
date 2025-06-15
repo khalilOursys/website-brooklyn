@@ -1,19 +1,39 @@
 "use client";
-import { collections12 } from "@/data/categories";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Configuration from "@/configuration";
 
 export default function Categories() {
-  /*  setInterval(() => {
-     const memory = process.memoryUsage();
-     console.log('Next.js Memory Usage:', {
-       rss: (memory.rss / 1024 / 1024).toFixed(2) + ' MB',
-       heapUsed: (memory.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
-     });
-   }, 5000); */
+  const [categories, setCategories] = useState([]);
+  const api = Configuration.BACK_BASEURL;
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(`${api}categories/getAllParent`); // Your API endpoint
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        setCategories(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  /* useEffect(() => {
+    fetch('http://localhost:3001/api/categories')
+      .then(res => res.json())
+      .then(data => setCategories(data))
+      .catch(err => console.error('Error fetching categories:', err));
+  }, []); */
+
   return (
     <section>
       <div className="flat-title">
@@ -39,28 +59,27 @@ export default function Categories() {
           }}
           className="swiper tf-sw-recent wow fadeInUp"
         >
-          {collections12.map((collection, index) => (
-            <SwiperSlide key={index}>
+          {categories.map((category) => (
+            <SwiperSlide key={category.id}>
               <div className="collection-item-circle hover-img">
                 <Link
-                  href={`/category/accesoire`}
+                  href={`/categories/${category.slug}`}
                   className="collection-image img-style"
                 >
                   <Image
-                    width="149"
-                    height="149"
+                    width={149}
+                    height={149}
                     className="lazyloaded"
-                    data-src={collection.imgSrc}
-                    alt={collection.alt}
-                    src={collection.imgSrc}
+                    alt={category.name}
+                    src={category.iconUrl || "/images/image-not-found.jpg"}
                   />
                 </Link>
                 <div className="collection-content text-center">
                   <Link
-                    href={`/category/accesoire`}
+                    href={`/categories/${category.slug}`}
                     className="link title fw-5 text-line-clamp-1"
                   >
-                    {collection.title}
+                    {category.name}
                   </Link>
                 </div>
               </div>

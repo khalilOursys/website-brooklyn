@@ -1,4 +1,3 @@
-// Full code with translations only
 "use client";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useState, useCallback, useEffect } from "react";
@@ -37,6 +36,7 @@ export default function Page() {
   const [bannerColor, setBannerColor] = useState("#FF6B6B");
   const [bannerText, setBannerText] = useState("#FF6B6B");
   const [parentId, setParentId] = useState(null);
+  const [parentCategoryDetails, setParentCategoryDetails] = useState(null);
   const [categories, setCategories] = useState([]);
   const [iconUrl, setIconUrl] = useState("");
   const [bgUrl, setBgUrl] = useState("");
@@ -73,6 +73,10 @@ export default function Page() {
       return;
     }
 
+    // If parent is selected, use parent's icon and bg if not provided
+    const finalIconUrl = iconUrl || (parentCategoryDetails ? parentCategoryDetails.iconUrl : "");
+    const finalBgUrl = bgUrl || (parentCategoryDetails ? parentCategoryDetails.bgUrl : "");
+
     dispatch(
       editCategory({
         id,
@@ -82,8 +86,8 @@ export default function Page() {
         description,
         bannerText,
         bannerColor,
-        iconUrl,
-        bgUrl
+        iconUrl: finalIconUrl,
+        bgUrl: finalBgUrl
       })
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
@@ -165,7 +169,6 @@ export default function Page() {
     if (acceptedFiles.length === 0) return;
     const file = acceptedFiles[0];
     setIconFile(file);
-    /* setIconPreview(URL.createObjectURL(file)); */
     uploadIcon(file);
   }, []);
 
@@ -173,7 +176,6 @@ export default function Page() {
     if (acceptedFiles.length === 0) return;
     const file = acceptedFiles[0];
     setBgFile(file);
-    /* setBgPreview(URL.createObjectURL(file)); */
     uploadBackground(file);
   }, []);
 
@@ -199,6 +201,8 @@ export default function Page() {
       const categoryOptions = data.map(category => ({
         value: category.id,
         label: category.name,
+        iconUrl: category.iconUrl,
+        bgUrl: category.bgUrl
       }));
       setCategories(categoryOptions);
     } catch (error) {
@@ -206,6 +210,43 @@ export default function Page() {
       notify(2, "Impossible de récupérer les catégories");
     }
   }, []);
+
+  const fetchParentDetails = async (parentId) => {
+    if (!parentId) {
+      setParentCategoryDetails(null);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${api}categories/getCategoryById/${parentId}`);
+      if (!response.ok) throw new Error("Failed to fetch parent details");
+
+      const data = await response.json();
+      setParentCategoryDetails(data);
+
+      // Show parent's icon and bg as preview (but don't set them as the actual values yet)
+      /* if (data.iconUrl && !iconUrl) setIconPreview(data.iconUrl);
+      if (data.bgUrl && !bgUrl) setBgPreview(data.bgUrl); */
+
+      if (data.iconUrl) setIconPreview(data.iconUrl);
+      if (data.bgUrl) setBgPreview(data.bgUrl);
+    } catch (error) {
+      console.error("Error fetching parent details:", error);
+    }
+  };
+
+  const handleParentChange = (selectedOption) => {
+    setParentId(selectedOption);
+    if (selectedOption) {
+      fetchParentDetails(selectedOption.value);
+    } else {
+      // When parent is deselected
+      setParentCategoryDetails(null);
+      // Only clear previews if we're using parent's assets
+      if (!iconUrl) setIconPreview(null);
+      if (!bgUrl) setBgPreview(null);
+    }
+  };
 
   const fetchCategory = useCallback(async (id) => {
     try {
@@ -221,10 +262,12 @@ export default function Page() {
       setBgPreview(data.bgUrl || null);
 
       if (data.parentId) {
-        setParentId({
+        const parentOption = {
           value: data.parentId,
-          label: data.parent.name || "Catégorie parente"
-        });
+          label: data.parent?.name || "Catégorie parente"
+        };
+        setParentId(parentOption);
+        /* fetchParentDetails(data.parentId); */
       }
     } catch (error) {
       console.error("Erreur lors de la récupération de la catégorie :", error);
@@ -298,9 +341,17 @@ export default function Page() {
                                   <Select
                                     options={categories}
                                     value={parentId}
-                                    onChange={(selectedOption) => setParentId(selectedOption)}
+                                    onChange={handleParentChange}
                                     placeholder="Sélectionner une catégorie parente"
+                                    isClearable={true}
                                   />
+                                  {parentCategoryDetails && (
+                                    <div className="mt-2">
+                                      <small className="text-muted">
+                                        Parent selectionné: {parentCategoryDetails.name}
+                                      </small>
+                                    </div>
+                                  )}
                                 </Form.Group>
                               </Col>
                               <Col md="6">
@@ -321,6 +372,13 @@ export default function Page() {
                               <Col md="6">
                                 <Form.Group>
                                   <label>Image d'icône</label>
+                                  {parentCategoryDetails && !iconUrl && (
+                                    <div className="alert alert-info mb-3">
+                                      <small>
+                                        <i className="fas fa-info-circle"></i> Cette catégorie héritera de l'icône de son parent si aucune n'est fournie.
+                                      </small>
+                                    </div>
+                                  )}
                                   <div
                                     {...getIconRootProps()}
                                     className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
@@ -330,17 +388,22 @@ export default function Page() {
                                     <input {...getIconInputProps()} />
                                     <p className="text-muted">
                                       {isUploadingIcon ? 'Téléchargement...' :
-                                        isDragActiveIcon ? 'Déposez l’icône ici' :
+                                        isDragActiveIcon ? "Déposez l'icône ici" :
                                           'Glissez-déposez une icône, ou cliquez pour sélectionner'}
                                     </p>
                                   </div>
                                   {(iconPreview || iconUrl) && (
                                     <div className="mt-4 text-center">
+                                      <p className="text-muted small mb-2">
+                                        {parentCategoryDetails && !iconUrl ?
+                                          "Prévisualisation de l'icône du parent" :
+                                          "Votre icône téléversée"}
+                                      </p>
                                       <img
                                         src={iconPreview || iconUrl}
-                                        alt="Aperçu de l’icône"
+                                        alt="Aperçu de l'icône"
                                         className="img-fluid rounded"
-                                        style={{ height: '100%' }}
+                                        style={{ height: '100px' }}
                                       />
                                     </div>
                                   )}
@@ -348,7 +411,14 @@ export default function Page() {
                               </Col>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Image d’arrière-plan</label>
+                                  <label>Image d'arrière-plan</label>
+                                  {parentCategoryDetails && !bgUrl && (
+                                    <div className="alert alert-info mb-3">
+                                      <small>
+                                        <i className="fas fa-info-circle"></i> Cette catégorie héritera du fond de son parent si aucun n'est fourni.
+                                      </small>
+                                    </div>
+                                  )}
                                   <div
                                     {...getBgRootProps()}
                                     className={`upload-block border-2 border-dashed rounded-3 p-5 text-center cursor-pointer transition-colors
@@ -358,15 +428,20 @@ export default function Page() {
                                     <input {...getBgInputProps()} />
                                     <p className="text-muted">
                                       {isUploadingBg ? 'Téléchargement...' :
-                                        isDragActiveBg ? 'Déposez l’arrière-plan ici' :
+                                        isDragActiveBg ? "Déposez l'arrière-plan ici" :
                                           'Glissez-déposez un arrière-plan, ou cliquez pour sélectionner'}
                                     </p>
                                   </div>
                                   {(bgPreview || bgUrl) && (
                                     <div className="mt-4 text-center">
+                                      <p className="text-muted small mb-2">
+                                        {parentCategoryDetails && !bgUrl ?
+                                          "Prévisualisation du fond du parent" :
+                                          "Votre fond téléversé"}
+                                      </p>
                                       <img
                                         src={bgPreview || bgUrl}
-                                        alt="Aperçu de l’arrière-plan"
+                                        alt="Aperçu de l'arrière-plan"
                                         className="img-fluid rounded"
                                         style={{ height: '100px' }}
                                       />
