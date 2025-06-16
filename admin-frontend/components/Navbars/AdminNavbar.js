@@ -6,7 +6,7 @@ function AdminNavbar({ users }) {
   function LogOut(e) {
     e.preventDefault();
     localStorage.clear();
-    window.location.replace("/login");
+    window.location.replace("/");
   }
 
   return (
@@ -58,7 +58,7 @@ function AdminNavbar({ users }) {
                   <span className="no-icon">Admin </span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
-                  <Dropdown.Item href="#" onClick={() => router.push("/admin")}>
+                  {/* <Dropdown.Item href="#" onClick={() => router.push("/admin")}>
                     <i className="fas fa-users-cog"></i>
                     Settings
                   </Dropdown.Item>
@@ -68,7 +68,7 @@ function AdminNavbar({ users }) {
                   >
                     <i className="fas fa-user"></i>
                     Profile
-                  </Dropdown.Item>
+                  </Dropdown.Item> */}
                   <Dropdown.Item href="#" onClick={LogOut}>
                     <i className="nc-icon nc-button-power"></i>
                     Déconnecter

@@ -1,7 +1,7 @@
-"use client"; // Marque ce composant comme un composant client
+"use client"; // Marquer ceci comme un composant client
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
-import { fetchCategories } from "@/Redux/categoriesReduce";
+import { fetchBrands } from "@/Redux/brandsReduce";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
 import MaterialReactTable from "material-react-table";
@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
+import { fetchHeroBanner } from "@/Redux/heroBannerReduce";
 
 export default function Page() {
   const [entities, setEntities] = useState([]);
@@ -43,17 +44,13 @@ export default function Page() {
       accessorKey: "description",
     },
     {
-      header: "Parent",
-      accessorKey: "parent.name",
-    },
-    {
       accessorKey: "id",
       header: "Actions",
       Cell: ({ cell }) => (
         <div className="actions-right block_action">
           <Button
             onClick={() => {
-              router.push("/categories/edit/" + cell.row.original.id);
+              router.push("/heroBanner/edit/" + cell.row.original.id);
             }}
             variant="warning"
             size="sm"
@@ -62,7 +59,7 @@ export default function Page() {
             <i className="fa fa-edit" />
           </Button>
           {/* <Button
-            onClick={() => router.push("/categories/detail/" + cell.row.original.id)}
+            onClick={() => router.push("/heroBanner/detail/" + cell.row.original.id)}
             variant="info"
             size="sm"
             className="text-info btn-link view"
@@ -74,16 +71,16 @@ export default function Page() {
     },
   ];
 
-  const getCategory = useCallback(async () => {
-    const response = await dispatch(fetchCategories());
+  const getBrand = useCallback(async () => {
+    const response = await dispatch(fetchHeroBanner());
     setEntities(response.payload);
   }, [dispatch]);
 
   useEffect(() => {
-    getCategory();
-  }, [getCategory]);
+    getBrand();
+  }, [getBrand]);
 
-  function ListTable({ list }) {
+  function TableauListe({ list }) {
     return (
       <MaterialReactTable
         columns={columns}
@@ -100,15 +97,15 @@ export default function Page() {
   }
 
   function ajouter() {
-    router.push("/categories/add");
+    router.push("/heroBanner/add");
   }
 
   return (
     <>
       <div className="wrapper">
-        <Sidebar categories={null} routes={[]} />
+        <Sidebar brands={null} routes={[]} />
         <div className="main-panel">
-          <AdminNavbar categories={null} />
+          <AdminNavbar brands={null} />
           <div className="content">
             <Container fluid>
               <ToastContainer />
@@ -125,14 +122,14 @@ export default function Page() {
                     <span className="btn-label">
                       <i className="fas fa-plus"></i>
                     </span>
-                    Ajouter une catégorie
+                    Ajouter une hero banner
                   </Button>
                 </Col>
                 <Col md="12">
-                  <h4 className="title">Liste des catégories</h4>
+                  <h4 className="title">Liste des hero banners</h4>
                   <Card>
                     <Card.Body>
-                      <ListTable list={entities} />
+                      <TableauListe list={entities} />
                     </Card.Body>
                   </Card>
                 </Col>

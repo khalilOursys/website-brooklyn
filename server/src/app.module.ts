@@ -22,6 +22,7 @@ import { BulkProductsModule } from './bulk-products/bulk-products.module';
 import { BulkClientRequestsModule } from './bulk-client-requests/bulk-client-requests.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { WishlistModule } from './wishlist/wishlist.module';
+import { HeroBannerModule } from './hero-banner/hero-banner.module';
 
 @Module({
   imports: [
@@ -45,7 +46,8 @@ import { WishlistModule } from './wishlist/wishlist.module';
     BulkProductsModule,
     BulkClientRequestsModule,
     NotificationsModule,
-    WishlistModule
+    WishlistModule,
+    HeroBannerModule
   ],
   controllers: [AppController],
   providers: [PrismaService],

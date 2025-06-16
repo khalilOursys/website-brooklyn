@@ -108,7 +108,15 @@ export default function ShopGram() {
                       priority={index < 3} // Only prioritize first few images
                     />
                   </div>
-                  {item.quickAdd ? (
+
+                  <Link
+                    href={`pack-detail/${item.id}`}
+                    className="box-icon"
+                  >
+                    <span className="icon icon-bag" />
+                    <span className="tooltip">View product</span>
+                  </Link>
+                  {/* {item.quickAdd ? (
                     <a
                       href="#quick_add"
                       onClick={() => {
@@ -123,13 +131,13 @@ export default function ShopGram() {
                     </a>
                   ) : (
                     <Link
-                      href={`product-detail/${item.id}`}
+                      href={`pack-detail/${item.id}`}
                       className="box-icon"
                     >
                       <span className="icon icon-bag" />
                       <span className="tooltip">View product</span>
                     </Link>
-                  )}
+                  )} */}
                 </div>
               </SwiperSlide>
             ))}

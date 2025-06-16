@@ -17,7 +17,6 @@ import { useContextElement } from "@/context/Context";
 import { openCartModal } from "@/utlis/openCartModal";
 
 export default function DetailsOuterZoom({ product = allProducts[0] }) {
-
   const [currentColor, setCurrentColor] = useState(colors[0]);
   const [currentSize, setCurrentSize] = useState(sizeOptions[1]);
   const [quantity, setQuantity] = useState(1);
@@ -39,6 +38,10 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
     addToWishlist,
     isAddedtoWishlist,
   } = useContextElement();
+
+  // Check if product is out of stock
+  const isOutOfStock = product.stock <= 0;
+
   return (
     <section
       className="flat-spacing-4 pt_0"
@@ -71,10 +74,6 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                     </h5>
                   </div>
                   <div className="tf-product-info-price">
-                    {/* <div className="price-on-sale">
-                      {parseFloat(product.price).toFixed(3)} TND
-                    </div> */}
-
                     {product.price && (
                       <>
                         {product.discount ? (
@@ -96,12 +95,10 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                         )}
                       </>
                     )}
-
                   </div>
                   <div className="tf-product-info-liveview">
                     <p>{product.description ? product.description : ""}</p>
                   </div>
-                  {/* Add this attributes section */}
                   {product.attributes && product.attributes.length > 0 && (
                     <div className="tf-product-info-attributes">
                       <h6 className="attributes-title">Specifications:</h6>
@@ -115,61 +112,39 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                       </ul>
                     </div>
                   )}
-                  {/* <div className="tf-product-info-variant-picker">
-                    <div className="variant-picker-item">
-                      <div className="variant-picker-label">
-                        Color:
-                        <span className="fw-6 variant-picker-label-value">
-                          {currentColor.value}
-                        </span>
-                      </div>
-                      <form className="variant-picker-values">
-                        {colors.map((color) => (
-                          <React.Fragment key={color.id}>
-                            <input
-                              id={color.id}
-                              type="radio"
-                              name="color1"
-                              readOnly
-                              checked={currentColor == color}
-                            />
-                            <label
-                              onClick={() => setCurrentColor(color)}
-                              className="hover-tooltip radius-60"
-                              htmlFor={color.id}
-                              data-value={color.value}
-                            >
-                              <span
-                                className={`btn-checkbox ${color.className}`}
-                              />
-                              <span className="tooltip">{color.value}</span>
-                            </label>
-                          </React.Fragment>
-                        ))}
-                      </form>
-                    </div>
-                  </div> */}
                   <div className="tf-product-info-quantity">
                     <div className="quantity-title fw-6">Quantity</div>
-                    <Quantity setQuantity={setQuantity} quantity={quantity} />
+                    <Quantity
+                      setQuantity={setQuantity}
+                      quantity={quantity}
+                      maxQuantity={product.stock}
+                      disabled={isOutOfStock}
+                    />
                   </div>
                   <div className="tf-product-info-buy-button">
-                    <form onSubmit={(e) => e.preventDefault()} className="">
-                      <a
-                        onClick={() => {
-                          openCartModal();
-                          addProductToCart(product, quantity ? quantity : 1);
-                        }}
-                        className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
-                      >
-                        <span>
-                          {isAddedToCartProducts(product.id)
-                            ? "Déjà ajouté"
-                            : "Ajouter au panier"}
-
+                    {isOutOfStock ? (
+                      <div className="out-of-stock-message">
+                        <span className="tf-btn justify-content-center fw-6 fs-16 flex-grow-1" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', color: 'white' }}>
+                          En rupture de stock
                         </span>
-                      </a>
-                    </form>
+                      </div>
+                    ) : (
+                      <form onSubmit={(e) => e.preventDefault()} className="">
+                        <a
+                          onClick={() => {
+                            openCartModal();
+                            addProductToCart(product, quantity ? quantity : 1);
+                          }}
+                          className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
+                        >
+                          <span>
+                            {isAddedToCartProducts(product.id)
+                              ? "Déjà ajouté"
+                              : "Ajouter au panier"}
+                          </span>
+                        </a>
+                      </form>
+                    )}
                   </div>
                 </div>
               </div>
@@ -177,7 +152,6 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
           </div>
         </div>
       </div>
-      {/* <StickyItem /> */}
     </section>
   );
 }
