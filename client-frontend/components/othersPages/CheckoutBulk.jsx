@@ -145,12 +145,12 @@ export default function CheckoutBulk() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
-      localStorage.removeItem("cartList");
+      /* const result = await response.json();
+      localStorage.removeItem("cartList"); */
       setSuccess(true);
-      /* setTimeout(() => {
+      setTimeout(() => {
         window.location.replace("/");
-      }, 1500); */
+      }, 1500);
     } catch (err) {
       console.error("Error submitting order:", err);
       setError(err.message || "Failed to place order. Please try again.");
@@ -297,7 +297,7 @@ export default function CheckoutBulk() {
                     </div>
                   </div>
                 )}
-                <div className="coupon-box">
+                {/* <div className="coupon-box">
                   <input type="text" placeholder="Discount code" />
                   <a
                     href="#"
@@ -305,7 +305,7 @@ export default function CheckoutBulk() {
                   >
                     Apply
                   </a>
-                </div>
+                </div> */}
                 <div className="d-flex justify-content-between line pb_20">
                   <h6 className="fw-5">Total</h6>
                   <h6 className="total fw-5">{totalPrice} TND</h6>

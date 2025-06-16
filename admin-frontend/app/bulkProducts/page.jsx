@@ -62,14 +62,14 @@ export default function Page() {
           >
             <i className="fa fa-edit" />
           </Button>
-          <Button
+          {/* <Button
             onClick={() => router.push("/bulkProducts/detail/" + cell.row.original.id)}
             variant="info"
             size="sm"
             className="text-info btn-link view"
           >
             <i className="fa fa-eye" />
-          </Button>
+          </Button> */}
         </div>
       ),
     },

@@ -1,6 +1,14 @@
 export const footerLinks = [
-  { href: "/category/smartphone", text: "Smartphone & Mobile" },
-  { href: "/category/pc-gamer", text: "PC portable & bureautique" },
+  { href: "/categories/informatique", text: "Informatique" },
+  { href: "/categories/telephone-et-tablette", text: "Téléphone et tablette" },
+  { href: "/categories/accessoires-audio", text: "Accessoires audio" },
+  { href: "/categories/protection", text: "Protection" },
+  {
+    href: "/categories/accessoires-de-recharge-gsm",
+    text: "Accessoires de recharge GSM",
+  },
+  { href: "/categories/support-et-gadgets", text: "Support et gadgets" },
+  { href: "/categories/stockage", text: "Stockage" },
 ];
 export const aboutLinks = [
   { href: "/about-us", text: "About Us" },

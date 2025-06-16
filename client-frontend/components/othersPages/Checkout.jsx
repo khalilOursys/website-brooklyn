@@ -245,7 +245,7 @@ export default function Checkout() {
                     </div>
                   </div>
                 )}
-                <div className="coupon-box">
+                {/* <div className="coupon-box">
                   <input type="text" placeholder="Discount code" />
                   <a
                     href="#"
@@ -253,7 +253,7 @@ export default function Checkout() {
                   >
                     Apply
                   </a>
-                </div>
+                </div> */}
                 <div className="d-flex justify-content-between line pb_20">
                   <h6 className="fw-5">Total</h6>
                   <h6 className="total fw-5">{totalPrice} TND</h6>

@@ -29,7 +29,32 @@ export default async function Page({ params }) {
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch category data");
+    return (
+      <>
+        <Header4 />
+
+        <div
+          className="tf-page-title cat-page"
+        >
+          <div className="cat-title">
+            <div className="container-full">
+              <div className="row">
+                <div className="col-12">
+                  <div className="heading text-center">Nouveautés</div>
+                  <p className="text-center text-2 text_black-2 mt_5">
+                    Découvrez notre dernière sélection de {slug}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <h2 className="text-center ">Non data trouvé</h2>
+        <Footer2 />
+      </>
+    );
   }
 
   const category = await res.json();

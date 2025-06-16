@@ -1,5 +1,11 @@
 const routesData = [
   {
+    path: "/heroBanner",
+    name: "Hero Banner",
+    icon: "fas fa-image",
+    role: ["admin"],
+  },
+  {
     path: "/orders",
     name: "Commandes",
     icon: "fas fa-shopping-cart",

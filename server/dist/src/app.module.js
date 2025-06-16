@@ -31,6 +31,7 @@ const bulk_products_module_1 = require("./bulk-products/bulk-products.module");
 const bulk_client_requests_module_1 = require("./bulk-client-requests/bulk-client-requests.module");
 const notifications_module_1 = require("./notifications/notifications.module");
 const wishlist_module_1 = require("./wishlist/wishlist.module");
+const hero_banner_module_1 = require("./hero-banner/hero-banner.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -57,7 +58,8 @@ exports.AppModule = AppModule = __decorate([
             bulk_products_module_1.BulkProductsModule,
             bulk_client_requests_module_1.BulkClientRequestsModule,
             notifications_module_1.NotificationsModule,
-            wishlist_module_1.WishlistModule
+            wishlist_module_1.WishlistModule,
+            hero_banner_module_1.HeroBannerModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [prisma_service_1.PrismaService],
