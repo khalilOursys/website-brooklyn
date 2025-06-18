@@ -76,6 +76,7 @@ export default function Cart() {
                     <th>Prix</th>
                     <th>Quantité</th>
                     <th>Total</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -98,14 +99,14 @@ export default function Cart() {
                             href={`/product-detail/${elm.id}`}
                             className="cart-title link"
                           >
-                            {elm.title}
+                            {elm.name}
                           </Link>
-                          <span
+                          {/* <span
                             className="remove-cart link remove"
                             onClick={() => removeItem(elm.id)}
                           >
                             Retirer
-                          </span>
+                          </span> */}
                         </div>
                       </td>
                       <td
@@ -116,6 +117,13 @@ export default function Cart() {
                           {/* {parseFloat(elm.price).toFixed(3)} TND */}
                           {elm.discount > 0 ? (
                             <>
+                              {parseFloat(elm.discount).toFixed(3)} TND
+                            </>
+                          ) : (
+                            parseFloat(elm.price).toFixed(3) + ' TND'
+                          )}
+                          {/* {elm.discount > 0 ? (
+                            <>
                               <span style={{ textDecoration: 'line-through', marginRight: '5px', color: '#999' }}>
                                 {parseFloat(elm.price).toFixed(3)} TND
                               </span>
@@ -123,7 +131,7 @@ export default function Cart() {
                             </>
                           ) : (
                             parseFloat(elm.price).toFixed(3) + ' TND'
-                          )}
+                          )} */}
                         </div>
                       </td>
                       <td
@@ -181,22 +189,37 @@ export default function Cart() {
                         cart-data-title="Total"
                       >
                         <div
-                          className="cart-total"
+                          /* className="cart-total" */
                           style={{ minWidth: "60px" }}
                         >
                           {/* {(elm.price * elm.quantity).toFixed(3)} TND */}
-
                           {elm.discount > 0 ? (
                             <>
-                              <span style={{ textDecoration: 'line-through', marginRight: '5px', color: '#999' }}>
-                                {(elm.price * elm.quantity).toFixed(3)} TND
-                              </span>
                               {(elm.discount * elm.quantity).toFixed(3)} TND
                             </>
                           ) : (
                             (elm.price * elm.quantity).toFixed(3) + ' TND'
                           )}
+                          {/* {elm.discount > 0 ? (
+                            <>
+                              <span style={{ textDecoration: 'line-through', marginRight: '5px', color: '#999' }}>
+                                {(elm.price * elm.quantity).toFixed(3)} TND
+                              </span><br></br>
+                              {(elm.discount * elm.quantity).toFixed(3)} TND
+                            </>
+                          ) : (
+                            (elm.price * elm.quantity).toFixed(3) + ' TND'
+                          )} */}
                         </div>
+                      </td>
+                      <td className="tf-cart-item_product-remove">
+
+                        <span
+                          className="remove-cart link remove"
+                          onClick={() => removeItem(elm.id)}
+                        >
+                          <i className="fas fa-trash"></i> Retirer
+                        </span>
                       </td>
                     </tr>
                   ))}

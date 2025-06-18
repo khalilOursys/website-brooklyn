@@ -95,10 +95,10 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
       </li>
       <li className="menu-item">
         <a
-          href="/home2"
+          href="#"
           className={`item-link ${Linkfs} ${textColor}`}
         >
-          Accueil 2
+          À propos
         </a>
       </li>
       <li className="menu-item">
@@ -156,6 +156,14 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
             </div>
           </div>
         </div>
+      </li>
+      <li className="menu-item">
+        <a
+          href="#"
+          className={`item-link ${Linkfs} ${textColor}`}
+        >
+          Contact
+        </a>
       </li>
     </>
   );
