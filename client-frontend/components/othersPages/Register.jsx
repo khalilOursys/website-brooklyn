@@ -84,8 +84,8 @@ export default function Register() {
       if (data.message) {
         setError(data.message);
       } else {
-        localStorage.setItem("x-access-token", data.access_token);
-        router.push("/"); // Redirection vers la page d'accueil
+        /* localStorage.setItem("x-access-token", data.access_token); */
+        router.push("/login"); // Redirection vers la page d'accueil
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "L'inscription a échoué");

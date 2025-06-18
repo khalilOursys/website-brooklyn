@@ -516,7 +516,9 @@ p.top-bar-text span {
 .pack-block .on-sale-wrap.text-end,.pack-block span.price {
     display: none;
 }
-
+td.tf-cart-item_product-remove span.remove-cart.link.remove {
+    cursor: pointer;
+}
 @media (max-width: 768px) {
   .modal-content {
     max-height: 90vh;
