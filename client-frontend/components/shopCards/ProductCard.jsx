@@ -141,9 +141,9 @@ export const ProductCard = ({ product }) => {
         {product.discount ? (
           <span className="price">
             <span className="fw-4 text-sale">
-              {product.discount.toFixed(3)} TND
-            </span>{" "}
-            <span className="text_primary">{product.price.toFixed(3)} TND</span>
+              {product.price.toFixed(3)} TND
+            </span>
+            <span className="text_primary">{product.discount.toFixed(3)} TND</span>
           </span>
         ) : (
           <span className="price">{product.price.toFixed(3)} TND</span>
