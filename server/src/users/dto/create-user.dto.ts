@@ -21,6 +21,10 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
+  telephone?: string;
+
+  @IsOptional()
+  @IsString()
   firstName?: string;
 
   @IsOptional()

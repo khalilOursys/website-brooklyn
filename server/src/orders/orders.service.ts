@@ -53,7 +53,6 @@ export class OrdersService {
         `User with id ${createOrderDto.userId} does not exist.`,
       );
     }
-    console.log(createOrderDto.orderItems);
 
     // Create the order, nested order items, and clear cart in one transaction
     return await this.prisma.$transaction(async (prisma) => {

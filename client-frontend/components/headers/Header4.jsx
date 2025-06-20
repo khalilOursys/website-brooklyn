@@ -143,15 +143,16 @@ export default function Header4() {
                   </a>
                 </li> */}
 
-                {role === "BULK_CLIENT" && (
-                  <li className="nav-cart cart-lg line-left-1">
-                    <a href="/cart-bulk" className="nav-icon-item">
-                      {/* <i className="fas fa-wallet"></i> */}
-                      <i className="fas fa-pallet"></i>
-                      <span className="count-box">{totalBulk}</span>
-                    </a>
-                  </li>
-                )}
+                {user?.role === "BULK_CLIENT" &&
+                  user?.bulkRequests?.status?.toLowerCase() === "approuvée" && (
+                    <li className="nav-cart cart-lg line-left-1">
+                      <a href="/cart-bulk" className="nav-icon-item">
+                        {/* <i className="fas fa-wallet"></i> */}
+                        <i className="fas fa-pallet"></i>
+                        <span className="count-box">{totalBulk}</span>
+                      </a>
+                    </li>
+                  )}
                 <li className="nav-cart">
                   <a
                     href="#shoppingCart"

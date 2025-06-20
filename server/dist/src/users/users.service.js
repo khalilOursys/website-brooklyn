@@ -24,7 +24,7 @@ let UsersService = class UsersService {
             where: { email: createUserDto.email },
         });
         if (existingUser) {
-            throw new common_1.ConflictException('Email already in use');
+            throw new common_1.ConflictException('E-mail déjà utilisé');
         }
         const hashedPassword = await bcryptjs.hash(createUserDto.password, 10);
         return await this.prisma.user.create({
@@ -32,6 +32,7 @@ let UsersService = class UsersService {
                 email: createUserDto.email,
                 password: hashedPassword,
                 name: createUserDto.name,
+                telephone: createUserDto.telephone,
                 firstName: createUserDto.firstName,
                 lastName: createUserDto.lastName,
                 role: createUserDto.role,

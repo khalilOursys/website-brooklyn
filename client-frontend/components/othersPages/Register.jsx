@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Configuration from "@/configuration";
@@ -8,12 +8,16 @@ export default function Register() {
   const router = useRouter();
   const api = Configuration.BACK_BASEURL;
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState("");
 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
+    telephone: "",
+    confirmPassword: ""
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -22,10 +26,37 @@ export default function Register() {
     setShowPassword(!showPassword);
   };
 
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
   };
+
+  const checkPasswordStrength = (password) => {
+    if (password.length === 0) return "";
+
+    // Check password strength
+    const hasLetters = /[a-zA-Z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < 6) {
+      return "Faible";
+    } else if (password.length < 8 || !(hasLetters && hasNumbers)) {
+      return "Moyen";
+    } else if (hasLetters && hasNumbers && hasSpecialChars) {
+      return "Fort";
+    } else {
+      return "Moyen";
+    }
+  };
+
+  useEffect(() => {
+    setPasswordStrength(checkPasswordStrength(formData.password));
+  }, [formData.password]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,8 +73,14 @@ export default function Register() {
       return;
     }
 
-    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(formData.password)) {
-      setError("Le mot de passe doit contenir au moins 8 caractères avec majuscule, minuscule, chiffre et caractère spécial");
+    if (formData.password !== formData.confirmPassword) {
+      setError("Les mots de passe ne correspondent pas");
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setError("Le mot de passe doit contenir au moins 8 caractères");
       setIsLoading(false);
       return;
     }
@@ -60,7 +97,8 @@ export default function Register() {
           email: formData.email,
           password: formData.password,
           firstName: formData.firstName,
-          lastName: formData.lastName
+          lastName: formData.lastName,
+          telephone: formData.telephone,
         }),
       });
 
@@ -69,8 +107,10 @@ export default function Register() {
         throw new Error(errorData.message || "L'inscription a échoué");
       }
 
+      router.push("/login");
+
       // Inscription réussie - connexion automatique
-      const responseLogin = await fetch(`${api}auth/login`, {
+      /* const responseLogin = await fetch(`${api}auth/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -84,13 +124,26 @@ export default function Register() {
       if (data.message) {
         setError(data.message);
       } else {
-        /* localStorage.setItem("x-access-token", data.access_token); */
+        localStorage.setItem("x-access-token", data.access_token);
         router.push("/login"); // Redirection vers la page d'accueil
-      }
+      } */
     } catch (err) {
       setError(err instanceof Error ? err.message : "L'inscription a échoué");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const getPasswordStrengthColor = () => {
+    switch (passwordStrength) {
+      case "Faible":
+        return "text-danger";
+      case "Moyen":
+        return "text-warning";
+      case "Fort":
+        return "text-success";
+      default:
+        return "text-muted";
     }
   };
 
@@ -169,7 +222,25 @@ export default function Register() {
                   Email *
                 </label>
               </div>
-              <div className="tf-field style-1 mb_30">
+              <div className="tf-field style-1 mb_15">
+                <input
+                  className="tf-field-input tf-input"
+                  placeholder=" "
+                  type="text"
+                  id="property12"
+                  name="telephone"
+                  value={formData.telephone}
+                  onChange={handleInputChange}
+                  required
+                />
+                <label
+                  className="tf-field-label fw-4 text_black-2"
+                  htmlFor="property12"
+                >
+                  Téléphone
+                </label>
+              </div>
+              <div className="tf-field style-1 mb_15">
                 <div className="password-input-wrapper">
                   <input
                     className="tf-field-input tf-input"
@@ -179,7 +250,7 @@ export default function Register() {
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     required
                   />
                   <label
@@ -194,6 +265,43 @@ export default function Register() {
                     onClick={toggleShowPassword}
                   >
                     {showPassword ? (
+                      <i className="fas fa-eye-slash"></i>
+                    ) : (
+                      <i className="fas fa-eye"></i>
+                    )}
+                  </button>
+                </div>
+                {formData.password && (
+                  <div className={`mt-2 small ${getPasswordStrengthColor()}`}>
+                    Force du mot de passe: {passwordStrength}
+                  </div>
+                )}
+              </div>
+              <div className="tf-field style-1 mb_30">
+                <div className="password-input-wrapper">
+                  <input
+                    className="tf-field-input tf-input"
+                    placeholder=" "
+                    type={showConfirmPassword ? "text" : "password"}
+                    id="property5"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    autoComplete="new-password"
+                    required
+                  />
+                  <label
+                    className="tf-field-label fw-4 text_black-2"
+                    htmlFor="property5"
+                  >
+                    Confirmer le mot de passe *
+                  </label>
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={toggleShowConfirmPassword}
+                  >
+                    {showConfirmPassword ? (
                       <i className="fas fa-eye-slash"></i>
                     ) : (
                       <i className="fas fa-eye"></i>

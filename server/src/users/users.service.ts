@@ -25,7 +25,7 @@ export class UsersService {
       where: { email: createUserDto.email },
     });
     if (existingUser) {
-      throw new ConflictException('Email already in use');
+      throw new ConflictException('E-mail déjà utilisé');
     }
     // Hash the password using bcrypt
     const hashedPassword = await bcryptjs.hash(createUserDto.password, 10);
@@ -34,6 +34,7 @@ export class UsersService {
         email: createUserDto.email,
         password: hashedPassword,
         name: createUserDto.name,
+        telephone: createUserDto.telephone,
         firstName: createUserDto.firstName,
         lastName: createUserDto.lastName,
         role: createUserDto.role,

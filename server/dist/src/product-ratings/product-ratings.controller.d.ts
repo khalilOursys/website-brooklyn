@@ -17,6 +17,7 @@ export declare class ProductRatingsController {
             id: string;
             email: string;
             password: string;
+            telephone: string | null;
             name: string | null;
             firstName: string | null;
             lastName: string | null;

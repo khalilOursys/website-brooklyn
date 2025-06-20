@@ -519,6 +519,39 @@ p.top-bar-text span {
 td.tf-cart-item_product-remove span.remove-cart.link.remove {
     cursor: pointer;
 }
+
+//alert
+.Toastify__toast--success {
+  background: #07bc0c !important;
+  color: white !important;
+}
+
+.Toastify__progress-bar--success,
+.Toastify__progress-bar--error {
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+
+.Toastify__toast-body strong {
+  color: white;
+  font-size: 14px !important;
+}
+
+.Toastify__toast--error {
+  background-color: #e74c3c !important;
+}
+
+.Toastify__toast-icon {
+  display: none !important;
+}
+
+.Toastify__toast-body i {
+  margin-right: 5px;
+}
+
+.Toastify__toast-theme--light {
+  color: white !important;
+  font-size: 14px !important;
+}
 @media (max-width: 768px) {
   .modal-content {
     max-height: 90vh;

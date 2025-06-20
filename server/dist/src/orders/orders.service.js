@@ -23,7 +23,6 @@ let OrdersService = class OrdersService {
         if (!user) {
             throw new common_1.BadRequestException(`User with id ${createOrderDto.userId} does not exist.`);
         }
-        console.log(createOrderDto.orderItems);
         return await this.prisma.$transaction(async (prisma) => {
             const order = await prisma.order.create({
                 data: {

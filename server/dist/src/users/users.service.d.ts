@@ -12,6 +12,7 @@ export declare class UsersService {
         id: string;
         email: string;
         password: string;
+        telephone: string | null;
         name: string | null;
         firstName: string | null;
         lastName: string | null;
@@ -43,6 +44,8 @@ export declare class UsersService {
             id: string;
             userId: string;
             storeName: string;
+            rib: string | null;
+            taxNumber: string | null;
             legalDocs: string;
             status: string;
             reviewedById: string | null;
@@ -53,6 +56,7 @@ export declare class UsersService {
         id: string;
         email: string;
         password: string;
+        telephone: string | null;
         name: string | null;
         firstName: string | null;
         lastName: string | null;
@@ -66,6 +70,7 @@ export declare class UsersService {
         id: string;
         email: string;
         password: string;
+        telephone: string | null;
         name: string | null;
         firstName: string | null;
         lastName: string | null;
@@ -80,6 +85,8 @@ export declare class UsersService {
             id: string;
             userId: string;
             storeName: string;
+            rib: string | null;
+            taxNumber: string | null;
             legalDocs: string;
             status: string;
             reviewedById: string | null;
@@ -90,6 +97,7 @@ export declare class UsersService {
         id: string;
         email: string;
         password: string;
+        telephone: string | null;
         name: string | null;
         firstName: string | null;
         lastName: string | null;
@@ -104,6 +112,8 @@ export declare class UsersService {
             id: string;
             userId: string;
             storeName: string;
+            rib: string | null;
+            taxNumber: string | null;
             legalDocs: string;
             status: string;
             reviewedById: string | null;
@@ -114,6 +124,7 @@ export declare class UsersService {
         id: string;
         email: string;
         password: string;
+        telephone: string | null;
         name: string | null;
         firstName: string | null;
         lastName: string | null;
@@ -127,6 +138,7 @@ export declare class UsersService {
         id: string;
         email: string;
         password: string;
+        telephone: string | null;
         name: string | null;
         firstName: string | null;
         lastName: string | null;

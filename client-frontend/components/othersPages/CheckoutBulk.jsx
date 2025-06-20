@@ -59,7 +59,7 @@ export default function CheckoutBulk() {
         ...prev,
         firstName: user?.name?.split(' ')[0] || prev.firstName,
         lastName: user?.name?.split(' ').slice(1).join(' ') || prev.lastName,
-        phoneNumber: user?.phoneNumber || prev.phoneNumber
+        phoneNumber: user?.telephone || prev.telephone
       }));
     }
   }, [user]);
