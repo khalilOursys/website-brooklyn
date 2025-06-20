@@ -87,11 +87,12 @@ export default function Page() {
   const columns = [
     {
       header: "Nom",
-      accessorKey: "user.name",
-    },
-    {
-      header: "Email",
-      accessorKey: "user.email",
+      accessorKey: "user",
+      Cell: ({ cell }) => (
+        <span>
+          {cell.row.original.user.firstName + " " + cell.row.original.user.lastName}
+        </span>
+      ),
     },
     {
       header: "Total",
@@ -106,14 +107,6 @@ export default function Page() {
           {translateStatus(cell.getValue())}
         </span>
       ),
-    },
-    {
-      header: "Adresse",
-      accessorKey: "address",
-    },
-    {
-      header: "Téléphone",
-      accessorKey: "phoneNumber",
     },
     {
       accessorKey: "id",

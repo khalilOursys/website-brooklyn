@@ -1,4 +1,4 @@
-"use client"; // Marquer ceci comme un composant Client
+"use client";
 import { Button, Card, Container, Row, Col, Form, Table } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
-import { getOrderById } from "@/Redux/ordersReduce";
+import { getOrderById, editOrder } from "@/Redux/ordersReduce";
 
 export default function Page() {
   const notify = (type, msg) => {
@@ -22,9 +22,52 @@ export default function Page() {
   const router = useRouter();
   const { id } = useParams();
 
-  // Déclarations des états
+  // State declarations
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+
+  // Status translation and flow logic
+  const translateStatus = (status) => {
+    const translations = {
+      'pending': 'En attente',
+      'processing': 'En cours de traitement',
+      'shipped': 'Expédié',
+      'completed': 'Terminé',
+      'cancelled': 'Annuler'
+    };
+    return translations[status.toLowerCase()] || status;
+  };
+
+  const getStatusBadgeColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'en attente': return 'warning';
+      case 'en cours de traitement': return 'info';
+      case 'expédié': return 'primary';
+      case 'terminé': return 'success';
+      case 'annuler': return 'danger';
+      default: return 'secondary';
+    }
+  };
+
+  const getNextStatus = (currentStatus) => {
+    const statusFlow = ['en attente', 'en cours de traitement', 'expédié', 'terminé'];
+    const currentIndex = statusFlow.indexOf(currentStatus.toLowerCase());
+    return currentIndex < statusFlow.length - 1 ? statusFlow[currentIndex + 1] : currentStatus;
+  };
+
+  const updateOrderStatus = async (newStatus) => {
+    try {
+      setUpdatingStatus(true);
+      await dispatch(editOrder({ id, status: newStatus })).unwrap();
+      notify(1, `Statut de la commande mis à jour en ${translateStatus(newStatus)}`);
+      fetchOrder(id); // Refresh order data
+    } catch (error) {
+      notify(2, error.message || 'Échec de la mise à jour du statut');
+    } finally {
+      setUpdatingStatus(false);
+    }
+  };
 
   const fetchOrder = useCallback(
     async (id) => {
@@ -49,7 +92,7 @@ export default function Page() {
   }, [id, fetchOrder]);
 
   const listOrders = () => {
-    router.push("/orders");
+    router.push("/ordersBulks");
   };
 
   const formatDate = (dateString) => {
@@ -91,7 +134,7 @@ export default function Page() {
                                     <Form.Group>
                                       <label>Client</label>
                                       <Form.Control
-                                        value={order.user?.name || 'N/A'}
+                                        value={order.user.firstName + " " + order.user.lastName || 'N/A'}
                                         placeholder="Client"
                                         name="client"
                                         type="text"
@@ -129,7 +172,7 @@ export default function Page() {
                                     <Form.Group>
                                       <label>Statut</label>
                                       <Form.Control
-                                        value={order.status || 'N/A'}
+                                        value={translateStatus(order.status) || 'N/A'}
                                         placeholder="Statut"
                                         name="status"
                                         type="text"
@@ -190,6 +233,33 @@ export default function Page() {
                                     </Form.Group>
                                   </Col>
                                 </Row>
+
+                                {/* Status Update Buttons */}
+                                <Row className="mt-3">
+                                  <Col md="12">
+                                    <div className="d-flex gap-2">
+                                      {getNextStatus(order.status) !== order.status.toLowerCase() && (
+                                        <Button
+                                          onClick={() => updateOrderStatus(getNextStatus(order.status))}
+                                          variant="success"
+                                          disabled={updatingStatus}
+                                        >
+                                          {updatingStatus ? 'Traitement...' :
+                                            `Passer à ${translateStatus(getNextStatus(order.status))}`}
+                                        </Button>
+                                      )}
+
+                                      <Button
+                                        onClick={() => updateOrderStatus('Annuler')}
+                                        variant="danger"
+                                        disabled={updatingStatus}
+                                      >
+                                        Annuler la commande
+                                      </Button>
+                                    </div>
+                                  </Col>
+                                </Row>
+
                                 <Row className="mt-4">
                                   <Col md="12">
                                     <h5>Articles commandés</h5>
@@ -207,7 +277,6 @@ export default function Page() {
                                           <tr key={index}>
                                             <td>
                                               {order.isBulk === 0 ? item.product?.name : item.bulk?.name}
-                                              {/* {item.variant && ` (${item.variant.name})`} */}
                                             </td>
                                             <td>{item.quantity}</td>
                                             <td>{item.bulk.discount === 0 ? item.bulk.bulkPrice : item.bulk?.discount} TND</td>
