@@ -7,11 +7,11 @@ export declare class OrdersService {
     create(createOrderDto: CreateOrderDto): Promise<{
         orderItems: {
             id: string;
-            price: number;
             productId: string | null;
-            quantity: number;
             variantId: string | null;
             bulkId: string | null;
+            quantity: number;
+            price: number;
             bundleId: string | null;
             orderId: string;
         }[];
@@ -19,9 +19,9 @@ export declare class OrdersService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        isBulk: number;
         userId: string;
         status: string;
+        isBulk: number;
         total: number;
         address: string;
         phoneNumber: string;
@@ -44,11 +44,11 @@ export declare class OrdersService {
         };
         orderItems: {
             id: string;
-            price: number;
             productId: string | null;
-            quantity: number;
             variantId: string | null;
             bulkId: string | null;
+            quantity: number;
+            price: number;
             bundleId: string | null;
             orderId: string;
         }[];
@@ -56,9 +56,9 @@ export declare class OrdersService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        isBulk: number;
         userId: string;
         status: string;
+        isBulk: number;
         total: number;
         address: string;
         phoneNumber: string;
@@ -83,19 +83,19 @@ export declare class OrdersService {
             product: ({
                 images: {
                     id: string;
+                    productId: string;
                     url: string;
                     isPrimary: boolean;
-                    productId: string;
                 }[];
             } & {
                 id: string;
                 name: string;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
-                price: number;
-                stock: number;
                 isBulk: boolean;
+                price: number;
+                description: string | null;
+                stock: number;
                 discount: number | null;
                 isFeatured: boolean;
                 specs: import("@prisma/client/runtime/library").JsonValue | null;
@@ -107,36 +107,36 @@ export declare class OrdersService {
             variant: {
                 id: string;
                 name: string;
+                productId: string;
                 price: number | null;
                 stock: number;
-                productId: string;
-            } | null;
-            bundle: {
-                id: string;
-                name: string;
-                createdAt: Date;
-                img: string | null;
-                discount: number;
-                expiresAt: Date | null;
             } | null;
             bulk: {
                 id: string;
                 name: string | null;
                 createdAt: Date;
                 updatedAt: Date;
+                productId: string;
                 description: string | null;
                 discount: number | null;
-                productId: string;
                 bulkPrice: number;
                 minQuantity: number;
             } | null;
+            bundle: {
+                id: string;
+                name: string;
+                createdAt: Date;
+                discount: number;
+                expiresAt: Date | null;
+                img: string | null;
+            } | null;
         } & {
             id: string;
-            price: number;
             productId: string | null;
-            quantity: number;
             variantId: string | null;
             bulkId: string | null;
+            quantity: number;
+            price: number;
             bundleId: string | null;
             orderId: string;
         })[];
@@ -144,9 +144,9 @@ export declare class OrdersService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        isBulk: number;
         userId: string;
         status: string;
+        isBulk: number;
         total: number;
         address: string;
         phoneNumber: string;
@@ -156,9 +156,9 @@ export declare class OrdersService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        isBulk: number;
         userId: string;
         status: string;
+        isBulk: number;
         total: number;
         address: string;
         phoneNumber: string;
@@ -168,9 +168,9 @@ export declare class OrdersService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        isBulk: number;
         userId: string;
         status: string;
+        isBulk: number;
         total: number;
         address: string;
         phoneNumber: string;
@@ -197,10 +197,10 @@ export declare class OrdersService {
                 name: string;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
-                price: number;
-                stock: number;
                 isBulk: boolean;
+                price: number;
+                description: string | null;
+                stock: number;
                 discount: number | null;
                 isFeatured: boolean;
                 specs: import("@prisma/client/runtime/library").JsonValue | null;
@@ -212,17 +212,17 @@ export declare class OrdersService {
             variant: {
                 id: string;
                 name: string;
+                productId: string;
                 price: number | null;
                 stock: number;
-                productId: string;
             } | null;
         } & {
             id: string;
-            price: number;
             productId: string | null;
-            quantity: number;
             variantId: string | null;
             bulkId: string | null;
+            quantity: number;
+            price: number;
             bundleId: string | null;
             orderId: string;
         })[];
@@ -230,9 +230,9 @@ export declare class OrdersService {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        isBulk: number;
         userId: string;
         status: string;
+        isBulk: number;
         total: number;
         address: string;
         phoneNumber: string;
