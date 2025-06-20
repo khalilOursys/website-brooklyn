@@ -31,6 +31,8 @@ export declare class AuthController {
             id: string;
             userId: string;
             storeName: string;
+            rib: string | null;
+            taxNumber: string | null;
             legalDocs: string;
             status: string;
             reviewedById: string | null;
@@ -41,6 +43,7 @@ export declare class AuthController {
         id: string;
         email: string;
         password: string;
+        telephone: string | null;
         name: string | null;
         firstName: string | null;
         lastName: string | null;

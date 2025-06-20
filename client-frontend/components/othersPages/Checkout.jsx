@@ -32,7 +32,7 @@ export default function Checkout() {
         ...prev,
         firstName: user?.name?.split(' ')[0] || prev.firstName,
         lastName: user?.name?.split(' ').slice(1).join(' ') || prev.lastName,
-        phoneNumber: user?.phoneNumber || prev.phoneNumber
+        phoneNumber: user?.telephone || prev.telephone
       }));
     }
   }, [user]);
@@ -90,7 +90,6 @@ export default function Checkout() {
         total: totalPrice,
         orderItems
       };
-      console.log(cartProducts);
 
       // Send the request to your API  `${api}orders`
       const response = await fetch(`${api}orders`, {

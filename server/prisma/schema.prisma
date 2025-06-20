@@ -23,6 +23,7 @@ model User {
   id                   String              @id @default(uuid())
   email                String              @unique
   password             String
+  telephone            String?
   name                 String?
   firstName            String?
   lastName             String?
@@ -46,6 +47,8 @@ model BulkClientRequest {
   userId       String    @unique
   user         User      @relation(fields: [userId], references: [id])
   storeName    String
+  rib          String?
+  taxNumber    String?
   legalDocs    String
   status       String    @default("en attente")
   reviewedById String?

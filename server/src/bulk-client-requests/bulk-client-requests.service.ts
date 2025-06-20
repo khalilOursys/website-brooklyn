@@ -20,9 +20,12 @@ export class BulkClientRequestsService {
         name: data.name,
         firstName: data.firstName,
         lastName: data.lastName,
+        telephone: data.telephone,
         role: 'BULK_CLIENT',
         bulkRequests: {
           create: {
+            rib: data.rib,
+            taxNumber: data.taxNumber,
             storeName: data.storeName,
             legalDocs: data.legalDocs,
             status: 'en attente',

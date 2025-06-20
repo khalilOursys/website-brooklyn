@@ -15,6 +15,18 @@ export class UpdateUserBulkRequestDto {
 
   @IsOptional()
   @IsString()
+  telephone?: string;
+
+  @IsOptional()
+  @IsString()
+  rib?: string;
+
+  @IsOptional()
+  @IsString()
+  taxNumber?: string;
+
+  @IsOptional()
+  @IsString()
   firstName?: string;
 
   @IsOptional()

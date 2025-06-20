@@ -3,11 +3,11 @@ import { useContextElement } from "@/context/Context";
 import { products1 } from "@/data/products";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pagination } from "swiper/modules";
 export default function ShopCart() {
   // Ensure localStorage is only accessed in the browser
-  let token = localStorage.getItem("x-access-token");
+  const [token, setToken] = useState(null);
   const { cartProducts, totalPrice, setCartProducts, setQuickViewItem } =
     useContextElement();
   const setQuantity = (id, quantity) => {
@@ -27,7 +27,13 @@ export default function ShopCart() {
   const addNoteRef = useRef();
   const addGiftRef = useRef();
   const addShipingRef = useRef();
+  useEffect(() => {
+    // This code will only run on the client side
 
+    let access = localStorage.getItem("x-access-token");
+    setToken(access);
+    // ... use the data
+  }, []);
   return (
     <div className="modal fullRight fade modal-shopping-cart" id="shoppingCart">
       <div className="modal-dialog">

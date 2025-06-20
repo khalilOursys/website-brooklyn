@@ -54,9 +54,9 @@ export default function Page() {
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         notify(1, "Utilisateur créé avec succès");
-        setTimeout(() => {
+        /* setTimeout(() => {
           router.push("/users");
-        }, 1500);
+        }, 1500); */
       } else if (action.meta.requestStatus === "rejected") {
         notify(2, action.payload.message || "Une erreur s'est produite");
       }

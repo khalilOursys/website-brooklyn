@@ -6,6 +6,7 @@ Table User {
   id String [pk]
   email String [unique, not null]
   password String [not null]
+  telephone String
   name String
   firstName String
   lastName String
@@ -29,6 +30,8 @@ Table BulkClientRequest {
   userId String [unique, not null]
   user User [not null]
   storeName String [not null]
+  rib String
+  taxNumber String
   legalDocs String [not null]
   status String [not null, default: 'en attente']
   reviewedById String

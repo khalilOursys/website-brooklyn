@@ -49,7 +49,6 @@ export default function QuickAdd() {
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="header">
-            {console.log(item?.isPacks)}
             <span className="icon-close icon-close-popup" data-bs-dismiss="modal" />
           </div>
           <div className="wrap">

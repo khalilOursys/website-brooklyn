@@ -11,7 +11,6 @@ import RecentProducts from "@/components/shopDetails/RecentProducts";
 async function getProductById(id) {
   const api = Configuration.BACK_BASEURL;
   try {
-    console.log(`${api}productBundles/getProductBundlesById/${id}`);
 
     const response = await fetch(`${api}productBundles/getProductBundlesById/${id}`); // Replace with your backend URL
     if (!response.ok) {

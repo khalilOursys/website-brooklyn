@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 export const ProductBulkCard = ({ product }) => {
-  console.log(product);
 
   return (
     <div className="card-product fl-item" key={product.id}>
