@@ -26,6 +26,7 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [telephone, setTelephone] = useState("");
   const [role, setRole] = useState("MANAGER");
 
   const submitForm = async (event) => {
@@ -46,6 +47,7 @@ export default function Page() {
       password,
       firstName: firstName || "",
       lastName: lastName || "",
+      telephone: telephone || "",
       role: role || "MANAGER",
     };
 
@@ -54,9 +56,9 @@ export default function Page() {
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
         notify(1, "Utilisateur créé avec succès");
-        /* setTimeout(() => {
+        setTimeout(() => {
           router.push("/users");
-        }, 1500); */
+        }, 1500);
       } else if (action.meta.requestStatus === "rejected") {
         notify(2, action.payload.message || "Une erreur s'est produite");
       }
@@ -173,6 +175,18 @@ export default function Page() {
                                       </option>
                                     ))}
                                   </Form.Select>
+                                </Form.Group>
+                              </Col>
+                              <Col className="pr-1" md="6">
+                                <Form.Group>
+                                  <label>Téléphone</label>
+                                  <Form.Control
+                                    value={telephone}
+                                    placeholder="Téléphone"
+                                    name="telephone"
+                                    type="text"
+                                    onChange={(e) => setTelephone(e.target.value)}
+                                  />
                                 </Form.Group>
                               </Col>
                             </Row>

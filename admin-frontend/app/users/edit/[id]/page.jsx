@@ -26,6 +26,7 @@ export default function Page() {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [telephone, setTelephone] = useState("");
   const [role, setRole] = useState("MANAGER");
 
   const fetchUser = useCallback(
@@ -36,6 +37,7 @@ export default function Page() {
       setEmail(data.email);
       setFirstName(data.firstName || "");
       setLastName(data.lastName || "");
+      setTelephone(data.telephone || "");
       setRole(data.role || "MANAGER");
     },
     [dispatch]
@@ -64,6 +66,7 @@ export default function Page() {
       password: password || "",
       firstName: firstName || "",
       lastName: lastName || "",
+      telephone: telephone || "",
       role: role || "MANAGER",
     };
 
@@ -188,6 +191,18 @@ export default function Page() {
                                       </option>
                                     ))}
                                   </Form.Select>
+                                </Form.Group>
+                              </Col>
+                              <Col className="pr-1" md="6">
+                                <Form.Group>
+                                  <label>Téléphone</label>
+                                  <Form.Control
+                                    value={telephone}
+                                    placeholder="Téléphone"
+                                    name="telephone"
+                                    type="text"
+                                    onChange={(e) => setTelephone(e.target.value)}
+                                  />
                                 </Form.Group>
                               </Col>
                             </Row>
