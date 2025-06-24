@@ -13,6 +13,8 @@ services:
       - .env
     depends_on:
       - postgres
+    volumes:
+      - ./server/uploads:/app/uploads
     restart: unless-stopped
 
   client-frontend:
@@ -21,8 +23,6 @@ services:
       - .env
     depends_on:
       - backend
-    volumes:
-      - ./server/uploads:/app/uploads
     restart: unless-stopped
 
   admin-frontend:
