@@ -17,7 +17,7 @@
 /.next/
 /out/
 #upload
-
+/uploads
 # production
 /build
 /dist
