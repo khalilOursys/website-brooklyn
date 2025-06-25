@@ -8,6 +8,7 @@ export declare class ProductRecommendationsService {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
+        color: string | null;
         price: number;
         stock: number;
         isBulk: boolean;

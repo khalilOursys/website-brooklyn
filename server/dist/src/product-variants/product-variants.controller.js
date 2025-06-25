@@ -24,8 +24,8 @@ let ProductVariantsController = class ProductVariantsController {
     async create(createProductVariantDto) {
         return await this.productVariantsService.create(createProductVariantDto);
     }
-    async findAll(productId) {
-        return await this.productVariantsService.findAll(productId);
+    async findAll() {
+        return await this.productVariantsService.findAll();
     }
     async findOne(id) {
         return await this.productVariantsService.findOne(id);
@@ -47,9 +47,8 @@ __decorate([
 ], ProductVariantsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('productId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ProductVariantsController.prototype, "findAll", null);
 __decorate([

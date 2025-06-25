@@ -10,7 +10,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProductVariantDto = void 0;
+const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
+class ProductImageDto {
+    constructor() {
+        this.isPrimary = false;
+    }
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ProductImageDto.prototype, "url", void 0);
+__decorate([
+    (0, class_validator_1.IsBoolean)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], ProductImageDto.prototype, "isPrimary", void 0);
 class CreateProductVariantDto {
 }
 exports.CreateProductVariantDto = CreateProductVariantDto;
@@ -29,8 +44,15 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateProductVariantDto.prototype, "stock", void 0);
 __decorate([
+    (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateProductVariantDto.prototype, "price", void 0);
+    __metadata("design:type", String)
+], CreateProductVariantDto.prototype, "color", void 0);
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => ProductImageDto),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateProductVariantDto.prototype, "images", void 0);
 //# sourceMappingURL=create-product-variant.dto.js.map

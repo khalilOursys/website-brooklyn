@@ -64,7 +64,8 @@ export declare class ProductBundlesController {
                     id: string;
                     url: string;
                     isPrimary: boolean;
-                    productId: string;
+                    variantId: string | null;
+                    productId: string | null;
                 }[];
             } & {
                 id: string;
@@ -72,6 +73,7 @@ export declare class ProductBundlesController {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                color: string | null;
                 price: number;
                 stock: number;
                 isBulk: boolean;

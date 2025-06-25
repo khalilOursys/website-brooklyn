@@ -112,6 +112,41 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                       </ul>
                     </div>
                   )}
+                  <div className="tf-product-info-variant-picker">
+                    <div className="variant-picker-item">
+                      <div className="variant-picker-label">
+                        Color:
+                        <span className="fw-6 variant-picker-label-value">
+                          {currentColor.value}
+                        </span>
+                      </div>
+                      <form className="variant-picker-values">
+                        {colors.map((color) => (
+                          <React.Fragment key={color.id}>
+                            <input
+                              id={color.id}
+                              type="radio"
+                              name="color1"
+                              readOnly
+                              checked={currentColor == color}
+                            />
+                            <label
+                              onClick={() => setCurrentColor(color)}
+                              className="hover-tooltip radius-60"
+                              htmlFor={color.id}
+                              data-value={color.value}
+                            >
+                              <span
+                                className="btn-checkbox"
+                                style={{ backgroundColor: color.value }}
+                              />
+                              <span className="tooltip">{color.value}</span>
+                            </label>
+                          </React.Fragment>
+                        ))}
+                      </form>
+                    </div>
+                  </div>
                   <div className="tf-product-info-quantity">
                     <div className="quantity-title fw-6">Quantity</div>
                     <Quantity

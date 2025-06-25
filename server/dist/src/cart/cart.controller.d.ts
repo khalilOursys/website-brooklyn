@@ -11,7 +11,8 @@ export declare class CartController {
                     id: string;
                     url: string;
                     isPrimary: boolean;
-                    productId: string;
+                    variantId: string | null;
+                    productId: string | null;
                 }[];
             } & {
                 id: string;
@@ -19,6 +20,7 @@ export declare class CartController {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                color: string | null;
                 price: number;
                 stock: number;
                 isBulk: boolean;
@@ -43,9 +45,9 @@ export declare class CartController {
             } | null;
         } & {
             id: string;
+            variantId: string | null;
             productId: string;
             quantity: number;
-            variantId: string | null;
             bulkId: string | null;
             cartId: string;
         })[];
@@ -56,25 +58,25 @@ export declare class CartController {
     }) | null>;
     addCartItem(createCartItemDto: CreateCartItemDto): Promise<{
         id: string;
+        variantId: string | null;
         productId: string;
         quantity: number;
-        variantId: string | null;
         bulkId: string | null;
         cartId: string;
     }>;
     updateCartItem(id: string, updateCartItemDto: UpdateCartItemDto): Promise<{
         id: string;
+        variantId: string | null;
         productId: string;
         quantity: number;
-        variantId: string | null;
         bulkId: string | null;
         cartId: string;
     }>;
     removeCartItem(id: string): Promise<{
         id: string;
+        variantId: string | null;
         productId: string;
         quantity: number;
-        variantId: string | null;
         bulkId: string | null;
         cartId: string;
     }>;

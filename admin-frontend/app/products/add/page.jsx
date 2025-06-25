@@ -45,7 +45,7 @@ export default function Page() {
   // États pour les marques et catégories
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
-
+  const [color, setColor] = useState('Black');
   // Récupération des marques et catégories
   const fetchBrands = useCallback(async () => {
     try {
@@ -183,6 +183,7 @@ export default function Page() {
         isFeatured,
         stock,
         images,
+        color,
         categoryId: categoryId.value,
         brandId: brandId ? brandId.value : null,
         attributes: attributes.filter(attr => attr.key.trim() && attr.value.trim())
@@ -344,7 +345,33 @@ export default function Page() {
                                 </Form.Group>
                               </Col>
                             </Row>
-
+                            <Row>
+                              <Col md="6">
+                                <Form.Group>
+                                  <label>Couleur du produit</label>
+                                  <div className="d-flex align-items-center">
+                                    <Form.Control
+                                      type="color"
+                                      value={color}
+                                      onChange={(e) => setColor(e.target.value)}
+                                      className="form-control-color me-3"
+                                      style={{ width: '50px', height: '50px' }}
+                                      title="Choisissez une couleur"
+                                    />
+                                    <div
+                                      style={{
+                                        backgroundColor: color,
+                                        width: '50px',
+                                        height: '50px',
+                                        borderRadius: '4px',
+                                        border: '1px solid #ddd'
+                                      }}
+                                    ></div>
+                                    {/* <span className="ms-3">{color.toUpperCase()}</span> */}
+                                  </div>
+                                </Form.Group>
+                              </Col>
+                            </Row>
                             {/* Attributs du produit */}
                             <Row>
                               <Col md="12">

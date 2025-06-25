@@ -1,5 +1,22 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsArray,
+  ValidateNested,
+  IsBoolean,
+} from 'class-validator';
 
+class ProductImageDto {
+  @IsString()
+  url: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isPrimary?: boolean = false;
+}
 export class CreateProductVariantDto {
   @IsString()
   @IsNotEmpty()
@@ -12,7 +29,13 @@ export class CreateProductVariantDto {
   @IsNumber()
   stock: number;
 
+  @IsString()
   @IsOptional()
-  @IsNumber()
-  price?: number; // Override price, if any
+  color?: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ProductImageDto)
+  @IsOptional()
+  images?: ProductImageDto[];
 }

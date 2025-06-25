@@ -61,6 +61,7 @@ model Product {
   id             String               @id @default(uuid())
   name           String
   description    String?
+  color          String?              @default("Black")
   price          Float
   stock          Int
   isBulk         Boolean              @default(false)
@@ -109,8 +110,10 @@ model BulkProduct {
 
 model ProductImage {
   id        String  @id @default(uuid())
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id])
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id])
   url       String
   isPrimary Boolean @default(false)
 }
@@ -121,7 +124,8 @@ model ProductVariant {
   product     Product      @relation(fields: [productId], references: [id])
   name        String
   stock       Int
-  price       Float?
+  color       String? 
+  images      ProductImage[]
   orderItems  OrderItem[]
   cartItems   CartItem[]
   stockAlerts StockAlert[]

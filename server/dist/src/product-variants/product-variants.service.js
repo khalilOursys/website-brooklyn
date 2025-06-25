@@ -17,37 +17,102 @@ let ProductVariantsService = class ProductVariantsService {
         this.prisma = prisma;
     }
     async create(createProductVariantDto) {
-        const product = await this.prisma.product.findUnique({
-            where: { id: createProductVariantDto.productId },
+        const { images, productId, ...variantData } = createProductVariantDto;
+        const productExists = await this.prisma.product.count({
+            where: { id: productId },
         });
-        if (!product) {
-            throw new common_1.NotFoundException(`Product with id ${createProductVariantDto.productId} not found`);
+        if (!productExists) {
+            throw new common_1.NotFoundException(`Product with id ${productId} not found`);
         }
-        return await this.prisma.productVariant.create({
+        return this.prisma.productVariant.create({
             data: {
-                ...createProductVariantDto,
+                ...variantData,
+                productId,
+                images: images
+                    ? {
+                        createMany: {
+                            data: images.map((img) => ({
+                                url: img.url,
+                                isPrimary: img.isPrimary || false,
+                            })),
+                        },
+                    }
+                    : undefined,
+            },
+            include: {
+                images: true,
+                product: {
+                    include: {
+                        category: true,
+                        brand: true,
+                    },
+                },
             },
         });
     }
     async findAll(productId) {
-        const filter = productId ? { productId } : {};
         return await this.prisma.productVariant.findMany({
-            where: filter,
+            include: {
+                images: true,
+                product: {
+                    include: {
+                        category: true,
+                        brand: true,
+                    },
+                },
+            },
             orderBy: { id: 'asc' },
         });
     }
     async findOne(id) {
-        const variant = await this.prisma.productVariant.findUnique({ where: { id } });
+        const variant = await this.prisma.productVariant.findUnique({
+            where: { id },
+            include: {
+                images: true,
+                product: {
+                    include: {
+                        category: true,
+                        brand: true,
+                    },
+                },
+            },
+        });
         if (!variant) {
             throw new common_1.NotFoundException(`Product variant with id ${id} not found`);
         }
         return variant;
     }
     async update(id, updateProductVariantDto) {
-        await this.findOne(id);
-        return await this.prisma.productVariant.update({
-            where: { id },
-            data: updateProductVariantDto,
+        const { images, productId, ...variantData } = updateProductVariantDto;
+        return this.prisma.$transaction(async (prisma) => {
+            await Promise.all([
+                prisma.productImage.deleteMany({ where: { variantId: id } }),
+            ]);
+            await prisma.productVariant.update({
+                where: { id },
+                data: variantData,
+            });
+            if (images && images.length > 0) {
+                await prisma.productImage.createMany({
+                    data: images.map((img) => ({
+                        variantId: id,
+                        url: img.url,
+                        isPrimary: img.isPrimary || false,
+                    })),
+                });
+            }
+            return prisma.productVariant.findUnique({
+                where: { id },
+                include: {
+                    images: true,
+                    product: {
+                        include: {
+                            category: true,
+                            brand: true,
+                        },
+                    },
+                },
+            });
         });
     }
     async remove(id) {
