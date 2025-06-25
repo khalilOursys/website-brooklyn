@@ -34,6 +34,10 @@ export class CreateProductDto {
   @IsOptional()
   description?: string;
 
+  @IsString()
+  @IsOptional()
+  color?: string;
+
   @IsNumber()
   price: number;
 

@@ -23,6 +23,7 @@ export declare class BulkProductsService {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            color: string | null;
             price: number;
             stock: number;
             isBulk: boolean;
@@ -72,7 +73,8 @@ export declare class BulkProductsService {
                 id: string;
                 url: string;
                 isPrimary: boolean;
-                productId: string;
+                variantId: string | null;
+                productId: string | null;
             }[];
             attributes: {
                 id: string;
@@ -86,6 +88,7 @@ export declare class BulkProductsService {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            color: string | null;
             price: number;
             stock: number;
             isBulk: boolean;
@@ -166,7 +169,8 @@ export declare class BulkProductsService {
                     id: string;
                     url: string;
                     isPrimary: boolean;
-                    productId: string;
+                    variantId: string | null;
+                    productId: string | null;
                 }[];
             } & {
                 id: string;
@@ -174,6 +178,7 @@ export declare class BulkProductsService {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                color: string | null;
                 price: number;
                 stock: number;
                 isBulk: boolean;

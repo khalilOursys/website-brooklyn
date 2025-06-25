@@ -24,6 +24,12 @@ const routesData = [
     role: ["admin"],
   },
   {
+    path: "/productVariant",
+    name: "Variantes produit",
+    icon: "fas fa-bezier-curve", // or choose any appropriate icon
+    role: ["admin"],
+  },
+  {
     path: "/bulkProducts",
     name: "Produits en gros",
     icon: "fas fa-boxes",

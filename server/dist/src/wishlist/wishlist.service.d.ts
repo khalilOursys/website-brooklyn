@@ -16,6 +16,7 @@ export declare class WishlistService {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            color: string | null;
             price: number;
             stock: number;
             isBulk: boolean;

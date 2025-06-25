@@ -27,9 +27,30 @@ async function main() {
         prisma.user.deleteMany(),
     ]);
     const users = await Promise.all([
-        prisma.user.create({ data: { email: 'admin@techstore.com', password: 'hashedpassword123', name: 'Admin User', role: client_1.Role.ADMIN } }),
-        prisma.user.create({ data: { email: 'client@techstore.com', password: 'hashedpassword123', name: 'John Doe', role: client_1.Role.CLIENT } }),
-        prisma.user.create({ data: { email: 'bulk@techstore.com', password: 'hashedpassword123', name: 'Bulk Buyer', role: client_1.Role.BULK_CLIENT } }),
+        prisma.user.create({
+            data: {
+                email: 'admin@techstore.com',
+                password: 'hashedpassword123',
+                name: 'Admin User',
+                role: client_1.Role.ADMIN,
+            },
+        }),
+        prisma.user.create({
+            data: {
+                email: 'client@techstore.com',
+                password: 'hashedpassword123',
+                name: 'John Doe',
+                role: client_1.Role.CLIENT,
+            },
+        }),
+        prisma.user.create({
+            data: {
+                email: 'bulk@techstore.com',
+                password: 'hashedpassword123',
+                name: 'Bulk Buyer',
+                role: client_1.Role.BULK_CLIENT,
+            },
+        }),
     ]);
     const categories = await Promise.all([
         prisma.category.create({
@@ -68,12 +89,8 @@ async function main() {
             categoryId: categories[0].id,
             brandId: brands[0].id,
             images: {
-                create: [{ url: 'https://example.com/laptop-pro.jpg', isPrimary: true }],
-            },
-            variants: {
                 create: [
-                    { name: 'Silver', stock: 30, price: 1299.99 },
-                    { name: 'Black', stock: 20, price: 1349.99 },
+                    { url: 'https://example.com/laptop-pro.jpg', isPrimary: true },
                 ],
             },
             attributes: {
@@ -107,7 +124,9 @@ async function main() {
             categoryId: categories[1].id,
             brandId: brands[1].id,
             images: {
-                create: [{ url: 'https://example.com/smartphone-x.jpg', isPrimary: true }],
+                create: [
+                    { url: 'https://example.com/smartphone-x.jpg', isPrimary: true },
+                ],
             },
         },
     });

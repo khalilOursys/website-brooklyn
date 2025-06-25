@@ -44,6 +44,7 @@ Table Product {
   id String [pk]
   name String [not null]
   description String
+  color String [default: 'Black']
   price Float [not null]
   stock Int [not null]
   isBulk Boolean [not null, default: false]
@@ -90,8 +91,10 @@ Table BulkProduct {
 
 Table ProductImage {
   id String [pk]
-  productId String [not null]
-  product Product [not null]
+  productId String
+  product Product
+  variantId String
+  variant ProductVariant
   url String [not null]
   isPrimary Boolean [not null, default: false]
 }
@@ -102,7 +105,8 @@ Table ProductVariant {
   product Product [not null]
   name String [not null]
   stock Int [not null]
-  price Float
+  color String
+  images ProductImage [not null]
   orderItems OrderItem [not null]
   cartItems CartItem [not null]
   stockAlerts StockAlert [not null]
@@ -346,6 +350,8 @@ Ref: Product.brandId > Brand.id
 Ref: BulkProduct.productId - Product.id
 
 Ref: ProductImage.productId > Product.id
+
+Ref: ProductImage.variantId > ProductVariant.id
 
 Ref: ProductVariant.productId > Product.id
 

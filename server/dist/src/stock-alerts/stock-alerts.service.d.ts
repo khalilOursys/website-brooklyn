@@ -7,43 +7,43 @@ export declare class StockAlertsService {
     create(createStockAlertDto: CreateStockAlertDto): Promise<{
         id: string;
         createdAt: Date;
+        variantId: string | null;
         productId: string;
         userId: string;
-        variantId: string | null;
     }>;
     findAll(): Promise<{
         id: string;
         createdAt: Date;
+        variantId: string | null;
         productId: string;
         userId: string;
-        variantId: string | null;
     }[]>;
     findByUser(userId: string): Promise<{
         id: string;
         createdAt: Date;
+        variantId: string | null;
         productId: string;
         userId: string;
-        variantId: string | null;
     }[]>;
     findOne(id: string): Promise<{
         id: string;
         createdAt: Date;
+        variantId: string | null;
         productId: string;
         userId: string;
-        variantId: string | null;
     }>;
     update(id: string, updateStockAlertDto: UpdateStockAlertDto): Promise<{
         id: string;
         createdAt: Date;
+        variantId: string | null;
         productId: string;
         userId: string;
-        variantId: string | null;
     }>;
     remove(id: string): Promise<{
         id: string;
         createdAt: Date;
+        variantId: string | null;
         productId: string;
         userId: string;
-        variantId: string | null;
     }>;
 }

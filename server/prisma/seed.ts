@@ -30,9 +30,30 @@ async function main() {
 
   // Users
   const users = await Promise.all([
-    prisma.user.create({ data: { email: 'admin@techstore.com', password: 'hashedpassword123', name: 'Admin User', role: Role.ADMIN } }),
-    prisma.user.create({ data: { email: 'client@techstore.com', password: 'hashedpassword123', name: 'John Doe', role: Role.CLIENT } }),
-    prisma.user.create({ data: { email: 'bulk@techstore.com', password: 'hashedpassword123', name: 'Bulk Buyer', role: Role.BULK_CLIENT } }),
+    prisma.user.create({
+      data: {
+        email: 'admin@techstore.com',
+        password: 'hashedpassword123',
+        name: 'Admin User',
+        role: Role.ADMIN,
+      },
+    }),
+    prisma.user.create({
+      data: {
+        email: 'client@techstore.com',
+        password: 'hashedpassword123',
+        name: 'John Doe',
+        role: Role.CLIENT,
+      },
+    }),
+    prisma.user.create({
+      data: {
+        email: 'bulk@techstore.com',
+        password: 'hashedpassword123',
+        name: 'Bulk Buyer',
+        role: Role.BULK_CLIENT,
+      },
+    }),
   ]);
 
   // Categories
@@ -77,14 +98,16 @@ async function main() {
       categoryId: categories[0].id,
       brandId: brands[0].id,
       images: {
-        create: [{ url: 'https://example.com/laptop-pro.jpg', isPrimary: true }],
+        create: [
+          { url: 'https://example.com/laptop-pro.jpg', isPrimary: true },
+        ],
       },
-      variants: {
+      /* variants: {
         create: [
           { name: 'Silver', stock: 30, price: 1299.99 },
           { name: 'Black', stock: 20, price: 1349.99 },
         ],
-      },
+      }, */
       attributes: {
         create: [
           { key: 'RAM', value: '16GB' },
@@ -120,7 +143,9 @@ async function main() {
       categoryId: categories[1].id,
       brandId: brands[1].id,
       images: {
-        create: [{ url: 'https://example.com/smartphone-x.jpg', isPrimary: true }],
+        create: [
+          { url: 'https://example.com/smartphone-x.jpg', isPrimary: true },
+        ],
       },
     },
   });

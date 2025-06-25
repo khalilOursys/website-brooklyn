@@ -8,30 +8,35 @@ export declare class ProductImagesController {
         id: string;
         url: string;
         isPrimary: boolean;
-        productId: string;
+        variantId: string | null;
+        productId: string | null;
     }>;
     findAll(productId?: string): Promise<{
         id: string;
         url: string;
         isPrimary: boolean;
-        productId: string;
+        variantId: string | null;
+        productId: string | null;
     }[]>;
     findOne(id: string): Promise<{
         id: string;
         url: string;
         isPrimary: boolean;
-        productId: string;
+        variantId: string | null;
+        productId: string | null;
     }>;
     update(id: string, updateProductImageDto: UpdateProductImageDto): Promise<{
         id: string;
         url: string;
         isPrimary: boolean;
-        productId: string;
+        variantId: string | null;
+        productId: string | null;
     }>;
     remove(id: string): Promise<{
         id: string;
         url: string;
         isPrimary: boolean;
-        productId: string;
+        variantId: string | null;
+        productId: string | null;
     }>;
 }

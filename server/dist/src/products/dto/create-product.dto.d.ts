@@ -9,6 +9,7 @@ declare class ProductAttributeDto {
 export declare class CreateProductDto {
     name: string;
     description?: string;
+    color?: string;
     price: number;
     stock: number;
     isBulk?: boolean;
