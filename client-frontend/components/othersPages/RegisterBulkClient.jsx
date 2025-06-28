@@ -167,9 +167,9 @@ export default function RegisterBulkClient() {
         const errorData = await response.json();
         throw new Error(errorData.message || "Échec de l'inscription");
       }
-      /* setTimeout(() => {
+      setTimeout(() => {
         window.location.replace("/login");
-      }, 1500); */
+      }, 1500);
       /* const responseLogin = await fetch(`${api}auth/login`, {
         method: "POST",
         headers: {

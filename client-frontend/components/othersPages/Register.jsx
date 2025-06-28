@@ -107,7 +107,7 @@ export default function Register() {
         throw new Error(errorData.message || "L'inscription a échoué");
       }
 
-      //router.push("/login");
+      router.push("/login");
 
       // Inscription réussie - connexion automatique
       /* const responseLogin = await fetch(`${api}auth/login`, {
