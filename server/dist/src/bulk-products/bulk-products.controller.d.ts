@@ -33,7 +33,7 @@ export declare class BulkProductsController {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
-        };
+        } | null;
     } & {
         id: string;
         name: string | null;
@@ -46,7 +46,7 @@ export declare class BulkProductsController {
         minQuantity: number;
     })[]>;
     findOne(id: string): Promise<{
-        product: {
+        product: ({
             category: {
                 id: string;
                 name: string;
@@ -98,7 +98,7 @@ export declare class BulkProductsController {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
-        };
+        }) | null;
     } & {
         id: string;
         name: string | null;
@@ -134,7 +134,7 @@ export declare class BulkProductsController {
     }>;
     findByCategory(categorySlug?: string, page?: number, limit?: number, brandNames?: string, minPrice?: number, maxPrice?: number, promotions?: number): Promise<{
         bulkProducts: ({
-            product: {
+            product: ({
                 category: {
                     id: string;
                     name: string;
@@ -180,7 +180,7 @@ export declare class BulkProductsController {
                 brandId: string;
                 averageRating: number | null;
                 ratingCount: number;
-            };
+            }) | null;
         } & {
             id: string;
             name: string | null;

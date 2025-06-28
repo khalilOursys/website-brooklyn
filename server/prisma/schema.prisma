@@ -88,16 +88,16 @@ model Product {
   ratingCount    Int                  @default(0)
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
-  bulkProduct  BulkProduct? @relation("BulkProductRelation")
+  bulkProduct  BulkProduct[] @relation("BulkProductRelation")
   @@index([name])
 }
 
 model BulkProduct {
   id          String    @id @default(uuid())
-  name           String?
-  description    String?
-  productId   String    @unique
-  product     Product   @relation("BulkProductRelation", fields: [productId], references: [id])
+  name        String?
+  description String?
+  productId   String    
+  product     Product?   @relation("BulkProductRelation", fields: [productId], references: [id])
   bulkPrice   Float
   minQuantity Int
   discount    Float?

@@ -35,6 +35,10 @@ export class ProductVariantsController {
   async findOne(@Param('id') id: string) {
     return await this.productVariantsService.findOne(id);
   }
+  @Get('getVariantWithProduct/:id')
+  async getVariantWithProduct(@Param('id') id: string) {
+    return await this.productVariantsService.getVariantWithProduct(id);
+  }
 
   @Put(':id')
   async update(

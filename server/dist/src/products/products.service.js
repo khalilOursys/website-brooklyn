@@ -62,6 +62,7 @@ let ProductsService = class ProductsService {
                 attributes: true,
                 category: true,
                 brand: true,
+                variants: true,
             },
         });
         if (!product) {
@@ -214,15 +215,6 @@ let ProductsService = class ProductsService {
                             },
                         },
                     },
-                    {
-                        products: {
-                            some: {
-                                bulkProduct: {
-                                    isNot: null,
-                                },
-                            },
-                        },
-                    },
                 ],
             },
             include: {
@@ -234,11 +226,6 @@ let ProductsService = class ProductsService {
                                     {
                                         category: {
                                             slug: categorySlug,
-                                        },
-                                    },
-                                    {
-                                        bulkProduct: {
-                                            isNot: null,
                                         },
                                     },
                                 ],
@@ -257,11 +244,27 @@ let ProductsService = class ProductsService {
         LEFT JOIN "BulkProduct" bp ON p.id = bp."productId"
         JOIN "Category" c ON p."categoryId" = c.id
       `;
+            const products = await this.prisma.product.findMany({
+                where: {
+                    bulkProduct: {
+                        some: {},
+                    },
+                },
+                include: {
+                    _count: {
+                        select: {
+                            bulkProduct: true,
+                        },
+                    },
+                    category: true,
+                    brand: true,
+                },
+            });
             return {
-                brands: brands.map((brand) => ({
+                brands: products.map((brand) => ({
                     id: brand.id,
                     name: brand.name,
-                    productCount: brand._count.products,
+                    productCount: brand._count.bulkProduct,
                 })),
                 priceRange: {
                     minPrice: priceAggregates[0].minprice || 0,

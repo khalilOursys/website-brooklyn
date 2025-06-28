@@ -83,7 +83,7 @@ let ProductVariantsService = class ProductVariantsService {
         return variant;
     }
     async update(id, updateProductVariantDto) {
-        const { images, productId, ...variantData } = updateProductVariantDto;
+        const { images, ...variantData } = updateProductVariantDto;
         return this.prisma.$transaction(async (prisma) => {
             await Promise.all([
                 prisma.productImage.deleteMany({ where: { variantId: id } }),
@@ -119,6 +119,25 @@ let ProductVariantsService = class ProductVariantsService {
         await this.findOne(id);
         return await this.prisma.productVariant.delete({
             where: { id },
+        });
+    }
+    async getVariantWithProduct(id) {
+        return this.prisma.productVariant.findUnique({
+            where: { id },
+            include: {
+                images: true,
+                product: {
+                    include: {
+                        images: true,
+                        attributes: true,
+                        category: true,
+                        brand: true,
+                        variants: {
+                            include: { images: true },
+                        },
+                    },
+                },
+            },
         });
     }
 };

@@ -34,7 +34,7 @@ export declare class BulkProductsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
-        };
+        } | null;
     } & {
         id: string;
         name: string | null;
@@ -47,7 +47,7 @@ export declare class BulkProductsService {
         minQuantity: number;
     })[]>;
     findOne(id: string): Promise<{
-        product: {
+        product: ({
             category: {
                 id: string;
                 name: string;
@@ -99,7 +99,7 @@ export declare class BulkProductsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
-        };
+        }) | null;
     } & {
         id: string;
         name: string | null;
@@ -143,7 +143,7 @@ export declare class BulkProductsService {
         maxPrice?: number;
     }): Promise<{
         bulkProducts: ({
-            product: {
+            product: ({
                 category: {
                     id: string;
                     name: string;
@@ -189,7 +189,7 @@ export declare class BulkProductsService {
                 brandId: string;
                 averageRating: number | null;
                 ratingCount: number;
-            };
+            }) | null;
         } & {
             id: string;
             name: string | null;
