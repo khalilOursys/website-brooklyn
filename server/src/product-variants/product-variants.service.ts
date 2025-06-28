@@ -97,7 +97,7 @@ export class ProductVariantsService {
   async update(id: string, updateProductVariantDto: UpdateProductVariantDto) {
     // Verify product exists
 
-    const { images, productId, ...variantData } = updateProductVariantDto;
+    const { images, ...variantData } = updateProductVariantDto;
 
     return this.prisma.$transaction(async (prisma) => {
       // 1. First delete all existing images and attributes
@@ -143,6 +143,25 @@ export class ProductVariantsService {
     await this.findOne(id);
     return await this.prisma.productVariant.delete({
       where: { id },
+    });
+  }
+  async getVariantWithProduct(id: string) {
+    return this.prisma.productVariant.findUnique({
+      where: { id },
+      include: {
+        images: true,
+        product: {
+          include: {
+            images: true,
+            attributes: true,
+            category: true,
+            brand: true,
+            variants: {
+              include: { images: true },
+            },
+          },
+        },
+      },
     });
   }
 }

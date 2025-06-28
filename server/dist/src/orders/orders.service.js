@@ -74,8 +74,12 @@ let OrdersService = class OrdersService {
                                 images: true,
                             },
                         },
+                        variant: {
+                            include: {
+                                images: true,
+                            },
+                        },
                         bulk: true,
-                        variant: true,
                         bundle: true,
                     },
                 },

@@ -57,11 +57,11 @@ export default function OrderDetails({ order }) {
   }, []);
 
   // Calculer la réduction totale
-  const totalDiscount = order.orderItems.reduce(
+  /* const totalDiscount = order.orderItems.reduce(
     (sum, item) => sum + (item.product.discount * item.quantity),
     0
-  );
-
+  ); */
+  const totalDiscount = 0;
   // Formater la date
   const formattedDate = new Date(order.createdAt).toLocaleString();
 
@@ -110,26 +110,57 @@ export default function OrderDetails({ order }) {
             {order.orderItems.map((item) => (
               <div key={item.id} className="order-head mb-4">
                 <figure className="img-product">
+                  {console.log(item.variant)}
                   <Image
                     alt="product"
-                    src={item.product.images[0].url}
+                    src={
+                      item.bundle?.img ||
+                      item.variant?.images[0]?.url ||
+                      item.product?.images[0]?.url ||
+                      "/placeholder-image.jpg" // fallback image
+                    }
                     width="720"
                     height="1005"
                   />
                 </figure>
                 <div className="content">
-                  <div className="text-2 fw-6">{item.product.name}</div>
-                  <div className="mt_4">
-                    <span className="fw-6">Prix :</span> {item.price} TND
+                  <div className="text-2 fw-6">
+                    {item.bundle?.name ||
+                      (item.variant ? `${item.variant.name}` : item.product?.name)}
                   </div>
+
+                  {item.bundle && (
+                    <div className="mt_4">
+                      <span className="fw-6">PU :</span> {item.bundle?.discount} TND
+                    </div>
+                  )}
+
                   <div className="mt_4">
                     <span className="fw-6">Quantité :</span> {item.quantity}
                   </div>
-                  {item.product.discount > 0 && (
+
+                  {item.product && (
                     <div className="mt_4">
-                      <span className="fw-6">Réduction :</span> {item.product.discount * item.quantity} TND
+                      <span className="fw-6">PU :</span> {item.product?.discount > 0 ? item.product?.discount : item.product?.price} TND
                     </div>
                   )}
+
+                  <div className="mt_4">
+                    <span className="fw-6">Prix :</span> {item.price} TND
+                  </div>
+
+                  {/* {(item.product?.discount > 0 || item.bundle?.discount > 0) && (
+                    <div className="mt_4">
+                      <span className="fw-6">Réduction :</span>
+                      {(item.product?.discount || item.bundle?.discount) * item.quantity} TND
+                    </div>
+                  )}
+
+                  {item.variant && (
+                    <div className="mt_4">
+                      <span className="fw-6">Variante :</span> {item.variant.name}
+                    </div>
+                  )} */}
                 </div>
               </div>
             ))}

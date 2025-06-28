@@ -1,24 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import Image from "next/image";
-import CountdownComponent from "../common/Countdown";
-import {
-  colors,
-  paymentImages,
-  sizeOptions,
-} from "@/data/singleProductOptions";
-import StickyItem from "./StickyItem";
 import Quantity from "./Quantity";
 
 import Slider1ZoomOuter from "./sliders/Slider1ZoomOuter";
 import { allProducts } from "@/data/products";
 import { useContextElement } from "@/context/Context";
 import { openCartModal } from "@/utlis/openCartModal";
+import { useParams } from "next/navigation";
 
 export default function DetailsOuterZoom({ product = allProducts[0] }) {
-  const [currentColor, setCurrentColor] = useState(colors[0]);
-  const [currentSize, setCurrentSize] = useState(sizeOptions[1]);
+  const params = useParams();
+  const [currentColor, setCurrentColor] = useState({});
+  const [colors, setColors] = useState([]);
   const [quantity, setQuantity] = useState(1);
 
   const handleColor = (color) => {
@@ -33,15 +27,35 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
   const {
     addProductToCart,
     isAddedToCartProducts,
-    addToCompareItem,
-    isAddedtoCompareItem,
-    addToWishlist,
-    isAddedtoWishlist,
   } = useContextElement();
 
   // Check if product is out of stock
   const isOutOfStock = product.stock <= 0;
 
+  useEffect(() => {
+    const colorInfo = [];
+
+    colorInfo.push({
+      id: product.idProduct ? product.idProduct : product.id,
+      type: 'parent',
+      value: product.color
+    });
+    setCurrentColor({
+      id: product.id,
+      type: 'parent',
+      value: product.colorVar ? product.colorVar : product.color
+    })
+    // Store the variant colors
+    product.variants.forEach(variant => {
+      colorInfo.push({
+        id: variant.id,
+        type: 'variant',
+        value: variant.color
+      });
+    });
+
+    setColors(colorInfo);
+  }, [product]);
   return (
     <section
       className="flat-spacing-4 pt_0"
@@ -128,10 +142,17 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                               type="radio"
                               name="color1"
                               readOnly
-                              checked={currentColor == color}
+                              checked={currentColor.value == color.value}
                             />
                             <label
-                              onClick={() => setCurrentColor(color)}
+                              /* onClick={() => setCurrentColor(color)} */
+                              onClick={() => {
+                                if (color.type === "parent") {
+                                  window.location.replace("/product-detail/" + color.id)
+                                } else {
+                                  window.location.replace("/variant-detail/" + color.id)
+                                }
+                              }}
                               className="hover-tooltip radius-60"
                               htmlFor={color.id}
                               data-value={color.value}

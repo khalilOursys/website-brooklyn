@@ -22,15 +22,18 @@ export class BulkProductsService {
         `Product with id ${createBulkProductDto.productId} does not exist.`,
       );
     }
+
     // Check if a bulk product record already exists for this product
-    const existingBulkProduct = await this.prisma.bulkProduct.findUnique({
+    const existingBulkProduct = await this.prisma.bulkProduct.findFirst({
       where: { productId: createBulkProductDto.productId },
     });
+
     if (existingBulkProduct) {
       throw new BadRequestException(
         `Bulk product for product id ${createBulkProductDto.productId} already exists.`,
       );
     }
+
     return await this.prisma.bulkProduct.create({
       data: createBulkProductDto,
     });

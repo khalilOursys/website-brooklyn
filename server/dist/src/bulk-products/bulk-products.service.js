@@ -23,7 +23,7 @@ let BulkProductsService = class BulkProductsService {
         if (!product) {
             throw new common_1.BadRequestException(`Product with id ${createBulkProductDto.productId} does not exist.`);
         }
-        const existingBulkProduct = await this.prisma.bulkProduct.findUnique({
+        const existingBulkProduct = await this.prisma.bulkProduct.findFirst({
             where: { productId: createBulkProductDto.productId },
         });
         if (existingBulkProduct) {

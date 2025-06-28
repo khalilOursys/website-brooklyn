@@ -114,8 +114,12 @@ export class OrdersService {
                 images: true,
               },
             },
+            variant: {
+              include: {
+                images: true,
+              },
+            },
             bulk: true, // Include bulk if needed
-            variant: true, // Include variant if needed
             bundle: true, // Include variant if needed
           },
         },

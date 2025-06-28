@@ -52,6 +52,7 @@ export default function Context({ children }) {
     fetchCategories();
   }, []);
   const addProductToCart = (item, qty) => {
+    console.log(item);
 
     if (!cartProducts.filter((elm) => elm.id == item.id)[0]) {
       var newItem = {

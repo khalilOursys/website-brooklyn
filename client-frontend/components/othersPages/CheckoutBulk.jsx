@@ -112,7 +112,8 @@ export default function CheckoutBulk() {
 
       const orderItems = cartProducts.map(product => {
         const discount = parseFloat(product.bulk?.discount);
-        const unitPrice = discount && discount !== 0 ? discount : parseFloat(product.bulkPrice);
+        const unitPrice = discount && discount !== 0 ? discount : parseFloat(product.bulk?.bulkPrice);
+        console.log(product);
 
         return {
           productId: product.productId,

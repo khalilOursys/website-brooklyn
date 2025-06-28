@@ -106,13 +106,21 @@ export declare class OrdersController {
                 averageRating: number | null;
                 ratingCount: number;
             }) | null;
-            variant: {
+            variant: ({
+                images: {
+                    id: string;
+                    url: string;
+                    isPrimary: boolean;
+                    variantId: string | null;
+                    productId: string | null;
+                }[];
+            } & {
                 id: string;
                 name: string;
                 color: string | null;
                 stock: number;
                 productId: string;
-            } | null;
+            }) | null;
             bundle: {
                 id: string;
                 name: string;

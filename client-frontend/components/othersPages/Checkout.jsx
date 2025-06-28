@@ -16,8 +16,8 @@ export default function Checkout() {
 
   // Form state - initialize with user data if available
   const [formData, setFormData] = useState({
-    firstName: user?.name?.split(' ')[0] || '',
-    lastName: user?.name?.split(' ').slice(1).join(' ') || '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
     address: '',
     phoneNumber: user?.phoneNumber || '',
     note: '',
@@ -30,8 +30,8 @@ export default function Checkout() {
     if (user) {
       setFormData(prev => ({
         ...prev,
-        firstName: user?.name?.split(' ')[0] || prev.firstName,
-        lastName: user?.name?.split(' ').slice(1).join(' ') || prev.lastName,
+        firstName: user.firstName || prev.firstName,
+        lastName: user.lastName || prev.lastName,
         phoneNumber: user?.telephone || prev.telephone
       }));
     }
@@ -72,10 +72,17 @@ export default function Checkout() {
       const orderItems = cartProducts.map(product => {
         const discount = parseFloat(product?.discount);
         const unitPrice = discount && discount !== 0 ? discount : parseFloat(product.price);
-
+        const bundleId = product.isPacks === 1 ? product.id : null;
+        var productId = null;
+        var variantId = null;
+        if (product.isPacks !== 1) {
+          productId = product.idProduct ? product.idProduct : product.id;
+          variantId = product.idProduct ? product.id : null;
+        }
         return {
-          productId: product.isPacks === 0 ? product.id : null,
-          bundleId: product.isPacks === 1 ? product.id : null,
+          productId: productId,
+          variantId: variantId,
+          bundleId: bundleId,
           bulkId: product.bulkId,
           quantity: product.quantity,
           price: unitPrice * parseFloat(product.quantity)
@@ -90,6 +97,7 @@ export default function Checkout() {
         total: totalPrice,
         orderItems
       };
+      console.log(orderData);
 
       // Send the request to your API  `${api}orders`
       const response = await fetch(`${api}orders`, {

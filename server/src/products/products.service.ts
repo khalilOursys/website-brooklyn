@@ -61,6 +61,7 @@ export class ProductsService {
         attributes: true,
         category: true,
         brand: true,
+        variants: true,
       },
     });
     if (!product) {
@@ -289,7 +290,7 @@ export class ProductsService {
               },
             },
           },
-          {
+          /* {
             products: {
               some: {
                 bulkProduct: {
@@ -297,7 +298,7 @@ export class ProductsService {
                 },
               },
             },
-          },
+          }, */
         ],
       },
       include: {
@@ -311,11 +312,11 @@ export class ProductsService {
                       slug: categorySlug,
                     },
                   },
-                  {
+                  /* {
                     bulkProduct: {
                       isNot: null,
                     },
-                  },
+                  }, */
                 ],
               },
             },
@@ -339,12 +340,27 @@ export class ProductsService {
         LEFT JOIN "BulkProduct" bp ON p.id = bp."productId"
         JOIN "Category" c ON p."categoryId" = c.id
       `;
-
+      const products = await this.prisma.product.findMany({
+        where: {
+          bulkProduct: {
+            some: {}, // Only products that have at least one BulkProduct
+          },
+        },
+        include: {
+          _count: {
+            select: {
+              bulkProduct: true, // Count of related bulk products
+            },
+          },
+          category: true,
+          brand: true,
+        },
+      });
       return {
-        brands: brands.map((brand) => ({
+        brands: products.map((brand) => ({
           id: brand.id,
           name: brand.name,
-          productCount: brand._count.products,
+          productCount: brand._count.bulkProduct,
         })),
         priceRange: {
           minPrice: priceAggregates[0].minprice || 0,
