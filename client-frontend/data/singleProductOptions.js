@@ -1,10 +1,8 @@
 export const colors = [
   {
-    id: "values-beige",
-    value: "Beige",
-    className: "bg-color-beige",
-    price: 7,
-    oldPrice: 10,
+    id: "09cb382e-87f2-414c-9e8a-76d7ae7f0070",
+    type: "parent",
+    value: "#ce1c1c",
   },
   {
     id: "values-black",

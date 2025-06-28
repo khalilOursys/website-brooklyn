@@ -7,6 +7,8 @@ import ProductsHome from "@/components/ProductsHome";
 import Blogs from "@/components/blogs/Blogs";
 import Header4 from "@/components/headers/Header4";
 import ShopGram from "@/components/homes/home-accessories/ShopGram";
+import Header2 from "@/components/headers/Header2";
+import Topbar2 from "@/components/headers/Topbar2";
 
 export const metadata = {
   title: "Home 1 || test",
@@ -16,6 +18,8 @@ export default function Home() {
   return (
     <>
       <Header4 />
+      {/* <Topbar2 />
+      <Header2 /> */}
       <Hero />
       <Features bgColor="" />
       <Categories />

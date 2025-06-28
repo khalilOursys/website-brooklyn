@@ -288,7 +288,7 @@ export default function Page() {
                                             displayPrice = item.product.discount === 0 ? item.product.price : item.product.discount;
 
                                             if (item.variant) {
-                                              name += ` (${item.variant.name})`;
+                                              name = `${item.variant.name}`;
                                             }
                                           }
                                           else {
