@@ -1,5 +1,9 @@
 // src/BulkClientRequests/BulkClientRequests.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as bcryptjs from 'bcryptjs';
 import { CreateBulkClientRequestDto } from './dto/create-bulk-client-request.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -13,6 +17,12 @@ export class BulkClientRequestsService {
   async createUserWithBulkRequest(data: CreateBulkClientRequestDto) {
     const hashedPassword = await bcryptjs.hash(data.password, 10);
 
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: data.email },
+    });
+    if (existingUser) {
+      throw new ConflictException('E-mail déjà utilisé');
+    }
     return this.prisma.user.create({
       data: {
         email: data.email,
