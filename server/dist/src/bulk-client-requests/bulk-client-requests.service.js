@@ -19,6 +19,12 @@ let BulkClientRequestsService = class BulkClientRequestsService {
     }
     async createUserWithBulkRequest(data) {
         const hashedPassword = await bcryptjs.hash(data.password, 10);
+        const existingUser = await this.prisma.user.findUnique({
+            where: { email: data.email },
+        });
+        if (existingUser) {
+            throw new common_1.ConflictException('E-mail déjà utilisé');
+        }
         return this.prisma.user.create({
             data: {
                 email: data.email,
