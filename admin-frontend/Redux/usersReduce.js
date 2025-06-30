@@ -84,6 +84,29 @@ export const getUserById = createAsyncThunk("users/getUserById", async (id) => {
   return response.json();
 });
 
+export const toggleUserStatus = createAsyncThunk(
+  "users/toggleStatus",
+  async (id) => {
+    const response = await fetch(
+      `${Configuration.BACK_BASEURL}users/toggle-status/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to toggle user status");
+    }
+
+    const result = await response.json();
+    return { id, isActive: result.isActive };
+  }
+);
 // Slice
 const usersSlice = createSlice({
   name: "users",

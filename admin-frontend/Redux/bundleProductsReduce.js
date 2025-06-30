@@ -92,6 +92,29 @@ export const getProductBundleById = createAsyncThunk(
   }
 );
 
+export const toggleProductBundleStatus = createAsyncThunk(
+  "productBundles/toggleStatus",
+  async (id) => {
+    const response = await fetch(
+      `${Configuration.BACK_BASEURL}productBundles/toggle-status/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to toggle productBundle status");
+    }
+
+    const result = await response.json();
+    return { id, isActive: result.isActive };
+  }
+);
 // Slice
 const productBundlesSlice = createSlice({
   name: "productBundles",

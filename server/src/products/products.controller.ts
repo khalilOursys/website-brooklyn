@@ -133,4 +133,14 @@ export class ProductsController {
       maxPrice: maxPrice ? Number(maxPrice) : undefined,
     });
   }
+
+  @Put('toggle-status/:id')
+  async toggleStatus(@Param('id') id: string) {
+    const result = await this.productService.toggleStatus(id);
+    return {
+      success: result.success,
+      isActive: result.isActive,
+      statusCode: result.status,
+    };
+  }
 }

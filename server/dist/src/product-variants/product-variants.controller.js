@@ -39,6 +39,14 @@ let ProductVariantsController = class ProductVariantsController {
     async remove(id) {
         return await this.productVariantsService.remove(id);
     }
+    async toggleStatus(id) {
+        const result = await this.productVariantsService.toggleStatus(id);
+        return {
+            success: result.success,
+            isActive: result.isActive,
+            statusCode: result.status,
+        };
+    }
 };
 exports.ProductVariantsController = ProductVariantsController;
 __decorate([
@@ -83,6 +91,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ProductVariantsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Put)('toggle-status/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductVariantsController.prototype, "toggleStatus", null);
 exports.ProductVariantsController = ProductVariantsController = __decorate([
     (0, common_1.Controller)('product-variants'),
     __metadata("design:paramtypes", [product_variants_service_1.ProductVariantsService])

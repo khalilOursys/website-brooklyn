@@ -61,7 +61,7 @@ let ProductVariantsService = class ProductVariantsService {
                     },
                 },
             },
-            orderBy: { id: 'asc' },
+            orderBy: { id: 'desc' },
         });
     }
     async findOne(id) {
@@ -139,6 +139,28 @@ let ProductVariantsService = class ProductVariantsService {
                 },
             },
         });
+    }
+    async toggleStatus(id) {
+        try {
+            const productVariant = await this.prisma.productVariant.findUnique({
+                where: { id },
+            });
+            if (!productVariant) {
+                return { success: false, status: common_1.HttpStatus.NOT_FOUND };
+            }
+            const updatedProductVariant = await this.prisma.productVariant.update({
+                where: { id },
+                data: { isActive: !productVariant.isActive },
+            });
+            return {
+                success: true,
+                status: common_1.HttpStatus.OK,
+                isActive: updatedProductVariant.isActive,
+            };
+        }
+        catch (error) {
+            return { success: false, status: common_1.HttpStatus.FORBIDDEN };
+        }
     }
 };
 exports.ProductVariantsService = ProductVariantsService;

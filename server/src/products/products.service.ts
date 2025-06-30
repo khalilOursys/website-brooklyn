@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  HttpStatus,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -50,6 +51,7 @@ export class ProductsService {
         category: true,
         brand: true,
       },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -516,5 +518,28 @@ export class ProductsService {
       products,
       totalCount,
     };
+  }
+
+  async toggleStatus(id: string) {
+    try {
+      const product = await this.prisma.product.findUnique({ where: { id } });
+
+      if (!product) {
+        return { success: false, status: HttpStatus.NOT_FOUND };
+      }
+
+      const updatedProduct = await this.prisma.product.update({
+        where: { id },
+        data: { isActive: !product.isActive },
+      });
+
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        isActive: updatedProduct.isActive, // Return new status
+      };
+    } catch (error) {
+      return { success: false, status: HttpStatus.FORBIDDEN };
+    }
   }
 }

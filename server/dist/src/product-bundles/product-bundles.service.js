@@ -110,6 +110,28 @@ let ProductBundlesService = class ProductBundlesService {
             where: { id },
         });
     }
+    async toggleStatus(id) {
+        try {
+            const productBundle = await this.prisma.productBundle.findUnique({
+                where: { id },
+            });
+            if (!productBundle) {
+                return { success: false, status: common_1.HttpStatus.NOT_FOUND };
+            }
+            const updatedProductBundle = await this.prisma.productBundle.update({
+                where: { id },
+                data: { isActive: !productBundle.isActive },
+            });
+            return {
+                success: true,
+                status: common_1.HttpStatus.OK,
+                isActive: updatedProductBundle.isActive,
+            };
+        }
+        catch (error) {
+            return { success: false, status: common_1.HttpStatus.FORBIDDEN };
+        }
+    }
 };
 exports.ProductBundlesService = ProductBundlesService;
 exports.ProductBundlesService = ProductBundlesService = __decorate([

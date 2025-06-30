@@ -15,10 +15,11 @@ export declare class ProductsController {
         category: {
             id: string;
             name: string;
+            description: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -28,29 +29,28 @@ export declare class ProductsController {
         brand: {
             id: string;
             name: string;
+            description: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -61,17 +61,21 @@ export declare class ProductsController {
         specs: import("@prisma/client/runtime/library").JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(): Promise<({
         category: {
             id: string;
             name: string;
+            description: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -81,29 +85,28 @@ export declare class ProductsController {
         brand: {
             id: string;
             name: string;
+            description: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -114,17 +117,21 @@ export declare class ProductsController {
         specs: import("@prisma/client/runtime/library").JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     })[]>;
     findOne(id: string): Promise<{
         category: {
             id: string;
             name: string;
+            description: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -134,36 +141,36 @@ export declare class ProductsController {
         brand: {
             id: string;
             name: string;
+            description: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
         variants: {
             id: string;
             name: string;
             color: string | null;
             stock: number;
+            isActive: boolean;
             productId: string;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -174,17 +181,21 @@ export declare class ProductsController {
         specs: import("@prisma/client/runtime/library").JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<({
         category: {
             id: string;
             name: string;
+            description: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -194,29 +205,28 @@ export declare class ProductsController {
         brand: {
             id: string;
             name: string;
+            description: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -227,14 +237,15 @@ export declare class ProductsController {
         specs: import("@prisma/client/runtime/library").JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }) | null>;
     remove(id: string): Promise<{
         id: string;
         name: string;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -245,18 +256,22 @@ export declare class ProductsController {
         specs: import("@prisma/client/runtime/library").JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findByDiscountAndFeatured(): Promise<{
         featuredProducts: ({
             category: {
                 id: string;
                 name: string;
+                description: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -266,23 +281,22 @@ export declare class ProductsController {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string | null;
+                variantId: string | null;
                 url: string;
                 isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
             }[];
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             color: string | null;
             price: number;
@@ -293,17 +307,21 @@ export declare class ProductsController {
             specs: import("@prisma/client/runtime/library").JsonValue | null;
             categoryId: string;
             brandId: string;
+            isActive: boolean;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         discountedProducts: ({
             category: {
                 id: string;
                 name: string;
+                description: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -313,23 +331,22 @@ export declare class ProductsController {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string | null;
+                variantId: string | null;
                 url: string;
                 isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
             }[];
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             color: string | null;
             price: number;
@@ -340,8 +357,11 @@ export declare class ProductsController {
             specs: import("@prisma/client/runtime/library").JsonValue | null;
             categoryId: string;
             brandId: string;
+            isActive: boolean;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
     }>;
     findByCategory(categorySlug?: string, page?: number, limit?: number, brandNames?: string, minPrice?: number, maxPrice?: number, promotions?: number): Promise<{
@@ -349,10 +369,11 @@ export declare class ProductsController {
             category: {
                 id: string;
                 name: string;
+                description: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -362,29 +383,28 @@ export declare class ProductsController {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string | null;
+                variantId: string | null;
                 url: string;
                 isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
             }[];
             attributes: {
                 id: string;
+                productId: string;
                 key: string;
                 value: string;
-                productId: string;
             }[];
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             color: string | null;
             price: number;
@@ -395,8 +415,11 @@ export declare class ProductsController {
             specs: import("@prisma/client/runtime/library").JsonValue | null;
             categoryId: string;
             brandId: string;
+            isActive: boolean;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         totalCount: number;
     }>;
@@ -432,10 +455,11 @@ export declare class ProductsController {
             category: {
                 id: string;
                 name: string;
+                description: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -445,29 +469,28 @@ export declare class ProductsController {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string | null;
+                variantId: string | null;
                 url: string;
                 isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
             }[];
             attributes: {
                 id: string;
+                productId: string;
                 key: string;
                 value: string;
-                productId: string;
             }[];
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             color: string | null;
             price: number;
@@ -478,9 +501,17 @@ export declare class ProductsController {
             specs: import("@prisma/client/runtime/library").JsonValue | null;
             categoryId: string;
             brandId: string;
+            isActive: boolean;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         totalCount: number;
+    }>;
+    toggleStatus(id: string): Promise<{
+        success: boolean;
+        isActive: boolean | undefined;
+        statusCode: import("@nestjs/common").HttpStatus;
     }>;
 }

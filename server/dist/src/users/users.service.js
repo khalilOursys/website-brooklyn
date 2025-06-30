@@ -80,6 +80,7 @@ let UsersService = class UsersService {
             include: {
                 bulkRequests: true,
             },
+            orderBy: { createdAt: 'desc' },
         });
     }
     async getUserById(id) {
@@ -134,6 +135,26 @@ let UsersService = class UsersService {
                 password: hashedPassword,
             },
         });
+    }
+    async toggleStatus(id) {
+        try {
+            const user = await this.prisma.user.findUnique({ where: { id } });
+            if (!user) {
+                return { success: false, status: common_1.HttpStatus.NOT_FOUND };
+            }
+            const updatedUser = await this.prisma.user.update({
+                where: { id },
+                data: { isActive: !user.isActive },
+            });
+            return {
+                success: true,
+                status: common_1.HttpStatus.OK,
+                isActive: updatedUser.isActive,
+            };
+        }
+        catch (error) {
+            return { success: false, status: common_1.HttpStatus.FORBIDDEN };
+        }
     }
 };
 exports.UsersService = UsersService;

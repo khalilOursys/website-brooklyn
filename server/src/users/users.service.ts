@@ -3,6 +3,7 @@ import {
   ConflictException,
   UnauthorizedException,
   NotFoundException,
+  HttpStatus,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -87,6 +88,7 @@ export class UsersService {
       include: {
         bulkRequests: true, // Include the related BulkRequest
       },
+      orderBy: { createdAt: 'desc' },
     });
   }
   async getUserById(id: string) {
@@ -157,5 +159,28 @@ export class UsersService {
         password: hashedPassword,
       },
     });
+  }
+
+  async toggleStatus(id: string) {
+    try {
+      const user = await this.prisma.user.findUnique({ where: { id } });
+
+      if (!user) {
+        return { success: false, status: HttpStatus.NOT_FOUND };
+      }
+
+      const updatedUser = await this.prisma.user.update({
+        where: { id },
+        data: { isActive: !user.isActive },
+      });
+
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        isActive: updatedUser.isActive, // Return new status
+      };
+    } catch (error) {
+      return { success: false, status: HttpStatus.FORBIDDEN };
+    }
   }
 }

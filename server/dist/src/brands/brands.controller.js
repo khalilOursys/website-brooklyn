@@ -43,6 +43,14 @@ let BrandsController = class BrandsController {
     async remove(id) {
         return await this.brandsService.remove(id);
     }
+    async toggleStatus(id) {
+        const result = await this.brandsService.toggleStatus(id);
+        return {
+            success: result.success,
+            isActive: result.isActive,
+            statusCode: result.status,
+        };
+    }
 };
 exports.BrandsController = BrandsController;
 __decorate([
@@ -88,6 +96,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BrandsController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Put)('toggle-status/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], BrandsController.prototype, "toggleStatus", null);
 exports.BrandsController = BrandsController = __decorate([
     (0, common_1.Controller)('brands'),
     __metadata("design:paramtypes", [brands_service_1.BrandsService])

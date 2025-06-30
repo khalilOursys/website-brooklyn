@@ -125,6 +125,28 @@ let BulkProductsService = class BulkProductsService {
             totalCount,
         };
     }
+    async toggleStatus(id) {
+        try {
+            const bulkProduct = await this.prisma.bulkProduct.findUnique({
+                where: { id },
+            });
+            if (!bulkProduct) {
+                return { success: false, status: common_1.HttpStatus.NOT_FOUND };
+            }
+            const updatedBulkProduct = await this.prisma.bulkProduct.update({
+                where: { id },
+                data: { isActive: !bulkProduct.isActive },
+            });
+            return {
+                success: true,
+                status: common_1.HttpStatus.OK,
+                isActive: updatedBulkProduct.isActive,
+            };
+        }
+        catch (error) {
+            return { success: false, status: common_1.HttpStatus.FORBIDDEN };
+        }
+    }
 };
 exports.BulkProductsService = BulkProductsService;
 exports.BulkProductsService = BulkProductsService = __decorate([

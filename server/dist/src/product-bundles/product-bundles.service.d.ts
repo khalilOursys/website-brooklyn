@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateProductBundleDto } from './dto/create-product-bundle.dto';
 export declare class ProductBundlesService {
@@ -13,6 +14,7 @@ export declare class ProductBundlesService {
     } & {
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
@@ -28,6 +30,7 @@ export declare class ProductBundlesService {
     } & {
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
@@ -39,6 +42,7 @@ export declare class ProductBundlesService {
                 category: {
                     id: string;
                     name: string;
+                    isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
                     slug: string | null;
@@ -52,6 +56,7 @@ export declare class ProductBundlesService {
                 brand: {
                     id: string;
                     name: string;
+                    isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
@@ -67,6 +72,7 @@ export declare class ProductBundlesService {
             } & {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -91,6 +97,7 @@ export declare class ProductBundlesService {
     } & {
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
@@ -106,6 +113,7 @@ export declare class ProductBundlesService {
     } & {
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
@@ -114,9 +122,19 @@ export declare class ProductBundlesService {
     remove(id: string): Promise<{
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
         expiresAt: Date | null;
+    }>;
+    toggleStatus(id: string): Promise<{
+        success: boolean;
+        status: HttpStatus;
+        isActive?: undefined;
+    } | {
+        success: boolean;
+        status: HttpStatus;
+        isActive: boolean;
     }>;
 }

@@ -6,6 +6,7 @@ export declare class AppController {
     testProducts(): Promise<{
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;

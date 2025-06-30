@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  HttpStatus,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
@@ -13,7 +18,9 @@ export class BrandsService {
       where: { name: createBrandDto.name },
     });
     if (existing) {
-      throw new BadRequestException(`Brand with name "${createBrandDto.name}" already exists.`);
+      throw new BadRequestException(
+        `Brand with name "${createBrandDto.name}" already exists.`,
+      );
     }
     return await this.prisma.brand.create({
       data: createBrandDto,
@@ -49,5 +56,28 @@ export class BrandsService {
     return await this.prisma.brand.delete({
       where: { id },
     });
+  }
+
+  async toggleStatus(id: string) {
+    try {
+      const brand = await this.prisma.brand.findUnique({ where: { id } });
+
+      if (!brand) {
+        return { success: false, status: HttpStatus.NOT_FOUND };
+      }
+
+      const updatedBrand = await this.prisma.brand.update({
+        where: { id },
+        data: { isActive: !brand.isActive },
+      });
+
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        isActive: updatedBrand.isActive, // Return new status
+      };
+    } catch (error) {
+      return { success: false, status: HttpStatus.FORBIDDEN };
+    }
   }
 }

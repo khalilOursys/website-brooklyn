@@ -17,6 +17,7 @@ export declare class CartService {
             } & {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -35,6 +36,7 @@ export declare class CartService {
             bulk: {
                 id: string;
                 name: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;

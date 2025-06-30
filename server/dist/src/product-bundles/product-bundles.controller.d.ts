@@ -16,6 +16,7 @@ export declare class ProductBundlesController {
     } & {
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
@@ -31,6 +32,7 @@ export declare class ProductBundlesController {
     } & {
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
@@ -42,6 +44,7 @@ export declare class ProductBundlesController {
                 category: {
                     id: string;
                     name: string;
+                    isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
                     slug: string | null;
@@ -55,6 +58,7 @@ export declare class ProductBundlesController {
                 brand: {
                     id: string;
                     name: string;
+                    isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
@@ -70,6 +74,7 @@ export declare class ProductBundlesController {
             } & {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -94,6 +99,7 @@ export declare class ProductBundlesController {
     } & {
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
@@ -109,6 +115,7 @@ export declare class ProductBundlesController {
     } & {
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
@@ -117,9 +124,15 @@ export declare class ProductBundlesController {
     remove(id: string): Promise<{
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         img: string | null;
         discount: number;
         expiresAt: Date | null;
+    }>;
+    toggleStatus(id: string): Promise<{
+        success: boolean;
+        isActive: boolean | undefined;
+        statusCode: import("@nestjs/common").HttpStatus;
     }>;
 }

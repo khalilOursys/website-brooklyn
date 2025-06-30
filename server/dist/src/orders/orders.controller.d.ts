@@ -37,6 +37,7 @@ export declare class OrdersController {
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
             createdAt: Date;
@@ -74,6 +75,7 @@ export declare class OrdersController {
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
             createdAt: Date;
@@ -91,6 +93,7 @@ export declare class OrdersController {
             } & {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -117,6 +120,7 @@ export declare class OrdersController {
             } & {
                 id: string;
                 name: string;
+                isActive: boolean;
                 color: string | null;
                 stock: number;
                 productId: string;
@@ -124,6 +128,7 @@ export declare class OrdersController {
             bundle: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 img: string | null;
                 discount: number;
@@ -132,6 +137,7 @@ export declare class OrdersController {
             bulk: {
                 id: string;
                 name: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -172,6 +178,7 @@ export declare class OrdersController {
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
             createdAt: Date;
@@ -181,6 +188,7 @@ export declare class OrdersController {
             product: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -199,6 +207,7 @@ export declare class OrdersController {
             variant: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 color: string | null;
                 stock: number;
                 productId: string;

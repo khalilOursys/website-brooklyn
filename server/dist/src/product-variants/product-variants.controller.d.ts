@@ -9,10 +9,11 @@ export declare class ProductVariantsController {
             category: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -22,20 +23,20 @@ export declare class ProductVariantsController {
             brand: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
-            description: string | null;
-            color: string | null;
-            price: number;
             stock: number;
+            color: string | null;
+            isActive: boolean;
+            description: string | null;
+            price: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -44,30 +45,34 @@ export declare class ProductVariantsController {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
     } & {
         id: string;
-        name: string;
-        color: string | null;
-        stock: number;
         productId: string;
+        name: string;
+        stock: number;
+        color: string | null;
+        isActive: boolean;
     }>;
     findAll(): Promise<({
         product: {
             category: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -77,20 +82,20 @@ export declare class ProductVariantsController {
             brand: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
-            description: string | null;
-            color: string | null;
-            price: number;
             stock: number;
+            color: string | null;
+            isActive: boolean;
+            description: string | null;
+            price: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -99,30 +104,34 @@ export declare class ProductVariantsController {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
     } & {
         id: string;
-        name: string;
-        color: string | null;
-        stock: number;
         productId: string;
+        name: string;
+        stock: number;
+        color: string | null;
+        isActive: boolean;
     })[]>;
     findOne(id: string): Promise<{
         product: {
             category: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -132,20 +141,20 @@ export declare class ProductVariantsController {
             brand: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
-            description: string | null;
-            color: string | null;
-            price: number;
             stock: number;
+            color: string | null;
+            isActive: boolean;
+            description: string | null;
+            price: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -154,30 +163,41 @@ export declare class ProductVariantsController {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
     } & {
         id: string;
-        name: string;
-        color: string | null;
-        stock: number;
         productId: string;
+        name: string;
+        stock: number;
+        color: string | null;
+        isActive: boolean;
     }>;
     getVariantWithProduct(id: string): Promise<({
         product: {
+            images: {
+                id: string;
+                productId: string | null;
+                variantId: string | null;
+                url: string;
+                isPrimary: boolean;
+            }[];
             category: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -187,48 +207,42 @@ export declare class ProductVariantsController {
             brand: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
-            images: {
-                id: string;
-                url: string;
-                isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
-            }[];
             variants: ({
                 images: {
                     id: string;
+                    productId: string | null;
+                    variantId: string | null;
                     url: string;
                     isPrimary: boolean;
-                    variantId: string | null;
-                    productId: string | null;
                 }[];
             } & {
                 id: string;
-                name: string;
-                color: string | null;
-                stock: number;
                 productId: string;
+                name: string;
+                stock: number;
+                color: string | null;
+                isActive: boolean;
             })[];
             attributes: {
                 id: string;
+                productId: string;
                 key: string;
                 value: string;
-                productId: string;
             }[];
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
-            description: string | null;
-            color: string | null;
-            price: number;
             stock: number;
+            color: string | null;
+            isActive: boolean;
+            description: string | null;
+            price: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -237,30 +251,34 @@ export declare class ProductVariantsController {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
     } & {
         id: string;
-        name: string;
-        color: string | null;
-        stock: number;
         productId: string;
+        name: string;
+        stock: number;
+        color: string | null;
+        isActive: boolean;
     }) | null>;
     update(id: string, updateProductVariantDto: UpdateProductVariantDto): Promise<({
         product: {
             category: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -270,20 +288,20 @@ export declare class ProductVariantsController {
             brand: {
                 id: string;
                 name: string;
+                isActive: boolean;
+                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
         } & {
             id: string;
             name: string;
-            createdAt: Date;
-            updatedAt: Date;
-            description: string | null;
-            color: string | null;
-            price: number;
             stock: number;
+            color: string | null;
+            isActive: boolean;
+            description: string | null;
+            price: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -292,26 +310,35 @@ export declare class ProductVariantsController {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
     } & {
         id: string;
-        name: string;
-        color: string | null;
-        stock: number;
         productId: string;
+        name: string;
+        stock: number;
+        color: string | null;
+        isActive: boolean;
     }) | null>;
     remove(id: string): Promise<{
         id: string;
-        name: string;
-        color: string | null;
-        stock: number;
         productId: string;
+        name: string;
+        stock: number;
+        color: string | null;
+        isActive: boolean;
+    }>;
+    toggleStatus(id: string): Promise<{
+        success: boolean;
+        isActive: boolean | undefined;
+        statusCode: import("@nestjs/common").HttpStatus;
     }>;
 }

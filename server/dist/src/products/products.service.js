@@ -52,6 +52,7 @@ let ProductsService = class ProductsService {
                 category: true,
                 brand: true,
             },
+            orderBy: { createdAt: 'desc' },
         });
     }
     async findOne(id) {
@@ -391,6 +392,26 @@ let ProductsService = class ProductsService {
             products,
             totalCount,
         };
+    }
+    async toggleStatus(id) {
+        try {
+            const product = await this.prisma.product.findUnique({ where: { id } });
+            if (!product) {
+                return { success: false, status: common_1.HttpStatus.NOT_FOUND };
+            }
+            const updatedProduct = await this.prisma.product.update({
+                where: { id },
+                data: { isActive: !product.isActive },
+            });
+            return {
+                success: true,
+                status: common_1.HttpStatus.OK,
+                isActive: updatedProduct.isActive,
+            };
+        }
+        catch (error) {
+            return { success: false, status: common_1.HttpStatus.FORBIDDEN };
+        }
     }
 };
 exports.ProductsService = ProductsService;

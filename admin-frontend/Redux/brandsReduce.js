@@ -77,6 +77,29 @@ export const getBrandById = createAsyncThunk(
   }
 );
 
+export const toggleBrandStatus = createAsyncThunk(
+  "brands/toggleStatus",
+  async (id) => {
+    const response = await fetch(
+      `${Configuration.BACK_BASEURL}brands/toggle-status/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to toggle brand status");
+    }
+
+    const result = await response.json();
+    return { id, isActive: result.isActive };
+  }
+);
 // Slice
 const brandsSlice = createSlice({
   name: "brands",

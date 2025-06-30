@@ -28,6 +28,7 @@ model User {
   firstName            String?
   lastName             String?
   role                 Role                @default(CLIENT)
+  isActive             Boolean             @default(true)
   oauthProvider        String?
   oauthId              String?
   createdAt            DateTime            @default(now())
@@ -71,6 +72,7 @@ model Product {
   categoryId     String
   category       Category             @relation(fields: [categoryId], references: [id])
   brandId        String
+  isActive       Boolean              @default(true)
   brand          Brand                @relation(fields: [brandId], references: [id])
   similarTo      Product[]            @relation("SimilarProducts")
   similar        Product[]            @relation("SimilarProducts")
@@ -100,7 +102,8 @@ model BulkProduct {
   product     Product?   @relation("BulkProductRelation", fields: [productId], references: [id])
   bulkPrice   Float
   minQuantity Int
-  discount    Float?
+  discount    Float?  
+  isActive    Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   orderItems  OrderItem[]  
@@ -124,7 +127,8 @@ model ProductVariant {
   product     Product      @relation(fields: [productId], references: [id])
   name        String
   stock       Int
-  color       String? 
+  color       String?
+  isActive    Boolean             @default(true) 
   images      ProductImage[]
   orderItems  OrderItem[]
   cartItems   CartItem[]
@@ -178,16 +182,17 @@ model Category {
   name        String    @unique
   slug        String?
   description String?
-  bgUrl String?
+  bgUrl String? 
   iconUrl String?
   bannerColor String
   bannerText  String
+  isActive    Boolean    @default(true)
   products    Product[]
   parentId    String?       // Reference to the parent category
   parent      Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
   children    Category[] @relation("CategoryToCategory") // Child categories
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model Brand {
@@ -195,6 +200,7 @@ model Brand {
   name      String    @unique
   description String?
   img String?
+  isActive  Boolean   @default(true)
   products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -305,6 +311,7 @@ model ProductBundle {
   id        String          @id @default(uuid())
   name      String
   discount  Float
+  isActive  Boolean         @default(true)
   products  BundleProduct[]
   orderItems     OrderItem[]
   createdAt DateTime        @default(now())
@@ -333,10 +340,11 @@ model Notification {
 }
 
 model HeroBanner {
-  id        String    @id @default(uuid())
-  name      String    @unique
+  id          String    @id @default(uuid())
+  name        String    @unique
   description String?
   img String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

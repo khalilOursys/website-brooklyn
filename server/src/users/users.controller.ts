@@ -67,4 +67,14 @@ export class UsersController {
 
     return user;
   }
+
+  @Put('toggle-status/:id')
+  async toggleStatus(@Param('id') id: string) {
+    const result = await this.usersService.toggleStatus(id);
+    return {
+      success: result.success,
+      isActive: result.isActive,
+      statusCode: result.status,
+    };
+  }
 }

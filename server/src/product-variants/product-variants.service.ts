@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateProductVariantDto } from './dto/create-product-variant.dto';
 import { UpdateProductVariantDto } from './dto/update-product-variant.dto';
@@ -71,7 +71,7 @@ export class ProductVariantsService {
           },
         },
       },
-      orderBy: { id: 'asc' },
+      orderBy: { id: 'desc' },
     });
   }
 
@@ -163,5 +163,30 @@ export class ProductVariantsService {
         },
       },
     });
+  }
+
+  async toggleStatus(id: string) {
+    try {
+      const productVariant = await this.prisma.productVariant.findUnique({
+        where: { id },
+      });
+
+      if (!productVariant) {
+        return { success: false, status: HttpStatus.NOT_FOUND };
+      }
+
+      const updatedProductVariant = await this.prisma.productVariant.update({
+        where: { id },
+        data: { isActive: !productVariant.isActive },
+      });
+
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        isActive: updatedProductVariant.isActive, // Return new status
+      };
+    } catch (error) {
+      return { success: false, status: HttpStatus.FORBIDDEN };
+    }
   }
 }

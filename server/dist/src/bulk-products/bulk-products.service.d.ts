@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateBulkProductDto } from './dto/create-bulk-product.dto';
 import { UpdateBulkProductDto } from './dto/update-bulk-product.dto';
@@ -8,6 +9,7 @@ export declare class BulkProductsService {
     create(createBulkProductDto: CreateBulkProductDto): Promise<{
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -20,6 +22,7 @@ export declare class BulkProductsService {
         product: {
             id: string;
             name: string;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
@@ -38,6 +41,7 @@ export declare class BulkProductsService {
     } & {
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -51,6 +55,7 @@ export declare class BulkProductsService {
             category: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
@@ -64,6 +69,7 @@ export declare class BulkProductsService {
             brand: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -85,6 +91,7 @@ export declare class BulkProductsService {
         } & {
             id: string;
             name: string;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
@@ -103,6 +110,7 @@ export declare class BulkProductsService {
     } & {
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -114,6 +122,7 @@ export declare class BulkProductsService {
     update(id: string, updateBulkProductDto: UpdateBulkProductDto): Promise<{
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -125,6 +134,7 @@ export declare class BulkProductsService {
     remove(id: string): Promise<{
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -147,6 +157,7 @@ export declare class BulkProductsService {
                 category: {
                     id: string;
                     name: string;
+                    isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
                     slug: string | null;
@@ -160,6 +171,7 @@ export declare class BulkProductsService {
                 brand: {
                     id: string;
                     name: string;
+                    isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
@@ -175,6 +187,7 @@ export declare class BulkProductsService {
             } & {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -193,6 +206,7 @@ export declare class BulkProductsService {
         } & {
             id: string;
             name: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
@@ -202,5 +216,14 @@ export declare class BulkProductsService {
             minQuantity: number;
         })[];
         totalCount: number;
+    }>;
+    toggleStatus(id: string): Promise<{
+        success: boolean;
+        status: HttpStatus;
+        isActive?: undefined;
+    } | {
+        success: boolean;
+        status: HttpStatus;
+        isActive: boolean;
     }>;
 }

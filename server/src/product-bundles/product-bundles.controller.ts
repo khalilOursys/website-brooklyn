@@ -56,4 +56,14 @@ export class ProductBundlesController {
   async remove(@Param('id') id: string) {
     return await this.productBundlesService.remove(id);
   }
+
+  @Put('toggle-status/:id')
+  async toggleStatus(@Param('id') id: string) {
+    const result = await this.productBundlesService.toggleStatus(id);
+    return {
+      success: result.success,
+      isActive: result.isActive,
+      statusCode: result.status,
+    };
+  }
 }

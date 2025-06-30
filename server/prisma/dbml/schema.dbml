@@ -11,6 +11,7 @@ Table User {
   firstName String
   lastName String
   role Role [not null, default: 'CLIENT']
+  isActive Boolean [not null, default: true]
   oauthProvider String
   oauthId String
   createdAt DateTime [default: `now()`, not null]
@@ -54,6 +55,7 @@ Table Product {
   categoryId String [not null]
   category Category [not null]
   brandId String [not null]
+  isActive Boolean [not null, default: true]
   brand Brand [not null]
   similarTo Product [not null]
   similar Product [not null]
@@ -83,6 +85,7 @@ Table BulkProduct {
   bulkPrice Float [not null]
   minQuantity Int [not null]
   discount Float
+  isActive Boolean [not null, default: true]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   orderItems OrderItem [not null]
@@ -106,6 +109,7 @@ Table ProductVariant {
   name String [not null]
   stock Int [not null]
   color String
+  isActive Boolean [not null, default: true]
   images ProductImage [not null]
   orderItems OrderItem [not null]
   cartItems CartItem [not null]
@@ -165,6 +169,7 @@ Table Category {
   iconUrl String
   bannerColor String [not null]
   bannerText String [not null]
+  isActive Boolean [not null, default: true]
   products Product [not null]
   parentId String
   parent Category
@@ -178,6 +183,7 @@ Table Brand {
   name String [unique, not null]
   description String
   img String
+  isActive Boolean [not null, default: true]
   products Product [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
@@ -291,6 +297,7 @@ Table ProductBundle {
   id String [pk]
   name String [not null]
   discount Float [not null]
+  isActive Boolean [not null, default: true]
   products BundleProduct [not null]
   orderItems OrderItem [not null]
   createdAt DateTime [default: `now()`, not null]
@@ -323,6 +330,7 @@ Table HeroBanner {
   name String [unique, not null]
   description String
   img String
+  isActive Boolean [not null, default: true]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
 }

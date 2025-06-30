@@ -26,6 +26,7 @@ export declare class BulkClientRequestsService {
         firstName: string | null;
         lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
         oauthProvider: string | null;
         oauthId: string | null;
         createdAt: Date;
@@ -53,6 +54,7 @@ export declare class BulkClientRequestsService {
         firstName: string | null;
         lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
         oauthProvider: string | null;
         oauthId: string | null;
         createdAt: Date;
@@ -80,6 +82,7 @@ export declare class BulkClientRequestsService {
         firstName: string | null;
         lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
         oauthProvider: string | null;
         oauthId: string | null;
         createdAt: Date;
@@ -94,6 +97,7 @@ export declare class BulkClientRequestsService {
         firstName: string | null;
         lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
         oauthProvider: string | null;
         oauthId: string | null;
         createdAt: Date;
@@ -109,6 +113,7 @@ export declare class BulkClientRequestsService {
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
             createdAt: Date;
@@ -123,6 +128,7 @@ export declare class BulkClientRequestsService {
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
             createdAt: Date;
@@ -150,6 +156,7 @@ export declare class BulkClientRequestsService {
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
             createdAt: Date;

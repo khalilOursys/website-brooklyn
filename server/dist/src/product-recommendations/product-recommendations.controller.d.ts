@@ -5,6 +5,7 @@ export declare class ProductRecommendationsController {
     getRecommendations(productId: string): Promise<{
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;

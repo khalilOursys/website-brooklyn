@@ -86,6 +86,29 @@ export const getHeroBannerById = createAsyncThunk(
   }
 );
 
+export const toggleHeroBannerStatus = createAsyncThunk(
+  "hero-banner/toggleStatus",
+  async (id) => {
+    const response = await fetch(
+      `${Configuration.BACK_BASEURL}hero-banner/toggle-status/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to toggle hero-banner status");
+    }
+
+    const result = await response.json();
+    return { id, isActive: result.isActive };
+  }
+);
 // Slice
 const heroBannerSlice = createSlice({
   name: "hero-banner",

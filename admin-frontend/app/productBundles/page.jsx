@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
-import { fetchProductBundles } from "@/Redux/bundleProductsReduce";
+import { fetchProductBundles, toggleProductBundleStatus } from "@/Redux/bundleProductsReduce";
 
 export default function Page() {
   const [entities, setEntities] = useState([]);
@@ -48,6 +48,12 @@ export default function Page() {
       accessorKey: "discount",
     },
     {
+      header: "Status",
+      accessorKey: "isActive",
+      Cell: ({ cell }) =>
+        cell.row.original.isActive === true ? "Activé" : "Désactivé",
+    },
+    {
       accessorKey: "id",
       header: "actions",
       Cell: ({ cell }) => (
@@ -61,6 +67,24 @@ export default function Page() {
             className="text-warning btn-link edit"
           >
             <i className="fa fa-edit" />
+          </Button>
+          <Button
+            onClick={(event) => {
+              changeStatus(cell.row.original.id, cell.row.original.isActive);
+            }}
+            variant="danger"
+            size="sm"
+            className={
+              cell.row.original.isActive === false
+                ? "text-success btn-link delete"
+                : "text-danger btn-link delete"
+            }
+          >
+            <i
+              className={
+                cell.row.original.isActive === false ? "fa fa-check" : "fa fa-times"
+              }
+            />
           </Button>
           {/* <Button
             onClick={() => router.push("/productBundles/detail/" + cell.row.original.id)}
@@ -104,6 +128,21 @@ export default function Page() {
     router.push("/productBundles/add");
   }
 
+  function changeStatus(id, e) {
+    dispatch(toggleProductBundleStatus(id)).then((e1) => {
+      getBulkProduct();
+      switch (e) {
+        case false:
+          notify(1, "Activer avec succes");
+          break;
+        case true:
+          notify(1, "Désactiver avec succes");
+          break;
+        default:
+          break;
+      }
+    });
+  }
   return (
     <>
       <div className="wrapper">
