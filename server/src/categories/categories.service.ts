@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  HttpStatus,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -130,5 +131,28 @@ export class CategoriesService {
       include: { children: true },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  async toggleStatus(id: string) {
+    try {
+      const category = await this.prisma.category.findUnique({ where: { id } });
+
+      if (!category) {
+        return { success: false, status: HttpStatus.NOT_FOUND };
+      }
+
+      const updatedCategory = await this.prisma.category.update({
+        where: { id },
+        data: { isActive: !category.isActive },
+      });
+
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        isActive: updatedCategory.isActive, // Return new status
+      };
+    } catch (error) {
+      return { success: false, status: HttpStatus.FORBIDDEN };
+    }
   }
 }

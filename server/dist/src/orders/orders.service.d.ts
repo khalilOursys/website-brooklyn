@@ -37,6 +37,7 @@ export declare class OrdersService {
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
             createdAt: Date;
@@ -74,6 +75,7 @@ export declare class OrdersService {
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
             createdAt: Date;
@@ -91,6 +93,7 @@ export declare class OrdersService {
             } & {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -117,6 +120,7 @@ export declare class OrdersService {
             } & {
                 id: string;
                 name: string;
+                isActive: boolean;
                 color: string | null;
                 stock: number;
                 productId: string;
@@ -124,6 +128,7 @@ export declare class OrdersService {
             bundle: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 img: string | null;
                 discount: number;
@@ -132,6 +137,7 @@ export declare class OrdersService {
             bulk: {
                 id: string;
                 name: string | null;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -196,6 +202,7 @@ export declare class OrdersService {
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
+            isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
             createdAt: Date;
@@ -205,6 +212,7 @@ export declare class OrdersService {
             product: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -223,6 +231,7 @@ export declare class OrdersService {
             variant: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 color: string | null;
                 stock: number;
                 productId: string;

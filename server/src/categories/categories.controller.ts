@@ -80,4 +80,14 @@ export class CategoriesController {
   async getAllChildren() {
     return this.categoriesService.findAllChildren();
   }
+
+  @Put('toggle-status/:id')
+  async toggleStatus(@Param('id') id: string) {
+    const result = await this.categoriesService.toggleStatus(id);
+    return {
+      success: result.success,
+      isActive: result.isActive,
+      statusCode: result.status,
+    };
+  }
 }

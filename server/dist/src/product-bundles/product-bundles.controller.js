@@ -42,6 +42,14 @@ let ProductBundlesController = class ProductBundlesController {
     async remove(id) {
         return await this.productBundlesService.remove(id);
     }
+    async toggleStatus(id) {
+        const result = await this.productBundlesService.toggleStatus(id);
+        return {
+            success: result.success,
+            isActive: result.isActive,
+            statusCode: result.status,
+        };
+    }
 };
 exports.ProductBundlesController = ProductBundlesController;
 __decorate([
@@ -87,6 +95,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ProductBundlesController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Put)('toggle-status/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductBundlesController.prototype, "toggleStatus", null);
 exports.ProductBundlesController = ProductBundlesController = __decorate([
     (0, common_1.Controller)('productBundles'),
     __metadata("design:paramtypes", [product_bundles_service_1.ProductBundlesService])

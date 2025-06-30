@@ -116,6 +116,26 @@ let CategoriesService = class CategoriesService {
             orderBy: { createdAt: 'desc' },
         });
     }
+    async toggleStatus(id) {
+        try {
+            const category = await this.prisma.category.findUnique({ where: { id } });
+            if (!category) {
+                return { success: false, status: common_1.HttpStatus.NOT_FOUND };
+            }
+            const updatedCategory = await this.prisma.category.update({
+                where: { id },
+                data: { isActive: !category.isActive },
+            });
+            return {
+                success: true,
+                status: common_1.HttpStatus.OK,
+                isActive: updatedCategory.isActive,
+            };
+        }
+        catch (error) {
+            return { success: false, status: common_1.HttpStatus.FORBIDDEN };
+        }
+    }
 };
 exports.CategoriesService = CategoriesService;
 exports.CategoriesService = CategoriesService = __decorate([

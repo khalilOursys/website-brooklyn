@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -57,5 +58,30 @@ export class HeroBannerService {
     return await this.prisma.heroBanner.delete({
       where: { id },
     });
+  }
+
+  async toggleStatus(id: string) {
+    try {
+      const heroBanner = await this.prisma.heroBanner.findUnique({
+        where: { id },
+      });
+
+      if (!heroBanner) {
+        return { success: false, status: HttpStatus.NOT_FOUND };
+      }
+
+      const updatedHeroBanner = await this.prisma.heroBanner.update({
+        where: { id },
+        data: { isActive: !heroBanner.isActive },
+      });
+
+      return {
+        success: true,
+        status: HttpStatus.OK,
+        isActive: updatedHeroBanner.isActive, // Return new status
+      };
+    } catch (error) {
+      return { success: false, status: HttpStatus.FORBIDDEN };
+    }
   }
 }

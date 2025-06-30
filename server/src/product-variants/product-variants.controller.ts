@@ -55,4 +55,14 @@ export class ProductVariantsController {
   async remove(@Param('id') id: string) {
     return await this.productVariantsService.remove(id);
   }
+
+  @Put('toggle-status/:id')
+  async toggleStatus(@Param('id') id: string) {
+    const result = await this.productVariantsService.toggleStatus(id);
+    return {
+      success: result.success,
+      isActive: result.isActive,
+      statusCode: result.status,
+    };
+  }
 }

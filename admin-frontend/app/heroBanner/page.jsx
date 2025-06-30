@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import AdminNavbar from "@/components/Navbars/AdminNavbar";
 import Footer from "@/components/Footer/Footer";
-import { fetchHeroBanner } from "@/Redux/heroBannerReduce";
+import { fetchHeroBanner, toggleHeroBannerStatus } from "@/Redux/heroBannerReduce";
 
 export default function Page() {
   const [entities, setEntities] = useState([]);
@@ -44,6 +44,12 @@ export default function Page() {
       accessorKey: "description",
     },
     {
+      header: "Status",
+      accessorKey: "isActive",
+      Cell: ({ cell }) =>
+        cell.row.original.isActive === true ? "Activé" : "Désactivé",
+    },
+    {
       accessorKey: "id",
       header: "Actions",
       Cell: ({ cell }) => (
@@ -58,6 +64,24 @@ export default function Page() {
           >
             <i className="fa fa-edit" />
           </Button>
+          <Button
+            onClick={(event) => {
+              changeStatus(cell.row.original.id, cell.row.original.isActive);
+            }}
+            variant="danger"
+            size="sm"
+            className={
+              cell.row.original.isActive === false
+                ? "text-success btn-link delete"
+                : "text-danger btn-link delete"
+            }
+          >
+            <i
+              className={
+                cell.row.original.isActive === false ? "fa fa-check" : "fa fa-times"
+              }
+            />
+          </Button>
           {/* <Button
             onClick={() => router.push("/heroBanner/detail/" + cell.row.original.id)}
             variant="info"
@@ -71,14 +95,14 @@ export default function Page() {
     },
   ];
 
-  const getBrand = useCallback(async () => {
+  const getHeroBanner = useCallback(async () => {
     const response = await dispatch(fetchHeroBanner());
     setEntities(response.payload);
   }, [dispatch]);
 
   useEffect(() => {
-    getBrand();
-  }, [getBrand]);
+    getHeroBanner();
+  }, [getHeroBanner]);
 
   function TableauListe({ list }) {
     return (
@@ -98,6 +122,22 @@ export default function Page() {
 
   function ajouter() {
     router.push("/heroBanner/add");
+  }
+
+  function changeStatus(id, e) {
+    dispatch(toggleHeroBannerStatus(id)).then((e1) => {
+      getHeroBanner();
+      switch (e) {
+        case false:
+          notify(1, "Activer avec succes");
+          break;
+        case true:
+          notify(1, "Désactiver avec succes");
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   return (

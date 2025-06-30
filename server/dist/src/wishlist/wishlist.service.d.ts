@@ -13,6 +13,7 @@ export declare class WishlistService {
         product: {
             id: string;
             name: string;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             description: string | null;

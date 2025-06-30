@@ -63,11 +63,6 @@ export default function CreateProductBundle() {
       return;
     }
 
-    if (formData.discount < 0 || formData.discount > 100) {
-      notify(2, "La remise doit être entre 0 et 100");
-      return;
-    }
-
     if (formData.products.length === 0 || formData.products.some(p => !p.productId)) {
       notify(2, "Veuillez ajouter au moins un produit valide au pack");
       return;

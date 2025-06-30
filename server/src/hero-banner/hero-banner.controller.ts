@@ -56,4 +56,14 @@ export class HeroBannerController {
   async remove(@Param('id') id: string) {
     return await this.heroBannersService.remove(id);
   }
+
+  @Put('toggle-status/:id')
+  async toggleStatus(@Param('id') id: string) {
+    const result = await this.heroBannersService.toggleStatus(id);
+    return {
+      success: result.success,
+      isActive: result.isActive,
+      statusCode: result.status,
+    };
+  }
 }

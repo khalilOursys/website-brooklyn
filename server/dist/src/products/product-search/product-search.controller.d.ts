@@ -7,6 +7,7 @@ export declare class ProductSearchController {
         category: {
             id: string;
             name: string;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
@@ -20,6 +21,7 @@ export declare class ProductSearchController {
         brand: {
             id: string;
             name: string;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
@@ -41,6 +43,7 @@ export declare class ProductSearchController {
     } & {
         id: string;
         name: string;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;

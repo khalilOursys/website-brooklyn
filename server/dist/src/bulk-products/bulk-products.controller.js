@@ -47,6 +47,14 @@ let BulkProductsController = class BulkProductsController {
             maxPrice: maxPrice ? Number(maxPrice) : undefined,
         });
     }
+    async toggleStatus(id) {
+        const result = await this.bulkProductsService.toggleStatus(id);
+        return {
+            success: result.success,
+            isActive: result.isActive,
+            statusCode: result.status,
+        };
+    }
 };
 exports.BulkProductsController = BulkProductsController;
 __decorate([
@@ -97,6 +105,13 @@ __decorate([
     __metadata("design:paramtypes", [String, Number, Number, String, Number, Number, Number]),
     __metadata("design:returntype", void 0)
 ], BulkProductsController.prototype, "findByCategory", null);
+__decorate([
+    (0, common_1.Put)('toggle-status/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], BulkProductsController.prototype, "toggleStatus", null);
 exports.BulkProductsController = BulkProductsController = __decorate([
     (0, common_1.Controller)('bulkProducts'),
     __metadata("design:paramtypes", [bulk_products_service_1.BulkProductsService])

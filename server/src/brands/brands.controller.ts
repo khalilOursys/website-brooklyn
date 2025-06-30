@@ -56,4 +56,14 @@ export class BrandsController {
   async remove(@Param('id') id: string) {
     return await this.brandsService.remove(id);
   }
+
+  @Put('toggle-status/:id')
+  async toggleStatus(@Param('id') id: string) {
+    const result = await this.brandsService.toggleStatus(id);
+    return {
+      success: result.success,
+      isActive: result.isActive,
+      statusCode: result.status,
+    };
+  }
 }

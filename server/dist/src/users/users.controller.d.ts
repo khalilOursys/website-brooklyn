@@ -1,3 +1,4 @@
+import { HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
@@ -14,6 +15,7 @@ export declare class UsersController {
         firstName: string | null;
         lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
         oauthProvider: string | null;
         oauthId: string | null;
         createdAt: Date;
@@ -31,6 +33,7 @@ export declare class UsersController {
         firstName: string | null;
         lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
         oauthProvider: string | null;
         oauthId: string | null;
         createdAt: Date;
@@ -58,6 +61,7 @@ export declare class UsersController {
         firstName: string | null;
         lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
         oauthProvider: string | null;
         oauthId: string | null;
         createdAt: Date;
@@ -85,6 +89,7 @@ export declare class UsersController {
         firstName: string | null;
         lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
         oauthProvider: string | null;
         oauthId: string | null;
         createdAt: Date;
@@ -99,9 +104,15 @@ export declare class UsersController {
         firstName: string | null;
         lastName: string | null;
         role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
         oauthProvider: string | null;
         oauthId: string | null;
         createdAt: Date;
         updatedAt: Date;
+    }>;
+    toggleStatus(id: string): Promise<{
+        success: boolean;
+        isActive: boolean | undefined;
+        statusCode: HttpStatus;
     }>;
 }

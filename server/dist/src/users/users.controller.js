@@ -51,6 +51,14 @@ let UsersController = class UsersController {
         }
         return user;
     }
+    async toggleStatus(id) {
+        const result = await this.usersService.toggleStatus(id);
+        return {
+            success: result.success,
+            isActive: result.isActive,
+            statusCode: result.status,
+        };
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -97,6 +105,13 @@ __decorate([
     __metadata("design:paramtypes", [String, UpdateUserDto_1.UpdateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateUser", null);
+__decorate([
+    (0, common_1.Put)('toggle-status/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "toggleStatus", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

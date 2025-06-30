@@ -1,7 +1,7 @@
 "use client"; // Marquer ceci comme un composant client
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
-import { fetchBrands } from "@/Redux/brandsReduce";
+import { fetchBrands, toggleBrandStatus } from "@/Redux/brandsReduce";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
 import MaterialReactTable from "material-react-table";
@@ -43,6 +43,12 @@ export default function Page() {
       accessorKey: "description",
     },
     {
+      header: "Status",
+      accessorKey: "isActive",
+      Cell: ({ cell }) =>
+        cell.row.original.isActive === true ? "Activé" : "Désactivé",
+    },
+    {
       accessorKey: "id",
       header: "Actions",
       Cell: ({ cell }) => (
@@ -56,6 +62,24 @@ export default function Page() {
             className="text-warning btn-link edit"
           >
             <i className="fa fa-edit" />
+          </Button>
+          <Button
+            onClick={(event) => {
+              changeStatus(cell.row.original.id, cell.row.original.isActive);
+            }}
+            variant="danger"
+            size="sm"
+            className={
+              cell.row.original.isActive === false
+                ? "text-success btn-link delete"
+                : "text-danger btn-link delete"
+            }
+          >
+            <i
+              className={
+                cell.row.original.isActive === false ? "fa fa-check" : "fa fa-times"
+              }
+            />
           </Button>
           {/* <Button
             onClick={() => router.push("/brands/detail/" + cell.row.original.id)}
@@ -97,6 +121,22 @@ export default function Page() {
 
   function ajouter() {
     router.push("/brands/add");
+  }
+
+  function changeStatus(id, e) {
+    dispatch(toggleBrandStatus(id)).then((e1) => {
+      getBrand();
+      switch (e) {
+        case false:
+          notify(1, "Activer avec succes");
+          break;
+        case true:
+          notify(1, "Désactiver avec succes");
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   return (

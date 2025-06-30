@@ -92,6 +92,14 @@ let ProductsController = class ProductsController {
             maxPrice: maxPrice ? Number(maxPrice) : undefined,
         });
     }
+    async toggleStatus(id) {
+        const result = await this.productService.toggleStatus(id);
+        return {
+            success: result.success,
+            isActive: result.isActive,
+            statusCode: result.status,
+        };
+    }
 };
 exports.ProductsController = ProductsController;
 __decorate([
@@ -182,6 +190,13 @@ __decorate([
     __metadata("design:paramtypes", [String, Number, Number, String, Number, Number]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "findByCategoryParent", null);
+__decorate([
+    (0, common_1.Put)('toggle-status/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductsController.prototype, "toggleStatus", null);
 exports.ProductsController = ProductsController = __decorate([
     (0, common_1.Controller)('products'),
     __metadata("design:paramtypes", [products_service_1.ProductsService])

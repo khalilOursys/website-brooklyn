@@ -52,6 +52,26 @@ let BrandsService = class BrandsService {
             where: { id },
         });
     }
+    async toggleStatus(id) {
+        try {
+            const brand = await this.prisma.brand.findUnique({ where: { id } });
+            if (!brand) {
+                return { success: false, status: common_1.HttpStatus.NOT_FOUND };
+            }
+            const updatedBrand = await this.prisma.brand.update({
+                where: { id },
+                data: { isActive: !brand.isActive },
+            });
+            return {
+                success: true,
+                status: common_1.HttpStatus.OK,
+                isActive: updatedBrand.isActive,
+            };
+        }
+        catch (error) {
+            return { success: false, status: common_1.HttpStatus.FORBIDDEN };
+        }
+    }
 };
 exports.BrandsService = BrandsService;
 exports.BrandsService = BrandsService = __decorate([

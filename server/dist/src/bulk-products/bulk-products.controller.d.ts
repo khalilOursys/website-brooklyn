@@ -7,6 +7,7 @@ export declare class BulkProductsController {
     create(createBulkProductDto: CreateBulkProductDto): Promise<{
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -19,6 +20,7 @@ export declare class BulkProductsController {
         product: {
             id: string;
             name: string;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
@@ -37,6 +39,7 @@ export declare class BulkProductsController {
     } & {
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -50,6 +53,7 @@ export declare class BulkProductsController {
             category: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
@@ -63,6 +67,7 @@ export declare class BulkProductsController {
             brand: {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -84,6 +89,7 @@ export declare class BulkProductsController {
         } & {
             id: string;
             name: string;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
@@ -102,6 +108,7 @@ export declare class BulkProductsController {
     } & {
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -113,6 +120,7 @@ export declare class BulkProductsController {
     update(id: string, updateBulkProductDto: UpdateBulkProductDto): Promise<{
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -124,6 +132,7 @@ export declare class BulkProductsController {
     remove(id: string): Promise<{
         id: string;
         name: string | null;
+        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
@@ -138,6 +147,7 @@ export declare class BulkProductsController {
                 category: {
                     id: string;
                     name: string;
+                    isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
                     slug: string | null;
@@ -151,6 +161,7 @@ export declare class BulkProductsController {
                 brand: {
                     id: string;
                     name: string;
+                    isActive: boolean;
                     createdAt: Date;
                     updatedAt: Date;
                     description: string | null;
@@ -166,6 +177,7 @@ export declare class BulkProductsController {
             } & {
                 id: string;
                 name: string;
+                isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
@@ -184,6 +196,7 @@ export declare class BulkProductsController {
         } & {
             id: string;
             name: string | null;
+            isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
@@ -193,5 +206,10 @@ export declare class BulkProductsController {
             minQuantity: number;
         })[];
         totalCount: number;
+    }>;
+    toggleStatus(id: string): Promise<{
+        success: boolean;
+        isActive: boolean | undefined;
+        statusCode: import("@nestjs/common").HttpStatus;
     }>;
 }
