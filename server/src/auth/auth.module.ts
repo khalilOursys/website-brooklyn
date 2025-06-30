@@ -7,10 +7,12 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 import { AuthController } from './auth.controller';
+import { MailerModule } from 'src/mailer/mailer.module';
 
 @Module({
   imports: [
     UsersModule,
+    MailerModule,
     PassportModule,
     ConfigModule.forRoot(),
     JwtModule.register({

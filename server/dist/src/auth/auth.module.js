@@ -16,6 +16,7 @@ const config_1 = require("@nestjs/config");
 const auth_service_1 = require("./auth.service");
 const local_strategy_1 = require("./local.strategy");
 const auth_controller_1 = require("./auth.controller");
+const mailer_module_1 = require("../mailer/mailer.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -23,6 +24,7 @@ exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
             users_module_1.UsersModule,
+            mailer_module_1.MailerModule,
             passport_1.PassportModule,
             config_1.ConfigModule.forRoot(),
             jwt_1.JwtModule.register({

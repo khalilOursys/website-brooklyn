@@ -118,6 +118,23 @@ let UsersService = class UsersService {
             throw error;
         }
     }
+    async updatePassword(userId, newPassword) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+        });
+        if (!user) {
+            throw new common_1.NotFoundException('User not found');
+        }
+        const saltRounds = 10;
+        const hashedPassword = await bcryptjs.hash(newPassword, saltRounds);
+        user.password = hashedPassword;
+        await this.prisma.user.update({
+            where: { id: userId },
+            data: {
+                password: hashedPassword,
+            },
+        });
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

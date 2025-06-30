@@ -1,9 +1,13 @@
 import { AuthService } from './auth.service';
 import { UsersService } from 'src/users/users.service';
+import { MailerService } from 'src/mailer/mailer.services';
+import { JwtService } from '@nestjs/jwt';
 export declare class AuthController {
     private authService;
     private usersService;
-    constructor(authService: AuthService, usersService: UsersService);
+    private readonly mailerService;
+    private readonly jwtService;
+    constructor(authService: AuthService, usersService: UsersService, mailerService: MailerService, jwtService: JwtService);
     login(req: any): Promise<{
         access_token: string;
         user: {
@@ -16,11 +20,11 @@ export declare class AuthController {
         cart: ({
             items: {
                 id: string;
-                variantId: string | null;
-                productId: string;
-                quantity: number;
-                bulkId: string | null;
                 cartId: string;
+                productId: string;
+                variantId: string | null;
+                bulkId: string | null;
+                quantity: number;
             }[];
         } & {
             id: string;
@@ -52,5 +56,16 @@ export declare class AuthController {
         oauthId: string | null;
         createdAt: Date;
         updatedAt: Date;
+    }>;
+    forgotPassword(body: {
+        email: string;
+    }): Promise<{
+        message: string;
+    }>;
+    resetPassword(body: {
+        token: string;
+        newPassword: string;
+    }): Promise<{
+        message: string;
     }>;
 }
