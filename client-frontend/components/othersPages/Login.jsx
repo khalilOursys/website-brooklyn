@@ -16,7 +16,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+  const [isForgotPasswordLoading, setIsForgotPasswordLoading] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
@@ -60,6 +61,42 @@ export default function Login() {
     }
   };
 
+
+  const handleForgotPassword = async (event) => {
+    event.preventDefault();
+    setIsForgotPasswordLoading(true);
+
+    if (!forgotPasswordEmail.trim()) {
+      notify(2, "L'email ne peut pas être vide.");
+      setIsForgotPasswordLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${Configuration.BACK_BASEURL}auth/forgot-password`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: forgotPasswordEmail }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        notify(1, "Un email de réinitialisation a été envoyé si l'adresse existe.");
+        setForgotPasswordEmail("");
+      } else {
+        notify(2, data.message || "Une erreur est survenue lors de l'envoi de l'email.");
+      }
+    } catch (error) {
+      console.error(error);
+      notify(2, "Une erreur est survenue lors de la demande de réinitialisation.");
+    } finally {
+      setIsForgotPasswordLoading(false);
+    }
+  };
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -76,7 +113,7 @@ export default function Login() {
                 Nous vous enverrons un email pour réinitialiser votre mot de passe
               </p>
               <div>
-                <form onSubmit={(e) => e.preventDefault()} className="">
+                <form onSubmit={handleForgotPassword} className="">
                   <div className="tf-field style-1 mb_15">
                     <input
                       className="tf-field-input tf-input"
@@ -84,12 +121,14 @@ export default function Login() {
                       required
                       type="email"
                       autoComplete="abc@xyz.com"
-                      id="property3"
+                      id="forgotPasswordEmail"
                       name="email"
+                      value={forgotPasswordEmail}
+                      onChange={(e) => setForgotPasswordEmail(e.target.value)}
                     />
                     <label
                       className="tf-field-label fw-4 text_black-2"
-                      htmlFor="property3"
+                      htmlFor="forgotPasswordEmail"
                     >
                       Email *
                     </label>
@@ -103,8 +142,9 @@ export default function Login() {
                     <button
                       type="submit"
                       className="tf-btn w-100 radius-3 btn-fill animate-hover-btn justify-content-center"
+                      disabled={isForgotPasswordLoading}
                     >
-                      Réinitialiser le mot de passe
+                      {isForgotPasswordLoading ? "Envoi en cours..." : "Réinitialiser le mot de passe"}
                     </button>
                   </div>
                 </form>

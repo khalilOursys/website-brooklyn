@@ -134,4 +134,28 @@ export class UsersService {
       throw error;
     }
   }
+
+  async updatePassword(userId: string, newPassword: string): Promise<void> {
+    // Find the user
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Hash the new password
+    const saltRounds = 10;
+    const hashedPassword = await bcryptjs.hash(newPassword, saltRounds);
+
+    // Update the password and clear any reset tokens if needed
+    user.password = hashedPassword;
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        password: hashedPassword,
+      },
+    });
+  }
 }
