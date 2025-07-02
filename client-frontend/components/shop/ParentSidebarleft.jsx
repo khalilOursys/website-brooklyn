@@ -52,7 +52,7 @@ export default function ParentSidebarleft({ slug }) {
   };
   const fetchFilterOption = async () => {
     try {
-      const url = new URL(`${api}products/filter-options`);
+      const url = new URL(`${api}products/getFilterOptionsParent`);
       url.searchParams.append("categorySlug", slug);
 
       const response = await fetch(url.toString());

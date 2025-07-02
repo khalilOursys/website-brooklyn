@@ -16,7 +16,7 @@ export default function Hero() {
   useEffect(() => {
     const fetchSliderData = async () => {
       try {
-        const response = await fetch(`${api}hero-banner`);
+        const response = await fetch(`${api}hero-banner/getIsActived`);
         if (!response.ok) {
           throw new Error('Failed to fetch slider data');
         }

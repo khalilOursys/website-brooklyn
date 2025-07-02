@@ -14,7 +14,7 @@ export default function Brands({ parentClass = "flat-spacing-1" }) {
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await fetch(`${api}brands`); // Your API endpoint
+        const response = await fetch(`${api}brands/getIsActived`); // Your API endpoint
         if (!response.ok) {
           throw new Error('Failed to fetch brands');
         }
