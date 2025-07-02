@@ -142,6 +142,7 @@ export class ProductsService {
         this.prisma.product.findMany({
           where: {
             isFeatured: true,
+            isActive: true,
           },
           skip: offset,
           take: limit,
@@ -156,6 +157,7 @@ export class ProductsService {
             discount: {
               gt: 0, // greater than 0
             },
+            isActive: true,
           },
           skip: offset,
           take: limit,
@@ -195,6 +197,7 @@ export class ProductsService {
     const offset = page * limit;
 
     const where: Prisma.ProductWhereInput = {
+      isActive: true,
       ...(categorySlug && {
         category: {
           slug: categorySlug,
@@ -286,6 +289,7 @@ export class ProductsService {
           {
             products: {
               some: {
+                isActive: true,
                 category: {
                   slug: categorySlug,
                 },
@@ -308,6 +312,7 @@ export class ProductsService {
           select: {
             products: {
               where: {
+                isActive: true,
                 OR: [
                   {
                     category: {
@@ -370,7 +375,7 @@ export class ProductsService {
         },
       };
     }
-    const priceAggregates = await this.prisma.$queryRaw<
+    /* const priceAggregates = await this.prisma.$queryRaw<
       {
         minprice: number;
         maxprice: number;
@@ -383,8 +388,20 @@ export class ProductsService {
     LEFT JOIN "BulkProduct" bp ON p.id = bp."productId"
     JOIN "Category" c ON p."categoryId" = c.id
     WHERE c.slug = ${categorySlug}
+  `; */
+    const priceAggregates = await this.prisma.$queryRaw<
+      {
+        minprice: number;
+        maxprice: number;
+      }[]
+    >`
+    SELECT 
+    MIN(LEAST(COALESCE(p.price))) as minPrice,
+    MAX(GREATEST(COALESCE(p.price))) as maxPrice
+    FROM "Product" p
+    JOIN "Category" c ON p."categoryId" = c.id
+    WHERE c.slug = ${categorySlug} and p."isActive"= true
   `;
-
     return {
       brands: brands.map((brand) => ({
         id: brand.id,
@@ -398,12 +415,98 @@ export class ProductsService {
     };
   }
 
+  async getFilterOptionsParent(categorySlug: string) {
+    // First, find the parent category of the specified category
+    const categoryWithParent = await this.prisma.category.findFirst({
+      where: { slug: categorySlug },
+      include: {
+        parent: true,
+      },
+    });
+
+    // Determine which category to filter by
+    const filterCategoryId =
+      categoryWithParent?.parent?.id || categoryWithParent?.id;
+
+    if (!filterCategoryId) {
+      return {
+        brands: [],
+        priceRange: { minPrice: 0, maxPrice: 10000 },
+      };
+    }
+
+    // Get distinct brands (including those with bulk products)
+    const brands = await this.prisma.brand.findMany({
+      where: {
+        OR: [
+          {
+            products: {
+              some: {
+                isActive: true,
+                category: {
+                  OR: [
+                    { id: filterCategoryId }, // Parent category
+                    { parentId: filterCategoryId }, // Direct children of parent
+                  ],
+                },
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        _count: {
+          select: {
+            products: {
+              where: {
+                isActive: true,
+                category: {
+                  OR: [
+                    { id: filterCategoryId }, // Parent category
+                    { parentId: filterCategoryId }, // Direct children of parent
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const priceAggregates = await this.prisma.$queryRaw<
+      {
+        minprice: number;
+        maxprice: number;
+      }[]
+    >`
+      SELECT 
+        MIN(LEAST(COALESCE(p.price))) as minPrice,
+        MAX(GREATEST(COALESCE(p.price))) as maxPrice
+      FROM "Product" p
+      JOIN "Category" c ON p."categoryId" = c.id
+      WHERE (c.id = ${filterCategoryId} OR c."parentId" = ${filterCategoryId})
+        AND p."isActive" = true
+    `;
+
+    return {
+      brands: brands.map((brand) => ({
+        id: brand.id,
+        name: brand.name,
+        productCount: brand._count.products,
+      })),
+      priceRange: {
+        minPrice: priceAggregates[0]?.minprice || 0,
+        maxPrice: priceAggregates[0]?.maxprice || 10000,
+      },
+    };
+  }
   async getFilterOptionsPromotion() {
     // Get distinct brands that have products with discount > 0
     const brands = await this.prisma.brand.findMany({
       where: {
         products: {
           some: {
+            isActive: true,
             discount: { gt: 0 }, // Only products with actual discounts
           },
         },
@@ -413,6 +516,7 @@ export class ProductsService {
           select: {
             products: {
               where: {
+                isActive: true,
                 discount: { gt: 0 }, // Count only discounted products
               },
             },
@@ -424,6 +528,7 @@ export class ProductsService {
     // Get price range for discounted products only
     const priceAggregates = await this.prisma.product.aggregate({
       where: {
+        isActive: true,
         discount: { gt: 0 }, // Only consider products with discount > 0
       },
       _min: {

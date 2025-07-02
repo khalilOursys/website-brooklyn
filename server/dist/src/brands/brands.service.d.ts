@@ -23,6 +23,15 @@ export declare class BrandsService {
         createdAt: Date;
         updatedAt: Date;
     }[]>;
+    getIsActived(): Promise<{
+        id: string;
+        name: string;
+        description: string | null;
+        img: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
     findOne(id: string): Promise<{
         id: string;
         name: string;

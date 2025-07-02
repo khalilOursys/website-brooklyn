@@ -32,6 +32,12 @@ let BrandsService = class BrandsService {
             orderBy: { createdAt: 'desc' },
         });
     }
+    async getIsActived() {
+        return await this.prisma.brand.findMany({
+            where: { isActive: true },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
     async findOne(id) {
         const brand = await this.prisma.brand.findUnique({ where: { id } });
         if (!brand) {

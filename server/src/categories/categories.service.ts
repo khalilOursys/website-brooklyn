@@ -120,6 +120,7 @@ export class CategoriesService {
         parentId: {
           not: null,
         },
+        isActive: true,
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -127,7 +128,7 @@ export class CategoriesService {
 
   async findAllParent() {
     return await this.prisma.category.findMany({
-      where: { parentId: null },
+      where: { parentId: null, isActive: true },
       include: { children: true },
       orderBy: { createdAt: 'desc' },
     });

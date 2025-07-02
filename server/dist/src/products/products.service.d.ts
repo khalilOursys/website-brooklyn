@@ -440,6 +440,17 @@ export declare class ProductsService {
             maxPrice: number;
         };
     }>;
+    getFilterOptionsParent(categorySlug: string): Promise<{
+        brands: {
+            id: string;
+            name: string;
+            productCount: number;
+        }[];
+        priceRange: {
+            minPrice: number;
+            maxPrice: number;
+        };
+    }>;
     getFilterOptionsPromotion(): Promise<{
         brands: {
             id: string;

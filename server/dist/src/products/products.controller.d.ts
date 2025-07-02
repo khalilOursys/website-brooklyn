@@ -450,6 +450,17 @@ export declare class ProductsController {
             avgDiscount: number;
         };
     }>;
+    getFilterOptionsParent(categorySlug: string): Promise<{
+        brands: {
+            id: string;
+            name: string;
+            productCount: number;
+        }[];
+        priceRange: {
+            minPrice: number;
+            maxPrice: number;
+        };
+    }>;
     findByCategoryParent(parentCategorySlug?: string, page?: number, limit?: number, brandNames?: string, minPrice?: number, maxPrice?: number): Promise<{
         products: ({
             category: {

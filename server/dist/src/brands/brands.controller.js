@@ -51,6 +51,9 @@ let BrandsController = class BrandsController {
             statusCode: result.status,
         };
     }
+    async getIsActived() {
+        return await this.brandsService.getIsActived();
+    }
 };
 exports.BrandsController = BrandsController;
 __decorate([
@@ -103,6 +106,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BrandsController.prototype, "toggleStatus", null);
+__decorate([
+    (0, common_1.Get)('getIsActived'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BrandsController.prototype, "getIsActived", null);
 exports.BrandsController = BrandsController = __decorate([
     (0, common_1.Controller)('brands'),
     __metadata("design:paramtypes", [brands_service_1.BrandsService])

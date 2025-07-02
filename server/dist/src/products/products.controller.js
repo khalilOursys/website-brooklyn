@@ -82,6 +82,9 @@ let ProductsController = class ProductsController {
     async getFilterOptionsPromotion() {
         return this.productService.getFilterOptionsPromotion();
     }
+    async getFilterOptionsParent(categorySlug) {
+        return this.productService.getFilterOptionsParent(categorySlug);
+    }
     findByCategoryParent(parentCategorySlug, page = 0, limit = 10, brandNames, minPrice, maxPrice) {
         return this.productService.findByCategoryParent({
             parentCategorySlug,
@@ -178,6 +181,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ProductsController.prototype, "getFilterOptionsPromotion", null);
+__decorate([
+    (0, common_1.Get)('getFilterOptionsParent'),
+    __param(0, (0, common_1.Query)('categorySlug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductsController.prototype, "getFilterOptionsParent", null);
 __decorate([
     (0, common_1.Get)('findByCategoryParent'),
     __param(0, (0, common_1.Query)('parentCategorySlug')),

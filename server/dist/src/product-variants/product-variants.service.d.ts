@@ -11,10 +11,10 @@ export declare class ProductVariantsService {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
+                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -25,19 +25,21 @@ export declare class ProductVariantsService {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
+                description: string | null;
                 img: string | null;
             };
         } & {
             id: string;
             name: string;
-            stock: number;
-            color: string | null;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
             description: string | null;
+            color: string | null;
             price: number;
+            stock: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -46,23 +48,21 @@ export declare class ProductVariantsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
-            createdAt: Date;
-            updatedAt: Date;
         };
         images: {
             id: string;
-            productId: string | null;
-            variantId: string | null;
             url: string;
             isPrimary: boolean;
+            variantId: string | null;
+            productId: string | null;
         }[];
     } & {
         id: string;
-        productId: string;
         name: string;
-        stock: number;
-        color: string | null;
         isActive: boolean;
+        color: string | null;
+        stock: number;
+        productId: string;
     }>;
     findAll(productId?: string): Promise<({
         product: {
@@ -70,10 +70,10 @@ export declare class ProductVariantsService {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
+                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -84,19 +84,21 @@ export declare class ProductVariantsService {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
+                description: string | null;
                 img: string | null;
             };
         } & {
             id: string;
             name: string;
-            stock: number;
-            color: string | null;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
             description: string | null;
+            color: string | null;
             price: number;
+            stock: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -105,23 +107,21 @@ export declare class ProductVariantsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
-            createdAt: Date;
-            updatedAt: Date;
         };
         images: {
             id: string;
-            productId: string | null;
-            variantId: string | null;
             url: string;
             isPrimary: boolean;
+            variantId: string | null;
+            productId: string | null;
         }[];
     } & {
         id: string;
-        productId: string;
         name: string;
-        stock: number;
-        color: string | null;
         isActive: boolean;
+        color: string | null;
+        stock: number;
+        productId: string;
     })[]>;
     findOne(id: string): Promise<{
         product: {
@@ -129,10 +129,10 @@ export declare class ProductVariantsService {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
+                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -143,19 +143,21 @@ export declare class ProductVariantsService {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
+                description: string | null;
                 img: string | null;
             };
         } & {
             id: string;
             name: string;
-            stock: number;
-            color: string | null;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
             description: string | null;
+            color: string | null;
             price: number;
+            stock: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -164,23 +166,21 @@ export declare class ProductVariantsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
-            createdAt: Date;
-            updatedAt: Date;
         };
         images: {
             id: string;
-            productId: string | null;
-            variantId: string | null;
             url: string;
             isPrimary: boolean;
+            variantId: string | null;
+            productId: string | null;
         }[];
     } & {
         id: string;
-        productId: string;
         name: string;
-        stock: number;
-        color: string | null;
         isActive: boolean;
+        color: string | null;
+        stock: number;
+        productId: string;
     }>;
     update(id: string, updateProductVariantDto: UpdateProductVariantDto): Promise<({
         product: {
@@ -188,10 +188,10 @@ export declare class ProductVariantsService {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
+                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -202,19 +202,21 @@ export declare class ProductVariantsService {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
+                description: string | null;
                 img: string | null;
             };
         } & {
             id: string;
             name: string;
-            stock: number;
-            color: string | null;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
             description: string | null;
+            color: string | null;
             price: number;
+            stock: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -223,49 +225,40 @@ export declare class ProductVariantsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
-            createdAt: Date;
-            updatedAt: Date;
         };
         images: {
             id: string;
-            productId: string | null;
-            variantId: string | null;
             url: string;
             isPrimary: boolean;
+            variantId: string | null;
+            productId: string | null;
         }[];
     } & {
         id: string;
-        productId: string;
         name: string;
-        stock: number;
-        color: string | null;
         isActive: boolean;
+        color: string | null;
+        stock: number;
+        productId: string;
     }) | null>;
     remove(id: string): Promise<{
         id: string;
-        productId: string;
         name: string;
-        stock: number;
-        color: string | null;
         isActive: boolean;
+        color: string | null;
+        stock: number;
+        productId: string;
     }>;
     getVariantWithProduct(id: string): Promise<({
         product: {
-            images: {
-                id: string;
-                productId: string | null;
-                variantId: string | null;
-                url: string;
-                isPrimary: boolean;
-            }[];
             category: {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
+                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -276,41 +269,50 @@ export declare class ProductVariantsService {
                 id: string;
                 name: string;
                 isActive: boolean;
-                description: string | null;
                 createdAt: Date;
                 updatedAt: Date;
+                description: string | null;
                 img: string | null;
             };
+            images: {
+                id: string;
+                url: string;
+                isPrimary: boolean;
+                variantId: string | null;
+                productId: string | null;
+            }[];
             variants: ({
                 images: {
                     id: string;
-                    productId: string | null;
-                    variantId: string | null;
                     url: string;
                     isPrimary: boolean;
+                    variantId: string | null;
+                    productId: string | null;
                 }[];
             } & {
                 id: string;
-                productId: string;
                 name: string;
-                stock: number;
-                color: string | null;
                 isActive: boolean;
+                color: string | null;
+                stock: number;
+                productId: string;
             })[];
             attributes: {
                 id: string;
-                productId: string;
                 key: string;
                 value: string;
+                productId: string;
             }[];
         } & {
             id: string;
             name: string;
-            stock: number;
-            color: string | null;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
             description: string | null;
+            color: string | null;
             price: number;
+            stock: number;
             isBulk: boolean;
             discount: number | null;
             isFeatured: boolean;
@@ -319,23 +321,21 @@ export declare class ProductVariantsService {
             brandId: string;
             averageRating: number | null;
             ratingCount: number;
-            createdAt: Date;
-            updatedAt: Date;
         };
         images: {
             id: string;
-            productId: string | null;
-            variantId: string | null;
             url: string;
             isPrimary: boolean;
+            variantId: string | null;
+            productId: string | null;
         }[];
     } & {
         id: string;
-        productId: string;
         name: string;
-        stock: number;
-        color: string | null;
         isActive: boolean;
+        color: string | null;
+        stock: number;
+        productId: string;
     }) | null>;
     toggleStatus(id: string): Promise<{
         success: boolean;

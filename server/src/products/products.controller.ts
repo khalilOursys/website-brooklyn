@@ -114,6 +114,11 @@ export class ProductsController {
   async getFilterOptionsPromotion() {
     return this.productService.getFilterOptionsPromotion();
   }
+
+  @Get('getFilterOptionsParent')
+  async getFilterOptionsParent(@Query('categorySlug') categorySlug: string) {
+    return this.productService.getFilterOptionsParent(categorySlug);
+  }
   // Find products by category name with pagination, optional brand name, and price range filters
   @Get('findByCategoryParent')
   findByCategoryParent(

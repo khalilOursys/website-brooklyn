@@ -33,6 +33,13 @@ export class BrandsService {
     });
   }
 
+  async getIsActived() {
+    return await this.prisma.brand.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
   async findOne(id: string) {
     const brand = await this.prisma.brand.findUnique({ where: { id } });
     if (!brand) {

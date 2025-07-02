@@ -57,4 +57,13 @@ export declare class BrandsController {
         isActive: boolean | undefined;
         statusCode: import("@nestjs/common").HttpStatus;
     }>;
+    getIsActived(): Promise<{
+        id: string;
+        name: string;
+        description: string | null;
+        img: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
 }

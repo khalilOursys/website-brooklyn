@@ -66,4 +66,9 @@ export class HeroBannerController {
       statusCode: result.status,
     };
   }
+
+  @Get('getIsActived')
+  async getIsActived() {
+    return await this.heroBannersService.getIsActived();
+  }
 }

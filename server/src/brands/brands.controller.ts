@@ -66,4 +66,9 @@ export class BrandsController {
       statusCode: result.status,
     };
   }
+
+  @Get('getIsActived')
+  async getIsActived() {
+    return await this.brandsService.getIsActived();
+  }
 }

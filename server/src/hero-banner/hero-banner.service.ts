@@ -84,4 +84,11 @@ export class HeroBannerService {
       return { success: false, status: HttpStatus.FORBIDDEN };
     }
   }
+
+  async getIsActived() {
+    return await this.prisma.heroBanner.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 }
