@@ -109,6 +109,11 @@ export default function Page() {
       return;
     }
 
+    if (images.length === 0) {
+      notify(2, "Il faut ajouter au moin une image");
+      return;
+    }
+
     // Soumission
     const variantData = {
       productId: productId.value,

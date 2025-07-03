@@ -1,6 +1,8 @@
 // app/shop/[slug]/page.tsx
 import Footer2 from "@/components/footers/Footer2";
+import Header2 from "@/components/headers/Header2";
 import Header4 from "@/components/headers/Header4";
+import Topbar1 from "@/components/headers/Topbar1";
 import ShopSidebarleft from "@/components/shop/ShopSidebarleft";
 import Configuration from "@/configuration";
 
@@ -36,7 +38,8 @@ export default async function Page({ params }) {
 
   return (
     <>
-      <Header4 />
+      <Topbar1 />
+      <Header2 />
 
       <div
         className="tf-page-title cat-page"

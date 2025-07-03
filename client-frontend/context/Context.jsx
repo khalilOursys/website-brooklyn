@@ -52,15 +52,17 @@ export default function Context({ children }) {
     fetchCategories();
   }, []);
   const addProductToCart = (item, qty) => {
-    console.log(item);
 
     if (!cartProducts.filter((elm) => elm.id == item.id)[0]) {
+
       var newItem = {
         ...item,
         quantity: qty ? qty : 1,
       }
       setCartProducts((pre) => [...pre, newItem]);
       openCartModal();
+    } else {
+      window.location.replace("/view-cart");
     }
   };
   const isAddedToCartProducts = (id) => {

@@ -215,12 +215,12 @@ export default function QuickView() {
                     >
                       <span>
                         {isAddedToCartProducts(quickViewItem.id)
-                          ? "Déjà ajouté - "
-                          : "Ajouter au panier - "}
+                          ? "Déjà ajouté"
+                          : "Ajouter au panier"}
                       </span>
-                      <span className="tf-qty-price">
+                      {/* <span className="tf-qty-price">
                         {quickViewItem.price.toFixed(3)} TND
-                      </span>
+                      </span> */}
                     </a>
                   </form>
                 </div>

@@ -95,21 +95,13 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
       </li>
       <li className="menu-item">
         <a
-          href="#"
-          className={`item-link ${Linkfs} ${textColor}`}
-        >
-          À propos
-        </a>
-      </li>
-      <li className="menu-item">
-        <a
           href="/promotions"
           className={`item-link ${Linkfs} ${textColor}`}
         >
           Promotions
         </a>
       </li>
-      {user?.role === "BULK_CLIENT" &&
+      {/* {user?.role === "BULK_CLIENT" &&
         user?.bulkRequests?.status?.toLowerCase() === "approuvée" && (
           <li className="menu-item">
             <a
@@ -119,7 +111,7 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
               Produit en gros
             </a>
           </li>
-        )}
+        )} */}
 
       <li className="menu-item">
         <a
@@ -157,14 +149,23 @@ export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
           </div>
         </div>
       </li>
+
       <li className="menu-item">
+        <a
+          href="/about-us"
+          className={`item-link ${Linkfs} ${textColor}`}
+        >
+          À propos
+        </a>
+      </li>
+      {/* <li className="menu-item">
         <a
           href="#"
           className={`item-link ${Linkfs} ${textColor}`}
         >
           Contact
         </a>
-      </li>
+      </li> */}
     </>
   );
 }

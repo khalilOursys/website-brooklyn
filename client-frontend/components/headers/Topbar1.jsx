@@ -1,11 +1,8 @@
 "use client";
 import React from "react";
-import Link from "next/link";
-import LanguageSelect from "../common/LanguageSelect";
-import CurrencySelect from "../common/CurrencySelect";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+import { useContextElement } from "@/context/Context";
 export default function Topbar1() {
+  const { user } = useContextElement();
   return (
     <div className="tf-top-bar bg_grey-7 line">
       <div className="px_15 lg-px_40">
@@ -48,13 +45,24 @@ export default function Topbar1() {
           </ul>
           <div className="text-center overflow-hidden">
             <p className="top-bar-text fw-5">
-              Register as
+              Inscrivez-vous en tant que
               <a
-                href="#registerBulkClient"
-                data-bs-toggle="modal"
+                href="/registerBulkClient"
+                /* href="#registerBulkClient"
+                data-bs-toggle="modal" */
                 className="tf-btn btn-line"
               >
-                <span className="text">Wholesaler</span>
+                <span className="text">revendeur </span>
+              </a> /
+              <a
+                href={user?.role === "BULK_CLIENT" && user?.bulkRequests?.status?.toLowerCase() === "approuvée"
+                  ? "/bulkproduct"
+                  : user?.role === "BULK_CLIENT" && user?.bulkRequests?.status?.toLowerCase() !== "approuvée" ?
+                    "/" :
+                    "/login"}
+                className="tf-btn btn-line"
+              >
+                Produit en gros
               </a>
             </p>
           </div>
@@ -99,8 +107,8 @@ export default function Topbar1() {
               </svg>
             </div>
             <div className="number d-grid">
-              <a href="tel:1900100888" className="phone">
-                (+216) XX XXX XXX
+              <a href="#" className="phone">
+                (+216) 94.666.413
               </a>
             </div>
           </div>

@@ -12,7 +12,7 @@ export const footerLinks = [
 ];
 export const aboutLinks = [
   { href: "/about-us", text: "About Us" },
-  { href: "/contact-1", text: "Contact Us" },
+  { href: "/contact", text: "Contact Us" },
 ];
 export const paymentImages = [
   { src: "/images/payments/visa.png", width: 48, height: 30, alt: "" },

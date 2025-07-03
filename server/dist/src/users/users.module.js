@@ -12,6 +12,7 @@ const users_controller_1 = require("./users.controller");
 const users_service_1 = require("./users.service");
 const prisma_service_1 = require("../prisma.service");
 const jwt_1 = require("@nestjs/jwt");
+const mailer_module_1 = require("../mailer/mailer.module");
 let UsersModule = class UsersModule {
 };
 exports.UsersModule = UsersModule;
@@ -20,6 +21,7 @@ exports.UsersModule = UsersModule = __decorate([
         controllers: [users_controller_1.UsersController],
         providers: [users_service_1.UsersService, prisma_service_1.PrismaService],
         imports: [
+            mailer_module_1.MailerModule,
             jwt_1.JwtModule.register({
                 secret: process.env.JWT_SECRET || 'secretKey',
                 signOptions: { expiresIn: '1h' },

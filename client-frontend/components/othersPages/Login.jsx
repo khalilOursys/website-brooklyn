@@ -105,7 +105,8 @@ export default function Login() {
     <section className="flat-spacing-10">
       <ToastContainer />
       <div className="container">
-        <div className="tf-grid-layout lg-col-2 tf-login-wrap">
+        <div className="form-register-wrap">
+          {/* <div className="tf-grid-layout lg-col-2 tf-login-wrap"> */}
           <div className="tf-login-form">
             <div id="recover">
               <h5 className="mb_24">Réinitialiser votre mot de passe</h5>
@@ -223,7 +224,7 @@ export default function Login() {
               </div>
             </div>
           </div>
-          <div className="tf-login-content">
+          {/* <div className="tf-login-content">
             <h5 className="mb_36">Je suis nouveau ici</h5>
             <p className="mb_20">
               Inscrivez-vous pour un accès anticipé aux soldes ainsi qu'à des nouvelles arrivées, tendances
@@ -233,7 +234,7 @@ export default function Login() {
               S'inscrire
               <i className="icon icon-arrow1-top-left" />
             </Link>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

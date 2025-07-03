@@ -78,13 +78,14 @@ export default function QuickAdd() {
             <div className="tf-product-info-buy-button">
               <form onSubmit={(e) => e.preventDefault()} className="">
                 <a
+                  href="#"
                   className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
                   onClick={() => addProductToCart(item, quantity)}
                 >
                   <span>
-                    {isAddedToCartProducts(item?.id) ? "Déjà ajouté - " : "Ajouter au panier - "}
+                    {isAddedToCartProducts(item?.id) ? "Déjà ajouté " : "Ajouter au panier"}
                   </span>
-                  <span className="tf-qty-price">{item?.price} TND</span>
+                  {/* <span className="tf-qty-price">{item?.price} TND</span> */}
                 </a>
               </form>
             </div>

@@ -76,6 +76,15 @@ export default function Page() {
     const finalIconUrl = iconUrl || (parentCategoryDetails ? parentCategoryDetails.iconUrl : "");
     const finalBgUrl = bgUrl || (parentCategoryDetails ? parentCategoryDetails.bgUrl : "");
 
+    if (finalIconUrl === "") {
+      notify(2, "Image d'arrière-plan est requise");
+      return;
+    }
+
+    if (finalIconUrl === "") {
+      notify(2, "Icon est requise");
+      return;
+    }
     dispatch(
       addCategory({
         parentId: parentId ? parentId.value : null,

@@ -4,22 +4,20 @@ import Brands from "@/components/common/Brands";
 import Categories from "@/components/homes/home-accessories/Categories";
 import Features from "@/components/common/Features";
 import ProductsHome from "@/components/ProductsHome";
-import Blogs from "@/components/blogs/Blogs";
-import Header4 from "@/components/headers/Header4";
 import ShopGram from "@/components/homes/home-accessories/ShopGram";
 import Header2 from "@/components/headers/Header2";
-import Topbar2 from "@/components/headers/Topbar2";
+import Topbar1 from "@/components/headers/Topbar1";
 
 export const metadata = {
-  title: "Home 1 || test",
+  title: "brooklyn-store",
   description: "brooklyn-store",
 };
 export default function Home() {
   return (
     <>
-      <Header4 />
-      {/* <Topbar2 />
-      <Header2 /> */}
+      {/* <Header4 /> */}
+      <Topbar1 />
+      <Header2 />
       <Hero />
       <Features bgColor="" />
       <Categories />
