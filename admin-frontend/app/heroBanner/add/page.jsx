@@ -44,6 +44,11 @@ export default function Page() {
       return;
     }
 
+    if (image === "") {
+      notify(2, "Image est requise");
+      return;
+    }
+
     dispatch(
       addHeroBanner({
         name,

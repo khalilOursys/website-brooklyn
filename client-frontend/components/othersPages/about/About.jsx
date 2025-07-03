@@ -9,35 +9,31 @@ export default function About() {
             <div className="tf-image-wrap">
               <Image
                 className="lazyload w-100"
-                data-src="/images/collections/collection-69.jpg"
+                data-src="/images/about-us.jpg"
                 alt="collection-img"
-                src="/images/collections/collection-69.jpg"
+                src="/images/about-us.jpg"
                 width={600}
                 height={499}
               />
             </div>
             <div className="tf-content-wrap px-0 d-flex justify-content-center w-100">
               <div>
-                <div className="heading">Established - 1995</div>
+                <div className="heading">BROOKLYN PHONES </div>
                 <div className="text">
-                  Ecomus was founded in 1995 by Jane Smith, a fashion lover with
-                  a <br className="d-xl-block d-none" />
-                  passion for timeless style. Jane had always been drawn to
-                  classic <br className="d-xl-block d-none" />
-                  pieces that could be worn season after season, and she
-                  believed that <br className="d-xl-block d-none" />
-                  there was a gap in the market for a store that focused solely
-                  on classic <br className="d-xl-block d-none" />
-                  women's clothing. She opened the first store in a small town
-                  in New <br className="d-xl-block d-none" />
-                  England, where it quickly became a local favorite.
+                  est spécialisée dans la vente en gros et au détail de téléphones
+                  mobiles et de leurs accessoires. Elle offre à tous ces clients le meilleur service.
+                  Chez BROOKLYN, nous sommes guidés par un ensemble de valeurs essentielles. La
+                  confiance, l'honnêteté, l'engagement, le respect, l'intégrité, la responsabilité et la
+                  collaboration. Ces valeurs sont au cœur de notre culture d'entreprise et influencent
+                  toutes nos actions et décisions.
+
                 </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <section className="flat-spacing-15">
+      {/* <section className="flat-spacing-15">
         <div className="container">
           <div className="tf-grid-layout md-col-2 tf-img-with-text style-4">
             <div className="tf-content-wrap px-0 d-flex justify-content-center w-100">
@@ -84,7 +80,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

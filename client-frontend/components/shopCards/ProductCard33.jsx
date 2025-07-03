@@ -118,7 +118,7 @@ const ProductCard33 = ({ product }) => {
       </div>
       <div className="card-product-info text-center">
         <Link href={`/product-detail/${product.id}`} className="title link">
-          {product.title}
+          {product.name}
         </Link>
         <span className="price">{product.price.toFixed(3)} TND</span>
         {/* {product.colors && (

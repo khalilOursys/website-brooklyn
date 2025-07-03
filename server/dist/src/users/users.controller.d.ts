@@ -4,9 +4,11 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/UpdateUserDto';
+import { MailerService } from 'src/mailer/mailer.services';
 export declare class UsersController {
     private readonly usersService;
-    constructor(usersService: UsersService);
+    private readonly mailerService;
+    constructor(usersService: UsersService, mailerService: MailerService);
     register(createUserDto: CreateUserDto): Promise<{
         id: string;
         email: string;
@@ -115,4 +117,10 @@ export declare class UsersController {
         isActive: boolean | undefined;
         statusCode: HttpStatus;
     }>;
+    contact(body: {
+        email: string;
+        nom: string;
+        prenom: string;
+        msg: string;
+    }): Promise<void>;
 }

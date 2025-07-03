@@ -19,9 +19,13 @@ const create_user_dto_1 = require("./dto/create-user.dto");
 const login_dto_1 = require("./dto/login.dto");
 const client_1 = require("@prisma/client");
 const UpdateUserDto_1 = require("./dto/UpdateUserDto");
+const mailer_services_1 = require("../mailer/mailer.services");
+const dotenv = require("dotenv");
+dotenv.config();
 let UsersController = class UsersController {
-    constructor(usersService) {
+    constructor(usersService, mailerService) {
         this.usersService = usersService;
+        this.mailerService = mailerService;
     }
     async register(createUserDto) {
         const user = await this.usersService.create(createUserDto);
@@ -58,6 +62,11 @@ let UsersController = class UsersController {
             isActive: result.isActive,
             statusCode: result.status,
         };
+    }
+    contact(body) {
+        const { email, nom, prenom, msg } = body;
+        var to = process.env.contact_us || 'shadowreaperguide@gmail.com';
+        return this.mailerService.sendContactEmail(email, nom, prenom, msg, to);
     }
 };
 exports.UsersController = UsersController;
@@ -112,8 +121,16 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "toggleStatus", null);
+__decorate([
+    (0, common_1.Post)('/contact'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "contact", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService,
+        mailer_services_1.MailerService])
 ], UsersController);
 //# sourceMappingURL=users.controller.js.map

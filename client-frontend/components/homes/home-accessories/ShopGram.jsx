@@ -65,11 +65,8 @@ export default function ShopGram() {
     <section className="flat-spacing-7">
       <div className="container">
         <div className="flat-title wow fadeInUp" data-wow-delay="0s">
-          <span className="title">Shop Gram</span>
-          <p className="sub-title">
-            Inspire and let yourself be inspired, from one unique fashion to
-            another.
-          </p>
+          <span className="title">Nos packs</span>
+
         </div>
         <div className="wrap-carousel wrap-shop-gram">
           <Swiper

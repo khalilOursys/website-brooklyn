@@ -84,7 +84,7 @@ export default function Cart() {
                     <tr key={i} className="tf-cart-item file-delete">
                       <td className="tf-cart-item_product">
                         <Link
-                          href={`/product-detail/${elm.id}`}
+                          href={elm.isPacks === 1 ? `/pack-detail/${elm.id}` : elm.idProduct ? `/variant-detail/${elm.id}` : `/product-detail/${elm.id}`}
                           className="img-box"
                         >
                           <Image
@@ -96,7 +96,7 @@ export default function Cart() {
                         </Link>
                         <div className="cart-info">
                           <Link
-                            href={`/product-detail/${elm.id}`}
+                            href={elm.isPacks === 1 ? `/pack-detail/${elm.id}` : elm.idProduct ? `/variant-detail/${elm.id}` : `/product-detail/${elm.id}`}
                             className="cart-title link"
                           >
                             {elm.name}
@@ -254,7 +254,7 @@ export default function Cart() {
           </div>
           <div className="tf-page-cart-footer">
             <div className="tf-cart-footer-inner">
-              <div className="tf-free-shipping-bar">
+              {/* <div className="tf-free-shipping-bar">
                 <div className="tf-progress-bar">
                   <span style={{ width: "50%" }}>
                     <div className="progress-car">
@@ -278,24 +278,32 @@ export default function Cart() {
                   Achetez <span className="price fw-6">75.00 TND</span> de plus pour profiter de la
                   <span className="fw-6 mr-1 ms-1">livraison gratuite</span>
                 </div>
-              </div>
+              </div> */}
               <div className="tf-page-cart-checkout">
 
-                {/* <div className="cart-checkbox">
-                  <input
+                <h5>Total panier</h5>
+                <div className="cart-checkbox">
+                  {/* <input
                     type="checkbox"
                     className="tf-check"
                     id="cart-gift-checkbox"
-                  />
+                  /> */}
                   <label htmlFor="cart-gift-checkbox" className="fw-4">
-                    <span>Do you want a gift wrap?</span> Only
-                    <span className="fw-5">$5.00</span>
+                    <span>Livraison à domicile:</span>
+                    <span className="fw-5"> 7.000 DT</span>
                   </label>
-                </div> */}
+                </div>
+                {/* <p>Livraison à domicile: 7.000 DT</p> */}
+                <div className="tf-cart-totals-discounts">
+                  <h3>Sous-total</h3>
+                  <span className="total-value">
+                    {totalPrice.toFixed(3)} TND
+                  </span>
+                </div>
                 <div className="tf-cart-totals-discounts">
                   <h3>Total</h3>
                   <span className="total-value">
-                    {totalPrice.toFixed(3)} TND
+                    {(parseFloat(totalPrice) + 7).toFixed(3)} TND
                   </span>
                 </div>
                 <p className="tf-cart-tax">

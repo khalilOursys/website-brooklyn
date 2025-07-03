@@ -73,7 +73,7 @@ export default function Footer2({ bgColor = "" }) {
         <div className="footer-body">
           <div className="container">
             <div className="row">
-              <div className="col-xl-3 col-md-6 col-12">
+              <div className="col-xl-4 col-md-6 col-12">
                 <div className="footer-infor">
                   <div className="footer-logo">
                     <Link href={`/`} className="logo-header">
@@ -91,26 +91,25 @@ export default function Footer2({ bgColor = "" }) {
                   <ul>
                     <li>
                       <p>
-                        Adresse: Teniour(Ceinture de Kaied Mhamed  <br />
-                        vers Teniour)
+                        Ceinture bourguiba, route kaied Mhamed vers route gremda, sfax
                       </p>
                     </li>
                     <li>
                       <p>
-                        Email: <a href="#">info@oursys.com</a>
+                        Email: <a href="#">commercial@brooklyn-phones.com</a>
                       </p>
                     </li>
                     <li>
                       <p>
-                        Phone: <a href="#">(+216) 22-xxx-xxx</a>
+                        Phone: <a href="#">(+216) 94.666.413</a>
                       </p>
                     </li>
                   </ul>
-                  <Link href={`/contact-1`} className="tf-btn btn-line">
+                  {/* <Link href={`/contact-1`} className="tf-btn btn-line">
                     Get direction
                     <i className="icon icon-arrow1-top-left" />
-                  </Link>
-                  <ul className="tf-social-icon d-flex gap-10 style-white">
+                  </Link> */}
+                  <ul className="tf-social-icon d-flex gap-10">
                     <li>
                       <a
                         href="#"
@@ -154,7 +153,7 @@ export default function Footer2({ bgColor = "" }) {
                   </ul>
                 </div>
               </div>
-              <div className="col-xl-3 col-md-6 col-12 footer-col-block">
+              <div className="col-xl-4 col-md-6 col-12 footer-col-block">
                 <div className="footer-heading footer-heading-desktop">
                   <h6>Category</h6>
                 </div>
@@ -171,7 +170,7 @@ export default function Footer2({ bgColor = "" }) {
                   ))}
                 </ul>
               </div>
-              <div className="col-xl-3 col-md-6 col-12 footer-col-block">
+              <div className="col-xl-4 col-md-6 col-12 footer-col-block">
                 <div className="footer-heading footer-heading-desktop">
                   <h6>About us</h6>
                 </div>
@@ -187,67 +186,6 @@ export default function Footer2({ bgColor = "" }) {
                     </li>
                   ))}
                 </ul>
-              </div>
-              <div className="col-xl-3 col-md-6 col-12">
-                <div className="footer-newsletter footer-col-block">
-                  <div className="footer-heading footer-heading-desktop">
-                    <h6>Sign Up for Email</h6>
-                  </div>
-                  <div className="footer-heading footer-heading-moblie">
-                    <h6>Sign Up for Email</h6>
-                  </div>
-                  <div className="tf-collapse-content">
-                    <div className="footer-menu_item">
-                      Sign up to get first dibs on new arrivals, sales,
-                      exclusive content, events and more!
-                    </div>
-                    <div
-                      className={`tfSubscribeMsg ${showMessage ? "active" : ""
-                        }`}
-                    >
-                      {success ? (
-                        <p style={{ color: "rgb(52, 168, 83)" }}>
-                          You have successfully subscribed.
-                        </p>
-                      ) : (
-                        <p style={{ color: "red" }}>Something went wrong</p>
-                      )}
-                    </div>
-                    <form
-                      ref={formRef}
-                      onSubmit={sendEmail}
-                      className="form-newsletter"
-                      action="#"
-                      method="post"
-                      acceptCharset="utf-8"
-                      data-mailchimp="true"
-                    >
-                      <div id="subscribe-content">
-                        <fieldset className="email">
-                          <input
-                            required
-                            type="email"
-                            name="email"
-                            placeholder="Enter your email...."
-                            tabIndex={0}
-                            aria-required="true"
-                            autoComplete="abc@xyz.com"
-                          />
-                        </fieldset>
-                        <div className="button-submit">
-                          <button
-                            className="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn"
-                            type="submit"
-                          >
-                            Subscribe
-                            <i className="icon icon-arrow1-top-left" />
-                          </button>
-                        </div>
-                      </div>
-                      <div id="subscribe-msg" />
-                    </form>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

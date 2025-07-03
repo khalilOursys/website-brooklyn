@@ -55,8 +55,19 @@ export default function Header4() {
                     className="tf-btn btn-line"
                   >
                     <span className="text">grossiste</span>
+                  </a>/
+                  <a
+                    href={user?.role === "BULK_CLIENT" && user?.bulkRequests?.status?.toLowerCase() === "approuvée"
+                      ? "/bulkproduct"
+                      : user?.role === "BULK_CLIENT" && user?.bulkRequests?.status?.toLowerCase() !== "approuvée" ?
+                        "/" :
+                        "/login"}
+                    className="tf-btn btn-line"
+                  >
+                    Produit en gros
                   </a>
                 </p>
+
               </div>
             </div>
             <div className="col-md-4 col-2 tf-lg-hidden">
@@ -125,7 +136,7 @@ export default function Header4() {
                         localStorage.removeItem("x-access-token");
                         setToken(null);
                         // Optional: reload page or update user context
-                        window.location.reload(); // or navigate to home
+                        window.location.replace("/"); // or navigate to home
                       }}
                       className="nav-icon-item align-items-center gap-10 bg-transparent border-0"
                     >

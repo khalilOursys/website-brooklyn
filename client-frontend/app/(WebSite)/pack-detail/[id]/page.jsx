@@ -6,6 +6,8 @@ import Configuration from "@/configuration";
 import Header4 from "@/components/headers/Header4";
 import DefaultShopDetailsNoZoom from "@/components/shopDetails/DefaultShopDetailsNoZoom";
 import RecentProducts from "@/components/shopDetails/RecentProducts";
+import Topbar1 from "@/components/headers/Topbar1";
+import Header2 from "@/components/headers/Header2";
 
 // Function to fetch product data from the backend
 async function getProductById(id) {
@@ -74,7 +76,8 @@ export default async function page({ params }) {
   if (!product) {
     return (
       <>
-        <Header4 />
+        <Topbar1 />
+        <Header2 />
 
         <div className="tf-breadcrumb">
           <div className="container">

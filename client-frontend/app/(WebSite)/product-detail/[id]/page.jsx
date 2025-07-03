@@ -4,6 +4,8 @@ import DetailsOuterZoom from "@/components/shopDetails/DetailsOuterZoom";
 import Footer2 from "@/components/footers/Footer2";
 import Configuration from "@/configuration";
 import Header4 from "@/components/headers/Header4";
+import Topbar1 from "@/components/headers/Topbar1";
+import Header2 from "@/components/headers/Header2";
 
 // Function to fetch product data from the backend
 async function getProductById(id) {
@@ -61,7 +63,8 @@ export default async function page({ params }) {
 
   return (
     <>
-      <Header4 />
+      <Topbar1 />
+      <Header2 />
       <div className="tf-breadcrumb">
         <div className="container">
           <div className="tf-breadcrumb-wrap d-flex justify-content-between flex-wrap align-items-center">

@@ -127,12 +127,12 @@ export default function Page() {
       return;
     }
 
-    if (price <= 0) {
+    if (parseFloat(price) <= 0) {
       notify(2, "Le prix doit être supérieur à 0");
       return;
     }
 
-    if (stock < 0) {
+    if (parseInt(stock) < 0) {
       notify(2, "Le stock ne peut pas être négatif");
       return;
     }
@@ -145,6 +145,11 @@ export default function Page() {
     const invalidAttributes = attributes.some(attr => !attr.key.trim() || !attr.value.trim());
     if (invalidAttributes) {
       notify(2, "Tous les attributs doivent avoir une clé et une valeur");
+      return;
+    }
+
+    if (images.length === 0) {
+      notify(2, "Il faut ajouter au moin une image");
       return;
     }
 
@@ -334,7 +339,7 @@ export default function Page() {
                                     name="price"
                                     className="required"
                                     type="number"
-                                    onChange={(e) => handleNumberChange(e, setPrice)}
+                                    onChange={(e) => setPrice(e.target.value)}
                                   />
                                 </Form.Group>
                               </Col>
@@ -346,7 +351,7 @@ export default function Page() {
                                     placeholder="Prix en remise"
                                     name="discount"
                                     type="number"
-                                    onChange={(e) => setDiscount(parseFloat(e.target.value))}
+                                    onChange={(e) => setDiscount(e.target.value)}
                                   />
                                 </Form.Group>
                               </Col>
@@ -362,7 +367,7 @@ export default function Page() {
                                     name="stock"
                                     className="required"
                                     type="number"
-                                    onChange={(e) => handleNumberChange(e, setStock)}
+                                    onChange={(e) => setStock(e.target.value)}
                                   />
                                 </Form.Group>
                               </Col>

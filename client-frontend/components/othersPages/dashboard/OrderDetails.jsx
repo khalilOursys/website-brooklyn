@@ -65,19 +65,38 @@ export default function OrderDetails({ order }) {
   // Formater la date
   const formattedDate = new Date(order.createdAt).toLocaleString();
 
+
+  const getStatusBadgeColor = (status) => {
+    switch (status) {
+      case 'en attente': return 'success';
+      case 'en cours de traitement': return 'info';
+      case 'expédié': return 'primary';
+      case 'terminé': return 'warning';
+      case 'Annuler': return 'danger';
+      default: return 'secondary';
+    }
+    /* switch (status) {
+      case 'completed': return 'success';
+      case 'processing': return 'info';
+      case 'shipped': return 'primary';
+      case 'pending': return 'warning';
+      case 'cancelled': return 'danger';
+      default: return 'secondary';
+    } */
+  };
   return (
     <div className="wd-form-order">
       <div className="order-head">
-        <figure className="img-product">
+        {/* <figure className="img-product">
           <Image
             alt="product"
             src="/images/products/brown.jpg"
             width="720"
             height="1005"
           />
-        </figure>
+        </figure> */}
         <div className="content">
-          <div className="badge">{order.status}</div>
+          <div className={`badge bg-${getStatusBadgeColor(order.status)}`}>{order.status}</div>
           <h6 className="mt-8 fw-5">Commande #{order.id.slice(0, 5)}</h6>
         </div>
       </div>

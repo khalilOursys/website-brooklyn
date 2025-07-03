@@ -112,7 +112,7 @@ export default function Orders() {
   return (
     <div className="my-account-content account-order">
       <div className="wrap-account-order">
-        <h2>Votre historique de commandes</h2>
+        {/* <h2>Votre historique de commandes</h2> */}
         <table>
           <thead>
             <tr>

@@ -7,6 +7,8 @@ import Link from 'next/link';
 import Footer2 from '@/components/footers/Footer2';
 import Header4 from '@/components/headers/Header4';
 import Configuration from '@/configuration';
+import Topbar1 from '@/components/headers/Topbar1';
+import Header2 from '@/components/headers/Header2';
 
 export default function ResetPasswordPage() {
   const api = Configuration.BACK_BASEURL;
@@ -128,7 +130,8 @@ export default function ResetPasswordPage() {
   };
   return (
     <>
-      <Header4 />
+      <Topbar1 />
+      <Header2 />
       {/* <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>

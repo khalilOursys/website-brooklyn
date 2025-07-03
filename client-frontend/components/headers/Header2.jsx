@@ -1,9 +1,11 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
 import Image from "next/image";
 import Link from "next/link";
 import CartLength from "../common/CartLength";
 import WishlistLength from "../common/WishlistLength";
+import { useContextElement } from "@/context/Context";
 export default function Header2({
   textClass,
   bgColor = "",
@@ -11,6 +13,21 @@ export default function Header2({
   isArrow = true,
   Linkfs = "",
 }) {
+  const [token, setToken] = useState(null);
+  const { user } = useContextElement();
+
+  const [totalBulk, setTotalBulk] = useState(0);
+  useEffect(() => {
+    // This code runs only on the client
+    const storedToken = localStorage.getItem("x-access-token");
+    setToken(storedToken);
+  }, []);
+  useEffect(() => {
+    // This code runs only on the client
+    if (user) {
+      setTotalBulk(user.cart ? user.cart.items.length : 0)
+    }
+  }, [user]);
   return (
     <header
       id="header"
@@ -43,7 +60,7 @@ export default function Header2({
               <Image
                 alt="logo"
                 className="logo"
-                src="/images/logo/logo.svg"
+                src="/images/logo/logo3.png"
                 width="136"
                 height="21"
               />
@@ -76,30 +93,56 @@ export default function Header2({
                   <i className="icon icon-search" />
                 </a>
               </li>
+
               <li className="nav-account">
-                <a
-                  href="#login"
-                  data-bs-toggle="modal"
-                  className="nav-icon-item"
+                {!token ? <a
+                  /* href="#login" */
+                  href="/login"
+                  /*  data-bs-toggle="modal" */
+                  className="nav-icon-item align-items-center gap-10 bg-transparent border-0"
                 >
                   <i className="icon icon-account" />
-                </a>
+                </a> : <a
+                  href="/my-account-edit"
+                  className="nav-icon-item align-items-center gap-10 bg-transparent border-0"
+                >
+                  <i className="icon icon-account" />
+                </a>}
               </li>
-              <li className="nav-wishlist">
-                <Link href={`/wishlist`} className="nav-icon-item">
-                  <i className="icon icon-heart" />
-                  <span className={`count-box ${bgColor} ${textClass}`}>
-                    <WishlistLength />
-                  </span>
-                </Link>
-              </li>
+              {token ? (
+                <li>
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem("x-access-token");
+                      setToken(null);
+                      // Optional: reload page or update user context
+                      window.location.replace("/"); // or navigate to home
+                    }}
+                    className="nav-icon-item align-items-center gap-10 bg-transparent border-0"
+                  >
+                    <i className="fas fa-sign-out-alt" />
+                  </button>
+                </li>
+              ) : ("")}
+
+              {user?.role === "BULK_CLIENT" &&
+                user?.bulkRequests?.status?.toLowerCase() === "approuvée" && (
+                  <li className="nav-cart cart-lg line-left-1">
+                    <a href="/cart-bulk" className="nav-icon-item">
+                      {/* <i className="fas fa-wallet"></i> */}
+                      <i className="fas fa-pallet"></i>
+                      <span className="count-box">{totalBulk}</span>
+                    </a>
+                  </li>
+                )}
               <li className="nav-cart">
                 <a
                   href="#shoppingCart"
                   data-bs-toggle="modal"
                   className="nav-icon-item"
                 >
-                  <i className="icon icon-bag" />
+
+                  <i className="fas fa-shopping-cart"></i>
                   <span className={`count-box ${bgColor} ${textClass}`}>
                     <CartLength />
                   </span>

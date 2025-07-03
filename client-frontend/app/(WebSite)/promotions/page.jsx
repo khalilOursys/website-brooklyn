@@ -1,6 +1,8 @@
 import Footer2 from "@/components/footers/Footer2";
 import Header0 from "@/components/headers/Header0";
+import Header2 from "@/components/headers/Header2";
 import Header4 from "@/components/headers/Header4";
+import Topbar1 from "@/components/headers/Topbar1";
 import PromotionSidebarleft from "@/components/shop/PromotionSidebarleft";
 import ShopSidebarleft from "@/components/shop/ShopSidebarleft";
 
@@ -20,7 +22,8 @@ export async function generateMetadata({ params }) {
 export default async function Page() {
   return (
     <>
-      <Header4 />
+      <Topbar1 />
+      <Header2 />
 
       <div className="tf-page-title">
         <div className="container-full">

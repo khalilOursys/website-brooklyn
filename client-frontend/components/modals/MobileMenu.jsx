@@ -48,7 +48,7 @@ export default function MobileMenu() {
   const navItems = [
     {
       id: "dropdown-menu-two",
-      label: "Shop",
+      label: "Produit",
       links: categories,
     }
   ];
@@ -91,12 +91,7 @@ export default function MobileMenu() {
           <ul className="nav-ul-mb" id="wrapper-menu-navigation">
             <li className="nav-mb-item">
               <a href="/" className="mb-menu-link">
-                Home
-              </a>
-            </li>
-            <li className="nav-mb-item">
-              <a href="/home2" className="mb-menu-link">
-                Home 2
+                Acceuil
               </a>
             </li>
             <li className="nav-mb-item">
@@ -104,10 +99,10 @@ export default function MobileMenu() {
                 href="/promotions"
                 className={`mb-menu-link`}
               >
-                promotions
+                Promotions
               </a>
             </li>
-            {user?.role === "BULK_CLIENT" && user !== null && (
+            {/* {user?.role === "BULK_CLIENT" && user !== null && (
               <li className="nav-mb-item">
                 <a
                   href="/bulkproduct"
@@ -116,7 +111,7 @@ export default function MobileMenu() {
                   Bulk-Product
                 </a>
               </li>
-            )}
+            )} */}
             {navItems.map((item, i) => (
               <li key={i} className="nav-mb-item">
                 <a
@@ -184,6 +179,14 @@ export default function MobileMenu() {
                 </div>
               </li>
             ))}
+            <li className="nav-mb-item">
+              <a
+                href="/about-us"
+                className={`mb-menu-link`}
+              >
+                À propos
+              </a>
+            </li>
           </ul>
           <div className="mb-other-content">
             {/* <div className="d-flex group-icon">
@@ -193,7 +196,7 @@ export default function MobileMenu() {
               </Link>
             </div> */}
 
-            <div className="overflow-hidden">
+            {/* <div className="overflow-hidden">
               <p className="top-bar-text">
                 Register as
                 <button
@@ -203,6 +206,30 @@ export default function MobileMenu() {
                   <span className="text">Wholesaler</span>
                 </button>
               </p>
+            </div> */}
+            <div className="overflow-hidden">
+              <p className="top-bar-text">
+                Inscrivez-vous en tant que
+                <a
+                  href="/registerBulkClient"
+                  /* href="#registerBulkClient"
+                  data-bs-toggle="modal" */
+                  className="tf-btn btn-line"
+                >
+                  <span className="text">grossiste</span>
+                </a>/
+                <a
+                  href={user?.role === "BULK_CLIENT" && user?.bulkRequests?.status?.toLowerCase() === "approuvée"
+                    ? "/bulkproduct"
+                    : user?.role === "BULK_CLIENT" && user?.bulkRequests?.status?.toLowerCase() !== "approuvée" ?
+                      "/" :
+                      "/login"}
+                  className="tf-btn btn-line"
+                >
+                  Produit en gros
+                </a>
+              </p>
+
             </div>
           </div>
         </div>

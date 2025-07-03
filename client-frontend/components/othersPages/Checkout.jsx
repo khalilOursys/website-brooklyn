@@ -94,10 +94,9 @@ export default function Checkout() {
         userId: user.id,
         address: `${formData.address}, ${formData.firstName} ${formData.lastName}`,
         phoneNumber: formData.phoneNumber,
-        total: totalPrice,
+        total: totalPrice + 7,
         orderItems
       };
-      console.log(orderData);
 
       // Send the request to your API  `${api}orders`
       const response = await fetch(`${api}orders`, {
@@ -113,10 +112,11 @@ export default function Checkout() {
       }
 
       const result = await response.json();
+
       localStorage.removeItem("cartList");
       setSuccess(true);
       setTimeout(() => {
-        window.location.replace("/");
+        window.location.replace("/my-account-orders-details/" + result.id);
       }, 1500);
     } catch (err) {
       console.error("Error submitting order:", err);
@@ -263,7 +263,7 @@ export default function Checkout() {
                 </div> */}
                 <div className="d-flex justify-content-between line pb_20">
                   <h6 className="fw-5">Total</h6>
-                  <h6 className="total fw-5">{totalPrice} TND</h6>
+                  <h6 className="total fw-5">{totalPrice + 7} TND</h6>
                 </div>
                 <div className="wd-check-payment">
                   <div className="fieldset-radio mb_20">

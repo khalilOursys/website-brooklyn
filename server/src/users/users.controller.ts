@@ -15,10 +15,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/UpdateUserDto';
+import { MailerService } from 'src/mailer/mailer.services';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly mailerService: MailerService,
+  ) {}
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
@@ -76,5 +82,20 @@ export class UsersController {
       isActive: result.isActive,
       statusCode: result.status,
     };
+  }
+
+  @Post('/contact')
+  contact(
+    @Body()
+    body: {
+      email: string;
+      nom: string;
+      prenom: string;
+      msg: string;
+    },
+  ) {
+    const { email, nom, prenom, msg } = body;
+    var to = process.env.contact_us || 'shadowreaperguide@gmail.com';
+    return this.mailerService.sendContactEmail(email, nom, prenom, msg, to);
   }
 }

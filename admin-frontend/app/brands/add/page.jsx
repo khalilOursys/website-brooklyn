@@ -43,7 +43,10 @@ export default function Page() {
       notify(2, "La description de la marque est requise");
       return;
     }
-
+    if (image === "") {
+      notify(2, "Image est requise");
+      return;
+    }
     dispatch(
       addBrand({
         name,

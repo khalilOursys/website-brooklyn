@@ -108,6 +108,11 @@ export default function CreateVariantPage() {
       return;
     }
 
+    if (images.length === 0) {
+      notify(2, "Il faut ajouter au moin une image");
+      return;
+    }
+
     try {
       const response = await fetch(`${api}product-variants`, {
         method: "POST",
