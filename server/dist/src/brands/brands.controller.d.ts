@@ -10,47 +10,47 @@ export declare class BrandsController {
     create(createBrandDto: CreateBrandDto): Promise<{
         id: string;
         name: string;
-        description: string | null;
-        img: string | null;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
+        img: string | null;
     }>;
     findAll(): Promise<{
         id: string;
         name: string;
-        description: string | null;
-        img: string | null;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
+        img: string | null;
     }[]>;
     findOne(id: string): Promise<{
         id: string;
         name: string;
-        description: string | null;
-        img: string | null;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
+        img: string | null;
     }>;
     update(id: string, updateBrandDto: UpdateBrandDto): Promise<{
         id: string;
         name: string;
-        description: string | null;
-        img: string | null;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
+        img: string | null;
     }>;
     remove(id: string): Promise<{
         id: string;
         name: string;
-        description: string | null;
-        img: string | null;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
+        img: string | null;
     }>;
     toggleStatus(id: string): Promise<{
         success: boolean;
@@ -60,10 +60,10 @@ export declare class BrandsController {
     getIsActived(): Promise<{
         id: string;
         name: string;
-        description: string | null;
-        img: string | null;
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
+        description: string | null;
+        img: string | null;
     }[]>;
 }

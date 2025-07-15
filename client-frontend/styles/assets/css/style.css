@@ -585,6 +585,9 @@ body>.navbar-collapse:before {
   opacity: 1;
 }
 
+.Toastify__toast {
+  z-index: 9999 !important;
+}
 
 .Toastify__toast--success {
   background: #07bc0c !important;
@@ -878,4 +881,16 @@ div#basic-navbar-nav {
 .upload-block {
   border: 1px dotted #fff;
   margin-top: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }

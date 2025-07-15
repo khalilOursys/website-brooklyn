@@ -26,6 +26,7 @@ export default function CreateProductBundle() {
 
   const [formData, setFormData] = useState({
     name: "",
+    stock: 0,
     discount: 0,
     expiresAt: null,
     img: "",
@@ -208,7 +209,7 @@ export default function CreateProductBundle() {
                             </Col>
                           </Row>
                           <Row>
-                            <Col md="6">
+                            <Col className="pr-1" md="6">
                               <Form.Group className="mb-3">
                                 <label>Date d'expiration</label>
                                 <DatePicker
@@ -218,6 +219,20 @@ export default function CreateProductBundle() {
                                   isClearable
                                   className="form-control"
                                   placeholderText="Sélectionner une date"
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col className="pl-1" md="6">
+                              <Form.Group>
+                                <label>Stock* </label>
+                                <Form.Control
+                                  value={formData.stock}
+                                  placeholder="Stock"
+                                  name="stock"
+                                  className="required"
+                                  type="number"
+                                  onChange={(e) => setFormData(prev => ({ ...prev, stock: parseFloat(e.target.value) }))}
+                                /* onChange={(e) => setStock(e.target.value)} */
                                 />
                               </Form.Group>
                             </Col>

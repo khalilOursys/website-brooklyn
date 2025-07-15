@@ -7,6 +7,7 @@ export declare class CreateProductBundleDto {
     discount: number;
     expiresAt?: string;
     img?: string;
+    stock?: number;
     products: BundleItemDto[];
 }
 export {};

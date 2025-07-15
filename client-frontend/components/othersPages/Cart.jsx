@@ -4,19 +4,37 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 export default function Cart() {
   const { cartProducts, setCartProducts, totalPrice } = useContextElement();
 
   const [token, setToken] = useState(null);
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const notify = (type, msg) => {
+    toast.error(<strong><i className="fas fa-exclamation-circle"></i>{msg}</strong>);
+  };
+
   const setQuantity = (id, quantity) => {
     if (quantity >= 1) {
       const item = cartProducts.filter((elm) => elm.id == id)[0];
       const items = [...cartProducts];
       const itemIndex = items.indexOf(item);
-      item.quantity = quantity;
-      items[itemIndex] = item;
-      setCartProducts(items);
+
+      if (items[itemIndex] && quantity > items[itemIndex].stock) {
+        setErrorMessage(`Quantité insuffisante : vous ne pouvez pas dépasser ${items[itemIndex].stock}.`);
+
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+
+        setQuantity(id, items[itemIndex].stock);
+      } else {
+        item.quantity = quantity;
+        items[itemIndex] = item;
+        setCartProducts(items);
+      }
     }
   };
   const removeItem = (id) => {
@@ -26,22 +44,32 @@ export default function Cart() {
     const savedToken = localStorage.getItem("x-access-token"); // or whatever key you use
     setToken(savedToken);
   }, []);
-
-  const handleCheckout = () => {
-    if (token) {
-      router.push("/checkout"); // go to checkout page
-    } else {
-      router.push("/login"); // or wherever your login page is
-    }
-  };
   return (
     <section className="flat-spacing-11">
+
+      {/* Error Message Display */}
+      {errorMessage && (
+        <div className="error-message" style={{
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: '#ffebee',
+          color: '#d32f2f',
+          padding: '10px 20px',
+          borderRadius: '4px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          animation: 'fadeIn 0.3s ease-in-out'
+        }}>
+          <i className="fas fa-exclamation-circle"></i>
+          <strong>{errorMessage}</strong>
+        </div>
+      )}
       <div className="container">
-        {/* <div className="tf-page-cart text-center mt_140 mb_200">
-              <h5 className="mb_24">Your cart is empty</h5>
-              <p className="mb_24">You may check out all the available products and buy some in the shop</p>
-              <Link href={`/shop-default`} className="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn">Return to shop<i className="icon icon-arrow1-top-left"></i></Link>
-          </div> */}
         <div className="tf-cart-countdown">
           <div className="title-left">
             <svg

@@ -19,8 +19,11 @@ async function getProductById(id) {
       throw new Error(`Failed to fetch product: ${response.statusText}`);
     }
     const product = await response.json();
+    console.log(product);
+
     const transformedData = {
       id: product.id,
+      stock: product.stock,
       name: product.name,
       description: product.description || '',
       price: product.discount?.toString() || '0.00',

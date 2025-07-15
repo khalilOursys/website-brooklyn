@@ -142,6 +142,11 @@ export default function Page() {
       return;
     }
 
+    if (!brandId) {
+      notify(2, "La marque est requise");
+      return;
+    }
+
     const invalidAttributes = attributes.some(attr => !attr.key.trim() || !attr.value.trim());
     if (invalidAttributes) {
       notify(2, "Tous les attributs doivent avoir une clé et une valeur");
@@ -166,7 +171,7 @@ export default function Page() {
         images,
         color,
         categoryId: categoryId.value,
-        brandId: brandId ? brandId.value : null,
+        brandId: brandId.value,
         attributes: attributes.filter(attr => attr.key.trim() && attr.value.trim())
       })
     ).then((action) => {
@@ -409,7 +414,6 @@ export default function Page() {
                                     value={brandId}
                                     onChange={setBrandId}
                                     placeholder="Sélectionner une marque"
-                                    isClearable
                                   />
                                 </Form.Group>
                               </Col>

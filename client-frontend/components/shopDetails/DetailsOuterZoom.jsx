@@ -8,6 +8,7 @@ import { allProducts } from "@/data/products";
 import { useContextElement } from "@/context/Context";
 import { openCartModal } from "@/utlis/openCartModal";
 import { useParams } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function DetailsOuterZoom({ product = allProducts[0] }) {
   const params = useParams();
@@ -32,6 +33,13 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
   // Check if product is out of stock
   const isOutOfStock = product.stock <= 0;
 
+
+  const notify = (type, msg) => {
+    if (type === 1)
+      toast.success(<strong><i className="fas fa-check-circle"></i>{msg}</strong>);
+    else
+      toast.error(<strong><i className="fas fa-exclamation-circle"></i>{msg}</strong>);
+  };
   useEffect(() => {
     const colorInfo = [];
 
@@ -56,6 +64,13 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
 
     setColors(colorInfo);
   }, [product]);
+
+  useEffect(() => {
+    if (product && quantity > product.stock) {
+      setQuantity(product.stock);
+      notify(2, `Quantité insuffisante : vous ne pouvez pas dépasser ${product.stock}.`);
+    }
+  }, [quantity, product]);
   return (
     <section
       className="flat-spacing-4 pt_0"
@@ -65,6 +80,7 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
         className="tf-main-product section-image-zoom"
         style={{ maxWidth: "100vw", overflow: "clip" }}
       >
+        <ToastContainer />
         <div className="container">
           <div className="row">
             <div className="col-md-6">
@@ -168,40 +184,44 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                       </form>
                     </div>
                   </div>
-                  <div className="tf-product-info-quantity">
-                    <div className="quantity-title fw-6">Quantity</div>
-                    <Quantity
-                      setQuantity={setQuantity}
-                      quantity={quantity}
-                      maxQuantity={product.stock}
-                      disabled={isOutOfStock}
-                    />
-                  </div>
-                  <div className="tf-product-info-buy-button">
-                    {isOutOfStock ? (
-                      <div className="out-of-stock-message">
-                        <span className="tf-btn justify-content-center fw-6 fs-16 flex-grow-1" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', color: 'white' }}>
-                          En rupture de stock
-                        </span>
+
+                  {isOutOfStock ? (
+                    <div className="out-of-stock-message">
+                      <span className="tf-btn justify-content-center fw-6 fs-16 flex-grow-1" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', color: 'white' }}>
+                        En rupture de stock
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="tf-product-info-quantity">
+                        <div className="quantity-title fw-6">Quantity</div>
+                        <Quantity
+                          setQuantity={setQuantity}
+                          quantity={quantity}
+                          maxQuantity={product.stock}
+                          disabled={isOutOfStock}
+                        />
                       </div>
-                    ) : (
-                      <form onSubmit={(e) => e.preventDefault()} className="">
-                        <a
-                          onClick={() => {
-                            openCartModal();
-                            addProductToCart(product, quantity ? quantity : 1);
-                          }}
-                          className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
-                        >
-                          <span>
-                            {isAddedToCartProducts(product.id)
-                              ? "Déjà ajouté"
-                              : "Ajouter au panier"}
-                          </span>
-                        </a>
-                      </form>
-                    )}
-                  </div>
+                      <div className="tf-product-info-buy-button">
+                        <form onSubmit={(e) => e.preventDefault()} className="">
+                          <a
+                            onClick={() => {
+                              openCartModal();
+                              addProductToCart(product, quantity ? quantity : 1);
+                            }}
+                            className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
+                          >
+                            <span>
+                              {isAddedToCartProducts(product.id)
+                                ? "Déjà ajouté"
+                                : "Ajouter au panier"}
+                            </span>
+                          </a>
+                        </form>
+                      </div>
+                    </>
+                  )}
+
                 </div>
               </div>
             </div>

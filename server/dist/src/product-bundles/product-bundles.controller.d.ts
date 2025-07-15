@@ -9,34 +9,36 @@ export declare class ProductBundlesController {
     create(createProductBundleDto: CreateProductBundleDto): Promise<{
         products: {
             id: string;
-            productId: string;
             quantity: number;
+            productId: string;
             bundleId: string;
         }[];
     } & {
         id: string;
         name: string;
+        discount: number;
         isActive: boolean;
         createdAt: Date;
-        img: string | null;
-        discount: number;
         expiresAt: Date | null;
+        img: string | null;
+        stock: number;
     }>;
     findAll(): Promise<({
         products: {
             id: string;
-            productId: string;
             quantity: number;
+            productId: string;
             bundleId: string;
         }[];
     } & {
         id: string;
         name: string;
+        discount: number;
         isActive: boolean;
         createdAt: Date;
-        img: string | null;
-        discount: number;
         expiresAt: Date | null;
+        img: string | null;
+        stock: number;
     })[]>;
     findOne(id: string): Promise<{
         products: ({
@@ -46,9 +48,9 @@ export declare class ProductBundlesController {
                     name: string;
                     isActive: boolean;
                     createdAt: Date;
+                    description: string | null;
                     updatedAt: Date;
                     slug: string | null;
-                    description: string | null;
                     bgUrl: string | null;
                     iconUrl: string | null;
                     bannerColor: string;
@@ -60,75 +62,78 @@ export declare class ProductBundlesController {
                     name: string;
                     isActive: boolean;
                     createdAt: Date;
-                    updatedAt: Date;
-                    description: string | null;
                     img: string | null;
+                    description: string | null;
+                    updatedAt: Date;
                 };
                 images: {
                     id: string;
+                    productId: string | null;
+                    variantId: string | null;
                     url: string;
                     isPrimary: boolean;
-                    variantId: string | null;
-                    productId: string | null;
                 }[];
             } & {
                 id: string;
                 name: string;
+                discount: number | null;
                 isActive: boolean;
                 createdAt: Date;
-                updatedAt: Date;
+                stock: number;
                 description: string | null;
                 color: string | null;
                 price: number;
-                stock: number;
                 isBulk: boolean;
-                discount: number | null;
                 isFeatured: boolean;
                 specs: import("@prisma/client/runtime/library").JsonValue | null;
                 categoryId: string;
                 brandId: string;
                 averageRating: number | null;
                 ratingCount: number;
+                updatedAt: Date;
             };
         } & {
             id: string;
-            productId: string;
             quantity: number;
+            productId: string;
             bundleId: string;
         })[];
     } & {
         id: string;
         name: string;
+        discount: number;
         isActive: boolean;
         createdAt: Date;
-        img: string | null;
-        discount: number;
         expiresAt: Date | null;
+        img: string | null;
+        stock: number;
     }>;
     update(id: string, updateProductBundleDto: CreateProductBundleDto): Promise<{
         products: {
             id: string;
-            productId: string;
             quantity: number;
+            productId: string;
             bundleId: string;
         }[];
     } & {
         id: string;
         name: string;
+        discount: number;
         isActive: boolean;
         createdAt: Date;
-        img: string | null;
-        discount: number;
         expiresAt: Date | null;
+        img: string | null;
+        stock: number;
     }>;
     remove(id: string): Promise<{
         id: string;
         name: string;
+        discount: number;
         isActive: boolean;
         createdAt: Date;
-        img: string | null;
-        discount: number;
         expiresAt: Date | null;
+        img: string | null;
+        stock: number;
     }>;
     toggleStatus(id: string): Promise<{
         success: boolean;

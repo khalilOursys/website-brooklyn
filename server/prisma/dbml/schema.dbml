@@ -303,6 +303,7 @@ Table ProductBundle {
   createdAt DateTime [default: `now()`, not null]
   expiresAt DateTime
   img String
+  stock Int [not null, default: 0]
 }
 
 Table BundleProduct {

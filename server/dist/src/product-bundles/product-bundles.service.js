@@ -31,6 +31,7 @@ let ProductBundlesService = class ProductBundlesService {
                     name: createProductBundleDto.name,
                     discount: createProductBundleDto.discount,
                     img: createProductBundleDto.img,
+                    stock: createProductBundleDto.stock,
                     expiresAt: createProductBundleDto.expiresAt
                         ? new Date(createProductBundleDto.expiresAt)
                         : null,
@@ -89,6 +90,7 @@ let ProductBundlesService = class ProductBundlesService {
             data: {
                 name: createProductBundleDto.name,
                 discount: createProductBundleDto.discount,
+                stock: createProductBundleDto.stock,
                 expiresAt: createProductBundleDto.expiresAt
                     ? new Date(createProductBundleDto.expiresAt)
                     : undefined,

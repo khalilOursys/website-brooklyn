@@ -106,18 +106,23 @@ export default function Checkout() {
         },
         body: JSON.stringify(orderData),
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
       const result = await response.json();
 
-      localStorage.removeItem("cartList");
-      setSuccess(true);
-      setTimeout(() => {
-        window.location.replace("/my-account-orders-details/" + result.id);
-      }, 1500);
+      if (!response.ok) {
+
+        if (response.status !== 400)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        else
+          setError(result.message || "Failed to place order. Please try again.");
+      } else {
+
+        localStorage.removeItem("cartList");
+        setSuccess(true);
+        setTimeout(() => {
+          window.location.replace("/my-account-orders-details/" + result.id);
+        }, 1500);
+
+      }
     } catch (err) {
       console.error("Error submitting order:", err);
       setError(err.message || "Failed to place order. Please try again.");
