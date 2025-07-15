@@ -168,6 +168,11 @@ export default function Page() {
       return;
     }
 
+    if (!brandId) {
+      notify(2, "La marque est requise");
+      return;
+    }
+
     const invalidAttributes = attributes.some(attr => !attr.key.trim() || !attr.value.trim());
     if (invalidAttributes) {
       notify(2, "Tous les attributs doivent avoir une clé et une valeur");
@@ -190,7 +195,7 @@ export default function Page() {
         images,
         color,
         categoryId: categoryId.value,
-        brandId: brandId ? brandId.value : null,
+        brandId: brandId.value,
         attributes: attributes.filter(attr => attr.key.trim() && attr.value.trim())
       })
     ).then((action) => {
@@ -275,7 +280,7 @@ export default function Page() {
                                     name="price"
                                     className="required"
                                     type="number"
-                                    onChange={(e) => setPrice(parseFloat(e.target.value))}
+                                    onChange={(e) => setPrice(e.target.value)}
                                   />
                                 </Form.Group>
                               </Col>
@@ -287,7 +292,7 @@ export default function Page() {
                                     placeholder="Prix en remise"
                                     name="discount"
                                     type="number"
-                                    onChange={(e) => setDiscount(parseFloat(e.target.value))}
+                                    onChange={(e) => setDiscount(e.target.value)}
                                   />
                                 </Form.Group>
                               </Col>
@@ -303,7 +308,7 @@ export default function Page() {
                                     name="stock"
                                     className="required"
                                     type="number"
-                                    onChange={(e) => setStock(parseInt(e.target.value))}
+                                    onChange={(e) => setStock(e.target.value)}
                                   />
                                 </Form.Group>
                               </Col>
@@ -345,7 +350,6 @@ export default function Page() {
                                     value={brandId}
                                     onChange={setBrandId}
                                     placeholder="Sélectionner une marque"
-                                    isClearable
                                   />
                                 </Form.Group>
                               </Col>

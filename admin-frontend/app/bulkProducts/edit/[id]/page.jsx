@@ -200,10 +200,10 @@ export default function Page() {
                               </Col>
                               <Col className="pl-1" md="6">
                                 <Form.Group>
-                                  <label>Quantité minimale* </label>
+                                  <label>Quantité * </label>
                                   <Form.Control
                                     value={minQuantity}
-                                    placeholder="Quantité minimale"
+                                    placeholder="Quantité "
                                     name="MinQuantity"
                                     className="required"
                                     type="text"

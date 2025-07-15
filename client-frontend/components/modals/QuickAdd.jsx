@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Quantity from "../shopDetails/Quantity";
 import { useContextElement } from "@/context/Context";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function QuickAdd() {
   const {
@@ -15,16 +16,25 @@ export default function QuickAdd() {
 
   const [item, setItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [isOutOfStock, setIsOutOfStock] = useState(1);
+
+  const notify = (type, msg) => {
+    if (type === 1)
+      toast.success(<strong><i className="fas fa-check-circle"></i>{msg}</strong>);
+    else
+      toast.error(<strong><i className="fas fa-exclamation-circle"></i>{msg}</strong>);
+  };
 
   useEffect(() => {
     setQuantity(1);
     if (quickAddItem) {
+      setIsOutOfStock(quickAddItem.stock <= 0);
       setItem({
         id: quickAddItem.id,
         name: quickAddItem.name,
         description: quickAddItem.description || "No description available",
         price: parseFloat(quickAddItem.price).toFixed(2),
-        stock: quickAddItem.stock || 0,
+        stock: quickAddItem.stock || 1,
         isBulk: quickAddItem.isBulk || false,
         discount: quickAddItem.discount || 0,
         isFeatured: quickAddItem.isFeatured || false,
@@ -43,9 +53,15 @@ export default function QuickAdd() {
       });
     }
   }, [quickAddItem]);
-
+  useEffect(() => {
+    if (item && quantity > item.stock) {
+      setQuantity(item.stock);
+      notify(2, `Quantité insuffisante : vous ne pouvez pas dépasser ${item.stock}.`);
+    }
+  }, [quantity, item]);
   return (
     <div className="modal fade modalDemo" id="quick_add">
+      <ToastContainer />
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="header">
@@ -71,24 +87,35 @@ export default function QuickAdd() {
                 </div>
               </div>
             </div>
-            <div className="tf-product-info-quantity mb_15">
-              <div className="quantity-title fw-6">Quantity</div>
-              <Quantity setQuantity={setQuantity} quantity={quantity} />
-            </div>
-            <div className="tf-product-info-buy-button">
-              <form onSubmit={(e) => e.preventDefault()} className="">
-                <a
-                  href="#"
-                  className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
-                  onClick={() => addProductToCart(item, quantity)}
-                >
-                  <span>
-                    {isAddedToCartProducts(item?.id) ? "Déjà ajouté " : "Ajouter au panier"}
-                  </span>
-                  {/* <span className="tf-qty-price">{item?.price} TND</span> */}
-                </a>
-              </form>
-            </div>
+            {isOutOfStock ? (
+              <div className="out-of-stock-message">
+                <span className="tf-btn justify-content-center fw-6 fs-16 flex-grow-1" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', color: 'white' }}>
+                  En rupture de stock
+                </span>
+              </div>
+            ) : (
+              <>
+                <div className="tf-product-info-quantity mb_15">
+                  <div className="quantity-title fw-6">Quantity</div>
+                  <Quantity setQuantity={setQuantity} quantity={quantity} />
+                </div>
+                <div className="tf-product-info-buy-button">
+                  <form onSubmit={(e) => e.preventDefault()} className="">
+                    <a
+                      href="#"
+                      className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
+                      onClick={() => addProductToCart(item, quantity)}
+                    >
+                      <span>
+                        {isAddedToCartProducts(item?.id) ? "Déjà ajouté " : "Ajouter au panier"}
+                      </span>
+                      {/* <span className="tf-qty-price">{item?.price} TND</span> */}
+                    </a>
+                  </form>
+                </div>
+              </>
+            )}
+
           </div>
         </div>
       </div>

@@ -24,6 +24,51 @@ let OrdersService = class OrdersService {
             throw new common_1.BadRequestException(`User with id ${createOrderDto.userId} does not exist.`);
         }
         return await this.prisma.$transaction(async (prisma) => {
+            for (const item of createOrderDto.orderItems) {
+                if (item.variantId) {
+                    const variant = await prisma.productVariant.findUnique({
+                        where: { id: item.variantId },
+                        include: { product: true },
+                    });
+                    if (!variant || variant.stock < item.quantity) {
+                        throw new common_1.BadRequestException(`Stock insuffisant pour cette variante ${variant?.name || item.variantId}`);
+                    }
+                }
+                else if (item.productId) {
+                    const product = await prisma.product.findUnique({
+                        where: { id: item.productId },
+                        include: { variants: true },
+                    });
+                    if (!product) {
+                        throw new common_1.BadRequestException(`Product with id ${item.productId} not found`);
+                    }
+                    if (product.stock < item.quantity) {
+                        throw new common_1.BadRequestException(`Stock insuffisant pour cette produit ${product.name}`);
+                    }
+                }
+                if (item.bundleId) {
+                    const bundle = await prisma.productBundle.findUnique({
+                        where: { id: item.bundleId },
+                    });
+                    if (!bundle) {
+                        throw new common_1.BadRequestException(`Bundle with id ${item.bundleId} not found`);
+                    }
+                    if (bundle.stock < item.quantity) {
+                        throw new common_1.BadRequestException(`Stock insuffisant pour cette pack ${bundle.name}`);
+                    }
+                }
+                if (item.bulkId) {
+                    const bulk = await prisma.bulkProduct.findUnique({
+                        where: { id: item.bulkId },
+                    });
+                    if (!bulk) {
+                        throw new common_1.BadRequestException(`Bundle with id ${item.bundleId} not found`);
+                    }
+                    if (bulk.minQuantity < item.quantity) {
+                        throw new common_1.BadRequestException(`Stock insuffisant pour cette produit en gros ${bulk.name}`);
+                    }
+                }
+            }
             const order = await prisma.order.create({
                 data: {
                     userId: createOrderDto.userId,
@@ -45,6 +90,39 @@ let OrdersService = class OrdersService {
                 },
                 include: { orderItems: true },
             });
+            for (const item of createOrderDto.orderItems) {
+                if (item.variantId) {
+                    await prisma.productVariant.update({
+                        where: { id: item.variantId },
+                        data: { stock: { decrement: item.quantity } },
+                    });
+                }
+                else if (item.productId) {
+                    const product = await prisma.product.findUnique({
+                        where: { id: item.productId },
+                        include: { variants: true },
+                    });
+                    await prisma.product.update({
+                        where: { id: item.productId },
+                        data: { stock: { decrement: item.quantity } },
+                    });
+                }
+                if (item.bundleId) {
+                    const bundle = await prisma.productBundle.findUnique({
+                        where: { id: item.bundleId },
+                    });
+                    await prisma.productBundle.update({
+                        where: { id: item.bundleId },
+                        data: { stock: { decrement: item.quantity } },
+                    });
+                }
+                if (item.bulkId) {
+                    await prisma.bulkProduct.update({
+                        where: { id: item.bulkId },
+                        data: { minQuantity: { decrement: item.quantity } },
+                    });
+                }
+            }
             const cart = await prisma.cart.findUnique({
                 where: { userId: createOrderDto.userId },
             });
@@ -92,10 +170,79 @@ let OrdersService = class OrdersService {
         return order;
     }
     async update(id, updateOrderDto) {
-        await this.findOne(id);
-        return await this.prisma.order.update({
-            where: { id },
-            data: updateOrderDto,
+        return await this.prisma.$transaction(async (prisma) => {
+            const existingOrder = await prisma.order.findUnique({
+                where: { id },
+                include: {
+                    orderItems: true,
+                },
+            });
+            if (!existingOrder) {
+                throw new common_1.NotFoundException(`Order with id ${id} not found`);
+            }
+            if (updateOrderDto.status === 'Annuler' &&
+                existingOrder.status !== 'Annuler') {
+                console.log(existingOrder.orderItems);
+                for (const item of existingOrder.orderItems) {
+                    if (item.variantId) {
+                        await prisma.productVariant.update({
+                            where: { id: item.variantId },
+                            data: { stock: { increment: item.quantity } },
+                        });
+                    }
+                    else if (item.bulkId) {
+                        await prisma.bulkProduct.update({
+                            where: { id: item.bulkId },
+                            data: { minQuantity: { increment: item.quantity } },
+                        });
+                    }
+                    else if (item.productId) {
+                        await prisma.product.update({
+                            where: { id: item.productId },
+                            data: { stock: { increment: item.quantity } },
+                        });
+                    }
+                    else if (item.bundleId) {
+                        await prisma.productBundle.update({
+                            where: { id: item.bundleId },
+                            data: { stock: { increment: item.quantity } },
+                        });
+                    }
+                }
+            }
+            else if (updateOrderDto.status === 'en attente' &&
+                existingOrder.status !== 'en attente') {
+                for (const item of existingOrder.orderItems) {
+                    if (item.variantId) {
+                        await prisma.productVariant.update({
+                            where: { id: item.variantId },
+                            data: { stock: { decrement: item.quantity } },
+                        });
+                    }
+                    else if (item.bulkId) {
+                        await prisma.bulkProduct.update({
+                            where: { id: item.bulkId },
+                            data: { minQuantity: { decrement: item.quantity } },
+                        });
+                    }
+                    else if (item.productId) {
+                        await prisma.product.update({
+                            where: { id: item.productId },
+                            data: { stock: { decrement: item.quantity } },
+                        });
+                    }
+                    else if (item.bundleId) {
+                        await prisma.productBundle.update({
+                            where: { id: item.bundleId },
+                            data: { stock: { decrement: item.quantity } },
+                        });
+                    }
+                }
+            }
+            return await this.prisma.order.update({
+                where: { id },
+                data: updateOrderDto,
+            });
         });
     }
     async remove(id) {

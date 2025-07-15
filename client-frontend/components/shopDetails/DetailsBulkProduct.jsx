@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   colors,
@@ -11,9 +11,21 @@ import Slider1ZoomOuter from "./sliders/Slider1ZoomOuter";
 import { allProducts } from "@/data/products";
 import { useContextElement } from "@/context/Context";
 import Configuration from "@/configuration";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function DetailsBulkProduct({ product = allProducts[0] }) {
   const api = Configuration.BACK_BASEURL;
+
+  // Check if product is out of stock
+  const isOutOfStock = product.stock <= 0;
+
+
+  const notify = (type, msg) => {
+    if (type === 1)
+      toast.success(<strong><i className="fas fa-check-circle"></i>{msg}</strong>);
+    else
+      toast.error(<strong><i className="fas fa-exclamation-circle"></i>{msg}</strong>);
+  };
 
 
   const { user } = useContextElement();
@@ -77,6 +89,13 @@ export default function DetailsBulkProduct({ product = allProducts[0] }) {
     }
   };
 
+
+  useEffect(() => {
+    if (product && quantity > product.minQuantity) {
+      setQuantity(product.minQuantity);
+      notify(2, `Quantité insuffisante : vous ne pouvez pas dépasser ${product.minQuantity}.`);
+    }
+  }, [quantity, product]);
   return (
     <section
       className="flat-spacing-4 pt_0"
@@ -86,6 +105,7 @@ export default function DetailsBulkProduct({ product = allProducts[0] }) {
         className="tf-main-product section-image-zoom"
         style={{ maxWidth: "100vw", overflow: "clip" }}
       >
+        <ToastContainer />
         <div className="container">
           <div className="row">
             <div className="col-md-6">

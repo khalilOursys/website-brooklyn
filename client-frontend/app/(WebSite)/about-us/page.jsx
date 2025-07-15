@@ -3,7 +3,8 @@ import FlatTitle from "@/components/othersPages/about/FlatTitle";
 import ShopGram from "@/components/homes/home-accessories/ShopGram";
 import React from "react";
 import Footer2 from "@/components/footers/Footer2";
-import Header4 from "@/components/headers/Header4";
+import Topbar1 from "@/components/headers/Topbar1";
+import Header2 from "@/components/headers/Header2";
 
 export const metadata = {
   title: "About Us || Ecomus - Ultimate Nextjs Ecommerce Template",
@@ -12,7 +13,8 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header4 />
+      <Topbar1 />
+      <Header2 />
       <FlatTitle />
       <div className="container">
         <div className="line"></div>

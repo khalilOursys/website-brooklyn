@@ -30,8 +30,12 @@ export class CreateProductBundleDto {
   @IsDateString()
   expiresAt?: string;
 
-  @IsOptional() // Allow variantId to be optional
+  @IsOptional()
   img?: string;
+
+  @IsNumber()
+  @IsOptional()
+  stock?: number;
 
   @IsArray()
   @ValidateNested({ each: true })

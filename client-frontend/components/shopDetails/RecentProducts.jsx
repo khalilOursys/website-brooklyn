@@ -39,7 +39,7 @@ export default function RecentProducts({ products }) {
           >
             {products.map((product, i) => (
               <SwiperSlide key={i} className="swiper-slide">
-                <ProductCard product={product.product} />
+                <ProductCard product={product.product} quantity={product.quantity} />
               </SwiperSlide>
             ))}
           </Swiper>

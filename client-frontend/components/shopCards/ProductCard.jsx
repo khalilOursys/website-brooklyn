@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useContextElement } from "@/context/Context";
 import CountdownComponent from "../common/Countdown";
-export const ProductCard = ({ product }) => {
+export const ProductCard = ({ product, quantity }) => {
   const [currentImage, setCurrentImage] = useState(product.imgSrc);
   const { setQuickViewItem } = useContextElement();
   const {
@@ -136,6 +136,16 @@ export const ProductCard = ({ product }) => {
       <div className="card-product-info">
         <Link href={`/product-detail/${product.id}`} className="title link">
           {product.name}
+          {quantity && quantity > 0 && (
+            <span className="product-quantity" style={{
+              marginLeft: '8px',
+              color: '#666',
+              fontSize: '0.9em',
+              fontWeight: 'normal'
+            }}>
+              (Quantité: {quantity})
+            </span>
+          )}
         </Link>
 
         {product.discount ? (

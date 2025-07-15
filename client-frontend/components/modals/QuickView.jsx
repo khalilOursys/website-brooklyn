@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Quantity from "../shopDetails/Quantity";
 import { colors, sizeOptions } from "@/data/singleProductOptions";
 import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function QuickView() {
   const {
@@ -20,9 +21,14 @@ export default function QuickView() {
     addToCompareItem,
     isAddedtoCompareItem,
   } = useContextElement();
+  const [isOutOfStock, setIsOutOfStock] = useState(1);
 
-  const [currentColor, setCurrentColor] = useState(colors[0]);
-  const [currentSize, setCurrentSize] = useState(sizeOptions[0]);
+  const notify = (type, msg) => {
+    if (type === 1)
+      toast.success(<strong><i className="fas fa-check-circle"></i>{msg}</strong>);
+    else
+      toast.error(<strong><i className="fas fa-exclamation-circle"></i>{msg}</strong>);
+  };
   const [quantity, setQuantity] = useState(1);
 
   const openModalSizeChoice = () => {
@@ -46,11 +52,19 @@ export default function QuickView() {
   };
 
   useEffect(() => {
+    setIsOutOfStock(quickViewItem.stock <= 0);
     setQuantity(1);
   }, [quickViewItem]);
 
+  useEffect(() => {
+    if (quickViewItem && quantity > quickViewItem.stock) {
+      setQuantity(quickViewItem.stock);
+      notify(2, `Quantité insuffisante : vous ne pouvez pas dépasser ${quickViewItem.stock}.`);
+    }
+  }, [quantity]);
   return (
     <div className="modal fade modalDemo" id="quick_view">
+      <ToastContainer />
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="header">
@@ -202,29 +216,35 @@ export default function QuickView() {
                     </form>
                   </div>
                 </div> */}
-                <div className="tf-product-info-quantity">
-                  <div className="quantity-title fw-6">Quantity</div>
-                  <Quantity setQuantity={setQuantity} quantity={quantity} />
-                </div>
-                <div className="tf-product-info-buy-button">
-                  <form onSubmit={(e) => e.preventDefault()} className="">
-                    <a
-                      href="#"
-                      className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
-                      onClick={() => addProductToCart(quickViewItem, quantity)}
-                    >
-                      <span>
-                        {isAddedToCartProducts(quickViewItem.id)
-                          ? "Déjà ajouté"
-                          : "Ajouter au panier"}
-                      </span>
-                      {/* <span className="tf-qty-price">
-                        {quickViewItem.price.toFixed(3)} TND
-                      </span> */}
-                    </a>
-                  </form>
-                </div>
-                <div>
+                {isOutOfStock ? (
+                  <div className="out-of-stock-message">
+                    <span className="tf-btn justify-content-center fw-6 fs-16 flex-grow-1" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', color: 'white' }}>
+                      En rupture de stock
+                    </span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="tf-product-info-quantity">
+                      <div className="quantity-title fw-6">Quantity</div>
+                      <Quantity setQuantity={setQuantity} quantity={quantity} />
+                    </div>
+                    <div className="tf-product-info-buy-button">
+                      <form onSubmit={(e) => e.preventDefault()} className="">
+                        <a
+                          href="#"
+                          className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
+                          onClick={() => addProductToCart(quickViewItem, quantity)}
+                        >
+                          <span>
+                            {isAddedToCartProducts(quickViewItem.id)
+                              ? "Déjà ajouté"
+                              : "Ajouter au panier"}
+                          </span>
+                        </a>
+                      </form>
+                    </div>
+                  </>)}
+                < div >
                   <Link
                     href={`/product-detail/${quickViewItem.id}`}
                     className="tf-btn fw-6 btn-line"
@@ -238,6 +258,6 @@ export default function QuickView() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
