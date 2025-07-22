@@ -82,7 +82,7 @@ export default function Footer2({ bgColor = "" }) {
                       <Image
                         alt="logo"
                         className="logo"
-                        src="/images/logo/logo.png"
+                        src="/images/logo.png"
                         width={273}
                         height={42}
                       />

@@ -211,7 +211,8 @@ export default function Login() {
                       Mot de passe oublié ?
                     </a>
                   </div>
-                  <div className="">
+
+                  <div className="mb_20">
                     <button
                       type="submit"
                       className="tf-btn w-100 radius-3 btn-fill animate-hover-btn justify-content-center"
@@ -219,6 +220,12 @@ export default function Login() {
                     >
                       {isLoading ? "Connexion..." : "Se connecter"}
                     </button>
+                  </div>
+                  <div className="text-center">
+                    <Link href={`/login`} className="tf-btn btn-line">
+                      Vous avez déjà un compte ? Connectez-vous ici
+                      <i className="icon icon-arrow1-top-left" />
+                    </Link>
                   </div>
                 </form>
               </div>
