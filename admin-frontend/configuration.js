@@ -1,5 +1,5 @@
 export const Configuration = { 
     FRONT_BASEURL: 'http://localhost:3000/',
-    BACK_BASEURL : 'https://api.brooklyn-store.shop/'
+    BACK_BASEURL : 'https://api.brooklyn-store.tn/'
 };
 export default Configuration;
