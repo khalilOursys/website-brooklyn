@@ -212,10 +212,24 @@ export class ProductsService {
           },
         }),
       ...((minPrice !== undefined || maxPrice !== undefined) && {
-        price: {
-          ...(minPrice !== undefined && { gte: minPrice }),
-          ...(maxPrice !== undefined && { lte: maxPrice }),
-        },
+        OR: [
+          // Case 1: Products with discount > 0 - filter on discount amount
+          {
+            discount: {
+              gt: 0,
+              ...(minPrice !== undefined && { gte: minPrice }),
+              ...(maxPrice !== undefined && { lte: maxPrice }),
+            },
+          },
+          // Case 2: Products with no discount - filter on regular price
+          {
+            discount: 0,
+            price: {
+              ...(minPrice !== undefined && { gte: minPrice }),
+              ...(maxPrice !== undefined && { lte: maxPrice }),
+            },
+          },
+        ],
       }),
       // Add promotion filter if promotions > 0
       ...(promotions !== undefined &&
@@ -340,34 +354,54 @@ export class ProductsService {
           maxprice: number;
         }[]
       >`
-        SELECT 
-          MIN(LEAST(COALESCE(bp."bulkPrice"))) as minPrice,
-          MAX(GREATEST(COALESCE(bp."bulkPrice"))) as maxPrice
-        FROM "Product" p
-        LEFT JOIN "BulkProduct" bp ON p.id = bp."productId"
-        JOIN "Category" c ON p."categoryId" = c.id
-      `;
+    SELECT 
+      MIN(LEAST(COALESCE(bp."bulkPrice"))) as minPrice,
+      MAX(GREATEST(COALESCE(bp."bulkPrice"))) as maxPrice
+    FROM "Product" p
+    LEFT JOIN "BulkProduct" bp ON p.id = bp."productId"
+    JOIN "Category" c ON p."categoryId" = c.id
+  `;
+
+      // Get brand aggregates with counts
+      const brandAggregates = await this.prisma.$queryRaw<
+        {
+          brandId: string;
+          brandName: string;
+          productCount: number;
+        }[]
+      >`
+    SELECT 
+      b.id as "brandId",
+      b.name as "brandName",
+      COUNT(bp.id) as "productCount"
+    FROM "Product" p
+    JOIN "BulkProduct" bp ON p.id = bp."productId"
+    JOIN "Brand" b ON p."brandId" = b.id
+    GROUP BY b.id, b.name
+  `;
+
       const products = await this.prisma.product.findMany({
         where: {
           bulkProduct: {
-            some: {}, // Only products that have at least one BulkProduct
+            some: {},
           },
         },
         include: {
           _count: {
             select: {
-              bulkProduct: true, // Count of related bulk products
+              bulkProduct: true,
             },
           },
           category: true,
           brand: true,
         },
       });
+
       return {
-        brands: products.map((brand) => ({
-          id: brand.id,
-          name: brand.name,
-          productCount: brand._count.bulkProduct,
+        brands: brandAggregates.map((brand) => ({
+          id: brand.brandId,
+          name: brand.brandName,
+          productCount: Number(brand.productCount), // Convert BigInt to Number if needed
         })),
         priceRange: {
           minPrice: priceAggregates[0].minprice || 0,
@@ -375,6 +409,7 @@ export class ProductsService {
         },
       };
     }
+
     /* const priceAggregates = await this.prisma.$queryRaw<
       {
         minprice: number;

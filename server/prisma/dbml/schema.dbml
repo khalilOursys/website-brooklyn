@@ -328,7 +328,7 @@ Table Notification {
 
 Table HeroBanner {
   id String [pk]
-  name String [unique, not null]
+  name String
   description String
   img String
   isActive Boolean [not null, default: true]

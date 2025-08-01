@@ -1,4 +1,4 @@
-"use client"; // Marque ce composant comme un composant client
+"use client";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -25,11 +25,19 @@ export default function Page() {
   const { id } = useParams();
 
   // Déclarations d'état
-  const [fullname, setFullname] = useState("");
-  const [legalDocs, setLegalDocs] = useState("");
-  const [storeName, setStoreName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("CLIENT");
+  const [data, setData] = useState({
+    email: "",
+    telephone: "",
+    firstName: "",
+    lastName: "",
+    bulkRequests: {
+      storeName: "",
+      rib: "",
+      taxNumber: "",
+      legalDocs: "",
+      status: ""
+    }
+  });
   const [loading, setLoading] = useState(false);
 
   const fetchUser = useCallback(
@@ -37,11 +45,20 @@ export default function Page() {
       try {
         setLoading(true);
         const response = await dispatch(getUserWithBulkRequest(id));
-        const data = await response.payload;
-        setFullname(data.name);
-        setEmail(data.email);
-        setStoreName(data.bulkRequests?.storeName || "");
-        setLegalDocs(data.bulkRequests?.legalDocs || "");
+        const userData = await response.payload;
+        setData(userData || {
+          email: "",
+          telephone: "",
+          firstName: "",
+          lastName: "",
+          bulkRequests: {
+            storeName: "",
+            rib: "",
+            taxNumber: "",
+            legalDocs: "",
+            status: ""
+          }
+        });
       } catch (error) {
         notify(2, "Échec de la récupération des données utilisateur");
       } finally {
@@ -62,17 +79,16 @@ export default function Page() {
   };
 
   const handleDownloadDocument = () => {
-    if (!legalDocs) {
-      notify(2, "Aucun document disponible à télécharger");
+    if (!data?.bulkRequests?.legalDocs) {
+      notify(2, "Aucun document disponible pour téléchargement");
       return;
     }
 
     try {
-      // Supposons que legalDocs est une URL vers le document
       const link = document.createElement('a');
-      link.href = legalDocs;
+      link.href = data.bulkRequests.legalDocs;
       link.target = '_blank';
-      link.download = `document_${fullname || 'utilisateur'}.pdf`; // Vous pouvez ajuster le nom du fichier
+      link.download = `document_${data.firstName || 'utilisateur'}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -111,58 +127,147 @@ export default function Page() {
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Nom et Prénom* </label>
+                                  <label>Prénom</label>
                                   <Form.Control
-                                    value={fullname}
-                                    placeholder="Nom complet"
-                                    name="fullname"
+                                    value={data?.firstName || ""}
+                                    placeholder="Prénom"
+                                    name="firstName"
                                     className="required"
                                     type="text"
                                     readOnly
                                   />
-                                  <div className="error"></div>
                                 </Form.Group>
                               </Col>
                               <Col className="pl-1" md="6">
                                 <Form.Group>
-                                  <label>E-mail* </label>
+                                  <label>Nom</label>
                                   <Form.Control
-                                    value={email}
-                                    placeholder="E-mail"
-                                    name="Email"
+                                    value={data?.lastName || ""}
+                                    placeholder="Nom"
+                                    name="lastName"
                                     className="required"
                                     type="text"
                                     readOnly
                                   />
-                                  <div className="error"></div>
                                 </Form.Group>
                               </Col>
                             </Row>
                             <Row>
                               <Col className="pr-1" md="6">
                                 <Form.Group>
-                                  <label>Nom du magasin* </label>
+                                  <label>Email</label>
                                   <Form.Control
-                                    value={storeName}
-                                    placeholder="Rôle"
+                                    value={data?.email || ""}
+                                    placeholder="Email"
+                                    name="email"
                                     className="required"
-                                    name="role"
+                                    type="text"
                                     readOnly
                                   />
-                                  <div className="error"></div>
                                 </Form.Group>
                               </Col>
+                              <Col className="pl-1" md="6">
+                                <Form.Group>
+                                  <label>Téléphone</label>
+                                  <Form.Control
+                                    value={data?.telephone || "Non fourni"}
+                                    placeholder="Téléphone"
+                                    name="telephone"
+                                    className="required"
+                                    type="text"
+                                    readOnly
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col className="pr-1" md="6">
+                                <Form.Group>
+                                  <label>Nom du magasin</label>
+                                  <Form.Control
+                                    value={data?.bulkRequests?.storeName || ""}
+                                    placeholder="Nom du magasin"
+                                    className="required"
+                                    name="storeName"
+                                    readOnly
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col className="pr-1" md="6">
+                                <Form.Group>
+                                  <label>Statut</label>
+                                  <Form.Control
+                                    value={data?.bulkRequests?.status || ""}
+                                    placeholder="Statut"
+                                    className="required"
+                                    name="status"
+                                    readOnly
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col className="pr-1" md="6">
+                                <Form.Group>
+                                  <label>RIB</label>
+                                  <Form.Control
+                                    value={data?.bulkRequests?.rib || "Non fourni"}
+                                    placeholder="RIB"
+                                    className="required"
+                                    name="rib"
+                                    readOnly
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col className="pl-1" md="6">
+                                <Form.Group>
+                                  <label>Numéro de taxe</label>
+                                  <Form.Control
+                                    value={data?.bulkRequests?.taxNumber || "Non fourni"}
+                                    placeholder="Numéro de taxe"
+                                    className="required"
+                                    name="taxNumber"
+                                    readOnly
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              {/* <Col className="pr-1" md="12">
+                                <Form.Group>
+                                  <label>Document légal</label>
+                                  <div className="d-flex align-items-center">
+                                    <Form.Control
+                                      value={data?.bulkRequests?.legalDocs ? "Document disponible" : "Aucun document"}
+                                      placeholder="Document légal"
+                                      className="required"
+                                      readOnly
+                                    />
+                                    {data?.bulkRequests?.legalDocs && (
+                                      <Button
+                                        variant="success"
+                                        className="ml-2"
+                                        onClick={handleDownloadDocument}
+                                        disabled={loading}
+                                      >
+                                        <i className="fas fa-download"></i> Télécharger
+                                      </Button>
+                                    )}
+                                  </div>
+                                </Form.Group>
+                              </Col> */}
+
                               <Col className="pr-1" md="12">
                                 <Form.Group>
                                   <label>Document </label>
                                   <div className="d-flex align-items-center">
                                     {/* <Form.Control
-                                      value={legalDocs ? "Document disponible" : "Aucun document"}
+                                      value={data?.bulkRequests?.legalDocs ? "Document disponible" : "Aucun document"}
                                       placeholder="Document"
                                       className="required"
                                       readOnly
                                     /> */}
-                                    {legalDocs && (
+                                    {data?.bulkRequests?.legalDocs && (
                                       <Button
                                         variant="success"
                                         className="ml-2"

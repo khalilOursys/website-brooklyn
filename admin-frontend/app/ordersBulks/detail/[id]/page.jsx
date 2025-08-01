@@ -249,13 +249,15 @@ export default function Page() {
                                         </Button>
                                       )}
 
-                                      <Button
-                                        onClick={() => updateOrderStatus('Annuler')}
-                                        variant="danger"
-                                        disabled={updatingStatus}
-                                      >
-                                        Annuler la commande
-                                      </Button>
+                                      {order.status !== "Annuler" && order.status !== "en attente" && (
+                                        <Button
+                                          onClick={() => updateOrderStatus('Annuler')}
+                                          variant="danger"
+                                          disabled={updatingStatus}
+                                        >
+                                          Annuler la commande
+                                        </Button>
+                                      )}
                                     </div>
                                   </Col>
                                 </Row>

@@ -84,7 +84,7 @@ export class BulkProductsService {
   }
 
   async findBulkProductsByCategory(options: {
-    categorySlug?: string;
+    categorySlug?: string[];
     page?: number;
     limit?: number;
     promotions?: number;
@@ -104,12 +104,21 @@ export class BulkProductsService {
     const offset = page * limit;
 
     const where: Prisma.BulkProductWhereInput = {
+      isActive: true,
       product: {
-        ...(categorySlug && {
+        /* ...(categorySlug && {
           category: {
             slug: categorySlug,
           },
-        }),
+        }), */
+        ...(categorySlug &&
+          categorySlug.length > 0 && {
+            category: {
+              slug: {
+                in: categorySlug,
+              },
+            },
+          }),
         ...(brandNames &&
           brandNames.length > 0 && {
             brand: {

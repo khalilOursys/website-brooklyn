@@ -144,7 +144,7 @@ export declare class BulkProductsService {
         minQuantity: number;
     }>;
     findBulkProductsByCategory(options: {
-        categorySlug?: string;
+        categorySlug?: string[];
         page?: number;
         limit?: number;
         promotions?: number;

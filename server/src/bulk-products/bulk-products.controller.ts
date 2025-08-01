@@ -57,7 +57,7 @@ export class BulkProductsController {
     @Query('promotions') promotions?: number,
   ) {
     return this.bulkProductsService.findBulkProductsByCategory({
-      categorySlug,
+      categorySlug: categorySlug ? categorySlug.split(',') : undefined,
       page,
       limit,
       promotions,
