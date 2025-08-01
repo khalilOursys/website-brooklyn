@@ -187,7 +187,7 @@ export default function Context({ children }) {
   const handleUnauthorized = () => {
     /* localStorage.removeItem("x-access-token");
     setUser(null); */
-    window.location.reload();
+    window.location.replace("/");
     // You might want to redirect to login here
   };
 

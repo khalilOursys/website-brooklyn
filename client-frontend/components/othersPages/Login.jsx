@@ -222,8 +222,8 @@ export default function Login() {
                     </button>
                   </div>
                   <div className="text-center">
-                    <Link href={`/login`} className="tf-btn btn-line">
-                      Vous avez déjà un compte ? Connectez-vous ici
+                    <Link href={`/register`} className="tf-btn btn-line">
+                      S'inscrire
                       <i className="icon icon-arrow1-top-left" />
                     </Link>
                   </div>

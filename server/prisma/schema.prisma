@@ -342,7 +342,7 @@ model Notification {
 
 model HeroBanner {
   id          String    @id @default(uuid())
-  name        String    @unique
+  name        String?
   description String?
   img String?
   isActive    Boolean   @default(true)

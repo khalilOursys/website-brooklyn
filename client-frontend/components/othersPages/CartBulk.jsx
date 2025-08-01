@@ -121,9 +121,10 @@ export default function CartBulk() {
   // Calculate total price
   const totalPrice = cartProducts.reduce((total, item) => {
     const discount = parseFloat(item.bulk?.discount);
-    const unitPrice = discount && discount !== 0 ? discount : parseFloat(item.bulkPrice);
-    /* const price = item?.bulk?.discount || item?.bulk?.bulkPrice; */
+
+    const unitPrice = discount && discount !== 0 ? discount : parseFloat(item.bulk?.bulkPrice);
     const quantity = item?.quantity || 0;
+
     return total + unitPrice * quantity;
   }, 0);
 
@@ -336,23 +337,12 @@ export default function CartBulk() {
                   </tr>
                 </tfoot>
               </table>
-
-              <div className="tf-page-cart-note">
-                <label htmlFor="cart-note">Add Order Note</label>
-                <textarea
-                  name="note"
-                  id="cart-note"
-                  placeholder="How can we help you?"
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                />
-              </div>
             </form>
           </div>
 
           <div className="tf-page-cart-footer">
             <div className="tf-cart-footer-inner">
-              <div className="tf-free-shipping-bar">
+              {/* <div className="tf-free-shipping-bar">
                 <div className="tf-progress-bar">
                   <span style={{ width: "50%" }}>
                     <div className="progress-car">
@@ -376,7 +366,7 @@ export default function CartBulk() {
                   Achetez <span className="price fw-6 ml-1">75.00 TND</span> de plus pour profiter de la
                   <span className="fw-6 mr-1 ms-1">livraison gratuite</span>
                 </div>
-              </div>
+              </div> */}
 
               <div className="tf-page-cart-checkout">
                 <div className="tf-cart-totals-discounts">

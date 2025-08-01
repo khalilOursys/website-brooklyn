@@ -6,9 +6,12 @@ import ProductGrid from "./ProductGrid";
 import Pagination from "../common/Pagination";
 import Sorting from "./Sorting";
 import Configuration from "@/configuration";
+import { useContextElement } from "@/context/Context";
 
 export default function ShopSidebarleft({ slug }) {
   const api = Configuration.BACK_BASEURL;
+  const { user } = useContextElement();
+  var role = user ? user.role : "";
 
   const [gridItems, setGridItems] = useState(3);
   const [brands, setBrands] = useState([]);
@@ -23,6 +26,8 @@ export default function ShopSidebarleft({ slug }) {
   const [itemsPerPage, setItemsPerPage] = useState(10); // Add state for items per page
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   // Function to fetch products from the API
   const fetchProducts = async () => {
     try {
@@ -57,19 +62,25 @@ export default function ShopSidebarleft({ slug }) {
       if (selectedBrand.length > 0) {
         url.searchParams.append("brandNames", selectedBrand.map(b => b.name).join(','));
       }
+      if (selectedCategories.length > 0) {
+        url.searchParams.append("categorySlug", selectedCategories.map(b => b.slug).join(','));
+      }
 
       if (price[0] > 0) url.searchParams.append("minPrice", (price[0]).toString());
       if (price[1] < 10000) url.searchParams.append("maxPrice", (price[1]).toString());
       url.searchParams.append("page", (currentPage - 1).toString());
       url.searchParams.append("limit", itemsPerPage.toString());
 
-      const response = await fetch(url.toString());
-      if (!response.ok) throw new Error("Failed to fetch products");
+      if (role === "BULK_CLIENT") {
 
-      const data = await response.json();
-      setFilteredProducts(data.bulkProducts);
-      setFinalSorted(data.bulkProducts);
-      setTotalCount(data.totalCount);
+        const response = await fetch(url.toString());
+        if (!response.ok) throw new Error("Failed to fetch products");
+
+        const data = await response.json();
+        setFilteredProducts(data.bulkProducts);
+        setFinalSorted(data.bulkProducts);
+        setTotalCount(data.totalCount);
+      }
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -104,15 +115,41 @@ export default function ShopSidebarleft({ slug }) {
     }
   };
 
+  const getAllChildren = async () => {
+    try {
+      const url = new URL(`${api}categories/getAllChildren`);
+
+
+      const response = await fetch(url.toString());
+      if (!response.ok) throw new Error("Failed to fetch categories");
+
+      const data = await response.json();
+      setCategories(data);
+
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   useEffect(() => {
     if (slug !== "bulkproduct") fetchProducts();
-    else fetchBulkproduct();
-  }, [slug, selectedBrand, minPrice, maxPrice, currentPage, itemsPerPage, price]);
+    else if (role === "BULK_CLIENT") {
+      fetchBulkproduct();
+    }
+  }, [slug, selectedBrand, minPrice, maxPrice, currentPage, itemsPerPage, price, selectedCategories]);
 
   useEffect(() => {
     fetchFilterOption();
   }, [slug]);
+
+  useEffect(() => {
+    if (role === "BULK_CLIENT") {
+      getAllChildren();
+    }
+  }, [role]);
 
   // Log selectedBrand and selectedAvailabilities for debugging
 
@@ -149,6 +186,10 @@ export default function ShopSidebarleft({ slug }) {
           </div>
           <div className="tf-row-flex">
             <Sidebar
+              slug={slug}
+              categories={categories}
+              selectedCategories={selectedCategories}
+              setSelectedCategories={setSelectedCategories}
               selectedBrand={selectedBrand}
               setSelectedBrand={setSelectedBrand}
               selectedAvailabilities={selectedAvailabilities}
@@ -170,9 +211,7 @@ export default function ShopSidebarleft({ slug }) {
                     onPageChange={handlePageChange}
                   />
                 </ul>
-              ) : (
-                <p className="text-center">No products found for "{slug}".</p>
-              )}
+              ) : (<></>)}
             </div>
           </div>
         </div>

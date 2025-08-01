@@ -75,10 +75,14 @@ let BulkProductsService = class BulkProductsService {
         const { categorySlug, page = 0, limit = 10, brandNames, promotions, minPrice, maxPrice, } = options;
         const offset = page * limit;
         const where = {
+            isActive: true,
             product: {
-                ...(categorySlug && {
+                ...(categorySlug &&
+                    categorySlug.length > 0 && {
                     category: {
-                        slug: categorySlug,
+                        slug: {
+                            in: categorySlug,
+                        },
                     },
                 }),
                 ...(brandNames &&

@@ -136,7 +136,7 @@ export default function Page() {
         const order = cell.row.original;
         const nextStatus = getNextStatus(order.status);
         const isProcessing = loadingStates[order.id];
-
+        const showCancelButton = order.status !== "Annuler" && order.status !== "en attente";
         return (
           <div className="d-flex gap-2">
             <div className="actions-right block_action">
@@ -151,14 +151,16 @@ export default function Page() {
                 </Button>
               )}
 
-              <Button
-                onClick={() => updateOrderStatus(order.id, 'Annuler')}
-                variant="danger"
-                size="sm"
-                disabled={isProcessing}
-              >
-                Annuler
-              </Button>
+              {showCancelButton && (
+                <Button
+                  onClick={() => updateOrderStatus(order.id, 'Annuler')}
+                  variant="danger"
+                  size="sm"
+                  disabled={isProcessing}
+                >
+                  Annuler
+                </Button>
+              )}
             </div>
           </div>
         );

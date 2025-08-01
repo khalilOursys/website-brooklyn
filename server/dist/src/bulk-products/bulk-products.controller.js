@@ -38,7 +38,7 @@ let BulkProductsController = class BulkProductsController {
     }
     findByCategory(categorySlug, page = 0, limit = 10, brandNames, minPrice, maxPrice, promotions) {
         return this.bulkProductsService.findBulkProductsByCategory({
-            categorySlug,
+            categorySlug: categorySlug ? categorySlug.split(',') : undefined,
             page,
             limit,
             promotions,

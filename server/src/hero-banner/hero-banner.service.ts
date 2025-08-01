@@ -13,15 +13,6 @@ export class HeroBannerService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createHeroBannerDto: CreateHeroBannerDto) {
-    // Check if a heroBanner with the same name already exists
-    const existing = await this.prisma.heroBanner.findUnique({
-      where: { name: createHeroBannerDto.name },
-    });
-    if (existing) {
-      throw new BadRequestException(
-        `HeroBanner with name "${createHeroBannerDto.name}" already exists.`,
-      );
-    }
     return await this.prisma.heroBanner.create({
       data: createHeroBannerDto,
     });
