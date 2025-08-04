@@ -155,10 +155,10 @@ export default function Footer2({ bgColor = "" }) {
               </div>
               <div className="col-xl-4 col-md-6 col-12 footer-col-block">
                 <div className="footer-heading footer-heading-desktop">
-                  <h6>Category</h6>
+                  <h6>Catégorie</h6>
                 </div>
                 <div className="footer-heading footer-heading-moblie">
-                  <h6>Category</h6>
+                  <h6>Catégorie</h6>
                 </div>
                 <ul className="footer-menu-list tf-collapse-content">
                   {footerLinks.map((link, index) => (
@@ -172,10 +172,10 @@ export default function Footer2({ bgColor = "" }) {
               </div>
               <div className="col-xl-4 col-md-6 col-12 footer-col-block">
                 <div className="footer-heading footer-heading-desktop">
-                  <h6>About us</h6>
+                  <h6>À propos de nous</h6>
                 </div>
                 <div className="footer-heading footer-heading-moblie">
-                  <h6>About us</h6>
+                  <h6>À propos de nous</h6>
                 </div>
                 <ul className="footer-menu-list tf-collapse-content">
                   {aboutLinks.slice(0, 4).map((link, index) => (

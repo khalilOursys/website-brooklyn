@@ -129,7 +129,6 @@ export default function OrderDetails({ order }) {
             {order.orderItems.map((item) => (
               <div key={item.id} className="order-head mb-4">
                 <figure className="img-product">
-                  {console.log(item.variant)}
                   <Image
                     alt="product"
                     src={

@@ -19,7 +19,6 @@ async function getProductById(id) {
       throw new Error(`Failed to fetch product: ${response.statusText}`);
     }
     const product = await response.json();
-    console.log(product);
 
     const transformedData = {
       id: product.id,
@@ -111,7 +110,8 @@ export default async function page({ params }) {
 
   return (
     <>
-      <Header4 />
+      <Topbar1 />
+      <Header2 />
       <div className="tf-breadcrumb">
         <div className="container">
           <div className="tf-breadcrumb-wrap d-flex justify-content-between flex-wrap align-items-center">

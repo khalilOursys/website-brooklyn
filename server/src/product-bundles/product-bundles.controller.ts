@@ -66,4 +66,9 @@ export class ProductBundlesController {
       statusCode: result.status,
     };
   }
+
+  @Get('getIsActived')
+  async getIsActived() {
+    return await this.productBundlesService.getIsActived();
+  }
 }

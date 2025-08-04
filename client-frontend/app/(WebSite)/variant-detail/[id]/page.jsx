@@ -10,7 +10,6 @@ import Header2 from "@/components/headers/Header2";
 // Function to fetch product data from the backend
 async function getProductById(id) {
   const api = Configuration.BACK_BASEURL;
-  console.log(`${api}product-variants/getVariantWithProduct/${id}`);
   try {
     const response = await fetch(`${api}product-variants/getVariantWithProduct/${id}`); // Replace with your backend URL
     if (!response.ok) {

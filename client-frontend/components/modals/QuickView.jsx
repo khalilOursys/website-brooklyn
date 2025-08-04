@@ -249,7 +249,7 @@ export default function QuickView() {
                     href={`/product-detail/${quickViewItem.id}`}
                     className="tf-btn fw-6 btn-line"
                   >
-                    View full details
+                    Voir tous les détails
                     <i className="icon icon-arrow1-top-left" />
                   </Link>
                 </div>

@@ -50,6 +50,9 @@ let ProductBundlesController = class ProductBundlesController {
             statusCode: result.status,
         };
     }
+    async getIsActived() {
+        return await this.productBundlesService.getIsActived();
+    }
 };
 exports.ProductBundlesController = ProductBundlesController;
 __decorate([
@@ -102,6 +105,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ProductBundlesController.prototype, "toggleStatus", null);
+__decorate([
+    (0, common_1.Get)('getIsActived'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ProductBundlesController.prototype, "getIsActived", null);
 exports.ProductBundlesController = ProductBundlesController = __decorate([
     (0, common_1.Controller)('productBundles'),
     __metadata("design:paramtypes", [product_bundles_service_1.ProductBundlesService])
