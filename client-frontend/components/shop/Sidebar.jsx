@@ -28,7 +28,6 @@ export default function Sidebar({
     { id: 1, isAvailable: true, text: "Available", count: 14 },
     { id: 2, isAvailable: false, text: "Out of Stock", count: 2 },
   ];
-  console.log(categories);
 
   const handleSelectCategories = (category) => {
     setSelectedCategories((prev) => {

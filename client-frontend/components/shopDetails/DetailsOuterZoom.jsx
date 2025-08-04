@@ -144,12 +144,12 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                   )}
                   <div className="tf-product-info-variant-picker">
                     <div className="variant-picker-item">
-                      <div className="variant-picker-label">
+                      {/* <div className="variant-picker-label">
                         Color:
                         <span className="fw-6 variant-picker-label-value">
                           {currentColor.value}
                         </span>
-                      </div>
+                      </div> */}
                       <form className="variant-picker-values">
                         {colors.map((color) => (
                           <React.Fragment key={color.id}>

@@ -18,7 +18,7 @@ export default function ShopGram() {
   useEffect(() => {
     const fetchBundles = async () => {
       try {
-        const response = await fetch(`${api}productBundles`);
+        const response = await fetch(`${api}productBundles/getIsActived`);
         if (!response.ok) {
           throw new Error('Failed to fetch bundles');
         }

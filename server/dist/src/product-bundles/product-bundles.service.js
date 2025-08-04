@@ -134,6 +134,12 @@ let ProductBundlesService = class ProductBundlesService {
             return { success: false, status: common_1.HttpStatus.FORBIDDEN };
         }
     }
+    async getIsActived() {
+        return await this.prisma.productBundle.findMany({
+            where: { isActive: true },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
 };
 exports.ProductBundlesService = ProductBundlesService;
 exports.ProductBundlesService = ProductBundlesService = __decorate([

@@ -11,8 +11,8 @@ export const footerLinks = [
   { href: "/categories/stockage", text: "Stockage" },
 ];
 export const aboutLinks = [
-  { href: "/about-us", text: "About Us" },
-  { href: "/contact", text: "Contact Us" },
+  { href: "/about-us", text: "À propos de nous" },
+  { href: "/contact", text: "Contactez-nous" },
 ];
 export const paymentImages = [
   { src: "/images/payments/visa.png", width: 48, height: 30, alt: "" },

@@ -171,4 +171,11 @@ export class ProductBundlesService {
       return { success: false, status: HttpStatus.FORBIDDEN };
     }
   }
+
+  async getIsActived() {
+    return await this.prisma.productBundle.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 }
