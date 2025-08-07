@@ -42,7 +42,7 @@ let OrdersService = class OrdersService {
                     if (!product) {
                         throw new common_1.BadRequestException(`Product with id ${item.productId} not found`);
                     }
-                    if (product.stock < item.quantity) {
+                    if (product.stock < item.quantity && item.bulkId === null) {
                         throw new common_1.BadRequestException(`Stock insuffisant pour cette produit ${product.name}`);
                     }
                 }

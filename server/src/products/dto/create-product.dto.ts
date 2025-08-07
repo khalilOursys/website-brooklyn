@@ -42,6 +42,10 @@ export class CreateProductDto {
   price: number;
 
   @IsNumber()
+  @IsOptional()
+  purchasePrice?: number;
+
+  @IsNumber()
   stock: number;
 
   @IsBoolean()

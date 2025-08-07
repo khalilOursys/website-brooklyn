@@ -11,6 +11,7 @@ export declare class CreateProductDto {
     description?: string;
     color?: string;
     price: number;
+    purchasePrice?: number;
     stock: number;
     isBulk?: boolean;
     discount?: number;

@@ -13,6 +13,7 @@ export class OrdersService {
 
   async create(createOrderDto: CreateOrderDto) {
     // Validate user exists
+
     const user = await this.prisma.user.findUnique({
       where: { id: createOrderDto.userId },
     });
@@ -51,7 +52,7 @@ export class OrdersService {
           }
 
           // If product has no variants, check product stock directly
-          if (product.stock < item.quantity) {
+          if (product.stock < item.quantity && item.bulkId === null) {
             throw new BadRequestException(
               `Stock insuffisant pour cette produit ${product.name}`,
             );
