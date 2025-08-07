@@ -64,6 +64,7 @@ model Product {
   description    String?
   color          String?              @default("Black")
   price          Float
+  purchasePrice  Float?               @default(0)
   stock          Int
   isBulk         Boolean              @default(false)
   discount       Float?
