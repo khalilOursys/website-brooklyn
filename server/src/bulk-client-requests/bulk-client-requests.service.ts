@@ -38,6 +38,7 @@ export class BulkClientRequestsService {
             taxNumber: data.taxNumber,
             storeName: data.storeName,
             legalDocs: data.legalDocs,
+            address: data.address,
             status: 'en attente',
           },
         },

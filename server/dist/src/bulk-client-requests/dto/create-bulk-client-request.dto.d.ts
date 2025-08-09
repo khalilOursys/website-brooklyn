@@ -8,5 +8,6 @@ export declare class CreateBulkClientRequestDto {
     firstName?: string;
     lastName?: string;
     storeName: string;
+    address: string;
     legalDocs: string;
 }

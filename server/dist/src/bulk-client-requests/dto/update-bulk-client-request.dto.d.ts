@@ -10,4 +10,5 @@ export declare class UpdateUserBulkRequestDto {
     storeName?: string;
     legalDocs?: string;
     status?: string;
+    address: string;
 }

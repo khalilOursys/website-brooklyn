@@ -41,5 +41,8 @@ export class CreateBulkClientRequestDto {
   storeName: string;
 
   @IsString()
+  address: string;
+
+  @IsString()
   legalDocs: string;
 }

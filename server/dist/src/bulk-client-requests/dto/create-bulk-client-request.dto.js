@@ -59,5 +59,9 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
+], CreateBulkClientRequestDto.prototype, "address", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
 ], CreateBulkClientRequestDto.prototype, "legalDocs", void 0);
 //# sourceMappingURL=create-bulk-client-request.dto.js.map
