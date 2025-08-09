@@ -28,6 +28,7 @@ export declare class BulkProductsService {
             description: string | null;
             color: string | null;
             price: number;
+            purchasePrice: number | null;
             stock: number;
             isBulk: boolean;
             discount: number | null;
@@ -97,6 +98,7 @@ export declare class BulkProductsService {
             description: string | null;
             color: string | null;
             price: number;
+            purchasePrice: number | null;
             stock: number;
             isBulk: boolean;
             discount: number | null;
@@ -193,6 +195,7 @@ export declare class BulkProductsService {
                 description: string | null;
                 color: string | null;
                 price: number;
+                purchasePrice: number | null;
                 stock: number;
                 isBulk: boolean;
                 discount: number | null;

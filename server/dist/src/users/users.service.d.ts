@@ -9,6 +9,8 @@ export declare class UsersService {
     private readonly prisma;
     private readonly jwtService;
     constructor(prisma: PrismaService, jwtService: JwtService);
+    onModuleInit(): Promise<void>;
+    private ensureAdminUserExists;
     create(createUserDto: CreateUserDto): Promise<{
         id: string;
         email: string;
@@ -46,6 +48,7 @@ export declare class UsersService {
             id: string;
             userId: string;
             storeName: string;
+            address: string | null;
             rib: string | null;
             taxNumber: string | null;
             legalDocs: string;
@@ -89,6 +92,7 @@ export declare class UsersService {
             id: string;
             userId: string;
             storeName: string;
+            address: string | null;
             rib: string | null;
             taxNumber: string | null;
             legalDocs: string;
@@ -117,6 +121,7 @@ export declare class UsersService {
             id: string;
             userId: string;
             storeName: string;
+            address: string | null;
             rib: string | null;
             taxNumber: string | null;
             legalDocs: string;

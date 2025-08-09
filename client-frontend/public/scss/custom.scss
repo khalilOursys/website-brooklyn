@@ -552,6 +552,11 @@ td.tf-cart-item_product-remove span.remove-cart.link.remove {
   color: white !important;
   font-size: 14px !important;
 }
+
+.card-product .card-product-info .title {
+  height: 50px;
+}
+
 @media (max-width: 768px) {
   .modal-content {
     max-height: 90vh;

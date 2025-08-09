@@ -14,10 +14,30 @@ const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
 const bcryptjs = require("bcryptjs");
 const jwt_1 = require("@nestjs/jwt");
+const client_1 = require("@prisma/client");
 let UsersService = class UsersService {
     constructor(prisma, jwtService) {
         this.prisma = prisma;
         this.jwtService = jwtService;
+    }
+    async onModuleInit() {
+        await this.ensureAdminUserExists();
+    }
+    async ensureAdminUserExists() {
+        const adminEmail = 'admin.admin@admin.com';
+        const adminPassword = 'adminadmin';
+        const usersCount = await this.prisma.user.count();
+        if (usersCount === 0) {
+            const adminUserDto = {
+                email: adminEmail,
+                password: adminPassword,
+                name: 'Admin',
+                firstName: 'Admin',
+                lastName: 'Admin',
+                role: client_1.Role.ADMIN,
+            };
+            await this.create(adminUserDto);
+        }
     }
     async create(createUserDto) {
         const existingUser = await this.prisma.user.findUnique({

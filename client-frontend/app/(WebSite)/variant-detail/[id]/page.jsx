@@ -6,6 +6,7 @@ import Configuration from "@/configuration";
 import Header4 from "@/components/headers/Header4";
 import Topbar1 from "@/components/headers/Topbar1";
 import Header2 from "@/components/headers/Header2";
+import Products from "@/components/shopDetails/Products";
 
 // Function to fetch product data from the backend
 async function getProductById(id) {
@@ -32,6 +33,7 @@ async function getProductById(id) {
       variants: product.product.variants,
       stock: product.stock,
       color: product.product.color,
+      product: product.product,
       colorVar: product.color
     };
     return transformedData;
@@ -102,6 +104,7 @@ export default async function page({ params }) {
         </div>
       </div>
       <DetailsOuterZoom product={product} />
+      <Products variants={product.variants} product={product.product} />
       {/* <ShopDetailsTab />
       <Products />
       <RecentProducts /> */}

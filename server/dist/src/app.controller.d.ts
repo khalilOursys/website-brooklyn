@@ -12,6 +12,7 @@ export declare class AppController {
         description: string | null;
         color: string | null;
         price: number;
+        purchasePrice: number | null;
         stock: number;
         isBulk: boolean;
         discount: number | null;

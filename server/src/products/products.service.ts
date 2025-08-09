@@ -63,7 +63,12 @@ export class ProductsService {
         attributes: true,
         category: true,
         brand: true,
-        variants: true,
+        variants: {
+          include: {
+            images: true, // Include images for each variant
+            product: true,
+          },
+        },
       },
     });
     if (!product) {

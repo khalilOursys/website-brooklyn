@@ -3,11 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useContextElement } from "@/context/Context";
 import CountdownComponent from "../common/Countdown";
-export const ProductCard = ({ product, quantity }) => {
+export const VariantCard = ({ product }) => {
   const { setQuickViewItem } = useContextElement();
   const {
     setQuickAddItem,
   } = useContextElement();
+  /* console.log(product); */
 
   return (
     <div className="card-product fl-item" key={product.id}>
@@ -127,19 +128,9 @@ export const ProductCard = ({ product, quantity }) => {
       <div className="card-product-info">
         <Link href={`/product-detail/${product.id}`} className="title link">
           {product.name}
-          {quantity && quantity > 0 && (
-            <span className="product-quantity" style={{
-              marginLeft: '8px',
-              color: '#666',
-              fontSize: '0.9em',
-              fontWeight: 'normal'
-            }}>
-              (Quantité: {quantity})
-            </span>
-          )}
         </Link>
 
-        {product.discount ? (
+        {/* {product.discount ? (
           <span className="price">
             <span className="fw-4 text-sale">
               {product.price.toFixed(3)} TND
@@ -148,7 +139,7 @@ export const ProductCard = ({ product, quantity }) => {
           </span>
         ) : (
           <span className="price">{product.price.toFixed(3)} TND</span>
-        )}
+        )} */}
         {/* <span className="price">{product.price.toFixed(3)} TND</span> */}
         {/* {product.colors && (
           <ul className="list-color-product">

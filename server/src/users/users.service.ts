@@ -19,7 +19,30 @@ export class UsersService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService, // Inject the JwtService for token creation
   ) {}
+  async onModuleInit() {
+    await this.ensureAdminUserExists();
+  }
 
+  private async ensureAdminUserExists() {
+    const adminEmail = 'admin.admin@admin.com'; // or from config
+    const adminPassword = 'adminadmin'; // or from config
+
+    const usersCount = await this.prisma.user.count();
+
+    if (usersCount === 0) {
+      const adminUserDto: CreateUserDto = {
+        email: adminEmail,
+        password: adminPassword,
+        name: 'Admin',
+        firstName: 'Admin',
+        lastName: 'Admin',
+        role: Role.ADMIN,
+        // add other required fields
+      };
+
+      await this.create(adminUserDto);
+    }
+  }
   async create(createUserDto: CreateUserDto) {
     // Check if email already exists
     const existingUser = await this.prisma.user.findUnique({

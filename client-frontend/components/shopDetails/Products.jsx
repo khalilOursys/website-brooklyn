@@ -1,34 +1,44 @@
 "use client";
-
-import { products1 } from "@/data/products";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ProductCard } from "../shopCards/ProductCard";
 import { Navigation, Pagination } from "swiper/modules";
+import { VariantCard } from "../shopCards/VariantCard";
 
-export default function Products() {
+export default function Products({ variants, product }) {
+  // Create a unified array with the main product first, then variants
+  const allProducts = [
+    {
+      ...product,
+      isDefault: true, // Mark as default product
+    },
+    ...variants.map(variant => ({
+      ...variant,
+      isDefault: false, // Mark as variant
+      // Merge product-level data that variants might need
+      category: product.category,
+      brand: product.brand,
+      description: product.description,
+      isFeatured: product.isFeatured,
+      // Add any other product-level fields you want variants to inherit
+    }))
+  ];
+
   return (
     <section className="flat-spacing-1 pt_0">
       <div className="container">
         <div className="flat-title">
-          <span className="title">People Also Bought</span>
+          <span className="title">Variantes produit</span>
         </div>
         <div className="hover-sw-nav hover-sw-2">
           <Swiper
             dir="ltr"
             className="swiper tf-sw-product-sell wrap-sw-over"
-            slidesPerView={4} // Equivalent to data-preview={4}
-            spaceBetween={30} // Equivalent to data-space-lg={30}
+            slidesPerView={4}
+            spaceBetween={30}
             breakpoints={{
-              1024: {
-                slidesPerView: 4, // Equivalent to data-tablet={3}
-              },
-              640: {
-                slidesPerView: 3, // Equivalent to data-tablet={3}
-              },
-              0: {
-                slidesPerView: 2, // Equivalent to data-mobile={2}
-                spaceBetween: 15, // Equivalent to data-space-md={15}
-              },
+              1024: { slidesPerView: 4 },
+              640: { slidesPerView: 3 },
+              0: { slidesPerView: 2, spaceBetween: 15 },
             }}
             modules={[Navigation, Pagination]}
             navigation={{
@@ -37,9 +47,9 @@ export default function Products() {
             }}
             pagination={{ clickable: true, el: ".spd307" }}
           >
-            {products1.slice(0, 8).map((product, i) => (
+            {allProducts.map((item, i) => (
               <SwiperSlide key={i} className="swiper-slide">
-                <ProductCard product={product} />
+                <VariantCard product={item} />
               </SwiperSlide>
             ))}
           </Swiper>
