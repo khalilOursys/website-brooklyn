@@ -23,6 +23,7 @@ import { BulkClientRequestsModule } from './bulk-client-requests/bulk-client-req
 import { NotificationsModule } from './notifications/notifications.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { HeroBannerModule } from './hero-banner/hero-banner.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 @Module({
   imports: [
@@ -47,7 +48,8 @@ import { HeroBannerModule } from './hero-banner/hero-banner.module';
     BulkClientRequestsModule,
     NotificationsModule,
     WishlistModule,
-    HeroBannerModule
+    HeroBannerModule,
+    StatisticsModule
   ],
   controllers: [AppController],
   providers: [PrismaService],

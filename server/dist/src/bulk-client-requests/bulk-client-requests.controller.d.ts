@@ -9,6 +9,7 @@ export declare class BulkClientRequestsController {
             id: string;
             userId: string;
             storeName: string;
+            address: string | null;
             rib: string | null;
             taxNumber: string | null;
             legalDocs: string;
@@ -37,6 +38,7 @@ export declare class BulkClientRequestsController {
             id: string;
             userId: string;
             storeName: string;
+            address: string | null;
             rib: string | null;
             taxNumber: string | null;
             legalDocs: string;
@@ -65,6 +67,7 @@ export declare class BulkClientRequestsController {
             id: string;
             userId: string;
             storeName: string;
+            address: string | null;
             rib: string | null;
             taxNumber: string | null;
             legalDocs: string;
@@ -126,6 +129,7 @@ export declare class BulkClientRequestsController {
         id: string;
         userId: string;
         storeName: string;
+        address: string | null;
         rib: string | null;
         taxNumber: string | null;
         legalDocs: string;
@@ -154,6 +158,7 @@ export declare class BulkClientRequestsController {
         id: string;
         userId: string;
         storeName: string;
+        address: string | null;
         rib: string | null;
         taxNumber: string | null;
         legalDocs: string;
@@ -166,6 +171,7 @@ export declare class BulkClientRequestsController {
         id: string;
         userId: string;
         storeName: string;
+        address: string | null;
         rib: string | null;
         taxNumber: string | null;
         legalDocs: string;

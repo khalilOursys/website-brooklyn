@@ -48,6 +48,7 @@ model BulkClientRequest {
   userId       String    @unique
   user         User      @relation(fields: [userId], references: [id])
   storeName    String
+  address      String?
   rib          String?
   taxNumber    String?
   legalDocs    String

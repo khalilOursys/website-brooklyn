@@ -31,6 +31,7 @@ Table BulkClientRequest {
   userId String [unique, not null]
   user User [not null]
   storeName String [not null]
+  address String
   rib String
   taxNumber String
   legalDocs String [not null]
@@ -47,6 +48,7 @@ Table Product {
   description String
   color String [default: 'Black']
   price Float [not null]
+  purchasePrice Float [default: 0]
   stock Int [not null]
   isBulk Boolean [not null, default: false]
   discount Float

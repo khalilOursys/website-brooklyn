@@ -46,6 +46,7 @@ export declare class UsersController {
             id: string;
             userId: string;
             storeName: string;
+            address: string | null;
             rib: string | null;
             taxNumber: string | null;
             legalDocs: string;
@@ -74,6 +75,7 @@ export declare class UsersController {
             id: string;
             userId: string;
             storeName: string;
+            address: string | null;
             rib: string | null;
             taxNumber: string | null;
             legalDocs: string;

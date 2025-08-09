@@ -63,7 +63,12 @@ let ProductsService = class ProductsService {
                 attributes: true,
                 category: true,
                 brand: true,
-                variants: true,
+                variants: {
+                    include: {
+                        images: true,
+                        product: true,
+                    },
+                },
             },
         });
         if (!product) {

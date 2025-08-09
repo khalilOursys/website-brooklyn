@@ -3,9 +3,9 @@ import Link from "next/link";
 import DetailsOuterZoom from "@/components/shopDetails/DetailsOuterZoom";
 import Footer2 from "@/components/footers/Footer2";
 import Configuration from "@/configuration";
-import Header4 from "@/components/headers/Header4";
 import Topbar1 from "@/components/headers/Topbar1";
 import Header2 from "@/components/headers/Header2";
+import Products from "@/components/shopDetails/Products";
 
 // Function to fetch product data from the backend
 async function getProductById(id) {
@@ -50,7 +50,6 @@ export default async function page({ params }) {
 
   // Fetch the product data from the backend
   const product = await getProductById(id);
-
   // If the product is not found, display a fallback or redirect
   if (!product) {
     return (
@@ -84,9 +83,8 @@ export default async function page({ params }) {
         </div>
       </div>
       <DetailsOuterZoom product={product} />
-      {/* <ShopDetailsTab />
-      <Products />
-      <RecentProducts /> */}
+      <Products variants={product.variants} product={product} />
+      {/* <RecentProducts /> */}
       <Footer2 />
     </>
   );
