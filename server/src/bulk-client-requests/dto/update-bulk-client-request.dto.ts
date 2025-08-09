@@ -44,4 +44,8 @@ export class UpdateUserBulkRequestDto {
   @IsString()
   @IsOptional()
   status?: string;
+
+  @IsString()
+  @IsOptional()
+  address: string;
 }

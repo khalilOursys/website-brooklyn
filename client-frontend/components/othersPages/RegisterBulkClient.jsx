@@ -18,6 +18,7 @@ export default function RegisterBulkClient() {
     telephone: "",
     taxNumber: "",
     rib: "",
+    address: "",
   });
   const [legalDoc, setLegalDoc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -155,6 +156,7 @@ export default function RegisterBulkClient() {
       formDataToSend.append("telephone", formData.telephone);
       formDataToSend.append("taxNumber", formData.taxNumber);
       formDataToSend.append("rib", formData.rib);
+      formDataToSend.append("address", formData.address); // Added address to form data
       formDataToSend.append("legalDocs", "");
       formDataToSend.append("file", legalDoc);
 
@@ -170,25 +172,6 @@ export default function RegisterBulkClient() {
       setTimeout(() => {
         window.location.replace("/login");
       }, 1500);
-      /* const responseLogin = await fetch(`${api}auth/login`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: formData.email, password: formData.password }),
-      });
-
-      const data = await responseLogin.json();
-
-      if (data.message) {
-        // notify(2, data.message);
-      } else {
-        localStorage.setItem("x-access-token", data.access_token);
-        setTimeout(() => {
-          window.location.replace("/");
-        }, 1500);
-      } */
     } catch (err) {
       setError(err instanceof Error ? err.message : "Échec de l'inscription");
     } finally {
@@ -201,7 +184,7 @@ export default function RegisterBulkClient() {
       <div className="container">
         <div className="form-register-wrap">
           <div className="flat-title align-items-start gap-0 mb_30 px-0">
-            <h5 className="mb_18">Inscription</h5>
+            <h5 className="mb_18">Inscription en tant que revendeur</h5>
             <p className="text_black-2">
               Inscrivez-vous pour un accès anticipé aux soldes ainsi que pour recevoir les nouveautés, tendances et promotions personnalisées. Pour vous désabonner, cliquez sur désinscrire dans nos emails.
             </p>
@@ -317,6 +300,24 @@ export default function RegisterBulkClient() {
                   htmlFor="rib"
                 >
                   RIB (optionnel)
+                </label>
+              </div>
+              {/* Added address field */}
+              <div className="tf-field style-1 mb_15">
+                <input
+                  className="tf-field-input tf-input"
+                  placeholder=" "
+                  type="text"
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleInputChange}
+                />
+                <label
+                  className="tf-field-label fw-4 text_black-2"
+                  htmlFor="address"
+                >
+                  Adresse
                 </label>
               </div>
               <div className="tf-field style-1 mb_15">

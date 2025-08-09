@@ -12,6 +12,7 @@ import OrderDetails from "@/components/othersPages/dashboard/OrderDetails";
 import { useParams } from "next/navigation";
 import Configuration from "@/configuration";
 import Header4 from "@/components/headers/Header4";
+import Topbar1 from "@/components/headers/Topbar1";
 
 export default function OrderPage() {
   const { id } = useParams(); // Use `useParams` if you're using dynamic routes
@@ -45,6 +46,7 @@ export default function OrderPage() {
   if (loading) {
     return (
       <div className="container">
+        <Topbar1 />
         <Header2 />
         <div className="tf-page-title">
           <div className="container-full">
@@ -64,6 +66,7 @@ export default function OrderPage() {
   if (error) {
     return (
       <div className="container">
+        <Topbar1 />
         <Header2 />
         <div className="tf-page-title">
           <div className="container-full">
@@ -84,6 +87,7 @@ export default function OrderPage() {
   if (!order) {
     return (
       <div className="container">
+        <Topbar1 />
         <Header2 />
         <div className="tf-page-title">
           <div className="container-full">
@@ -103,7 +107,8 @@ export default function OrderPage() {
 
   return (
     <>
-      <Header4 />
+      <Topbar1 />
+      <Header2 />
       <div className="tf-page-title">
         <div className="container-full">
           <div className="heading text-center">Mes commandes</div>

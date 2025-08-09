@@ -18,9 +18,9 @@ export default function CheckoutBulk() {
 
   // Form state - initialize with user data if available
   const [formData, setFormData] = useState({
-    firstName: user?.name?.split(' ')[0] || '',
-    lastName: user?.name?.split(' ').slice(1).join(' ') || '',
-    address: '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    address: user?.bulkRequests?.address || '',
     phoneNumber: user?.phoneNumber || '',
     note: '',
     paymentMethod: 'delivery', // default to cash on delivery
@@ -57,9 +57,10 @@ export default function CheckoutBulk() {
     if (user) {
       setFormData(prev => ({
         ...prev,
-        firstName: user?.name?.split(' ')[0] || prev.firstName,
-        lastName: user?.name?.split(' ').slice(1).join(' ') || prev.lastName,
-        phoneNumber: user?.telephone || prev.telephone
+        firstName: user.firstName || prev.firstName,
+        lastName: user.lastName || prev.lastName,
+        phoneNumber: user?.telephone || prev.telephone,
+        address: user?.bulkRequests?.address || prev.address,
       }));
     }
   }, [user]);
