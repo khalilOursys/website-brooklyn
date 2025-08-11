@@ -14,7 +14,7 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
   const params = useParams();
   const [currentColor, setCurrentColor] = useState({});
   const [colors, setColors] = useState([]);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
 
   const handleColor = (color) => {
     const updatedColor = colors.filter(

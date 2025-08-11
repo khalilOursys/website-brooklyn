@@ -35,7 +35,7 @@ export default function Page() {
   const submitForm = async (event) => {
     event.preventDefault();
 
-    if (!name.trim()) {
+    /* if (!name.trim()) {
       notify(2, "Le nom est requis");
       return;
     }
@@ -43,7 +43,7 @@ export default function Page() {
     if (!description.trim()) {
       notify(2, "La description est requise");
       return;
-    }
+    } */
 
     if (image === "") {
       notify(2, "Image est requise");
@@ -59,7 +59,7 @@ export default function Page() {
       })
     ).then((action) => {
       if (action.meta.requestStatus === "fulfilled") {
-        notify(1, "Marque modifiée avec succès !");
+        notify(1, "Hero banner modifiée avec succès !");
         setTimeout(() => {
           window.location.replace("/heroBanner");
         }, 1500);
@@ -156,13 +156,13 @@ export default function Page() {
                       <Form onSubmit={submitForm}>
                         <Card>
                           <Card.Header>
-                            <Card.Title as="h4">Ajouter une marque</Card.Title>
+                            <Card.Title as="h4">Modifier une Hero banner</Card.Title>
                           </Card.Header>
                           <Card.Body>
                             <Row>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Nom* </label>
+                                  <label>Nom </label>
                                   <Form.Control
                                     value={name}
                                     placeholder="Nom"
@@ -175,7 +175,7 @@ export default function Page() {
                               </Col>
                               <Col md="6">
                                 <Form.Group>
-                                  <label>Description* </label>
+                                  <label>Description </label>
                                   <Form.Control
                                     value={description}
                                     placeholder="Description"

@@ -10,11 +10,11 @@ export declare class ProductsService {
         category: {
             id: string;
             name: string;
+            description: string | null;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -24,31 +24,28 @@ export declare class ProductsService {
         brand: {
             id: string;
             name: string;
+            description: string | null;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -60,18 +57,21 @@ export declare class ProductsService {
         specs: Prisma.JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(): Promise<({
         category: {
             id: string;
             name: string;
+            description: string | null;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -81,31 +81,28 @@ export declare class ProductsService {
         brand: {
             id: string;
             name: string;
+            description: string | null;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -117,18 +114,21 @@ export declare class ProductsService {
         specs: Prisma.JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     })[]>;
     findOne(id: string): Promise<{
         category: {
             id: string;
             name: string;
+            description: string | null;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -138,26 +138,23 @@ export declare class ProductsService {
         brand: {
             id: string;
             name: string;
+            description: string | null;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
         variants: ({
             product: {
                 id: string;
                 name: string;
-                isActive: boolean;
-                createdAt: Date;
-                updatedAt: Date;
                 description: string | null;
                 color: string | null;
                 price: number;
@@ -169,36 +166,36 @@ export declare class ProductsService {
                 specs: Prisma.JsonValue | null;
                 categoryId: string;
                 brandId: string;
+                isActive: boolean;
                 averageRating: number | null;
                 ratingCount: number;
+                createdAt: Date;
+                updatedAt: Date;
             };
             images: {
                 id: string;
+                productId: string | null;
+                variantId: string | null;
                 url: string;
                 isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
             }[];
         } & {
             id: string;
             name: string;
-            isActive: boolean;
             color: string | null;
             stock: number;
+            isActive: boolean;
             productId: string;
         })[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -210,18 +207,21 @@ export declare class ProductsService {
         specs: Prisma.JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<({
         category: {
             id: string;
             name: string;
+            description: string | null;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
             slug: string | null;
-            description: string | null;
             bgUrl: string | null;
             iconUrl: string | null;
             bannerColor: string;
@@ -231,31 +231,28 @@ export declare class ProductsService {
         brand: {
             id: string;
             name: string;
+            description: string | null;
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            description: string | null;
             img: string | null;
         };
         images: {
             id: string;
+            productId: string | null;
+            variantId: string | null;
             url: string;
             isPrimary: boolean;
-            variantId: string | null;
-            productId: string | null;
         }[];
         attributes: {
             id: string;
+            productId: string;
             key: string;
             value: string;
-            productId: string;
         }[];
     } & {
         id: string;
         name: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -267,15 +264,15 @@ export declare class ProductsService {
         specs: Prisma.JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }) | null>;
     remove(id: string): Promise<{
         id: string;
         name: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
         description: string | null;
         color: string | null;
         price: number;
@@ -287,8 +284,11 @@ export declare class ProductsService {
         specs: Prisma.JsonValue | null;
         categoryId: string;
         brandId: string;
+        isActive: boolean;
         averageRating: number | null;
         ratingCount: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findByDiscountAndFeatured(options: {
         page?: number;
@@ -298,11 +298,11 @@ export declare class ProductsService {
             category: {
                 id: string;
                 name: string;
+                description: string | null;
                 isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -312,25 +312,22 @@ export declare class ProductsService {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
                 isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string | null;
+                variantId: string | null;
                 url: string;
                 isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
             }[];
         } & {
             id: string;
             name: string;
-            isActive: boolean;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             color: string | null;
             price: number;
@@ -342,18 +339,21 @@ export declare class ProductsService {
             specs: Prisma.JsonValue | null;
             categoryId: string;
             brandId: string;
+            isActive: boolean;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         discountedProducts: ({
             category: {
                 id: string;
                 name: string;
+                description: string | null;
                 isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -363,25 +363,22 @@ export declare class ProductsService {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
                 isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string | null;
+                variantId: string | null;
                 url: string;
                 isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
             }[];
         } & {
             id: string;
             name: string;
-            isActive: boolean;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             color: string | null;
             price: number;
@@ -393,8 +390,11 @@ export declare class ProductsService {
             specs: Prisma.JsonValue | null;
             categoryId: string;
             brandId: string;
+            isActive: boolean;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
     }>;
     findByCategory(options: {
@@ -410,11 +410,11 @@ export declare class ProductsService {
             category: {
                 id: string;
                 name: string;
+                description: string | null;
                 isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -424,31 +424,28 @@ export declare class ProductsService {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
                 isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string | null;
+                variantId: string | null;
                 url: string;
                 isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
             }[];
             attributes: {
                 id: string;
+                productId: string;
                 key: string;
                 value: string;
-                productId: string;
             }[];
         } & {
             id: string;
             name: string;
-            isActive: boolean;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             color: string | null;
             price: number;
@@ -460,8 +457,11 @@ export declare class ProductsService {
             specs: Prisma.JsonValue | null;
             categoryId: string;
             brandId: string;
+            isActive: boolean;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         totalCount: number;
     }>;
@@ -515,11 +515,11 @@ export declare class ProductsService {
             category: {
                 id: string;
                 name: string;
+                description: string | null;
                 isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
                 slug: string | null;
-                description: string | null;
                 bgUrl: string | null;
                 iconUrl: string | null;
                 bannerColor: string;
@@ -529,31 +529,28 @@ export declare class ProductsService {
             brand: {
                 id: string;
                 name: string;
+                description: string | null;
                 isActive: boolean;
                 createdAt: Date;
                 updatedAt: Date;
-                description: string | null;
                 img: string | null;
             };
             images: {
                 id: string;
+                productId: string | null;
+                variantId: string | null;
                 url: string;
                 isPrimary: boolean;
-                variantId: string | null;
-                productId: string | null;
             }[];
             attributes: {
                 id: string;
+                productId: string;
                 key: string;
                 value: string;
-                productId: string;
             }[];
         } & {
             id: string;
             name: string;
-            isActive: boolean;
-            createdAt: Date;
-            updatedAt: Date;
             description: string | null;
             color: string | null;
             price: number;
@@ -565,8 +562,11 @@ export declare class ProductsService {
             specs: Prisma.JsonValue | null;
             categoryId: string;
             brandId: string;
+            isActive: boolean;
             averageRating: number | null;
             ratingCount: number;
+            createdAt: Date;
+            updatedAt: Date;
         })[];
         totalCount: number;
     }>;

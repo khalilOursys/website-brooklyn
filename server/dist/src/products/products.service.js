@@ -182,14 +182,6 @@ let ProductsService = class ProductsService {
             ...((minPrice !== undefined || maxPrice !== undefined) && {
                 OR: [
                     {
-                        discount: {
-                            gt: 0,
-                            ...(minPrice !== undefined && { gte: minPrice }),
-                            ...(maxPrice !== undefined && { lte: maxPrice }),
-                        },
-                    },
-                    {
-                        discount: 0,
                         price: {
                             ...(minPrice !== undefined && { gte: minPrice }),
                             ...(maxPrice !== undefined && { lte: maxPrice }),

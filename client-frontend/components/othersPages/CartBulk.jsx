@@ -13,6 +13,7 @@ export default function CartBulk() {
   const [error, setError] = useState(null);
   const [note, setNote] = useState("");
   const [cartProducts, setCartProducts] = useState([]); // Added missing state
+  const [errorMessage, setErrorMessage] = useState(null);
   const router = useRouter();
   const API_BASE_URL = Configuration.BACK_BASEURL;
 
@@ -51,25 +52,39 @@ export default function CartBulk() {
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`${API_BASE_URL}cart/items/${id}`, {
-        method: "PUT",
-        headers: {
-          /* Authorization: `Bearer ${token}`, */
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ quantity }),
-      });
 
-      if (!response.ok) {
-        throw new Error("Failed to update quantity");
+      const item = cartProducts.filter((elm) => elm.id == id)[0];
+      const items = [...cartProducts];
+      const itemIndex = items.indexOf(item);
+      if (items[itemIndex] && quantity > items[itemIndex].bulk.minQuantity) {
+        setErrorMessage(`Quantité insuffisante : vous ne pouvez pas dépasser ${items[itemIndex].bulk.minQuantity}.`);
+
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+
+        setQuantity(id, items[itemIndex].stock);
+      } else {
+        const response = await fetch(`${API_BASE_URL}cart/items/${id}`, {
+          method: "PUT",
+          headers: {
+            /* Authorization: `Bearer ${token}`, */
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ quantity }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to update quantity");
+        }
+
+        const updatedItem = await response.json();
+        setCartProducts((prev) =>
+          prev.map((item) =>
+            item.id === id ? { ...item, quantity: updatedItem.quantity } : item
+          )
+        );
       }
-
-      const updatedItem = await response.json();
-      setCartProducts((prev) =>
-        prev.map((item) =>
-          item.id === id ? { ...item, quantity: updatedItem.quantity } : item
-        )
-      );
     } catch (err) {
       setError(err.message);
       console.error("Quantity update error:", err);
@@ -149,6 +164,28 @@ export default function CartBulk() {
 
   return (
     <section className="flat-spacing-11">
+      {/* Error Message Display */}
+      {errorMessage && (
+        <div className="error-message" style={{
+          position: 'fixed',
+          top: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: '#ffebee',
+          color: '#d32f2f',
+          padding: '10px 20px',
+          borderRadius: '4px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          animation: 'fadeIn 0.3s ease-in-out'
+        }}>
+          <i className="fas fa-exclamation-circle"></i>
+          <strong>{errorMessage}</strong>
+        </div>
+      )}
       <div className="container">
         {loading && (
           <div className="loading-overlay">
