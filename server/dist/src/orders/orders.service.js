@@ -34,6 +34,17 @@ let OrdersService = class OrdersService {
                         throw new common_1.BadRequestException(`Stock insuffisant pour cette variante ${variant?.name || item.variantId}`);
                     }
                 }
+                else if (item.bulkId) {
+                    const bulk = await prisma.bulkProduct.findUnique({
+                        where: { id: item.bulkId },
+                    });
+                    if (!bulk) {
+                        throw new common_1.BadRequestException(`Bundle with id ${item.bundleId} not found`);
+                    }
+                    if (bulk.minQuantity < item.quantity) {
+                        throw new common_1.BadRequestException(`Stock insuffisant pour cette produit en gros ${bulk.name}`);
+                    }
+                }
                 else if (item.productId) {
                     const product = await prisma.product.findUnique({
                         where: { id: item.productId },
@@ -42,7 +53,7 @@ let OrdersService = class OrdersService {
                     if (!product) {
                         throw new common_1.BadRequestException(`Product with id ${item.productId} not found`);
                     }
-                    if (product.stock < item.quantity && item.bulkId === null) {
+                    if (product.stock < item.quantity) {
                         throw new common_1.BadRequestException(`Stock insuffisant pour cette produit ${product.name}`);
                     }
                 }
@@ -55,17 +66,6 @@ let OrdersService = class OrdersService {
                     }
                     if (bundle.stock < item.quantity) {
                         throw new common_1.BadRequestException(`Stock insuffisant pour cette pack ${bundle.name}`);
-                    }
-                }
-                if (item.bulkId) {
-                    const bulk = await prisma.bulkProduct.findUnique({
-                        where: { id: item.bulkId },
-                    });
-                    if (!bulk) {
-                        throw new common_1.BadRequestException(`Bundle with id ${item.bundleId} not found`);
-                    }
-                    if (bulk.minQuantity < item.quantity) {
-                        throw new common_1.BadRequestException(`Stock insuffisant pour cette produit en gros ${bulk.name}`);
                     }
                 }
             }
@@ -97,6 +97,12 @@ let OrdersService = class OrdersService {
                         data: { stock: { decrement: item.quantity } },
                     });
                 }
+                else if (item.bulkId) {
+                    await prisma.bulkProduct.update({
+                        where: { id: item.bulkId },
+                        data: { minQuantity: { decrement: item.quantity } },
+                    });
+                }
                 else if (item.productId) {
                     const product = await prisma.product.findUnique({
                         where: { id: item.productId },
@@ -114,12 +120,6 @@ let OrdersService = class OrdersService {
                     await prisma.productBundle.update({
                         where: { id: item.bundleId },
                         data: { stock: { decrement: item.quantity } },
-                    });
-                }
-                if (item.bulkId) {
-                    await prisma.bulkProduct.update({
-                        where: { id: item.bulkId },
-                        data: { minQuantity: { decrement: item.quantity } },
                     });
                 }
             }

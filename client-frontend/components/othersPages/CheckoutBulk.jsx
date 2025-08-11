@@ -142,16 +142,23 @@ export default function CheckoutBulk() {
         body: JSON.stringify(orderData),
       });
 
+      const result = await response.json();
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
 
-      /* const result = await response.json();
-      localStorage.removeItem("cartList"); */
-      setSuccess(true);
-      setTimeout(() => {
-        window.location.replace("/");
-      }, 1500);
+        if (response.status !== 400)
+          throw new Error(`HTTP error! status: ${response.status}`);
+        else
+          setError(result.message || "Failed to place order. Please try again.");
+      } else {
+
+        /* const result = await response.json();
+        localStorage.removeItem("cartList"); */
+        setSuccess(true);
+        setTimeout(() => {
+          window.location.replace("/");
+        }, 1500);
+
+      }
     } catch (err) {
       console.error("Error submitting order:", err);
       setError(err.message || "Failed to place order. Please try again.");

@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Card, Col, Container, Row, Form } from "react-bootstrap";
+import { Button, Card, Col, Container, Row, Form, Nav } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import MaterialReactTable from "material-react-table";
 import Sidebar from "@/components/Sidebar/Sidebar";
@@ -12,6 +12,13 @@ export default function StatisticsPage() {
   const dispatch = useDispatch();
   const [statistics, setStatistics] = useState({ products: [], bulks: [] });
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('products');
+
+  // Define the tabs
+  const STATISTICS_TABS = [
+    { id: 'products', label: 'Produits' },
+    { id: 'bulks', label: 'Produits en Gros' }
+  ];
 
   // Set default dates: January 1st of current year and current date
   const currentYear = new Date().getFullYear();
@@ -20,6 +27,24 @@ export default function StatisticsPage() {
 
   const [startDate, setStartDate] = useState(januaryFirst);
   const [endDate, setEndDate] = useState(currentDate);
+
+  // Calculate totals for products
+  const productsTotal = statistics.products.reduce((acc, product) => {
+    return {
+      revenue: acc.revenue + (product.revenue || 0),
+      cost: acc.cost + (product.cost || 0),
+      profit: acc.profit + (product.profit || 0)
+    };
+  }, { revenue: 0, cost: 0, profit: 0 });
+
+  // Calculate totals for bulks
+  const bulksTotal = statistics.bulks.reduce((acc, bulk) => {
+    return {
+      revenue: acc.revenue + (bulk.revenue || 0),
+      cost: acc.cost + (bulk.cost || 0),
+      profit: acc.profit + (bulk.profit || 0)
+    };
+  }, { revenue: 0, cost: 0, profit: 0 });
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
@@ -47,18 +72,81 @@ export default function StatisticsPage() {
   const productColumns = [
     { header: "Nom Produit", accessorKey: "productName" },
     { header: "Quantité Totale", accessorKey: "quantitySold" },
-    { header: "Montant Total (achat)", accessorKey: "cost" },
-    { header: "Montant Total (vente)", accessorKey: "revenue" },
-    { header: "Montant Total", accessorKey: "profit" },
+    { header: "Montant Total (achat)", accessorKey: "cost", Cell: ({ cell }) => `${cell.getValue().toFixed(3)} TND` },
+    { header: "Montant Total (vente)", accessorKey: "revenue", Cell: ({ cell }) => `${cell.getValue().toFixed(3)} TND` },
+    { header: "Bénéfice", accessorKey: "profit", Cell: ({ cell }) => `${cell.getValue().toFixed(3)} TND` },
   ];
 
   const bulkColumns = [
     { header: "Nom Produit (Gros)", accessorKey: "bulkName" },
     { header: "Quantité Totale", accessorKey: "quantitySold" },
-    { header: "Montant Total (achat)", accessorKey: "cost" },
-    { header: "Montant Total (vente)", accessorKey: "revenue" },
-    { header: "Bénéfice", accessorKey: "profit" },
+    { header: "Montant Total (achat)", accessorKey: "cost", Cell: ({ cell }) => `${cell.getValue().toFixed(3)} TND` },
+    { header: "Montant Total (vente)", accessorKey: "revenue", Cell: ({ cell }) => `${cell.getValue().toFixed(3)} TND` },
+    { header: "Bénéfice", accessorKey: "profit", Cell: ({ cell }) => `${cell.getValue().toFixed(3)} TND` },
   ];
+
+  // Helper function to render summary cards
+  const renderSummaryCards = (totals) => (
+    <Row className="mb-4">
+      <Col md={4}>
+        <Card className="card-stats">
+          <Card.Body>
+            <Row>
+              <Col xs={5}>
+                <div className="icon-big text-center icon-warning">
+                  <i className="nc-icon nc-money-coins text-success" />
+                </div>
+              </Col>
+              <Col xs={7}>
+                <div className="numbers">
+                  <p className="card-category">Revenue Total</p>
+                  <Card.Title as="h4">{totals.revenue.toFixed(3)} TND</Card.Title>
+                </div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+      </Col>
+      <Col md={4}>
+        <Card className="card-stats">
+          <Card.Body>
+            <Row>
+              <Col xs={5}>
+                <div className="icon-big text-center icon-warning">
+                  <i className="nc-icon nc-cart-simple text-danger" />
+                </div>
+              </Col>
+              <Col xs={7}>
+                <div className="numbers">
+                  <p className="card-category">Coût Total</p>
+                  <Card.Title as="h4">{totals.cost.toFixed(3)} TND</Card.Title>
+                </div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+      </Col>
+      <Col md={4}>
+        <Card className="card-stats">
+          <Card.Body>
+            <Row>
+              <Col xs={5}>
+                <div className="icon-big text-center icon-warning">
+                  <i className="nc-icon nc-chart-bar-32 text-info" />
+                </div>
+              </Col>
+              <Col xs={7}>
+                <div className="numbers">
+                  <p className="card-category">Bénéfice Total</p>
+                  <Card.Title as="h4">{totals.profit.toFixed(3)} TND</Card.Title>
+                </div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+      </Col>
+    </Row>
+  );
 
   return (
     <div className="wrapper">
@@ -116,34 +204,46 @@ export default function StatisticsPage() {
                 </Card>
               </Col>
 
-              <Col md={12}>
-                <h4 className="title">Statistiques Produits</h4>
+              <Col md="12">
                 <Card>
+                  <Card.Header>
+                    <Nav variant="tabs" activeKey={activeTab} onSelect={setActiveTab}>
+                      {STATISTICS_TABS.map(tab => (
+                        <Nav.Item key={tab.id}>
+                          <Nav.Link eventKey={tab.id}>{tab.label}</Nav.Link>
+                        </Nav.Item>
+                      ))}
+                    </Nav>
+                  </Card.Header>
                   <Card.Body>
-                    <MaterialReactTable
-                      columns={productColumns}
-                      data={statistics.products || []}
-                      enableColumnFilters
-                      enableSorting
-                      enablePagination
-                      state={{ isLoading }}
-                    />
-                  </Card.Body>
-                </Card>
-              </Col>
-
-              <Col md={12}>
-                <h4 className="title">Statistiques Produits en Gros</h4>
-                <Card>
-                  <Card.Body>
-                    <MaterialReactTable
-                      columns={bulkColumns}
-                      data={statistics.bulks || []}
-                      enableColumnFilters
-                      enableSorting
-                      enablePagination
-                      state={{ isLoading }}
-                    />
+                    {activeTab === 'products' && (
+                      <>
+                        <h4 className="title">Statistiques Produits</h4>
+                        {renderSummaryCards(productsTotal)}
+                        <MaterialReactTable
+                          columns={productColumns}
+                          data={statistics.products || []}
+                          enableColumnFilters
+                          enableSorting
+                          enablePagination
+                          state={{ isLoading }}
+                        />
+                      </>
+                    )}
+                    {activeTab === 'bulks' && (
+                      <>
+                        <h4 className="title">Statistiques Produits en Gros</h4>
+                        {renderSummaryCards(bulksTotal)}
+                        <MaterialReactTable
+                          columns={bulkColumns}
+                          data={statistics.bulks || []}
+                          enableColumnFilters
+                          enableSorting
+                          enablePagination
+                          state={{ isLoading }}
+                        />
+                      </>
+                    )}
                   </Card.Body>
                 </Card>
               </Col>

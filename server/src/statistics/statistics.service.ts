@@ -51,9 +51,9 @@ export class StatisticsService {
 
         const stat = productStatsMap.get(id);
         stat.quantitySold += quantity;
-        stat.revenue += price * quantity;
+        stat.revenue += price;
         stat.cost += purchasePrice * quantity;
-        stat.profit += (price - purchasePrice) * quantity;
+        stat.profit += price - purchasePrice * quantity;
       } else if (item.bulk) {
         // Bulk product sale
         const bulkId = item.bulk.id;
@@ -78,9 +78,9 @@ export class StatisticsService {
 
         const stat = bulkStatsMap.get(bulkId);
         stat.quantitySold += quantity;
-        stat.revenue += price * quantity;
+        stat.revenue += price;
         stat.cost += purchasePrice * quantity;
-        stat.profit += (price - purchasePrice) * quantity;
+        stat.profit += price - purchasePrice * quantity;
       }
     }
 

@@ -17,7 +17,7 @@ export default function DetailsBulkProduct({ product = allProducts[0] }) {
   const api = Configuration.BACK_BASEURL;
 
   // Check if product is out of stock
-  const isOutOfStock = product.stock <= 0;
+  const isOutOfStock = product.minQuantity <= 0;
 
 
   const notify = (type, msg) => {
@@ -31,7 +31,7 @@ export default function DetailsBulkProduct({ product = allProducts[0] }) {
   const { user } = useContextElement();
   var cartId = user?.cart.id;
   const [currentColor, setCurrentColor] = useState(colors[0]);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [error, setError] = useState(null);
 
@@ -168,28 +168,38 @@ export default function DetailsBulkProduct({ product = allProducts[0] }) {
                       </ul>
                     </div>
                   )}
-                  <div className="tf-product-info-quantity">
-                    <div className="quantity-title fw-6">Quantity</div>
-                    <Quantity setQuantity={setQuantity} quantity={quantity} />
-                  </div>
-                  <div className="tf-product-info-buy-button">
-                    <form onSubmit={(e) => e.preventDefault()} className="">
-                      <a
-                        onClick={handleAddToCart}
-                        className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
-                        disabled={isAddingToCart}
-                      >
-                        {isAddingToCart ? (
-                          <span>Déjà ajouté...</span>
-                        ) : (
-                          <span className="tf-qty-price">
-                            Ajouter au panier {/* {(product.discount || product.bulkPrice * quantity).toFixed(2)} TND */}
-                          </span>
-                        )}
-                      </a>
-                    </form>
-                    {error && <div className="text-danger mt-2">{error}</div>}
-                  </div>
+                  {isOutOfStock ? (
+                    <div className="out-of-stock-message">
+                      <span className="tf-btn justify-content-center fw-6 fs-16 flex-grow-1" style={{ backgroundColor: '#ccc', cursor: 'not-allowed', color: 'white' }}>
+                        En rupture de stock
+                      </span>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="tf-product-info-quantity">
+                        <div className="quantity-title fw-6">Quantity</div>
+                        <Quantity setQuantity={setQuantity} quantity={quantity} />
+                      </div>
+                      <div className="tf-product-info-buy-button">
+                        <form onSubmit={(e) => e.preventDefault()} className="">
+                          <a
+                            onClick={handleAddToCart}
+                            className="tf-btn btn-fill justify-content-center fw-6 fs-16 flex-grow-1 animate-hover-btn"
+                            disabled={isAddingToCart}
+                          >
+                            {isAddingToCart ? (
+                              <span>Déjà ajouté...</span>
+                            ) : (
+                              <span className="tf-qty-price">
+                                Ajouter au panier {/* {(product.discount || product.bulkPrice * quantity).toFixed(2)} TND */}
+                              </span>
+                            )}
+                          </a>
+                        </form>
+                        {error && <div className="text-danger mt-2">{error}</div>}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

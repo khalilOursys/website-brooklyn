@@ -219,16 +219,16 @@ export class ProductsService {
       ...((minPrice !== undefined || maxPrice !== undefined) && {
         OR: [
           // Case 1: Products with discount > 0 - filter on discount amount
-          {
+          //I will add filter by discount in the future (minPrice,maxPrice)
+          /* {
             discount: {
               gt: 0,
               ...(minPrice !== undefined && { gte: minPrice }),
               ...(maxPrice !== undefined && { lte: maxPrice }),
             },
-          },
+          }, */
           // Case 2: Products with no discount - filter on regular price
           {
-            discount: 0,
             price: {
               ...(minPrice !== undefined && { gte: minPrice }),
               ...(maxPrice !== undefined && { lte: maxPrice }),
