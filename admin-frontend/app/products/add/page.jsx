@@ -31,7 +31,8 @@ export default function Page() {
   // États pour les champs du produit
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
+  const [purchasePrice, setPurchasePrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [isFeatured, setIsFeatured] = useState(false);
   const [stock, setStock] = useState(0);
@@ -194,6 +195,7 @@ export default function Page() {
         stock,
         images,
         color,
+        purchasePrice,
         categoryId: categoryId.value,
         brandId: brandId.value,
         attributes: attributes.filter(attr => attr.key.trim() && attr.value.trim())
@@ -284,7 +286,22 @@ export default function Page() {
                                   />
                                 </Form.Group>
                               </Col>
-                              <Col className="px-1" md="6">
+                              <Col className="pl-1" md="6">
+                                <Form.Group>
+                                  <label>Prix d'achat </label>
+                                  <Form.Control
+                                    value={purchasePrice}
+                                    placeholder="Prix d'achat"
+                                    name="purchasePrice"
+                                    type="number"
+                                    onChange={(e) => setPurchasePrice(e.target.value)}
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+
+                            <Row>
+                              <Col className="pr-1" md="6">
                                 <Form.Group>
                                   <label>Prix en remise </label>
                                   <Form.Control
@@ -296,10 +313,7 @@ export default function Page() {
                                   />
                                 </Form.Group>
                               </Col>
-                            </Row>
-
-                            <Row>
-                              <Col className="pr-1" md="6">
+                              <Col className="pl-1" md="6">
                                 <Form.Group>
                                   <label>Stock* </label>
                                   <Form.Control
@@ -310,22 +324,6 @@ export default function Page() {
                                     type="number"
                                     onChange={(e) => setStock(e.target.value)}
                                   />
-                                </Form.Group>
-                              </Col>
-                              <Col className="pr-1" md="6">
-                                <Form.Group>
-                                  <label>En vedette </label>
-                                  <div className="form-group">
-                                    <label className="switch">
-                                      <input
-                                        type="checkbox"
-                                        id="featured-switch"
-                                        checked={isFeatured}
-                                        onChange={(e) => setIsFeatured(e.target.checked)}
-                                      />
-                                      <span className="slider round"></span>
-                                    </label>
-                                  </div>
                                 </Form.Group>
                               </Col>
                             </Row>
@@ -377,6 +375,22 @@ export default function Page() {
                                       }}
                                     ></div>
                                     {/* <span className="ms-3">{color.toUpperCase()}</span> */}
+                                  </div>
+                                </Form.Group>
+                              </Col>
+                              <Col className="pr-1" md="6">
+                                <Form.Group>
+                                  <label>En vedette </label>
+                                  <div className="form-group">
+                                    <label className="switch">
+                                      <input
+                                        type="checkbox"
+                                        id="featured-switch"
+                                        checked={isFeatured}
+                                        onChange={(e) => setIsFeatured(e.target.checked)}
+                                      />
+                                      <span className="slider round"></span>
+                                    </label>
                                   </div>
                                 </Form.Group>
                               </Col>
