@@ -7,101 +7,101 @@ export declare class OrdersService {
     create(createOrderDto: CreateOrderDto): Promise<{
         orderItems: {
             id: string;
-            quantity: number;
             price: number;
-            productId: string | null;
             variantId: string | null;
+            productId: string | null;
+            quantity: number;
             bulkId: string | null;
             bundleId: string | null;
             orderId: string;
         }[];
     } & {
         id: string;
-        userId: string;
-        isBulk: number;
-        total: number;
-        status: string;
-        address: string;
-        phoneNumber: string;
-        discountCodeId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        isBulk: number;
+        userId: string;
+        address: string;
+        status: string;
+        total: number;
+        phoneNumber: string;
+        discountCodeId: string | null;
     }>;
     findAll(isBulk: number): Promise<({
         user: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string | null;
             email: string;
             password: string;
             telephone: string | null;
+            name: string | null;
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
             isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
+            createdAt: Date;
+            updatedAt: Date;
         };
         orderItems: {
             id: string;
-            quantity: number;
             price: number;
-            productId: string | null;
             variantId: string | null;
+            productId: string | null;
+            quantity: number;
             bulkId: string | null;
             bundleId: string | null;
             orderId: string;
         }[];
     } & {
         id: string;
-        userId: string;
-        isBulk: number;
-        total: number;
-        status: string;
-        address: string;
-        phoneNumber: string;
-        discountCodeId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        isBulk: number;
+        userId: string;
+        address: string;
+        status: string;
+        total: number;
+        phoneNumber: string;
+        discountCodeId: string | null;
     })[]>;
     findOne(id: string): Promise<{
         user: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string | null;
             email: string;
             password: string;
             telephone: string | null;
+            name: string | null;
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
             isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
+            createdAt: Date;
+            updatedAt: Date;
         };
         orderItems: ({
             product: ({
                 images: {
                     id: string;
-                    productId: string | null;
-                    variantId: string | null;
                     url: string;
                     isPrimary: boolean;
+                    variantId: string | null;
+                    productId: string | null;
                 }[];
             } & {
                 id: string;
-                isBulk: boolean;
-                createdAt: Date;
-                updatedAt: Date;
-                price: number;
                 name: string;
                 isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
                 description: string | null;
                 color: string | null;
+                price: number;
                 purchasePrice: number | null;
                 stock: number;
+                isBulk: boolean;
                 discount: number | null;
                 isFeatured: boolean;
                 specs: import("@prisma/client/runtime/library").JsonValue | null;
@@ -113,116 +113,116 @@ export declare class OrdersService {
             variant: ({
                 images: {
                     id: string;
-                    productId: string | null;
-                    variantId: string | null;
                     url: string;
                     isPrimary: boolean;
+                    variantId: string | null;
+                    productId: string | null;
                 }[];
             } & {
                 id: string;
-                productId: string;
                 name: string;
                 isActive: boolean;
                 color: string | null;
                 stock: number;
+                productId: string;
             }) | null;
             bundle: {
                 id: string;
-                createdAt: Date;
                 name: string;
                 isActive: boolean;
+                createdAt: Date;
+                img: string | null;
                 stock: number;
                 discount: number;
                 expiresAt: Date | null;
-                img: string | null;
             } | null;
             bulk: {
                 id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                productId: string;
                 name: string | null;
                 isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
                 description: string | null;
                 discount: number | null;
+                productId: string;
                 bulkPrice: number;
                 minQuantity: number;
             } | null;
         } & {
             id: string;
-            quantity: number;
             price: number;
-            productId: string | null;
             variantId: string | null;
+            productId: string | null;
+            quantity: number;
             bulkId: string | null;
             bundleId: string | null;
             orderId: string;
         })[];
     } & {
         id: string;
-        userId: string;
-        isBulk: number;
-        total: number;
-        status: string;
-        address: string;
-        phoneNumber: string;
-        discountCodeId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        isBulk: number;
+        userId: string;
+        address: string;
+        status: string;
+        total: number;
+        phoneNumber: string;
+        discountCodeId: string | null;
     }>;
     update(id: string, updateOrderDto: UpdateOrderDto): Promise<{
         id: string;
-        userId: string;
-        isBulk: number;
-        total: number;
-        status: string;
-        address: string;
-        phoneNumber: string;
-        discountCodeId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        isBulk: number;
+        userId: string;
+        address: string;
+        status: string;
+        total: number;
+        phoneNumber: string;
+        discountCodeId: string | null;
     }>;
     remove(id: string): Promise<{
         id: string;
-        userId: string;
-        isBulk: number;
-        total: number;
-        status: string;
-        address: string;
-        phoneNumber: string;
-        discountCodeId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        isBulk: number;
+        userId: string;
+        address: string;
+        status: string;
+        total: number;
+        phoneNumber: string;
+        discountCodeId: string | null;
     }>;
     getOrdersByUserId(userId: string): Promise<({
         user: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string | null;
             email: string;
             password: string;
             telephone: string | null;
+            name: string | null;
             firstName: string | null;
             lastName: string | null;
             role: import(".prisma/client").$Enums.Role;
             isActive: boolean;
             oauthProvider: string | null;
             oauthId: string | null;
+            createdAt: Date;
+            updatedAt: Date;
         };
         orderItems: ({
             product: {
                 id: string;
-                isBulk: boolean;
-                createdAt: Date;
-                updatedAt: Date;
-                price: number;
                 name: string;
                 isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
                 description: string | null;
                 color: string | null;
+                price: number;
                 purchasePrice: number | null;
                 stock: number;
+                isBulk: boolean;
                 discount: number | null;
                 isFeatured: boolean;
                 specs: import("@prisma/client/runtime/library").JsonValue | null;
@@ -233,32 +233,32 @@ export declare class OrdersService {
             } | null;
             variant: {
                 id: string;
-                productId: string;
                 name: string;
                 isActive: boolean;
                 color: string | null;
                 stock: number;
+                productId: string;
             } | null;
         } & {
             id: string;
-            quantity: number;
             price: number;
-            productId: string | null;
             variantId: string | null;
+            productId: string | null;
+            quantity: number;
             bulkId: string | null;
             bundleId: string | null;
             orderId: string;
         })[];
     } & {
         id: string;
-        userId: string;
-        isBulk: number;
-        total: number;
-        status: string;
-        address: string;
-        phoneNumber: string;
-        discountCodeId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        isBulk: number;
+        userId: string;
+        address: string;
+        status: string;
+        total: number;
+        phoneNumber: string;
+        discountCodeId: string | null;
     })[]>;
 }
