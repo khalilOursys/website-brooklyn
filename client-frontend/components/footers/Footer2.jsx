@@ -96,7 +96,7 @@ export default function Footer2({ bgColor = "" }) {
                     </li>
                     <li>
                       <p>
-                        Email: <a href="#">commercial@brooklyn-phones.com</a>
+                        Email: <a href="#">contact@brooklyn-store.tn</a>
                       </p>
                     </li>
                     <li>
@@ -105,25 +105,14 @@ export default function Footer2({ bgColor = "" }) {
                       </p>
                     </li>
                   </ul>
-                  {/* <Link href={`/contact-1`} className="tf-btn btn-line">
-                    Get direction
-                    <i className="icon icon-arrow1-top-left" />
-                  </Link> */}
                   <ul className="tf-social-icon d-flex gap-10">
                     <li>
                       <a
-                        href="#"
+                        target="_blank"
+                        href="https://www.facebook.com/share/1CpwNpu5SF/"
                         className="box-icon w_34 round social-facebook social-line"
                       >
                         <i className="icon fs-14 icon-fb" />
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="box-icon w_34 round social-twiter social-line"
-                      >
-                        <i className="icon fs-12 icon-Icon-x" />
                       </a>
                     </li>
                     <li>
@@ -140,14 +129,6 @@ export default function Footer2({ bgColor = "" }) {
                         className="box-icon w_34 round social-tiktok social-line"
                       >
                         <i className="icon fs-14 icon-tiktok" />
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="box-icon w_34 round social-pinterest social-line"
-                      >
-                        <i className="icon fs-14 icon-pinterest-1" />
                       </a>
                     </li>
                   </ul>

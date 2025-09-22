@@ -10,15 +10,11 @@ export default function Topbar1() {
           <ul className="tf-top-bar_item tf-social-icon d-flex gap-10">
             <li>
               <a
-                href="#"
+                target="_blank"
+                href="https://www.facebook.com/share/1CpwNpu5SF/"
                 className="box-icon w_28 round social-facebook bg_line"
               >
                 <i className="icon fs-12 icon-fb" />
-              </a>
-            </li>
-            <li>
-              <a href="#" className="box-icon w_28 round social-twiter bg_line">
-                <i className="icon fs-10 icon-Icon-x" />
               </a>
             </li>
             <li>
@@ -32,14 +28,6 @@ export default function Topbar1() {
             <li>
               <a href="#" className="box-icon w_28 round social-tiktok bg_line">
                 <i className="icon fs-12 icon-tiktok" />
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="box-icon w_28 round social-pinterest bg_line"
-              >
-                <i className="icon fs-12 icon-pinterest-1" />
               </a>
             </li>
           </ul>

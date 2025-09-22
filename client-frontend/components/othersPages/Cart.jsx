@@ -356,14 +356,12 @@ export default function Cart() {
                       <span>Passer à la caisse</span>
                     </Link>
                   ) : (
-
-                    <a
-                      href="#login"
-                      data-bs-toggle="modal"
+                    <Link
+                      href={"/login"}
                       className="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
                     >
                       <span>Connectez-vous pour payer</span>
-                    </a>
+                    </Link>
                   )}
                 </div>
               </div>
