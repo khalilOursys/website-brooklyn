@@ -13,6 +13,7 @@ export class StatisticsService {
             gte: startDate,
             lte: endDate,
           },
+          status: 'terminé',
         },
       },
       include: {

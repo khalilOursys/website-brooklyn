@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation, Pagination, Autoplay } from "swiper/modules"; // Import Autoplay
 import Configuration from "@/configuration";
 
 export default function Brands({ parentClass = "flat-spacing-1" }) {
@@ -55,7 +55,10 @@ export default function Brands({ parentClass = "flat-spacing-1" }) {
             dir="ltr"
             className="swiper tf-sw-brand"
             loop={false}
-            autoplay={false}
+            autoplay={{
+              delay: 3000, // 3 seconds delay between slides
+              disableOnInteraction: false, // Continue autoplay after user interaction
+            }}
             spaceBetween={7}
             slidesPerView={5}
             breakpoints={{
@@ -64,7 +67,7 @@ export default function Brands({ parentClass = "flat-spacing-1" }) {
               576: { slidesPerView: 3 },
               0: { slidesPerView: 2 },
             }}
-            modules={[Navigation, Pagination]}
+            modules={[Navigation, Pagination, Autoplay]} // Add Autoplay to modules
             navigation={{
               prevEl: ".brand1",
               nextEl: ".brand2",
