@@ -151,6 +151,7 @@ export default function DetailsOuterZoom({ product = allProducts[0] }) {
                         </span>
                       </div> */}
                       <form className="variant-picker-values">
+                        <h6 className="attributes-title">Color:</h6>
                         {colors.map((color) => (
                           <React.Fragment key={color.id}>
                             <input

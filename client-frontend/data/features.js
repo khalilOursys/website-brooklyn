@@ -21,42 +21,42 @@ export const iconBoxData = [
   {
     iconClass: "icon-shipping",
     title: "Livraison Gratuite",
-    description: "Livraison gratuite à partir de 120 TND d'achat",
+    description: "Livraison sur tout la Tunisie",
   },
   {
     iconClass: "icon-payment fs-22",
     title: "Paiement Flexible",
-    description: "Payez avec plusieurs cartes de crédit",
+    description: "Paiements à la livraison",
   },
   {
     iconClass: "icon-return fs-20",
     title: "Retours sous 14 Jours",
-    description: "Échange possible sous 30 jours",
+    description: "Paiements 100% sécuritaires",
   },
   {
     iconClass: "icon-suport",
     title: "Support Premium",
-    description: "Support premium exceptionnel",
+    description: "Service client à votre écoute",
   },
   {
     iconClass: "icon-shipping",
     title: "Livraison Gratuite",
-    description: "Livraison gratuite à partir de 120 TND d'achat",
+    description: "Livraison sur tout la Tunisie",
   },
   {
     iconClass: "icon-payment fs-22",
     title: "Paiement Flexible",
-    description: "Payez avec plusieurs cartes de crédit",
+    description: "Paiements à la livraison",
   },
   {
     iconClass: "icon-return fs-20",
     title: "Retours sous 14 Jours",
-    description: "Échange possible sous 30 jours",
+    description: "Paiements 100% sécuritaires",
   },
   {
     iconClass: "icon-suport",
     title: "Support Premium",
-    description: "Support premium exceptionnel",
+    description: "Service client à votre écoute",
   },
 ];
 
