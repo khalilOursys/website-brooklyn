@@ -556,7 +556,9 @@ td.tf-cart-item_product-remove span.remove-cart.link.remove {
 .card-product .card-product-info .title {
   height: 50px;
 }
-
+.form-checkout label::after {
+    content: none;
+}
 @media (max-width: 768px) {
   .modal-content {
     max-height: 90vh;

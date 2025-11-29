@@ -20,8 +20,9 @@ export default function Checkout() {
     lastName: user?.lastName || '',
     address: '',
     phoneNumber: user?.phoneNumber || '',
+    email: user?.email || '',
     note: '',
-    paymentMethod: 'delivery', // default to cash on delivery
+    paymentMethod: 'delivery',
     agreeToTerms: false
   });
 
@@ -32,7 +33,8 @@ export default function Checkout() {
         ...prev,
         firstName: user.firstName || prev.firstName,
         lastName: user.lastName || prev.lastName,
-        phoneNumber: user?.telephone || prev.telephone
+        phoneNumber: user?.phoneNumber || prev.phoneNumber,
+        email: user?.email || prev.email
       }));
     }
   }, [user]);
@@ -46,29 +48,26 @@ export default function Checkout() {
   };
 
   const submitForm = async (event) => {
-    if (!user) {
-      router.push('/view-cart');
-    }
     event.preventDefault();
     setIsSubmitting(true);
     setError(null);
     setSuccess(false);
 
-    // Check if phone number or address is empty
+    // Validation
     if (!formData.phoneNumber || !formData.address) {
       setError("Veuillez fournir le numéro de téléphone et l'adresse");
       setIsSubmitting(false);
       return;
     }
 
+    if (!user && (!formData.firstName || !formData.lastName)) {
+      setError("Veuillez remplir tous les champs obligatoires");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       // Prepare order items from cart products
-      /* const orderItems = cartProducts.map(product => ({
-        productId: product.id,
-        quantity: product.quantity,
-        price: parseFloat(product.price) * parseFloat(product.quantity)
-      })); */
-
       const orderItems = cartProducts.map(product => {
         const discount = parseFloat(product?.discount);
         const unitPrice = discount && discount !== 0 ? discount : parseFloat(product.price);
@@ -88,17 +87,27 @@ export default function Checkout() {
           price: unitPrice * parseFloat(product.quantity)
         };
       });
+
       // Prepare the request body
       const orderData = {
         isBulk: 0,
-        userId: user.id,
+        userId: user ? user.id : null,
         address: `${formData.address}, ${formData.firstName} ${formData.lastName}`,
         phoneNumber: formData.phoneNumber,
         total: totalPrice + 7,
-        orderItems
+        orderItems,
+        // Include guest user data if not logged in
+        ...(!user && {
+          guestUser: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            phoneNumber: formData.phoneNumber,
+            email: formData.email
+          }
+        })
       };
 
-      // Send the request to your API  `${api}orders`
+      // Send the request to your API
       const response = await fetch(`${api}orders`, {
         method: "POST",
         headers: {
@@ -109,19 +118,19 @@ export default function Checkout() {
       const result = await response.json();
 
       if (!response.ok) {
-
         if (response.status !== 400)
           throw new Error(`HTTP error! status: ${response.status}`);
         else
           setError(result.message || "Failed to place order. Please try again.");
       } else {
-
         localStorage.removeItem("cartList");
         setSuccess(true);
         setTimeout(() => {
-          window.location.replace("/my-account-orders-details/" + result.id);
+          if (user)
+            window.location.replace("/my-account-orders-details/" + result.id);
+          else
+            window.location.replace("/");
         }, 1500);
-
       }
     } catch (err) {
       console.error("Error submitting order:", err);
@@ -130,11 +139,6 @@ export default function Checkout() {
       setIsSubmitting(false);
     }
   };
-
-  // Don't render checkout page if user is not connected
-  if (!user) {
-    return null;
-  }
 
   return (
     <section className="flat-spacing-11">
@@ -145,7 +149,7 @@ export default function Checkout() {
             <form onSubmit={submitForm} className="form-checkout">
               <div className="box grid-2">
                 <fieldset className="fieldset">
-                  <label htmlFor="first-name">Nom</label>
+                  <label htmlFor="first-name">Nom *</label>
                   <input
                     required
                     type="text"
@@ -153,12 +157,12 @@ export default function Checkout() {
                     name="firstName"
                     placeholder="Nom"
                     value={formData.firstName}
-                    readOnly
                     onChange={handleInputChange}
+                    readOnly={!!user} // Only readonly if user is logged in
                   />
                 </fieldset>
                 <fieldset className="fieldset">
-                  <label htmlFor="last-name">Prénom</label>
+                  <label htmlFor="last-name">Prénom *</label>
                   <input
                     required
                     type="text"
@@ -166,25 +170,41 @@ export default function Checkout() {
                     name="lastName"
                     placeholder="Prénom"
                     value={formData.lastName}
-                    readOnly
                     onChange={handleInputChange}
+                    readOnly={!!user} // Only readonly if user is logged in
                   />
                 </fieldset>
               </div>
+
+              {!user && (
+                <fieldset className="box fieldset">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Votre email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                </fieldset>
+              )}
+
               <fieldset className="box fieldset">
-                <label htmlFor="address">Adresse</label>
+                <label htmlFor="address">Adresse *</label>
                 <input
                   required
                   type="text"
                   id="address"
                   name="address"
-                  placeholder="Your Adresse"
+                  placeholder="Votre adresse"
                   value={formData.address}
                   onChange={handleInputChange}
                 />
               </fieldset>
+
               <fieldset className="box fieldset">
-                <label htmlFor="phone">Numéro de téléphone</label>
+                <label htmlFor="phone">Numéro de téléphone *</label>
                 <input
                   required
                   type="tel"
@@ -195,18 +215,9 @@ export default function Checkout() {
                   onChange={handleInputChange}
                 />
               </fieldset>
-              {/* <fieldset className="box fieldset">
-                <label htmlFor="note">Order notes (optional)</label>
-                <textarea
-                  name="note"
-                  id="note"
-                  placeholder="Notes about your order..."
-                  value={formData.note}
-                  onChange={handleInputChange}
-                />
-              </fieldset> */}
             </form>
           </div>
+
           <div className="tf-page-cart-footer">
             <div className="tf-cart-footer-inner">
               <h5 className="fw-5 mb_20">Votre commande</h5>
@@ -231,23 +242,22 @@ export default function Checkout() {
                           <p className="name">{elm.name}</p>
                         </div>
                         <span className="price">
-                          <span className="price">
-                            {elm.discount > 0 ? (
-                              <>
-                                <span style={{ textDecoration: 'line-through', marginRight: '5px', color: '#999' }}>
-                                  {(elm.price * elm.quantity).toFixed(3)} TND
-                                </span>
-                                {(elm.discount * elm.quantity).toFixed(3)} TND
-                              </>
-                            ) : (
-                              (elm.price * elm.quantity).toFixed(3) + ' TND'
-                            )}
-                          </span>
+                          {elm.discount > 0 ? (
+                            <>
+                              <span style={{ textDecoration: 'line-through', marginRight: '5px', color: '#999' }}>
+                                {(elm.price * elm.quantity).toFixed(3)} TND
+                              </span>
+                              {(elm.discount * elm.quantity).toFixed(3)} TND
+                            </>
+                          ) : (
+                            (elm.price * elm.quantity).toFixed(3) + ' TND'
+                          )}
                         </span>
                       </div>
                     </li>
                   ))}
                 </ul>
+
                 {!cartProducts.length && (
                   <div className="container">
                     <div className="row align-items-center mt-5 mb-5">
@@ -257,19 +267,12 @@ export default function Checkout() {
                     </div>
                   </div>
                 )}
-                {/* <div className="coupon-box">
-                  <input type="text" placeholder="Discount code" />
-                  <a
-                    href="#"
-                    className="tf-btn btn-sm radius-3 btn-fill btn-icon animate-hover-btn"
-                  >
-                    Apply
-                  </a>
-                </div> */}
+
                 <div className="d-flex justify-content-between line pb_20">
                   <h6 className="fw-5">Total</h6>
                   <h6 className="total fw-5">{totalPrice + 7} TND</h6>
                 </div>
+
                 <div className="wd-check-payment">
                   <div className="fieldset-radio mb_20">
                     <input
@@ -286,39 +289,6 @@ export default function Checkout() {
                     />
                     <label htmlFor="delivery">Paiement à la livraison</label>
                   </div>
-                  {/* <p className="text_black-2 mb_20">
-                    Your personal data will be used to process your order,
-                    support your experience throughout this website, and for
-                    other purposes described in our
-                    <Link
-                      href={`/privacy-policy`}
-                      className="text-decoration-underline"
-                    >
-                      privacy policy
-                    </Link>
-                    .
-                  </p> */}
-                  {/* <div className="box-checkbox fieldset-radio mb_20">
-                    <input
-                      required
-                      type="checkbox"
-                      id="check-agree"
-                      name="agreeToTerms"
-                      className="tf-check"
-                      checked={formData.agreeToTerms}
-                      onChange={handleInputChange}
-                    />
-                    <label htmlFor="check-agree" className="text_black-2">
-                      I have read and agree to the website
-                      <Link
-                        href={`/terms-conditions`}
-                        className="text-decoration-underline"
-                      >
-                        terms and conditions
-                      </Link>
-                      .
-                    </label>
-                  </div> */}
                 </div>
 
                 {error && (
@@ -337,7 +307,7 @@ export default function Checkout() {
                   className="tf-btn radius-3 btn-fill btn-icon animate-hover-btn justify-content-center"
                   disabled={isSubmitting || cartProducts.length === 0}
                 >
-                  {isSubmitting ? "Processing..." : "Passer commande"}
+                  {isSubmitting ? "Traitement..." : "Passer commande"}
                 </button>
               </form>
             </div>

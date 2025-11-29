@@ -5,6 +5,7 @@ import {
   ValidateNested,
   IsNumber,
   IsOptional,
+  IsEmail,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -12,26 +13,44 @@ class OrderItemDto {
   @IsOptional()
   productId?: string | null;
 
-  @IsOptional() // Allow variantId to be optional
+  @IsOptional()
   variantId?: string | null;
 
-  @IsOptional() // Allow variantId to be optional
+  @IsOptional()
   bulkId?: string | null;
 
-  @IsOptional() // Allow variantId to be optional
+  @IsOptional()
   bundleId?: string | null;
 
   @IsNumber()
   quantity: number;
 
   @IsNumber()
-  price: number; // Price at the time of order
+  price: number;
+}
+
+class GuestUserDto {
+  @IsString()
+  @IsNotEmpty()
+  firstName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  lastName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  phoneNumber: string;
+
+  @IsString()
+  @IsOptional()
+  email?: string;
 }
 
 export class CreateOrderDto {
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  userId: string;
+  userId?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -45,7 +64,7 @@ export class CreateOrderDto {
   @IsNotEmpty()
   phoneNumber: string;
 
-  @IsOptional() // Mark discountCodeId as optional
+  @IsOptional()
   @IsString()
   discountCodeId?: string;
 
@@ -56,4 +75,9 @@ export class CreateOrderDto {
 
   @IsNumber()
   total: number;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => GuestUserDto)
+  guestUser?: GuestUserDto;
 }

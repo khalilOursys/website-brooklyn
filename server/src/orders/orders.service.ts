@@ -6,28 +6,85 @@ import {
 import { PrismaService } from '../prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { Role } from '@prisma/client';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createOrderDto: CreateOrderDto) {
-    // Validate user exists
+    let userId = createOrderDto.userId;
 
-    const user = await this.prisma.user.findUnique({
-      where: { id: createOrderDto.userId },
-    });
-    if (!user) {
-      throw new BadRequestException(
-        `User with id ${createOrderDto.userId} does not exist.`,
-      );
+    // If no user ID provided, handle guest user
+    if (!userId) {
+      if (!createOrderDto.guestUser) {
+        throw new BadRequestException('Guest user information is required');
+      }
+
+      // Get email from guest user or fallback to environment variable
+      const guestEmail =
+        createOrderDto.guestUser.email || process.env.EMAIL_USER;
+
+      if (!guestEmail) {
+        throw new BadRequestException('Email is required for guest user');
+      }
+
+      // Check if guest user already exists with the same email
+      const existingGuestUser = await this.prisma.user.findFirst({
+        where: {
+          email: guestEmail,
+          role: Role.GUEST,
+        },
+      });
+
+      if (existingGuestUser) {
+        // Use existing guest user
+        userId = existingGuestUser.id;
+
+        // Update the existing guest user's information if needed
+        await this.prisma.user.update({
+          where: { id: userId },
+          data: {
+            firstName: createOrderDto.guestUser.firstName,
+            lastName: createOrderDto.guestUser.lastName,
+            telephone: createOrderDto.guestUser.phoneNumber,
+            email: guestEmail, // Use the determined email
+          },
+        });
+      } else {
+        // Create new guest user with the determined email
+        const hashedPassword = await bcryptjs.hash(
+          `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          10,
+        );
+        const guestUser = await this.prisma.user.create({
+          data: {
+            email: guestEmail,
+            password: `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            role: Role.GUEST,
+            firstName: createOrderDto.guestUser.firstName,
+            lastName: createOrderDto.guestUser.lastName,
+            telephone: createOrderDto.guestUser.phoneNumber,
+            isActive: false,
+          },
+        });
+        userId = guestUser.id;
+      }
+    } else {
+      // Validate user exists if ID was provided
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+      if (!user) {
+        throw new BadRequestException(`User with id ${userId} does not exist.`);
+      }
     }
 
     return await this.prisma.$transaction(async (prisma) => {
       // First, verify stock availability for all items
       for (const item of createOrderDto.orderItems) {
         if (item.variantId) {
-          // Handle variant products
           const variant = await prisma.productVariant.findUnique({
             where: { id: item.variantId },
             include: { product: true },
@@ -39,13 +96,12 @@ export class OrdersService {
             );
           }
         } else if (item.bulkId) {
-          // Handle bundles (same as before)
           const bulk = await prisma.bulkProduct.findUnique({
             where: { id: item.bulkId },
           });
           if (!bulk) {
             throw new BadRequestException(
-              `Bundle with id ${item.bundleId} not found`,
+              `Bundle with id ${item.bulkId} not found`,
             );
           }
 
@@ -55,7 +111,6 @@ export class OrdersService {
             );
           }
         } else if (item.productId) {
-          // Handle simple products (no variants)
           const product = await prisma.product.findUnique({
             where: { id: item.productId },
             include: { variants: true },
@@ -67,7 +122,6 @@ export class OrdersService {
             );
           }
 
-          // If product has no variants, check product stock directly
           if (product.stock < item.quantity) {
             throw new BadRequestException(
               `Stock insuffisant pour cette produit ${product.name}`,
@@ -76,7 +130,6 @@ export class OrdersService {
         }
 
         if (item.bundleId) {
-          // Handle bundles (same as before)
           const bundle = await prisma.productBundle.findUnique({
             where: { id: item.bundleId },
           });
@@ -94,10 +147,10 @@ export class OrdersService {
         }
       }
 
-      // Create the order
+      // Create the order with the user ID (either provided or guest)
       const order = await prisma.order.create({
         data: {
-          userId: createOrderDto.userId,
+          userId: userId,
           address: createOrderDto.address,
           phoneNumber: createOrderDto.phoneNumber,
           discountCodeId: createOrderDto.discountCodeId,
@@ -120,7 +173,6 @@ export class OrdersService {
       // Update stock levels
       for (const item of createOrderDto.orderItems) {
         if (item.variantId) {
-          // Update variant stock
           await prisma.productVariant.update({
             where: { id: item.variantId },
             data: { stock: { decrement: item.quantity } },
@@ -131,11 +183,6 @@ export class OrdersService {
             data: { minQuantity: { decrement: item.quantity } },
           });
         } else if (item.productId) {
-          // Update product stock only if product has no variants
-          const product = await prisma.product.findUnique({
-            where: { id: item.productId },
-            include: { variants: true },
-          });
           await prisma.product.update({
             where: { id: item.productId },
             data: { stock: { decrement: item.quantity } },
@@ -143,85 +190,29 @@ export class OrdersService {
         }
 
         if (item.bundleId) {
-          // Handle bundle stock updates
-          const bundle = await prisma.productBundle.findUnique({
-            where: { id: item.bundleId },
-          });
-
           await prisma.productBundle.update({
             where: { id: item.bundleId },
             data: { stock: { decrement: item.quantity } },
           });
         }
-        /* bulkProduct bulkId */
       }
 
-      // Clear the user's cart
-      const cart = await prisma.cart.findUnique({
-        where: { userId: createOrderDto.userId },
-      });
-
-      if (cart) {
-        await prisma.cartItem.deleteMany({
-          where: { cartId: cart.id },
+      // Only clear cart if it's a registered user (not guest)
+      if (createOrderDto.userId) {
+        const cart = await prisma.cart.findUnique({
+          where: { userId: createOrderDto.userId },
         });
+
+        if (cart) {
+          await prisma.cartItem.deleteMany({
+            where: { cartId: cart.id },
+          });
+        }
       }
 
       return order;
     });
   }
-  /* async create(createOrderDto: CreateOrderDto) {
-    // Validate user exists
-    const user = await this.prisma.user.findUnique({
-      where: { id: createOrderDto.userId },
-    });
-    if (!user) {
-      throw new BadRequestException(
-        `User with id ${createOrderDto.userId} does not exist.`,
-      );
-    }
-
-    // Create the order, nested order items, and clear cart in one transaction
-    return await this.prisma.$transaction(async (prisma) => {
-      // Create the order
-      const order = await prisma.order.create({
-        data: {
-          userId: createOrderDto.userId,
-          address: createOrderDto.address,
-          phoneNumber: createOrderDto.phoneNumber,
-          discountCodeId: createOrderDto.discountCodeId,
-          total: createOrderDto.total,
-          isBulk: createOrderDto.isBulk,
-          orderItems: {
-            create: createOrderDto.orderItems.map((item) => ({
-              productId: item.productId,
-              variantId: item.variantId,
-              bundleId: item.bundleId,
-              bulkId: item.bulkId,
-              quantity: item.quantity,
-              price: item.price,
-            })),
-          },
-        },
-        include: { orderItems: true },
-      });
-
-      // Find the user's cart
-      const cart = await prisma.cart.findUnique({
-        where: { userId: createOrderDto.userId },
-      });
-
-      if (cart) {
-        // Delete all cart items for this user's cart
-        await prisma.cartItem.deleteMany({
-          where: { cartId: cart.id },
-        });
-      }
-
-      return order;
-    });
-  } */
-
   async findAll(isBulk: number) {
     return await this.prisma.order.findMany({
       where: { isBulk },
