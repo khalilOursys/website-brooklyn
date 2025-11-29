@@ -17,6 +17,7 @@ enum Role {
   BULK_CLIENT
   MANAGER
   ADMIN
+  GUEST
 }
 
 model User {

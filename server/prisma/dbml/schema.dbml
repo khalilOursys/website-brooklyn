@@ -348,6 +348,7 @@ Enum Role {
   BULK_CLIENT
   MANAGER
   ADMIN
+  GUEST
 }
 
 Ref: BulkClientRequest.userId - User.id
