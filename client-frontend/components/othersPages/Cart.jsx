@@ -348,7 +348,13 @@ export default function Cart() {
                   </label>
                 </div> */}
                 <div className="cart-checkout-btn">
-                  {token ? (
+                  <Link
+                    href={"/checkout"}
+                    className="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
+                  >
+                    <span>Passer à la caisse</span>
+                  </Link>
+                  {/* {token ? (
                     <Link
                       href={"/checkout"}
                       className="tf-btn w-100 btn-fill animate-hover-btn radius-3 justify-content-center"
@@ -362,7 +368,7 @@ export default function Cart() {
                     >
                       <span>Connectez-vous pour payer</span>
                     </Link>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>

@@ -179,7 +179,8 @@ export default function ShopCart() {
                       Voir le panier
                     </Link>
                     <Link
-                      href={token ? `/checkout` : `/login`}
+                      /* href={token ? `/checkout` : `/login`} */
+                      href={`/checkout`}
                       className="tf-btn btn-fill animate-hover-btn radius-3 w-100 justify-content-center"
                     >
                       <span>Commander</span>
