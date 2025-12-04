@@ -42,6 +42,18 @@ model User {
   ratings              ProductRating[]
   stockAlerts          StockAlert[]
   reviewedBulkRequests BulkClientRequest[] @relation("ReviewedBulkRequests")
+  userCities   UserCity[]
+}
+
+
+model UserCity {
+  id          String    @id @default(uuid()) 
+  userId   String    
+  user     User?   @relation(fields: [userId], references: [id]) 
+  cityId   String    
+  city     City?   @relation(fields: [cityId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt 
 }
 
 model BulkClientRequest {
@@ -111,8 +123,32 @@ model BulkProduct {
   updatedAt   DateTime  @updatedAt
   orderItems  OrderItem[]  
   cartItems   CartItem[]
+  bulkProductCities   BulkProductCity[]
 }
 
+
+model BulkProductCity {
+  id          String    @id @default(uuid()) 
+  productId   String    
+  product     BulkProduct?   @relation(fields: [productId], references: [id]) 
+  cityId   String    
+  city     City?   @relation(fields: [cityId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt 
+}
+
+model City {
+  id          String    @id @default(uuid())
+  name      String
+  state     String?
+  country   String      @default("Tunisia") 
+  isActive    Boolean   @default(true)
+  bulkProductCities   BulkProductCity[]
+  userCities   UserCity[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt 
+ 
+}
 
 model ProductImage {
   id        String  @id @default(uuid())

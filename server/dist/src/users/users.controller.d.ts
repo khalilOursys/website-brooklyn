@@ -5,6 +5,7 @@ import { LoginDto } from './dto/login.dto';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/UpdateUserDto';
 import { MailerService } from 'src/mailer/mailer.services';
+import { UpdateUserCitiesDto } from './dto/update-user-cities.dto';
 export declare class UsersController {
     private readonly usersService;
     private readonly mailerService;
@@ -55,6 +56,23 @@ export declare class UsersController {
             submittedAt: Date;
             reviewedAt: Date | null;
         } | null;
+        userCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            cityId: string;
+        })[];
     } & {
         id: string;
         email: string;
@@ -84,6 +102,23 @@ export declare class UsersController {
             submittedAt: Date;
             reviewedAt: Date | null;
         } | null;
+        userCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            cityId: string;
+        })[];
     } & {
         id: string;
         email: string;
@@ -99,6 +134,83 @@ export declare class UsersController {
         createdAt: Date;
         updatedAt: Date;
     }>;
+    findOne(id: string): Promise<{
+        cart: ({
+            items: {
+                id: string;
+                variantId: string | null;
+                productId: string;
+                quantity: number;
+                bulkId: string | null;
+                cartId: string;
+            }[];
+        } & {
+            id: string;
+            updatedAt: Date;
+            userId: string;
+        }) | null;
+        bulkRequests: {
+            id: string;
+            userId: string;
+            storeName: string;
+            address: string | null;
+            rib: string | null;
+            taxNumber: string | null;
+            legalDocs: string;
+            status: string;
+            reviewedById: string | null;
+            submittedAt: Date;
+            reviewedAt: Date | null;
+        } | null;
+        userCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            cityId: string;
+        })[];
+    } & {
+        id: string;
+        email: string;
+        password: string;
+        telephone: string | null;
+        name: string | null;
+        firstName: string | null;
+        lastName: string | null;
+        role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
+        oauthProvider: string | null;
+        oauthId: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
+    getUserCities(id: string): Promise<({
+        city: {
+            id: string;
+            name: string;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            state: string | null;
+            country: string;
+        } | null;
+    } & {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string;
+        cityId: string;
+    })[]>;
     updateUser(id: string, updateUserDto: UpdateUserDto): Promise<{
         id: string;
         email: string;
@@ -113,6 +225,17 @@ export declare class UsersController {
         oauthId: string | null;
         createdAt: Date;
         updatedAt: Date;
+    }>;
+    updateUserCities(id: string, updateUserCitiesDto: UpdateUserCitiesDto): Promise<{
+        message: string;
+        count: number;
+        cities: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            cityId: string;
+        }[];
     }>;
     toggleStatus(id: string): Promise<{
         success: boolean;

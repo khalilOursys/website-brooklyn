@@ -11,6 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBulkProductDto = void 0;
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
+class BulkProductCityDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], BulkProductCityDto.prototype, "cityId", void 0);
 class CreateBulkProductDto {
 }
 exports.CreateBulkProductDto = CreateBulkProductDto;
@@ -36,6 +44,13 @@ __decorate([
 ], CreateBulkProductDto.prototype, "minQuantity", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], CreateBulkProductDto.prototype, "discount", void 0);
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => BulkProductCityDto),
+    __metadata("design:type", Array)
+], CreateBulkProductDto.prototype, "bulkProductCities", void 0);
 //# sourceMappingURL=create-bulk-product.dto.js.map

@@ -1,3 +1,4 @@
+// users.controller.ts
 import {
   Controller,
   Post,
@@ -16,6 +17,7 @@ import { LoginDto } from './dto/login.dto';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/UpdateUserDto';
 import { MailerService } from 'src/mailer/mailer.services';
+import { UpdateUserCitiesDto } from './dto/update-user-cities.dto';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -29,7 +31,6 @@ export class UsersController {
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
-    // Omit sensitive fields (like password) in the response
     const { password, ...result } = user;
     return result;
   }
@@ -49,6 +50,7 @@ export class UsersController {
   async getAllUsers(@Query('role') role?: Role) {
     return this.usersService.getAllUsers(role);
   }
+
   @Get('getUserById/:id')
   async getUserById(@Param('id') id: string) {
     const user = await this.usersService.getUserById(id);
@@ -58,6 +60,23 @@ export class UsersController {
     }
 
     return user;
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const user = await this.usersService.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    return user;
+  }
+
+  @Get(':id/cities')
+  async getUserCities(@Param('id') id: string) {
+    const user = await this.usersService.getUserWithCities(id);
+    return user.userCities;
   }
 
   @Put(':id')
@@ -72,6 +91,23 @@ export class UsersController {
     }
 
     return user;
+  }
+
+  @Put(':id/cities')
+  async updateUserCities(
+    @Param('id') id: string,
+    @Body() updateUserCitiesDto: UpdateUserCitiesDto,
+  ) {
+    const result = await this.usersService.updateUserCities(
+      id,
+      updateUserCitiesDto,
+    );
+
+    return {
+      message: 'User cities updated successfully',
+      count: result.length,
+      cities: result,
+    };
   }
 
   @Put('toggle-status/:id')
@@ -95,7 +131,7 @@ export class UsersController {
     },
   ) {
     const { email, nom, prenom, msg } = body;
-    var to = process.env.contact_us || 'shadowreaperguide@gmail.com';
+    const to = process.env.contact_us || 'shadowreaperguide@gmail.com';
     return this.mailerService.sendContactEmail(email, nom, prenom, msg, to);
   }
 }

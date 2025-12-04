@@ -24,6 +24,29 @@ export class BulkProductsService {
       );
     }
 
+    // Validate cities exist
+    if (
+      createBulkProductDto.bulkProductCities &&
+      createBulkProductDto.bulkProductCities.length > 0
+    ) {
+      const cityIds = createBulkProductDto.bulkProductCities.map(
+        (city) => city.cityId,
+      );
+      const cities = await this.prisma.city.findMany({
+        where: { id: { in: cityIds } },
+      });
+
+      if (cities.length !== cityIds.length) {
+        const foundCityIds = cities.map((city) => city.id);
+        const missingCityIds = cityIds.filter(
+          (id) => !foundCityIds.includes(id),
+        );
+        throw new BadRequestException(
+          `Cities with ids ${missingCityIds.join(', ')} do not exist.`,
+        );
+      }
+    }
+
     // Check if a bulk product record already exists for this product
     const existingBulkProduct = await this.prisma.bulkProduct.findFirst({
       where: { productId: createBulkProductDto.productId },
@@ -35,14 +58,41 @@ export class BulkProductsService {
       );
     }
 
+    // Create bulk product with cities
     return await this.prisma.bulkProduct.create({
-      data: createBulkProductDto,
+      data: {
+        name: createBulkProductDto.name,
+        productId: createBulkProductDto.productId,
+        bulkPrice: createBulkProductDto.bulkPrice,
+        minQuantity: createBulkProductDto.minQuantity,
+        discount: createBulkProductDto.discount || 0,
+        bulkProductCities: {
+          create: createBulkProductDto.bulkProductCities.map((city) => ({
+            cityId: city.cityId,
+          })),
+        },
+      },
+      include: {
+        product: true,
+        bulkProductCities: {
+          include: {
+            city: true,
+          },
+        },
+      },
     });
   }
 
   async findAll() {
     return await this.prisma.bulkProduct.findMany({
-      include: { product: true },
+      include: {
+        product: true,
+        bulkProductCities: {
+          include: {
+            city: true,
+          },
+        },
+      },
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -59,6 +109,11 @@ export class BulkProductsService {
             brand: true,
           },
         },
+        bulkProductCities: {
+          include: {
+            city: true,
+          },
+        },
       },
     });
     if (!bulkProduct) {
@@ -70,16 +125,89 @@ export class BulkProductsService {
   async update(id: string, updateBulkProductDto: UpdateBulkProductDto) {
     // Ensure the bulk product exists
     await this.findOne(id);
-    return await this.prisma.bulkProduct.update({
-      where: { id },
-      data: updateBulkProductDto,
+
+    // Validate cities if provided
+    if (
+      updateBulkProductDto.bulkProductCities &&
+      updateBulkProductDto.bulkProductCities.length > 0
+    ) {
+      const cityIds = updateBulkProductDto.bulkProductCities.map(
+        (city) => city.cityId,
+      );
+      const cities = await this.prisma.city.findMany({
+        where: { id: { in: cityIds } },
+      });
+
+      if (cities.length !== cityIds.length) {
+        const foundCityIds = cities.map((city) => city.id);
+        const missingCityIds = cityIds.filter(
+          (id) => !foundCityIds.includes(id),
+        );
+        throw new BadRequestException(
+          `Cities with ids ${missingCityIds.join(', ')} do not exist.`,
+        );
+      }
+    }
+
+    // Start a transaction to update bulk product and its cities
+    return await this.prisma.$transaction(async (prisma) => {
+      // Update bulk product
+      const updatedBulkProduct = await prisma.bulkProduct.update({
+        where: { id },
+        data: {
+          name: updateBulkProductDto.name,
+          productId: updateBulkProductDto.productId,
+          bulkPrice: updateBulkProductDto.bulkPrice,
+          minQuantity: updateBulkProductDto.minQuantity,
+          discount: updateBulkProductDto.discount,
+        },
+      });
+
+      // If cities are provided, update the relations
+      if (updateBulkProductDto.bulkProductCities) {
+        // Delete existing city relations
+        await prisma.bulkProductCity.deleteMany({
+          where: { productId: id },
+        });
+
+        // Create new city relations
+        if (updateBulkProductDto.bulkProductCities.length > 0) {
+          await prisma.bulkProductCity.createMany({
+            data: updateBulkProductDto.bulkProductCities.map((city) => ({
+              productId: id,
+              cityId: city.cityId,
+            })),
+          });
+        }
+      }
+
+      // Return the updated bulk product with its cities
+      return await prisma.bulkProduct.findUnique({
+        where: { id },
+        include: {
+          product: true,
+          bulkProductCities: {
+            include: {
+              city: true,
+            },
+          },
+        },
+      });
     });
   }
 
   async remove(id: string) {
-    await this.findOne(id);
-    return await this.prisma.bulkProduct.delete({
-      where: { id },
+    // Start a transaction to delete bulk product and its cities
+    return await this.prisma.$transaction(async (prisma) => {
+      // Delete related cities first
+      await prisma.bulkProductCity.deleteMany({
+        where: { productId: id },
+      });
+
+      // Delete the bulk product
+      return await prisma.bulkProduct.delete({
+        where: { id },
+      });
     });
   }
 
@@ -106,11 +234,6 @@ export class BulkProductsService {
     const where: Prisma.BulkProductWhereInput = {
       isActive: true,
       product: {
-        /* ...(categorySlug && {
-          category: {
-            slug: categorySlug,
-          },
-        }), */
         ...(categorySlug &&
           categorySlug.length > 0 && {
             category: {
@@ -155,6 +278,11 @@ export class BulkProductsService {
               images: true,
             },
           },
+          bulkProductCities: {
+            include: {
+              city: true,
+            },
+          },
         },
       }),
       this.prisma.bulkProduct.count({ where }),
@@ -184,7 +312,7 @@ export class BulkProductsService {
       return {
         success: true,
         status: HttpStatus.OK,
-        isActive: updatedBulkProduct.isActive, // Return new status
+        isActive: updatedBulkProduct.isActive,
       };
     } catch (error) {
       return { success: false, status: HttpStatus.FORBIDDEN };

@@ -169,27 +169,6 @@ async function main() {
     },
   });
 
-  // Order with a laptop variant
-  const order = await prisma.order.create({
-    data: {
-      userId: users[1].id,
-      total: 1299.99,
-      status: 'pending',
-      address: '123 Tech Street',
-      phoneNumber: '+1234567890',
-      orderItems: {
-        create: [
-          {
-            productId: laptop.id,
-            variantId: laptop.variants[0].id,
-            quantity: 1,
-            price: 1299.99,
-          },
-        ],
-      },
-    },
-  });
-
   // Cart for client
   await prisma.cart.create({
     data: {

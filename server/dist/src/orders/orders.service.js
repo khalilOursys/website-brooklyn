@@ -12,16 +12,63 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma.service");
+const client_1 = require("@prisma/client");
+const bcryptjs = require("bcryptjs");
 let OrdersService = class OrdersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
     async create(createOrderDto) {
-        const user = await this.prisma.user.findUnique({
-            where: { id: createOrderDto.userId },
-        });
-        if (!user) {
-            throw new common_1.BadRequestException(`User with id ${createOrderDto.userId} does not exist.`);
+        let userId = createOrderDto.userId;
+        if (!userId) {
+            if (!createOrderDto.guestUser) {
+                throw new common_1.BadRequestException('Guest user information is required');
+            }
+            const guestEmail = createOrderDto.guestUser.email || process.env.EMAIL_USER;
+            if (!guestEmail) {
+                throw new common_1.BadRequestException('Email is required for guest user');
+            }
+            const existingGuestUser = await this.prisma.user.findFirst({
+                where: {
+                    email: guestEmail,
+                    role: client_1.Role.GUEST,
+                },
+            });
+            if (existingGuestUser) {
+                userId = existingGuestUser.id;
+                await this.prisma.user.update({
+                    where: { id: userId },
+                    data: {
+                        firstName: createOrderDto.guestUser.firstName,
+                        lastName: createOrderDto.guestUser.lastName,
+                        telephone: createOrderDto.guestUser.phoneNumber,
+                        email: guestEmail,
+                    },
+                });
+            }
+            else {
+                const hashedPassword = await bcryptjs.hash(`guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, 10);
+                const guestUser = await this.prisma.user.create({
+                    data: {
+                        email: guestEmail,
+                        password: `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                        role: client_1.Role.GUEST,
+                        firstName: createOrderDto.guestUser.firstName,
+                        lastName: createOrderDto.guestUser.lastName,
+                        telephone: createOrderDto.guestUser.phoneNumber,
+                        isActive: false,
+                    },
+                });
+                userId = guestUser.id;
+            }
+        }
+        else {
+            const user = await this.prisma.user.findUnique({
+                where: { id: userId },
+            });
+            if (!user) {
+                throw new common_1.BadRequestException(`User with id ${userId} does not exist.`);
+            }
         }
         return await this.prisma.$transaction(async (prisma) => {
             for (const item of createOrderDto.orderItems) {
@@ -39,7 +86,7 @@ let OrdersService = class OrdersService {
                         where: { id: item.bulkId },
                     });
                     if (!bulk) {
-                        throw new common_1.BadRequestException(`Bundle with id ${item.bundleId} not found`);
+                        throw new common_1.BadRequestException(`Bundle with id ${item.bulkId} not found`);
                     }
                     if (bulk.minQuantity < item.quantity) {
                         throw new common_1.BadRequestException(`Stock insuffisant pour cette produit en gros ${bulk.name}`);
@@ -71,7 +118,7 @@ let OrdersService = class OrdersService {
             }
             const order = await prisma.order.create({
                 data: {
-                    userId: createOrderDto.userId,
+                    userId: userId,
                     address: createOrderDto.address,
                     phoneNumber: createOrderDto.phoneNumber,
                     discountCodeId: createOrderDto.discountCodeId,
@@ -104,32 +151,27 @@ let OrdersService = class OrdersService {
                     });
                 }
                 else if (item.productId) {
-                    const product = await prisma.product.findUnique({
-                        where: { id: item.productId },
-                        include: { variants: true },
-                    });
                     await prisma.product.update({
                         where: { id: item.productId },
                         data: { stock: { decrement: item.quantity } },
                     });
                 }
                 if (item.bundleId) {
-                    const bundle = await prisma.productBundle.findUnique({
-                        where: { id: item.bundleId },
-                    });
                     await prisma.productBundle.update({
                         where: { id: item.bundleId },
                         data: { stock: { decrement: item.quantity } },
                     });
                 }
             }
-            const cart = await prisma.cart.findUnique({
-                where: { userId: createOrderDto.userId },
-            });
-            if (cart) {
-                await prisma.cartItem.deleteMany({
-                    where: { cartId: cart.id },
+            if (createOrderDto.userId) {
+                const cart = await prisma.cart.findUnique({
+                    where: { userId: createOrderDto.userId },
                 });
+                if (cart) {
+                    await prisma.cartItem.deleteMany({
+                        where: { cartId: cart.id },
+                    });
+                }
             }
             return order;
         });

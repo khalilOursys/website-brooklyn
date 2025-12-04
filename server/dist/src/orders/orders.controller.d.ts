@@ -23,9 +23,9 @@ export declare class OrdersController {
         userId: string;
         address: string;
         status: string;
-        total: number;
         phoneNumber: string;
         discountCodeId: string | null;
+        total: number;
     }>;
     findAll(type: number): Promise<({
         user: {
@@ -61,9 +61,9 @@ export declare class OrdersController {
         userId: string;
         address: string;
         status: string;
-        total: number;
         phoneNumber: string;
         discountCodeId: string | null;
+        total: number;
     })[]>;
     findOne(id: string): Promise<{
         user: {
@@ -126,16 +126,6 @@ export declare class OrdersController {
                 stock: number;
                 productId: string;
             }) | null;
-            bundle: {
-                id: string;
-                name: string;
-                isActive: boolean;
-                createdAt: Date;
-                img: string | null;
-                stock: number;
-                discount: number;
-                expiresAt: Date | null;
-            } | null;
             bulk: {
                 id: string;
                 name: string | null;
@@ -147,6 +137,16 @@ export declare class OrdersController {
                 productId: string;
                 bulkPrice: number;
                 minQuantity: number;
+            } | null;
+            bundle: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                img: string | null;
+                stock: number;
+                discount: number;
+                expiresAt: Date | null;
             } | null;
         } & {
             id: string;
@@ -166,9 +166,9 @@ export declare class OrdersController {
         userId: string;
         address: string;
         status: string;
-        total: number;
         phoneNumber: string;
         discountCodeId: string | null;
+        total: number;
     }>;
     getOrderByIdUser(userId: string): Promise<({
         user: {
@@ -233,9 +233,9 @@ export declare class OrdersController {
         userId: string;
         address: string;
         status: string;
-        total: number;
         phoneNumber: string;
         discountCodeId: string | null;
+        total: number;
     })[]>;
     update(id: string, updateOrderDto: UpdateOrderDto): Promise<{
         id: string;
@@ -245,9 +245,9 @@ export declare class OrdersController {
         userId: string;
         address: string;
         status: string;
-        total: number;
         phoneNumber: string;
         discountCodeId: string | null;
+        total: number;
     }>;
     remove(id: string): Promise<{
         id: string;
@@ -257,8 +257,8 @@ export declare class OrdersController {
         userId: string;
         address: string;
         status: string;
-        total: number;
         phoneNumber: string;
         discountCodeId: string | null;
+        total: number;
     }>;
 }

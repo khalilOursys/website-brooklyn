@@ -1,8 +1,8 @@
-"use client"; // Marque ce composant comme un composant Client
+"use client";
 import { Button, Card, Container, Row, Col, Form } from "react-bootstrap";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useParams, useRouter } from 'next/navigation'; // Import mis à jour pour Next.js 14
+import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "@/components/Sidebar/Sidebar";
@@ -11,8 +11,10 @@ import Footer from "@/components/Footer/Footer";
 import { addBulkProduct } from "@/Redux/bulkProductsReduce";
 import dynamic from "next/dynamic";
 import { fetchProducts } from "@/Redux/productsReduce";
+import Configuration from "@/configuration";
+
 const Select = dynamic(() => import('react-select'), {
-  ssr: false, // Désactive SSR pour react-select
+  ssr: false,
 });
 
 export default function Page() {
@@ -24,19 +26,22 @@ export default function Page() {
   };
 
   const dispatch = useDispatch();
-  const router = useRouter(); // Hook mis à jour
+  const router = useRouter();
 
-  // Déclarations d'état
+  // États existants
   const [name, setName] = useState("");
   const [minQuantity, setMinQuantity] = useState("");
   const [bulkPrice, setBulkPrice] = useState("");
   const [discount, setDiscount] = useState(0);
-  const [productId, setProductId] = useState(null); // Utilise null pour react-select
+  const [productId, setProductId] = useState(null);
   const [products, setProducts] = useState([]);
 
-  const submitForm = async () => {
+  // États modifiés pour les villes - SIMPLIFIÉ
+  const [cities, setCities] = useState([]);
+  const [selectedCities, setSelectedCities] = useState([]); // Multi-select simple 
 
-    // Conditions de validation
+  const submitForm = async () => {
+    // Validation existante
     if (!name || name.trim() === "") {
       notify(2, "Le nom est requis");
       return;
@@ -52,43 +57,61 @@ export default function Page() {
       return;
     }
 
-    // Si toutes les validations passent, procéder à la soumission du formulaire
-    dispatch(
-      addBulkProduct({
-        name: name,
-        minQuantity,
-        bulkPrice,
-        productId: productId.value, // Extrait la valeur de react-select
-        discount
-      })
-    ).then((action) => {
-      if (action.meta.requestStatus === "fulfilled") {
-        /* notify(1, "Insertion réussie"); */
-        notify(1, "Produit en gros ajoutée avec succès !");
-        setTimeout(() => {
-          router.push("/bulkProducts"); // Navigation mise à jour
-        }, 1500);
-      } else if (action.meta.requestStatus === "rejected") {
-        notify(2, action.payload.message || "Une erreur est survenue");
-      }
-    });
+    // Validation des villes
+    if (selectedCities.length === 0) {
+      notify(2, "Veuillez sélectionner au moins une ville");
+      return;
+    }
+
+    if (!productId) {
+      notify(2, "Le produit est requis");
+      return;
+    }
+
+    // Préparation des données selon le schéma
+    const bulkProductData = {
+      name: name.trim(),
+      minQuantity: parseInt(minQuantity),
+      bulkPrice: parseFloat(bulkPrice),
+      productId: productId.value,
+      discount: discount ? parseFloat(discount) : 0,
+      bulkProductCities: selectedCities.map(city => ({
+        cityId: city.value
+      }))
+    };
+
+
+    try {
+      dispatch(
+        addBulkProduct(bulkProductData)
+      ).then((action) => {
+        if (action.meta.requestStatus === "fulfilled") {
+          notify(1, "Produit en gros ajouté avec succès !");
+          setTimeout(() => {
+            router.push("/bulkProducts");
+          }, 1500);
+        } else if (action.meta.requestStatus === "rejected") {
+          notify(2, action.payload.message || "Une erreur est survenue");
+        }
+      });
+    } catch (error) {
+      console.error("Erreur lors de la soumission:", error);
+      notify(2, "Une erreur est survenue lors de l'enregistrement");
+    }
   };
 
   const listeBulkProduct = () => {
-    router.push("/bulkProducts"); // Navigation mise à jour
+    router.push("/bulkProducts");
   };
 
   const getProducts = useCallback(async () => {
     try {
       const response = await dispatch(fetchProducts());
-
       const data = await response.payload;
-
       const prodOptions = data.map(prod => ({
         value: prod.id,
         label: prod.name,
       }));
-
       setProducts(prodOptions);
     } catch (error) {
       console.error("Erreur lors de la récupération des produits:", error);
@@ -96,9 +119,27 @@ export default function Page() {
     }
   }, [dispatch]);
 
+  // Récupérer les villes
+  const getCities = useCallback(async () => {
+    try {
+      const response = await fetch(`${Configuration.BACK_BASEURL}cities`);
+      if (!response.ok) throw new Error('Échec du chargement des villes');
+      const data = await response.json();
+      const cityOptions = data.map(city => ({
+        value: city.id,
+        label: city.name,
+      }));
+      setCities(cityOptions);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des villes:", error);
+      notify(2, "Échec de la récupération des villes");
+    }
+  }, []);
+
   useEffect(() => {
     getProducts();
-  }, []);
+    getCities();
+  }, [getProducts, getCities]);
 
   return (
     <>
@@ -171,11 +212,11 @@ export default function Page() {
                               </Col>
                               <Col className="pl-1" md="6">
                                 <Form.Group>
-                                  <label>Quantité * </label>
+                                  <label>Quantité minimale * </label>
                                   <Form.Control
                                     value={minQuantity}
-                                    placeholder="Quantité "
-                                    name="MinQuantity"
+                                    placeholder="Quantité minimale"
+                                    name="minQuantity"
                                     className="required"
                                     type="text"
                                     onChange={(e) => setMinQuantity(e.target.value)}
@@ -199,8 +240,28 @@ export default function Page() {
                                   <div className="error"></div>
                                 </Form.Group>
                               </Col>
+                              <Col className="pl-1" md="6">
+                                <Form.Group>
+                                  <label>Villes *</label>
+                                  <Select
+                                    options={cities}
+                                    value={selectedCities}
+                                    onChange={(selectedOptions) => setSelectedCities(selectedOptions || [])}
+                                    isMulti
+                                    placeholder="Sélectionner une ou plusieurs villes"
+                                    closeMenuOnSelect={false}
+                                  />
+                                  {/* <small className="text-muted">
+                                    {selectedCities.length > 0
+                                      ? `${selectedCities.length} ville(s) sélectionnée(s)`
+                                      : "Sélectionnez les villes où ce produit sera disponible"}
+                                  </small> */}
+                                  <div className="error"></div>
+                                </Form.Group>
+                              </Col>
                             </Row>
-                            <Button className="btn-fill pull-right" type="button" variant="info" onClick={submitForm}>
+
+                            <Button className="btn-fill pull-right mt-3" type="button" variant="info" onClick={submitForm}>
                               Enregistrer
                             </Button>
                             <div className="clearfix"></div>
@@ -214,12 +275,6 @@ export default function Page() {
             </Container>
           </div>
           <Footer />
-          <div
-            className="close-layer"
-            onClick={() =>
-              document.documentElement.classList.toggle("nav-open")
-            }
-          />
         </div>
       </div>
     </>

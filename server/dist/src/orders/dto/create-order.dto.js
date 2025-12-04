@@ -38,12 +38,34 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], OrderItemDto.prototype, "price", void 0);
+class GuestUserDto {
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], GuestUserDto.prototype, "firstName", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], GuestUserDto.prototype, "lastName", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], GuestUserDto.prototype, "phoneNumber", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], GuestUserDto.prototype, "email", void 0);
 class CreateOrderDto {
 }
 exports.CreateOrderDto = CreateOrderDto;
 __decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateOrderDto.prototype, "userId", void 0);
 __decorate([
@@ -76,4 +98,10 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateOrderDto.prototype, "total", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.ValidateNested)(),
+    (0, class_transformer_1.Type)(() => GuestUserDto),
+    __metadata("design:type", GuestUserDto)
+], CreateOrderDto.prototype, "guestUser", void 0);
 //# sourceMappingURL=create-order.dto.js.map

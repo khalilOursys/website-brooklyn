@@ -1,4 +1,19 @@
-import { IsString, IsNotEmpty, IsNumber, Min } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  Min,
+  IsArray,
+  ValidateNested,
+  IsOptional,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+class BulkProductCityDto {
+  @IsString()
+  @IsNotEmpty()
+  cityId: string;
+}
 
 export class CreateBulkProductDto {
   @IsString()
@@ -18,6 +33,11 @@ export class CreateBulkProductDto {
   minQuantity: number;
 
   @IsNumber()
-  // Optional discount percentage for bulk orders
+  @IsOptional()
   discount?: number;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => BulkProductCityDto)
+  bulkProductCities: BulkProductCityDto[];
 }
