@@ -24,6 +24,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { WishlistModule } from './wishlist/wishlist.module';
 import { HeroBannerModule } from './hero-banner/hero-banner.module';
 import { StatisticsModule } from './statistics/statistics.module';
+import { CitiesModule } from './cities/cities.module';
 
 @Module({
   imports: [
@@ -49,7 +50,8 @@ import { StatisticsModule } from './statistics/statistics.module';
     NotificationsModule,
     WishlistModule,
     HeroBannerModule,
-    StatisticsModule
+    StatisticsModule,
+    CitiesModule,
   ],
   controllers: [AppController],
   providers: [PrismaService],

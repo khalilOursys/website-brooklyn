@@ -44,6 +44,23 @@ export declare class AuthController {
             submittedAt: Date;
             reviewedAt: Date | null;
         } | null;
+        userCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            cityId: string;
+        })[];
     } & {
         id: string;
         email: string;

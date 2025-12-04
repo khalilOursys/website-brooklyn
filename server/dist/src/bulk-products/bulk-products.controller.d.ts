@@ -5,6 +5,44 @@ export declare class BulkProductsController {
     private readonly bulkProductsService;
     constructor(bulkProductsService: BulkProductsService);
     create(createBulkProductDto: CreateBulkProductDto): Promise<{
+        product: {
+            id: string;
+            name: string;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            description: string | null;
+            color: string | null;
+            price: number;
+            purchasePrice: number | null;
+            stock: number;
+            isBulk: boolean;
+            discount: number | null;
+            isFeatured: boolean;
+            specs: import("@prisma/client/runtime/library").JsonValue | null;
+            categoryId: string;
+            brandId: string;
+            averageRating: number | null;
+            ratingCount: number;
+        } | null;
+        bulkProductCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            productId: string;
+            cityId: string;
+        })[];
+    } & {
         id: string;
         name: string | null;
         isActive: boolean;
@@ -37,6 +75,23 @@ export declare class BulkProductsController {
             averageRating: number | null;
             ratingCount: number;
         } | null;
+        bulkProductCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            productId: string;
+            cityId: string;
+        })[];
     } & {
         id: string;
         name: string | null;
@@ -107,6 +162,23 @@ export declare class BulkProductsController {
             averageRating: number | null;
             ratingCount: number;
         }) | null;
+        bulkProductCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            productId: string;
+            cityId: string;
+        })[];
     } & {
         id: string;
         name: string | null;
@@ -119,7 +191,45 @@ export declare class BulkProductsController {
         bulkPrice: number;
         minQuantity: number;
     }>;
-    update(id: string, updateBulkProductDto: UpdateBulkProductDto): Promise<{
+    update(id: string, updateBulkProductDto: UpdateBulkProductDto): Promise<({
+        product: {
+            id: string;
+            name: string;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            description: string | null;
+            color: string | null;
+            price: number;
+            purchasePrice: number | null;
+            stock: number;
+            isBulk: boolean;
+            discount: number | null;
+            isFeatured: boolean;
+            specs: import("@prisma/client/runtime/library").JsonValue | null;
+            categoryId: string;
+            brandId: string;
+            averageRating: number | null;
+            ratingCount: number;
+        } | null;
+        bulkProductCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            productId: string;
+            cityId: string;
+        })[];
+    } & {
         id: string;
         name: string | null;
         isActive: boolean;
@@ -130,7 +240,7 @@ export declare class BulkProductsController {
         productId: string;
         bulkPrice: number;
         minQuantity: number;
-    }>;
+    }) | null>;
     remove(id: string): Promise<{
         id: string;
         name: string | null;
@@ -196,6 +306,23 @@ export declare class BulkProductsController {
                 averageRating: number | null;
                 ratingCount: number;
             }) | null;
+            bulkProductCities: ({
+                city: {
+                    id: string;
+                    name: string;
+                    isActive: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    state: string | null;
+                    country: string;
+                } | null;
+            } & {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                productId: string;
+                cityId: string;
+            })[];
         } & {
             id: string;
             name: string | null;

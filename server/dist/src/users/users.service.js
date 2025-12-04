@@ -84,6 +84,11 @@ let UsersService = class UsersService {
                     },
                 },
                 bulkRequests: true,
+                userCities: {
+                    include: {
+                        city: true,
+                    },
+                },
             },
         });
         if (!user) {
@@ -92,13 +97,20 @@ let UsersService = class UsersService {
         return user;
     }
     async findByEmail(email) {
-        return await this.prisma.user.findUnique({ where: { email } });
+        return await this.prisma.user.findUnique({
+            where: { email },
+        });
     }
     async getAllUsers(role) {
         return this.prisma.user.findMany({
             where: role ? { role } : undefined,
             include: {
                 bulkRequests: true,
+                userCities: {
+                    include: {
+                        city: true,
+                    },
+                },
             },
             orderBy: { createdAt: 'desc' },
         });
@@ -108,8 +120,29 @@ let UsersService = class UsersService {
             where: { id },
             include: {
                 bulkRequests: true,
+                userCities: {
+                    include: {
+                        city: true,
+                    },
+                },
             },
         });
+    }
+    async getUserWithCities(userId) {
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                userCities: {
+                    include: {
+                        city: true,
+                    },
+                },
+            },
+        });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${userId} not found`);
+        }
+        return user;
     }
     async updateUser(userId, updateUserDto) {
         try {
@@ -124,8 +157,7 @@ let UsersService = class UsersService {
                     existingUser.password || updateUserDto.password;
             }
             else {
-                const saltRounds = 10;
-                updateUserDto.password = await bcryptjs.hash(updateUserDto.password, saltRounds);
+                updateUserDto.password = await bcryptjs.hash(updateUserDto.password, 10);
             }
             return await this.prisma.user.update({
                 where: { id: userId },
@@ -139,6 +171,42 @@ let UsersService = class UsersService {
             throw error;
         }
     }
+    async updateUserCities(userId, updateUserCitiesDto) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: { id: userId },
+            });
+            if (!user) {
+                throw new common_1.NotFoundException(`User with ID ${userId} not found`);
+            }
+            return await this.prisma.$transaction(async (prisma) => {
+                await prisma.userCity.deleteMany({
+                    where: { userId },
+                });
+                const cities = await prisma.city.findMany({
+                    where: {
+                        id: { in: updateUserCitiesDto.cityIds },
+                    },
+                });
+                if (cities.length !== updateUserCitiesDto.cityIds.length) {
+                    throw new common_1.NotFoundException('One or more cities not found');
+                }
+                const newUserCities = await Promise.all(updateUserCitiesDto.cityIds.map((cityId) => prisma.userCity.create({
+                    data: {
+                        userId,
+                        cityId,
+                    },
+                })));
+                return newUserCities;
+            });
+        }
+        catch (error) {
+            if (error.code === 'P2025') {
+                throw new common_1.NotFoundException(`User or City not found`);
+            }
+            throw error;
+        }
+    }
     async updatePassword(userId, newPassword) {
         const user = await this.prisma.user.findUnique({
             where: { id: userId },
@@ -146,14 +214,10 @@ let UsersService = class UsersService {
         if (!user) {
             throw new common_1.NotFoundException('User not found');
         }
-        const saltRounds = 10;
-        const hashedPassword = await bcryptjs.hash(newPassword, saltRounds);
-        user.password = hashedPassword;
+        const hashedPassword = await bcryptjs.hash(newPassword, 10);
         await this.prisma.user.update({
             where: { id: userId },
-            data: {
-                password: hashedPassword,
-            },
+            data: { password: hashedPassword },
         });
     }
     async toggleStatus(id) {

@@ -20,6 +20,7 @@ const login_dto_1 = require("./dto/login.dto");
 const client_1 = require("@prisma/client");
 const UpdateUserDto_1 = require("./dto/UpdateUserDto");
 const mailer_services_1 = require("../mailer/mailer.services");
+const update_user_cities_dto_1 = require("./dto/update-user-cities.dto");
 const dotenv = require("dotenv");
 dotenv.config();
 let UsersController = class UsersController {
@@ -48,12 +49,31 @@ let UsersController = class UsersController {
         }
         return user;
     }
+    async findOne(id) {
+        const user = await this.usersService.findOne(id);
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${id} not found`);
+        }
+        return user;
+    }
+    async getUserCities(id) {
+        const user = await this.usersService.getUserWithCities(id);
+        return user.userCities;
+    }
     async updateUser(id, updateUserDto) {
         const user = await this.usersService.updateUser(id, updateUserDto);
         if (!user) {
             throw new common_1.NotFoundException(`User with ID ${id} not found`);
         }
         return user;
+    }
+    async updateUserCities(id, updateUserCitiesDto) {
+        const result = await this.usersService.updateUserCities(id, updateUserCitiesDto);
+        return {
+            message: 'User cities updated successfully',
+            count: result.length,
+            cities: result,
+        };
     }
     async toggleStatus(id) {
         const result = await this.usersService.toggleStatus(id);
@@ -65,7 +85,7 @@ let UsersController = class UsersController {
     }
     contact(body) {
         const { email, nom, prenom, msg } = body;
-        var to = process.env.contact_us || 'shadowreaperguide@gmail.com';
+        const to = process.env.contact_us || 'shadowreaperguide@gmail.com';
         return this.mailerService.sendContactEmail(email, nom, prenom, msg, to);
     }
 };
@@ -107,6 +127,20 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserById", null);
 __decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Get)(':id/cities'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUserCities", null);
+__decorate([
     (0, common_1.Put)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
@@ -114,6 +148,14 @@ __decorate([
     __metadata("design:paramtypes", [String, UpdateUserDto_1.UpdateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateUser", null);
+__decorate([
+    (0, common_1.Put)(':id/cities'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, update_user_cities_dto_1.UpdateUserCitiesDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updateUserCities", null);
 __decorate([
     (0, common_1.Put)('toggle-status/:id'),
     __param(0, (0, common_1.Param)('id')),

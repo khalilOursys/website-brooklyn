@@ -23,6 +23,18 @@ let BulkProductsService = class BulkProductsService {
         if (!product) {
             throw new common_1.BadRequestException(`Product with id ${createBulkProductDto.productId} does not exist.`);
         }
+        if (createBulkProductDto.bulkProductCities &&
+            createBulkProductDto.bulkProductCities.length > 0) {
+            const cityIds = createBulkProductDto.bulkProductCities.map((city) => city.cityId);
+            const cities = await this.prisma.city.findMany({
+                where: { id: { in: cityIds } },
+            });
+            if (cities.length !== cityIds.length) {
+                const foundCityIds = cities.map((city) => city.id);
+                const missingCityIds = cityIds.filter((id) => !foundCityIds.includes(id));
+                throw new common_1.BadRequestException(`Cities with ids ${missingCityIds.join(', ')} do not exist.`);
+            }
+        }
         const existingBulkProduct = await this.prisma.bulkProduct.findFirst({
             where: { productId: createBulkProductDto.productId },
         });
@@ -30,12 +42,38 @@ let BulkProductsService = class BulkProductsService {
             throw new common_1.BadRequestException(`Bulk product for product id ${createBulkProductDto.productId} already exists.`);
         }
         return await this.prisma.bulkProduct.create({
-            data: createBulkProductDto,
+            data: {
+                name: createBulkProductDto.name,
+                productId: createBulkProductDto.productId,
+                bulkPrice: createBulkProductDto.bulkPrice,
+                minQuantity: createBulkProductDto.minQuantity,
+                discount: createBulkProductDto.discount || 0,
+                bulkProductCities: {
+                    create: createBulkProductDto.bulkProductCities.map((city) => ({
+                        cityId: city.cityId,
+                    })),
+                },
+            },
+            include: {
+                product: true,
+                bulkProductCities: {
+                    include: {
+                        city: true,
+                    },
+                },
+            },
         });
     }
     async findAll() {
         return await this.prisma.bulkProduct.findMany({
-            include: { product: true },
+            include: {
+                product: true,
+                bulkProductCities: {
+                    include: {
+                        city: true,
+                    },
+                },
+            },
             orderBy: { createdAt: 'desc' },
         });
     }
@@ -51,6 +89,11 @@ let BulkProductsService = class BulkProductsService {
                         brand: true,
                     },
                 },
+                bulkProductCities: {
+                    include: {
+                        city: true,
+                    },
+                },
             },
         });
         if (!bulkProduct) {
@@ -60,15 +103,63 @@ let BulkProductsService = class BulkProductsService {
     }
     async update(id, updateBulkProductDto) {
         await this.findOne(id);
-        return await this.prisma.bulkProduct.update({
-            where: { id },
-            data: updateBulkProductDto,
+        if (updateBulkProductDto.bulkProductCities &&
+            updateBulkProductDto.bulkProductCities.length > 0) {
+            const cityIds = updateBulkProductDto.bulkProductCities.map((city) => city.cityId);
+            const cities = await this.prisma.city.findMany({
+                where: { id: { in: cityIds } },
+            });
+            if (cities.length !== cityIds.length) {
+                const foundCityIds = cities.map((city) => city.id);
+                const missingCityIds = cityIds.filter((id) => !foundCityIds.includes(id));
+                throw new common_1.BadRequestException(`Cities with ids ${missingCityIds.join(', ')} do not exist.`);
+            }
+        }
+        return await this.prisma.$transaction(async (prisma) => {
+            const updatedBulkProduct = await prisma.bulkProduct.update({
+                where: { id },
+                data: {
+                    name: updateBulkProductDto.name,
+                    productId: updateBulkProductDto.productId,
+                    bulkPrice: updateBulkProductDto.bulkPrice,
+                    minQuantity: updateBulkProductDto.minQuantity,
+                    discount: updateBulkProductDto.discount,
+                },
+            });
+            if (updateBulkProductDto.bulkProductCities) {
+                await prisma.bulkProductCity.deleteMany({
+                    where: { productId: id },
+                });
+                if (updateBulkProductDto.bulkProductCities.length > 0) {
+                    await prisma.bulkProductCity.createMany({
+                        data: updateBulkProductDto.bulkProductCities.map((city) => ({
+                            productId: id,
+                            cityId: city.cityId,
+                        })),
+                    });
+                }
+            }
+            return await prisma.bulkProduct.findUnique({
+                where: { id },
+                include: {
+                    product: true,
+                    bulkProductCities: {
+                        include: {
+                            city: true,
+                        },
+                    },
+                },
+            });
         });
     }
     async remove(id) {
-        await this.findOne(id);
-        return await this.prisma.bulkProduct.delete({
-            where: { id },
+        return await this.prisma.$transaction(async (prisma) => {
+            await prisma.bulkProductCity.deleteMany({
+                where: { productId: id },
+            });
+            return await prisma.bulkProduct.delete({
+                where: { id },
+            });
         });
     }
     async findBulkProductsByCategory(options) {
@@ -118,6 +209,11 @@ let BulkProductsService = class BulkProductsService {
                             category: true,
                             brand: true,
                             images: true,
+                        },
+                    },
+                    bulkProductCities: {
+                        include: {
+                            city: true,
                         },
                     },
                 },

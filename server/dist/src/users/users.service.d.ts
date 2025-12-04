@@ -5,6 +5,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/UpdateUserDto';
+import { UpdateUserCitiesDto } from './dto/update-user-cities.dto';
 export declare class UsersService {
     private readonly prisma;
     private readonly jwtService;
@@ -57,6 +58,23 @@ export declare class UsersService {
             submittedAt: Date;
             reviewedAt: Date | null;
         } | null;
+        userCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            cityId: string;
+        })[];
     } & {
         id: string;
         email: string;
@@ -101,6 +119,23 @@ export declare class UsersService {
             submittedAt: Date;
             reviewedAt: Date | null;
         } | null;
+        userCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            cityId: string;
+        })[];
     } & {
         id: string;
         email: string;
@@ -130,6 +165,23 @@ export declare class UsersService {
             submittedAt: Date;
             reviewedAt: Date | null;
         } | null;
+        userCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            cityId: string;
+        })[];
     } & {
         id: string;
         email: string;
@@ -145,6 +197,39 @@ export declare class UsersService {
         createdAt: Date;
         updatedAt: Date;
     }) | null>;
+    getUserWithCities(userId: string): Promise<{
+        userCities: ({
+            city: {
+                id: string;
+                name: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                state: string | null;
+                country: string;
+            } | null;
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            userId: string;
+            cityId: string;
+        })[];
+    } & {
+        id: string;
+        email: string;
+        password: string;
+        telephone: string | null;
+        name: string | null;
+        firstName: string | null;
+        lastName: string | null;
+        role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
+        oauthProvider: string | null;
+        oauthId: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
     updateUser(userId: string, updateUserDto: UpdateUserDto): Promise<{
         id: string;
         email: string;
@@ -160,6 +245,13 @@ export declare class UsersService {
         createdAt: Date;
         updatedAt: Date;
     }>;
+    updateUserCities(userId: string, updateUserCitiesDto: UpdateUserCitiesDto): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string;
+        cityId: string;
+    }[]>;
     updatePassword(userId: string, newPassword: string): Promise<void>;
     toggleStatus(id: string): Promise<{
         success: boolean;

@@ -1,3 +1,4 @@
+// users.service.ts
 import {
   Injectable,
   ConflictException,
@@ -12,20 +13,22 @@ import * as bcryptjs from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/UpdateUserDto';
+import { UpdateUserCitiesDto } from './dto/update-user-cities.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService, // Inject the JwtService for token creation
+    private readonly jwtService: JwtService,
   ) {}
+
   async onModuleInit() {
     await this.ensureAdminUserExists();
   }
 
   private async ensureAdminUserExists() {
-    const adminEmail = 'admin.admin@admin.com'; // or from config
-    const adminPassword = 'adminadmin'; // or from config
+    const adminEmail = 'admin.admin@admin.com';
+    const adminPassword = 'adminadmin';
 
     const usersCount = await this.prisma.user.count();
 
@@ -37,22 +40,23 @@ export class UsersService {
         firstName: 'Admin',
         lastName: 'Admin',
         role: Role.ADMIN,
-        // add other required fields
       };
 
       await this.create(adminUserDto);
     }
   }
+
   async create(createUserDto: CreateUserDto) {
-    // Check if email already exists
     const existingUser = await this.prisma.user.findUnique({
       where: { email: createUserDto.email },
     });
+
     if (existingUser) {
       throw new ConflictException('E-mail déjà utilisé');
     }
-    // Hash the password using bcrypt
+
     const hashedPassword = await bcryptjs.hash(createUserDto.password, 10);
+
     return await this.prisma.user.create({
       data: {
         email: createUserDto.email,
@@ -70,15 +74,16 @@ export class UsersService {
     const user = await this.prisma.user.findUnique({
       where: { email: loginDto.email },
     });
+
     if (!user || !user.password) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    // Compare the incoming password with the hashed password
+
     const isMatch = await bcryptjs.compare(loginDto.password, user.password);
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    // Generate JWT token with necessary payload
+
     const payload = { sub: user.id, email: user.email, role: user.role };
     const token = this.jwtService.sign(payload);
     return { accessToken: token };
@@ -94,38 +99,77 @@ export class UsersService {
           },
         },
         bulkRequests: true,
+        userCities: {
+          include: {
+            city: true,
+          },
+        },
       },
     });
+
     if (!user) {
       throw new Error(`User with id ${id} not found`);
     }
+
     return user;
   }
 
   async findByEmail(email: string) {
-    return await this.prisma.user.findUnique({ where: { email } });
+    return await this.prisma.user.findUnique({
+      where: { email },
+    });
   }
+
   async getAllUsers(role?: Role) {
     return this.prisma.user.findMany({
-      where: role ? { role } : undefined, // Filter by role if provided
+      where: role ? { role } : undefined,
       include: {
-        bulkRequests: true, // Include the related BulkRequest
+        bulkRequests: true,
+        userCities: {
+          include: {
+            city: true,
+          },
+        },
       },
       orderBy: { createdAt: 'desc' },
     });
   }
+
   async getUserById(id: string) {
     return this.prisma.user.findUnique({
       where: { id },
       include: {
-        bulkRequests: true, // Include the related category
+        bulkRequests: true,
+        userCities: {
+          include: {
+            city: true,
+          },
+        },
       },
     });
   }
 
+  async getUserWithCities(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        userCities: {
+          include: {
+            city: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    return user;
+  }
+
   async updateUser(userId: string, updateUserDto: UpdateUserDto) {
     try {
-      // Fetch the existing user from the database
       const existingUser = await this.prisma.user.findUnique({
         where: { id: userId },
       });
@@ -134,20 +178,16 @@ export class UsersService {
         throw new NotFoundException(`User with ID ${userId} not found`);
       }
 
-      // If no new password is provided, retain the old password
       if (!updateUserDto.password || updateUserDto.password.trim() === '') {
         updateUserDto.password =
           existingUser.password || updateUserDto.password;
       } else {
-        // Hash the new password if provided
-        const saltRounds = 10; // Number of salt rounds for hashing
         updateUserDto.password = await bcryptjs.hash(
           updateUserDto.password,
-          saltRounds,
+          10,
         );
       }
 
-      // Update the user with the new data
       return await this.prisma.user.update({
         where: { id: userId },
         data: updateUserDto,
@@ -160,27 +200,74 @@ export class UsersService {
     }
   }
 
+  async updateUserCities(
+    userId: string,
+    updateUserCitiesDto: UpdateUserCitiesDto,
+  ) {
+    try {
+      // Check if user exists
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        throw new NotFoundException(`User with ID ${userId} not found`);
+      }
+
+      // Use transaction for consistency
+      return await this.prisma.$transaction(async (prisma) => {
+        // Delete existing user cities
+        await prisma.userCity.deleteMany({
+          where: { userId },
+        });
+
+        // Verify all cities exist before creating
+        const cities = await prisma.city.findMany({
+          where: {
+            id: { in: updateUserCitiesDto.cityIds },
+          },
+        });
+
+        if (cities.length !== updateUserCitiesDto.cityIds.length) {
+          throw new NotFoundException('One or more cities not found');
+        }
+
+        // Create new user cities
+        const newUserCities = await Promise.all(
+          updateUserCitiesDto.cityIds.map((cityId) =>
+            prisma.userCity.create({
+              data: {
+                userId,
+                cityId,
+              },
+            }),
+          ),
+        );
+
+        return newUserCities;
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`User or City not found`);
+      }
+      throw error;
+    }
+  }
+
   async updatePassword(userId: string, newPassword: string): Promise<void> {
-    // Find the user
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
+
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    // Hash the new password
-    const saltRounds = 10;
-    const hashedPassword = await bcryptjs.hash(newPassword, saltRounds);
-
-    // Update the password and clear any reset tokens if needed
-    user.password = hashedPassword;
+    const hashedPassword = await bcryptjs.hash(newPassword, 10);
 
     await this.prisma.user.update({
       where: { id: userId },
-      data: {
-        password: hashedPassword,
-      },
+      data: { password: hashedPassword },
     });
   }
 
@@ -200,7 +287,7 @@ export class UsersService {
       return {
         success: true,
         status: HttpStatus.OK,
-        isActive: updatedUser.isActive, // Return new status
+        isActive: updatedUser.isActive,
       };
     } catch (error) {
       return { success: false, status: HttpStatus.FORBIDDEN };
