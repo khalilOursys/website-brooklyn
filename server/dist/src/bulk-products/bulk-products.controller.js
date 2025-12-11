@@ -36,7 +36,7 @@ let BulkProductsController = class BulkProductsController {
     async remove(id) {
         return await this.bulkProductsService.remove(id);
     }
-    findByCategory(categorySlug, page = 0, limit = 10, brandNames, minPrice, maxPrice, promotions) {
+    findByCategory(categorySlug, page = 0, limit = 10, brandNames, minPrice, maxPrice, promotions, userId) {
         return this.bulkProductsService.findBulkProductsByCategory({
             categorySlug: categorySlug ? categorySlug.split(',') : undefined,
             page,
@@ -45,6 +45,7 @@ let BulkProductsController = class BulkProductsController {
             brandNames: brandNames ? brandNames.split(',') : undefined,
             minPrice: minPrice ? Number(minPrice) : undefined,
             maxPrice: maxPrice ? Number(maxPrice) : undefined,
+            userId: userId ? userId : undefined,
         });
     }
     async toggleStatus(id) {
@@ -101,8 +102,9 @@ __decorate([
     __param(4, (0, common_1.Query)('minPrice')),
     __param(5, (0, common_1.Query)('maxPrice')),
     __param(6, (0, common_1.Query)('promotions')),
+    __param(7, (0, common_1.Query)('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number, String, Number, Number, Number]),
+    __metadata("design:paramtypes", [String, Number, Number, String, Number, Number, Number, String]),
     __metadata("design:returntype", void 0)
 ], BulkProductsController.prototype, "findByCategory", null);
 __decorate([

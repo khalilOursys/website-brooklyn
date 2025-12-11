@@ -263,6 +263,7 @@ export declare class BulkProductsService {
         brandNames?: string[];
         minPrice?: number;
         maxPrice?: number;
+        userId?: string;
     }): Promise<{
         bulkProducts: ({
             product: ({

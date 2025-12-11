@@ -58,6 +58,11 @@ export default function ShopSidebarleft({ slug }) {
   const fetchBulkproduct = async () => {
     try {
       const url = new URL(`${api}bulkProducts/search`);
+
+      if (user && user.id) {
+        url.searchParams.append("userId", user.id);
+      }
+
       /* url.searchParams.append("categorySlug", slug); */
       if (selectedBrand.length > 0) {
         url.searchParams.append("brandNames", selectedBrand.map(b => b.name).join(','));
@@ -72,7 +77,6 @@ export default function ShopSidebarleft({ slug }) {
       url.searchParams.append("limit", itemsPerPage.toString());
 
       if (role === "BULK_CLIENT") {
-
         const response = await fetch(url.toString());
         if (!response.ok) throw new Error("Failed to fetch products");
 

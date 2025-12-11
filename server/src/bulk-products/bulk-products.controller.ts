@@ -55,6 +55,7 @@ export class BulkProductsController {
     @Query('minPrice') minPrice?: number,
     @Query('maxPrice') maxPrice?: number,
     @Query('promotions') promotions?: number,
+    @Query('userId') userId?: string, // Add userId parameter
   ) {
     return this.bulkProductsService.findBulkProductsByCategory({
       categorySlug: categorySlug ? categorySlug.split(',') : undefined,
@@ -64,6 +65,7 @@ export class BulkProductsController {
       brandNames: brandNames ? brandNames.split(',') : undefined,
       minPrice: minPrice ? Number(minPrice) : undefined,
       maxPrice: maxPrice ? Number(maxPrice) : undefined,
+      userId: userId ? userId : undefined, // Pass userId to service
     });
   }
 

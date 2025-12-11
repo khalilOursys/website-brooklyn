@@ -17,7 +17,7 @@ export class BulkClientRequestsService {
   async createUserWithBulkRequest(data: CreateBulkClientRequestDto) {
     const hashedPassword = await bcryptjs.hash(data.password, 10);
 
-    const existingUser = await this.prisma.user.findUnique({
+    const existingUser = await this.prisma.user.findFirst({
       where: { email: data.email },
     });
     if (existingUser) {

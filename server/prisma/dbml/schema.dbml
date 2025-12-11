@@ -4,7 +4,7 @@
 
 Table User {
   id String [pk]
-  email String [unique, not null]
+  email String [not null]
   password String [not null]
   telephone String
   name String
