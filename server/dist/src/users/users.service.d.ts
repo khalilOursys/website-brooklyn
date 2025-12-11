@@ -34,11 +34,11 @@ export declare class UsersService {
         cart: ({
             items: {
                 id: string;
-                variantId: string | null;
-                productId: string;
-                quantity: number;
-                bulkId: string | null;
                 cartId: string;
+                productId: string;
+                variantId: string | null;
+                bulkId: string | null;
+                quantity: number;
             }[];
         } & {
             id: string;

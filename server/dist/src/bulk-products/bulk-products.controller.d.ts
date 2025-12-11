@@ -253,7 +253,7 @@ export declare class BulkProductsController {
         bulkPrice: number;
         minQuantity: number;
     }>;
-    findByCategory(categorySlug?: string, page?: number, limit?: number, brandNames?: string, minPrice?: number, maxPrice?: number, promotions?: number): Promise<{
+    findByCategory(categorySlug?: string, page?: number, limit?: number, brandNames?: string, minPrice?: number, maxPrice?: number, promotions?: number, userId?: string): Promise<{
         bulkProducts: ({
             product: ({
                 category: {

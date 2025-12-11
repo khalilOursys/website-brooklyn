@@ -35,12 +35,6 @@ let BulkProductsService = class BulkProductsService {
                 throw new common_1.BadRequestException(`Cities with ids ${missingCityIds.join(', ')} do not exist.`);
             }
         }
-        const existingBulkProduct = await this.prisma.bulkProduct.findFirst({
-            where: { productId: createBulkProductDto.productId },
-        });
-        if (existingBulkProduct) {
-            throw new common_1.BadRequestException(`Bulk product for product id ${createBulkProductDto.productId} already exists.`);
-        }
         return await this.prisma.bulkProduct.create({
             data: {
                 name: createBulkProductDto.name,
@@ -163,10 +157,41 @@ let BulkProductsService = class BulkProductsService {
         });
     }
     async findBulkProductsByCategory(options) {
-        const { categorySlug, page = 0, limit = 10, brandNames, promotions, minPrice, maxPrice, } = options;
+        const { categorySlug, page = 0, limit = 10, brandNames, promotions, minPrice, maxPrice, userId, } = options;
         const offset = page * limit;
+        let userCityIds = [];
+        if (userId) {
+            const userCities = await this.prisma.userCity.findMany({
+                where: {
+                    userId: userId,
+                },
+                select: {
+                    cityId: true,
+                },
+            });
+            userCityIds = userCities.map((uc) => uc.cityId);
+        }
         const where = {
             isActive: true,
+            ...(userId &&
+                userCityIds.length > 0 && {
+                OR: [
+                    {
+                        bulkProductCities: {
+                            some: {
+                                cityId: {
+                                    in: userCityIds,
+                                },
+                            },
+                        },
+                    },
+                    {
+                        bulkProductCities: {
+                            none: {},
+                        },
+                    },
+                ],
+            }),
             product: {
                 ...(categorySlug &&
                     categorySlug.length > 0 && {

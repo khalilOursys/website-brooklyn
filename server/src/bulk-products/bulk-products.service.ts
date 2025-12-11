@@ -48,7 +48,7 @@ export class BulkProductsService {
     }
 
     // Check if a bulk product record already exists for this product
-    const existingBulkProduct = await this.prisma.bulkProduct.findFirst({
+    /* const existingBulkProduct = await this.prisma.bulkProduct.findFirst({
       where: { productId: createBulkProductDto.productId },
     });
 
@@ -56,7 +56,7 @@ export class BulkProductsService {
       throw new BadRequestException(
         `Bulk product for product id ${createBulkProductDto.productId} already exists.`,
       );
-    }
+    } */
 
     // Create bulk product with cities
     return await this.prisma.bulkProduct.create({
@@ -219,6 +219,7 @@ export class BulkProductsService {
     brandNames?: string[];
     minPrice?: number;
     maxPrice?: number;
+    userId?: string; // Add userId parameter
   }) {
     const {
       categorySlug,
@@ -228,11 +229,48 @@ export class BulkProductsService {
       promotions,
       minPrice,
       maxPrice,
+      userId,
     } = options;
     const offset = page * limit;
 
+    // Get user's cities if userId is provided
+    let userCityIds: string[] = [];
+    if (userId) {
+      const userCities = await this.prisma.userCity.findMany({
+        where: {
+          userId: userId,
+        },
+        select: {
+          cityId: true,
+        },
+      });
+      userCityIds = userCities.map((uc) => uc.cityId);
+    }
+
     const where: Prisma.BulkProductWhereInput = {
       isActive: true,
+      // Filter by user's cities if userId is provided and has cities
+      ...(userId &&
+        userCityIds.length > 0 && {
+          OR: [
+            // Include products that are available in user's cities
+            {
+              bulkProductCities: {
+                some: {
+                  cityId: {
+                    in: userCityIds,
+                  },
+                },
+              },
+            },
+            // OR include products that are available in all cities (no city restrictions)
+            {
+              bulkProductCities: {
+                none: {},
+              },
+            },
+          ],
+        }),
       product: {
         ...(categorySlug &&
           categorySlug.length > 0 && {

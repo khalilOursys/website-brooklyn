@@ -40,7 +40,7 @@ let UsersService = class UsersService {
         }
     }
     async create(createUserDto) {
-        const existingUser = await this.prisma.user.findUnique({
+        const existingUser = await this.prisma.user.findFirst({
             where: { email: createUserDto.email },
         });
         if (existingUser) {
@@ -60,7 +60,7 @@ let UsersService = class UsersService {
         });
     }
     async login(loginDto) {
-        const user = await this.prisma.user.findUnique({
+        const user = await this.prisma.user.findFirst({
             where: { email: loginDto.email },
         });
         if (!user || !user.password) {
@@ -97,7 +97,7 @@ let UsersService = class UsersService {
         return user;
     }
     async findByEmail(email) {
-        return await this.prisma.user.findUnique({
+        return await this.prisma.user.findFirst({
             where: { email },
         });
     }
