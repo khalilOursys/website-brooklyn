@@ -24,42 +24,78 @@ let OrdersService = class OrdersService {
             if (!createOrderDto.guestUser) {
                 throw new common_1.BadRequestException('Guest user information is required');
             }
-            const guestEmail = createOrderDto.guestUser.email || process.env.EMAIL_USER;
-            if (!guestEmail) {
-                throw new common_1.BadRequestException('Email is required for guest user');
-            }
-            const existingGuestUser = await this.prisma.user.findFirst({
-                where: {
-                    email: guestEmail,
-                    role: client_1.Role.GUEST,
-                },
-            });
-            if (existingGuestUser) {
-                userId = existingGuestUser.id;
-                await this.prisma.user.update({
-                    where: { id: userId },
-                    data: {
-                        firstName: createOrderDto.guestUser.firstName,
-                        lastName: createOrderDto.guestUser.lastName,
-                        telephone: createOrderDto.guestUser.phoneNumber,
+            if (createOrderDto.guestUser.email) {
+                const guestEmail = createOrderDto.guestUser.email;
+                const existingGuestUser = await this.prisma.user.findFirst({
+                    where: {
                         email: guestEmail,
+                        role: client_1.Role.GUEST,
                     },
                 });
+                if (existingGuestUser) {
+                    userId = existingGuestUser.id;
+                    await this.prisma.user.update({
+                        where: { id: userId },
+                        data: {
+                            firstName: createOrderDto.guestUser.firstName,
+                            lastName: createOrderDto.guestUser.lastName,
+                            telephone: createOrderDto.guestUser.phoneNumber,
+                        },
+                    });
+                }
+                else {
+                    const hashedPassword = await bcryptjs.hash(`guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, 10);
+                    const guestUser = await this.prisma.user.create({
+                        data: {
+                            email: guestEmail,
+                            password: hashedPassword,
+                            role: client_1.Role.GUEST,
+                            firstName: createOrderDto.guestUser.firstName,
+                            lastName: createOrderDto.guestUser.lastName,
+                            telephone: createOrderDto.guestUser.phoneNumber,
+                            isActive: false,
+                        },
+                    });
+                    userId = guestUser.id;
+                }
             }
             else {
+                const baseEmail = process.env.EMAIL_USER || 'feriani.khalil.oursys@gmail.com';
                 const hashedPassword = await bcryptjs.hash(`guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, 10);
-                const guestUser = await this.prisma.user.create({
-                    data: {
-                        email: guestEmail,
-                        password: `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-                        role: client_1.Role.GUEST,
-                        firstName: createOrderDto.guestUser.firstName,
-                        lastName: createOrderDto.guestUser.lastName,
-                        telephone: createOrderDto.guestUser.phoneNumber,
-                        isActive: false,
-                    },
-                });
-                userId = guestUser.id;
+                try {
+                    const guestUser = await this.prisma.user.create({
+                        data: {
+                            email: baseEmail,
+                            password: hashedPassword,
+                            role: client_1.Role.GUEST,
+                            firstName: createOrderDto.guestUser.firstName || 'Guest',
+                            lastName: createOrderDto.guestUser.lastName || 'User',
+                            telephone: createOrderDto.guestUser.phoneNumber || '',
+                            isActive: false,
+                        },
+                    });
+                    userId = guestUser.id;
+                }
+                catch (error) {
+                    if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
+                        const uniqueEmail = `${baseEmail.split('@')[0]}+guest_${Date.now()}_${Math.random().toString(36).substr(2, 5)}@${baseEmail.split('@')[1]}`;
+                        const guestUser = await this.prisma.user.create({
+                            data: {
+                                email: uniqueEmail,
+                                password: hashedPassword,
+                                role: client_1.Role.GUEST,
+                                firstName: createOrderDto.guestUser.firstName || 'Guest',
+                                lastName: createOrderDto.guestUser.lastName || 'User',
+                                telephone: createOrderDto.guestUser.phoneNumber || '',
+                                isActive: false,
+                            },
+                        });
+                        userId = guestUser.id;
+                    }
+                    else {
+                        throw error;
+                    }
+                }
             }
         }
         else {

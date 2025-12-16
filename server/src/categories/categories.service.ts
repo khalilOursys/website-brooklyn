@@ -32,7 +32,7 @@ export class CategoriesService {
       include: {
         parent: true,
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
     });
   }
 
@@ -48,6 +48,7 @@ export class CategoriesService {
     }
     return category;
   }
+
   async findBySlug(slug: string) {
     const category = await this.prisma.category.findFirst({
       where: { slug }, // assumes `slug` is unique
@@ -62,6 +63,7 @@ export class CategoriesService {
 
     return category;
   }
+
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
     // Ensure the category exists
     await this.findOne(id);
@@ -83,7 +85,12 @@ export class CategoriesService {
     // Fetch parent categories with their child categories
     const categories = await this.prisma.category.findMany({
       where: { parentId: null },
-      include: { children: true },
+      include: {
+        children: {
+          orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
+        },
+      },
+      orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
     });
 
     // Transform the categories into the desired format
@@ -100,7 +107,12 @@ export class CategoriesService {
     // Fetch parent categories with their child categories
     const categories = await this.prisma.category.findMany({
       where: { parentId: null },
-      include: { children: true },
+      include: {
+        children: {
+          orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
+        },
+      },
+      orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
     });
 
     // Transform the categories into the desired format
@@ -122,15 +134,19 @@ export class CategoriesService {
         },
         isActive: true,
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
     });
   }
 
   async findAllParent() {
     return await this.prisma.category.findMany({
       where: { parentId: null, isActive: true },
-      include: { children: true },
-      orderBy: { createdAt: 'desc' },
+      include: {
+        children: {
+          orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
+        },
+      },
+      orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
     });
   }
 

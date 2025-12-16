@@ -22,54 +22,98 @@ export class OrdersService {
         throw new BadRequestException('Guest user information is required');
       }
 
-      // Get email from guest user or fallback to environment variable
-      const guestEmail =
-        createOrderDto.guestUser.email || process.env.EMAIL_USER;
+      // Check if guest provides their own email
+      if (createOrderDto.guestUser.email) {
+        // Use guest's email - create ONE user or reuse existing
+        const guestEmail = createOrderDto.guestUser.email;
 
-      if (!guestEmail) {
-        throw new BadRequestException('Email is required for guest user');
-      }
-
-      // Check if guest user already exists with the same email
-      const existingGuestUser = await this.prisma.user.findFirst({
-        where: {
-          email: guestEmail,
-          role: Role.GUEST,
-        },
-      });
-
-      if (existingGuestUser) {
-        // Use existing guest user
-        userId = existingGuestUser.id;
-
-        // Update the existing guest user's information if needed
-        await this.prisma.user.update({
-          where: { id: userId },
-          data: {
-            firstName: createOrderDto.guestUser.firstName,
-            lastName: createOrderDto.guestUser.lastName,
-            telephone: createOrderDto.guestUser.phoneNumber,
-            email: guestEmail, // Use the determined email
+        // Check if guest user already exists with this email
+        const existingGuestUser = await this.prisma.user.findFirst({
+          where: {
+            email: guestEmail,
+            role: Role.GUEST,
           },
         });
+
+        if (existingGuestUser) {
+          // Use existing guest user
+          userId = existingGuestUser.id;
+
+          // Update the existing guest user's information if needed
+          await this.prisma.user.update({
+            where: { id: userId },
+            data: {
+              firstName: createOrderDto.guestUser.firstName,
+              lastName: createOrderDto.guestUser.lastName,
+              telephone: createOrderDto.guestUser.phoneNumber,
+            },
+          });
+        } else {
+          // Create new guest user with guest's email
+          const hashedPassword = await bcryptjs.hash(
+            `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            10,
+          );
+          const guestUser = await this.prisma.user.create({
+            data: {
+              email: guestEmail,
+              password: hashedPassword,
+              role: Role.GUEST,
+              firstName: createOrderDto.guestUser.firstName,
+              lastName: createOrderDto.guestUser.lastName,
+              telephone: createOrderDto.guestUser.phoneNumber,
+              isActive: false,
+            },
+          });
+          userId = guestUser.id;
+        }
       } else {
-        // Create new guest user with the determined email
+        // Guest doesn't provide email - use process.env.EMAIL_USER
+        // Create NEW guest user each time (with same email if no unique constraint)
+        const baseEmail =
+          process.env.EMAIL_USER || 'feriani.khalil.oursys@gmail.com';
+
+        // Try to create with the same email - will fail if unique constraint exists
         const hashedPassword = await bcryptjs.hash(
           `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           10,
         );
-        const guestUser = await this.prisma.user.create({
-          data: {
-            email: guestEmail,
-            password: `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-            role: Role.GUEST,
-            firstName: createOrderDto.guestUser.firstName,
-            lastName: createOrderDto.guestUser.lastName,
-            telephone: createOrderDto.guestUser.phoneNumber,
-            isActive: false,
-          },
-        });
-        userId = guestUser.id;
+
+        try {
+          const guestUser = await this.prisma.user.create({
+            data: {
+              email: baseEmail, // Same email every time
+              password: hashedPassword,
+              role: Role.GUEST,
+              firstName: createOrderDto.guestUser.firstName || 'Guest',
+              lastName: createOrderDto.guestUser.lastName || 'User',
+              telephone: createOrderDto.guestUser.phoneNumber || '',
+              isActive: false,
+            },
+          });
+          userId = guestUser.id;
+        } catch (error) {
+          // If duplicate email error, generate a unique one
+          if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
+            // Generate unique email
+            const uniqueEmail = `${baseEmail.split('@')[0]}+guest_${Date.now()}_${Math.random().toString(36).substr(2, 5)}@${baseEmail.split('@')[1]}`;
+
+            const guestUser = await this.prisma.user.create({
+              data: {
+                email: uniqueEmail,
+                password: hashedPassword,
+                role: Role.GUEST,
+                firstName: createOrderDto.guestUser.firstName || 'Guest',
+                lastName: createOrderDto.guestUser.lastName || 'User',
+                telephone: createOrderDto.guestUser.phoneNumber || '',
+                isActive: false,
+              },
+            });
+            userId = guestUser.id;
+          } else {
+            throw error;
+          }
+        }
       }
     } else {
       // Validate user exists if ID was provided
@@ -213,6 +257,7 @@ export class OrdersService {
       return order;
     });
   }
+
   async findAll(isBulk: number) {
     return await this.prisma.order.findMany({
       where: { isBulk },

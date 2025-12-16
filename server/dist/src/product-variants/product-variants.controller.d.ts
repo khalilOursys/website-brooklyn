@@ -18,6 +18,7 @@ export declare class ProductVariantsController {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {
@@ -78,6 +79,7 @@ export declare class ProductVariantsController {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {
@@ -138,6 +140,7 @@ export declare class ProductVariantsController {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {
@@ -198,6 +201,7 @@ export declare class ProductVariantsController {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {
@@ -287,6 +291,7 @@ export declare class ProductVariantsController {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {

@@ -55,6 +55,7 @@ export declare class ProductBundlesController {
                     iconUrl: string | null;
                     bannerColor: string;
                     bannerText: string;
+                    sort: string;
                     parentId: string | null;
                 };
                 brand: {

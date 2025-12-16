@@ -53,6 +53,10 @@ export default function Page() {
         cell.row.original.isActive === true ? "Activé" : "Désactivé",
     },
     {
+      header: "Tri",
+      accessorKey: "sort",
+    },
+    {
       accessorKey: "id",
       header: "Actions",
       Cell: ({ cell }) => (

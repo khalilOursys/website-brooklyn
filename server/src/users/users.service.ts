@@ -47,12 +47,32 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
+    // First, check for existing user with the same email
     const existingUser = await this.prisma.user.findFirst({
       where: { email: createUserDto.email },
     });
 
     if (existingUser) {
-      throw new ConflictException('E-mail déjà utilisé');
+      // If user exists with role GUEST, update it with the new data
+      if (existingUser.role === 'GUEST') {
+        const hashedPassword = await bcryptjs.hash(createUserDto.password, 10);
+
+        return await this.prisma.user.update({
+          where: { id: existingUser.id },
+          data: {
+            email: createUserDto.email,
+            password: hashedPassword,
+            name: createUserDto.name,
+            telephone: createUserDto.telephone,
+            firstName: createUserDto.firstName,
+            lastName: createUserDto.lastName,
+            role: createUserDto.role,
+          },
+        });
+      } else {
+        // If user exists but is not GUEST
+        throw new ConflictException('E-mail déjà utilisé');
+      }
     }
 
     const hashedPassword = await bcryptjs.hash(createUserDto.password, 10);
@@ -121,8 +141,9 @@ export class UsersService {
   }
 
   async getAllUsers(role?: Role) {
+    const whereCondition = role ? { role } : { role: { not: Role.GUEST } };
     return this.prisma.user.findMany({
-      where: role ? { role } : undefined,
+      where: whereCondition,
       include: {
         bulkRequests: true,
         userCities: {

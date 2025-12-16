@@ -29,4 +29,8 @@ export class CreateCategoryDto {
 
   @IsOptional()
   bgUrl?: string;
+
+  @IsString()
+  @IsOptional()
+  sort?: string;
 }

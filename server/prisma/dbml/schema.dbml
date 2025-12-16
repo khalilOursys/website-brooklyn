@@ -206,6 +206,7 @@ Table Category {
   bannerColor String [not null]
   bannerText String [not null]
   isActive Boolean [not null, default: true]
+  sort String [not null, default: '1']
   products Product [not null]
   parentId String
   parent Category

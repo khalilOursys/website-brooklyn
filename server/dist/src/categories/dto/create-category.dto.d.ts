@@ -7,4 +7,5 @@ export declare class CreateCategoryDto {
     parentId?: string;
     iconUrl?: string;
     bgUrl?: string;
+    sort?: string;
 }
