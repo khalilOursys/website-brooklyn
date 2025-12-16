@@ -19,6 +19,7 @@ export declare class ProductVariantsService {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {
@@ -79,6 +80,7 @@ export declare class ProductVariantsService {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {
@@ -139,6 +141,7 @@ export declare class ProductVariantsService {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {
@@ -199,6 +202,7 @@ export declare class ProductVariantsService {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {
@@ -267,6 +271,7 @@ export declare class ProductVariantsService {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {

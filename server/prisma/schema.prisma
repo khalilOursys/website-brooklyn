@@ -226,6 +226,7 @@ model Category {
   bannerColor String
   bannerText  String
   isActive    Boolean    @default(true)
+  sort        String    @default("1") // New sort attribute
   products    Product[]
   parentId    String?       // Reference to the parent category
   parent      Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])

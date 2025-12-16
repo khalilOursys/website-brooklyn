@@ -156,6 +156,8 @@ export class ProductsService {
             brand: true,
             images: true,
           },
+
+          orderBy: { createdAt: 'desc' },
         }),
         this.prisma.product.findMany({
           where: {
@@ -171,6 +173,8 @@ export class ProductsService {
             brand: true,
             images: true,
           },
+
+          orderBy: { createdAt: 'desc' },
         }),
       ]);
 

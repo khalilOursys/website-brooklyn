@@ -32,6 +32,7 @@ export default function Page() {
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
+  const [sort, setSort] = useState("1");
   const [description, setDescription] = useState("");
   const [bannerColor, setBannerColor] = useState("#FF6B6B");
   const [bannerText, setBannerText] = useState("#FF6B6B");
@@ -96,6 +97,7 @@ export default function Page() {
         description,
         bannerText,
         bannerColor,
+        sort,
         iconUrl: finalIconUrl,
         bgUrl: finalBgUrl
       })
@@ -270,6 +272,7 @@ export default function Page() {
       setBgUrl(data.bgUrl || "");
       setIconPreview(data.iconUrl || null);
       setBgPreview(data.bgUrl || null);
+      setSort(data.sort || "1");
 
       if (data.parentId) {
         const parentOption = {
@@ -457,6 +460,24 @@ export default function Page() {
                                       />
                                     </div>
                                   )}
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col md="6">
+                                <Form.Group>
+                                  <label>Ordre de tri*</label>
+                                  <Form.Control
+                                    value={sort}
+                                    placeholder="Ex: 1, 2, 3..."
+                                    name="sort"
+                                    className="required"
+                                    type="text"
+                                    onChange={(e) => setSort(e.target.value)}
+                                  />
+                                  <Form.Text className="text-muted">
+                                    Définir l'ordre d'affichage (plus grand = en premier)
+                                  </Form.Text>
                                 </Form.Group>
                               </Col>
                             </Row>

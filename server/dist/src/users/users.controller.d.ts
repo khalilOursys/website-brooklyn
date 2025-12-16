@@ -138,11 +138,11 @@ export declare class UsersController {
         cart: ({
             items: {
                 id: string;
-                cartId: string;
-                productId: string;
                 variantId: string | null;
-                bulkId: string | null;
+                productId: string;
                 quantity: number;
+                bulkId: string | null;
+                cartId: string;
             }[];
         } & {
             id: string;
@@ -247,5 +247,9 @@ export declare class UsersController {
         nom: string;
         prenom: string;
         msg: string;
-    }): Promise<void>;
+    }): Promise<{
+        success: boolean;
+        messageId: string;
+        response: string;
+    }>;
 }

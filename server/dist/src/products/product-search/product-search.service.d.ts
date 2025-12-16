@@ -16,6 +16,7 @@ export declare class ProductSearchService {
             iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
+            sort: string;
             parentId: string | null;
         };
         brand: {

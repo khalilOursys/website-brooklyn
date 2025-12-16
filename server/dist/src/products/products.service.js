@@ -139,6 +139,7 @@ let ProductsService = class ProductsService {
                     brand: true,
                     images: true,
                 },
+                orderBy: { createdAt: 'desc' },
             }),
             this.prisma.product.findMany({
                 where: {
@@ -154,6 +155,7 @@ let ProductsService = class ProductsService {
                     brand: true,
                     images: true,
                 },
+                orderBy: { createdAt: 'desc' },
             }),
         ]);
         return {

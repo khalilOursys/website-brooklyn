@@ -17,6 +17,7 @@ export declare class CategoriesService {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     findAll(): Promise<({
@@ -32,6 +33,7 @@ export declare class CategoriesService {
             iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
+            sort: string;
             parentId: string | null;
         } | null;
     } & {
@@ -46,6 +48,7 @@ export declare class CategoriesService {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     })[]>;
     findOne(id: string): Promise<{
@@ -61,6 +64,7 @@ export declare class CategoriesService {
             iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
+            sort: string;
             parentId: string | null;
         } | null;
     } & {
@@ -75,6 +79,7 @@ export declare class CategoriesService {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     findBySlug(slug: string): Promise<{
@@ -90,6 +95,7 @@ export declare class CategoriesService {
             iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
+            sort: string;
             parentId: string | null;
         } | null;
     } & {
@@ -104,6 +110,7 @@ export declare class CategoriesService {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<{
@@ -118,6 +125,7 @@ export declare class CategoriesService {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     remove(id: string): Promise<{
@@ -132,6 +140,7 @@ export declare class CategoriesService {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     getCategoriesStructured(): Promise<{
@@ -161,6 +170,7 @@ export declare class CategoriesService {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }[]>;
     findAllParent(): Promise<({
@@ -176,6 +186,7 @@ export declare class CategoriesService {
             iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
+            sort: string;
             parentId: string | null;
         }[];
     } & {
@@ -190,6 +201,7 @@ export declare class CategoriesService {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     })[]>;
     toggleStatus(id: string): Promise<{

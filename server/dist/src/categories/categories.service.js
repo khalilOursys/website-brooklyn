@@ -32,7 +32,7 @@ let CategoriesService = class CategoriesService {
             include: {
                 parent: true,
             },
-            orderBy: { createdAt: 'desc' },
+            orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
         });
     }
     async findOne(id) {
@@ -75,7 +75,12 @@ let CategoriesService = class CategoriesService {
     async getCategoriesStructured() {
         const categories = await this.prisma.category.findMany({
             where: { parentId: null },
-            include: { children: true },
+            include: {
+                children: {
+                    orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
+                },
+            },
+            orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
         });
         return categories.map((category) => ({
             heading: category.name,
@@ -88,7 +93,12 @@ let CategoriesService = class CategoriesService {
     async getCategoriesStructuredMobile() {
         const categories = await this.prisma.category.findMany({
             where: { parentId: null },
-            include: { children: true },
+            include: {
+                children: {
+                    orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
+                },
+            },
+            orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
         });
         return categories.map((category) => ({
             id: category.id,
@@ -107,14 +117,18 @@ let CategoriesService = class CategoriesService {
                 },
                 isActive: true,
             },
-            orderBy: { createdAt: 'desc' },
+            orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
         });
     }
     async findAllParent() {
         return await this.prisma.category.findMany({
             where: { parentId: null, isActive: true },
-            include: { children: true },
-            orderBy: { createdAt: 'desc' },
+            include: {
+                children: {
+                    orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
+                },
+            },
+            orderBy: [{ sort: 'asc' }, { createdAt: 'asc' }],
         });
     }
     async toggleStatus(id) {

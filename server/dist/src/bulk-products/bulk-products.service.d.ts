@@ -120,6 +120,7 @@ export declare class BulkProductsService {
                 iconUrl: string | null;
                 bannerColor: string;
                 bannerText: string;
+                sort: string;
                 parentId: string | null;
             };
             brand: {
@@ -279,6 +280,7 @@ export declare class BulkProductsService {
                     iconUrl: string | null;
                     bannerColor: string;
                     bannerText: string;
+                    sort: string;
                     parentId: string | null;
                 };
                 brand: {

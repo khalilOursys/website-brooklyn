@@ -17,12 +17,46 @@ export class BulkClientRequestsService {
   async createUserWithBulkRequest(data: CreateBulkClientRequestDto) {
     const hashedPassword = await bcryptjs.hash(data.password, 10);
 
+    // First, check for existing user with the same email
     const existingUser = await this.prisma.user.findFirst({
       where: { email: data.email },
     });
+
     if (existingUser) {
-      throw new ConflictException('E-mail déjà utilisé');
+      // If user exists with role GUEST, update it
+      if (existingUser.role === 'GUEST') {
+        return this.prisma.user.update({
+          where: { id: existingUser.id },
+          data: {
+            email: data.email,
+            password: hashedPassword,
+            name: data.name,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            telephone: data.telephone,
+            role: 'BULK_CLIENT', // Update role from GUEST to BULK_CLIENT
+            bulkRequests: {
+              create: {
+                rib: data.rib,
+                taxNumber: data.taxNumber,
+                storeName: data.storeName,
+                legalDocs: data.legalDocs,
+                address: data.address,
+                status: 'en attente',
+              },
+            },
+          },
+          include: {
+            bulkRequests: true,
+          },
+        });
+      } else {
+        // If user exists but is not GUEST (e.g., already BULK_CLIENT or other role)
+        throw new ConflictException('E-mail déjà utilisé');
+      }
     }
+
+    // If no existing user, create a new one
     return this.prisma.user.create({
       data: {
         email: data.email,

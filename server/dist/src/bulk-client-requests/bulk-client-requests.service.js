@@ -23,7 +23,36 @@ let BulkClientRequestsService = class BulkClientRequestsService {
             where: { email: data.email },
         });
         if (existingUser) {
-            throw new common_1.ConflictException('E-mail déjà utilisé');
+            if (existingUser.role === 'GUEST') {
+                return this.prisma.user.update({
+                    where: { id: existingUser.id },
+                    data: {
+                        email: data.email,
+                        password: hashedPassword,
+                        name: data.name,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        telephone: data.telephone,
+                        role: 'BULK_CLIENT',
+                        bulkRequests: {
+                            create: {
+                                rib: data.rib,
+                                taxNumber: data.taxNumber,
+                                storeName: data.storeName,
+                                legalDocs: data.legalDocs,
+                                address: data.address,
+                                status: 'en attente',
+                            },
+                        },
+                    },
+                    include: {
+                        bulkRequests: true,
+                    },
+                });
+            }
+            else {
+                throw new common_1.ConflictException('E-mail déjà utilisé');
+            }
         }
         return this.prisma.user.create({
             data: {

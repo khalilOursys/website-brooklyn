@@ -19,6 +19,7 @@ export declare class CategoriesController {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     findAll(): Promise<({
@@ -34,6 +35,7 @@ export declare class CategoriesController {
             iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
+            sort: string;
             parentId: string | null;
         } | null;
     } & {
@@ -48,6 +50,7 @@ export declare class CategoriesController {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     })[]>;
     findOne(id: string): Promise<{
@@ -63,6 +66,7 @@ export declare class CategoriesController {
             iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
+            sort: string;
             parentId: string | null;
         } | null;
     } & {
@@ -77,6 +81,7 @@ export declare class CategoriesController {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     findBySlug(slug: string): Promise<{
@@ -92,6 +97,7 @@ export declare class CategoriesController {
             iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
+            sort: string;
             parentId: string | null;
         } | null;
     } & {
@@ -106,6 +112,7 @@ export declare class CategoriesController {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<{
@@ -120,6 +127,7 @@ export declare class CategoriesController {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     remove(id: string): Promise<{
@@ -134,6 +142,7 @@ export declare class CategoriesController {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }>;
     getStructuredCategories(): Promise<{
@@ -164,6 +173,7 @@ export declare class CategoriesController {
             iconUrl: string | null;
             bannerColor: string;
             bannerText: string;
+            sort: string;
             parentId: string | null;
         }[];
     } & {
@@ -178,6 +188,7 @@ export declare class CategoriesController {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     })[]>;
     getAllChildren(): Promise<{
@@ -192,6 +203,7 @@ export declare class CategoriesController {
         iconUrl: string | null;
         bannerColor: string;
         bannerText: string;
+        sort: string;
         parentId: string | null;
     }[]>;
     toggleStatus(id: string): Promise<{

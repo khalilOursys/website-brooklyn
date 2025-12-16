@@ -13,7 +13,7 @@ export const VariantCard = ({ product }) => {
   return (
     <div className="card-product fl-item" key={product.id}>
       <div className="card-product-wrapper">
-        <Link href={`/product-detail/${product.id}`} className="product-img">
+        <Link href={product.isDefault ? `/product-detail/${product.id}` : `/variant-detail/${product.id}`} className="product-img">
           <Image
             className="lazyload img-product"
             data-src={product.images[0].url}

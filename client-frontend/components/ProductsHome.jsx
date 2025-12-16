@@ -121,8 +121,9 @@ export default function ProductsHome() {
                   768: { spaceBetween: 30, slidesPerView: 3 },
                   0: { spaceBetween: 15, slidesPerView: 2 },
                 }}
-                modules={[Pagination]}
+                modules={[Pagination, Navigation]}
                 pagination={{ clickable: true, el: ".spdp1" }}
+                navigation={{ prevEl: ".pnbpp211", nextEl: ".pnbpn211" }}
               >
                 {featuredProducts.map((product, i) => (
                   <SwiperSlide key={i}>
@@ -131,6 +132,13 @@ export default function ProductsHome() {
                 ))}
               </Swiper>
             )}
+
+            <div className="nav-sw disable-line nav-next-slider nav-next-sell-1 box-icon w_46 round pnbpp211">
+              <span className="icon icon-arrow-left" />
+            </div>
+            <div className="nav-sw disable-line nav-prev-slider nav-prev-sell-1 box-icon w_46 round pnbpn211">
+              <span className="icon icon-arrow-right" />
+            </div>
             <div className="sw-dots style-2 sw-pagination-sell justify-content-center spdp1" />
           </div>
         </div>

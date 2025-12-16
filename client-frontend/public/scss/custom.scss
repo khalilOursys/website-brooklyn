@@ -565,3 +565,20 @@ td.tf-cart-item_product-remove span.remove-cart.link.remove {
     overflow-y: auto;
   }
 }
+
+/* Fallback custom CSS if Bootstrap classes aren't working */
+.slider-desktop {
+  display: block;
+}
+.slider-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .slider-desktop {
+    display: none;
+  }
+  .slider-mobile {
+    display: block;
+  }
+}
