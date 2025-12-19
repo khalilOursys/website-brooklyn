@@ -5,13 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { Navigation, Pagination } from "swiper/modules";
 import { useEffect, useState } from "react";
-import Configuration from "@/configuration";
+
 
 export default function Blogs() {
   const [bundles, setBundles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchBundles = async () => {

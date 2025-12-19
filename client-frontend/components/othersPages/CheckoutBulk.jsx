@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Configuration from "@/configuration";
+
 
 export default function CheckoutBulk() {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const { user } = useContextElement();
   const [token, setToken] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);

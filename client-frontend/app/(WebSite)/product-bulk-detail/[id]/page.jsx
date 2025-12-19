@@ -3,14 +3,14 @@ import Link from "next/link";
 import Footer2 from "@/components/footers/Footer2";
 import Header22 from "@/components/headers/Header22";
 import DetailsBulkProduct from "@/components/shopDetails/DetailsBulkProduct";
-import Configuration from "@/configuration";
+
 import Header4 from "@/components/headers/Header4";
 import Topbar1 from "@/components/headers/Topbar1";
 import Header2 from "@/components/headers/Header2";
 
 // Function to fetch product data from the backend
 async function getProductById(id) {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   try {
     const response = await fetch(`${api}bulkProducts/getBulkProductById/${id}`); // Replace with your backend URL
     if (!response.ok) {

@@ -10,7 +10,7 @@ import Footer1 from "@/components/footers/Footer1";
 import DashboardNav from "@/components/othersPages/dashboard/DashboardNav";
 import OrderDetails from "@/components/othersPages/dashboard/OrderDetails";
 import { useParams } from "next/navigation";
-import Configuration from "@/configuration";
+
 import Header4 from "@/components/headers/Header4";
 import Topbar1 from "@/components/headers/Topbar1";
 
@@ -19,7 +19,7 @@ export default function OrderPage() {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchOrder = async () => {

@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Configuration from "@/configuration";
+
 
 export default function Categories() {
   const [categories, setCategories] = useState([]);
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchCategories = async () => {

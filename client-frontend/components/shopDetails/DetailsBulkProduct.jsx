@@ -10,11 +10,11 @@ import Quantity from "./Quantity";
 import Slider1ZoomOuter from "./sliders/Slider1ZoomOuter";
 import { allProducts } from "@/data/products";
 import { useContextElement } from "@/context/Context";
-import Configuration from "@/configuration";
+
 import { toast, ToastContainer } from "react-toastify";
 
 export default function DetailsBulkProduct({ product = allProducts[0] }) {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   // Check if product is out of stock
   const isOutOfStock = product.minQuantity <= 0;

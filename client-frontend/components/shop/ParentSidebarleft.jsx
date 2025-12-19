@@ -5,10 +5,10 @@ import { layouts, sortingOptions } from "@/data/shop";
 import ProductGrid from "./ProductGrid";
 import Pagination from "../common/Pagination";
 import Sorting from "./Sorting";
-import Configuration from "@/configuration";
+
 
 export default function ParentSidebarleft({ slug }) {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   const [gridItems, setGridItems] = useState(3);
   const [brands, setBrands] = useState([]);

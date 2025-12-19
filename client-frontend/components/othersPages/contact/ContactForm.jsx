@@ -1,10 +1,10 @@
 "use client";
-import Configuration from "@/configuration";
+
 import { socialLinksWithBorder } from "@/data/socials";
 import React, { useRef, useState } from "react";
 
 export default function ContactForm() {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const formRef = useRef();
   const [success, setSuccess] = useState(true);
   const [showMessage, setShowMessage] = useState(false);

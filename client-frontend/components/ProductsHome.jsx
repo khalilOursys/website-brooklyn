@@ -5,13 +5,13 @@ import Shopcard28 from "@/components/shopCards/ProductCard28";
 import ProductCard33 from "./shopCards/ProductCard33";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-import Configuration from "@/configuration";
+
 
 export default function ProductsHome() {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [discountedProducts, setDiscountedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     let isMounted = true;

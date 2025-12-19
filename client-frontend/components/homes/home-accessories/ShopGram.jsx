@@ -6,14 +6,14 @@ import Link from "next/link";
 import { Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useState } from "react";
-import Configuration from "@/configuration";
+
 
 export default function ShopGram() {
   const { setQuickAddItem, setIsPacks } = useContextElement();
   const [bundles, setBundles] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchBundles = async () => {

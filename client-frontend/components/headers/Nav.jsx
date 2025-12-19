@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import { allHomepages } from "@/data/menu";
 import { usePathname } from "next/navigation";
 import { useContextElement } from "@/context/Context";
-import Configuration from "@/configuration";
+
 
 export default function Nav({ isArrow = true, textColor = "", Linkfs = "" }) {
   const { user } = useContextElement();
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const pathname = usePathname();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);

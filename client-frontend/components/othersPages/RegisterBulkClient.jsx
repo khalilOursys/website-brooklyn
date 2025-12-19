@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Configuration from "@/configuration";
+
 
 export default function RegisterBulkClient() {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
   const [formData, setFormData] = useState({

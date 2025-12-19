@@ -1,10 +1,10 @@
 "use client";
-import Configuration from "@/configuration";
+
 import { useContextElement } from "@/context/Context";
 import React, { useState, useEffect } from "react";
 
 export default function AccountEdit() {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   const { user, setUser } = useContextElement();
   const [formData, setFormData] = useState({

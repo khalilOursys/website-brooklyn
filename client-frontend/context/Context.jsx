@@ -1,5 +1,5 @@
 "use client";
-import Configuration from "@/configuration";
+
 import { allProducts } from "@/data/products";
 import { openCartModal } from "@/utlis/openCartModal";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,7 @@ export const useContextElement = () => {
 };
 
 export default function Context({ children }) {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   const [cartProducts, setCartProducts] = useState([]);
   const [categories, setCategories] = useState([]);

@@ -1,5 +1,5 @@
 "use client";
-import Configuration from "@/configuration";
+
 import { useContextElement } from "@/context/Context";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,7 +15,7 @@ export default function CartBulk() {
   const [cartProducts, setCartProducts] = useState([]); // Added missing state
   const [errorMessage, setErrorMessage] = useState(null);
   const router = useRouter();
-  const API_BASE_URL = Configuration.BACK_BASEURL;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   // Fetch cart data
   const fetchCart = async () => {

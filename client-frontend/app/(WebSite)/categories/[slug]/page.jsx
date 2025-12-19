@@ -5,7 +5,7 @@ import Header4 from "@/components/headers/Header4";
 import Topbar1 from "@/components/headers/Topbar1";
 import ParentSidebarleft from "@/components/shop/ParentSidebarleft";
 import ShopSidebarleft from "@/components/shop/ShopSidebarleft";
-import Configuration from "@/configuration";
+
 
 
 // ✅ Server-Side SEO Metadata
@@ -25,7 +25,7 @@ export default async function Page({ params }) {
   const param = await params;
   const slug = param.slug;
 
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const res = await fetch(`${api}categories/getCategoryBySlug/${slug}`, {
     cache: "no-store", // so it fetches fresh data each time
   });

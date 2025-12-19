@@ -5,11 +5,11 @@ import { layouts, sortingOptions } from "@/data/shop";
 import ProductGrid from "./ProductGrid";
 import Pagination from "../common/Pagination";
 import Sorting from "./Sorting";
-import Configuration from "@/configuration";
+
 import { useContextElement } from "@/context/Context";
 
 export default function ShopSidebarleft({ slug }) {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const { user } = useContextElement();
   var role = user ? user.role : "";
 

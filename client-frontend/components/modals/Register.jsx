@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Configuration from "@/configuration";
+
 
 export default function Register() {
   const router = useRouter();
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({

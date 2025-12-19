@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import Configuration from "@/configuration";
+
 import { toast, ToastContainer } from "react-toastify";
 
 export default function Login() {
@@ -34,7 +34,7 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch(`${Configuration.BACK_BASEURL}auth/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}auth/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -73,7 +73,7 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch(`${Configuration.BACK_BASEURL}auth/forgot-password`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}auth/forgot-password`, {
         method: "POST",
         headers: {
           Accept: "application/json",

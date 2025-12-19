@@ -10,7 +10,7 @@ import Header2 from '@/components/headers/Header2';
 import Topbar1 from '@/components/headers/Topbar1';
 
 export default function ResetPasswordClient() {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
