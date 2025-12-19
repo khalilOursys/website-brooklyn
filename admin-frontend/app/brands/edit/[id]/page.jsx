@@ -13,7 +13,7 @@ import { useDropzone } from "react-dropzone";
 import Configuration from "@/configuration";
 
 export default function Page() {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
   const notify = (type, msg) => {
     if (type === 1)
       toast.success(<strong><i className="fas fa-check-circle"></i> {msg}</strong>);

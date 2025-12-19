@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 // Ensure localStorage is only accessed in the browser
 let token = null;
@@ -11,7 +10,7 @@ export const addProductBundle = createAsyncThunk(
   "productBundle/addProductBundle",
   async (payload) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}productBundles`,
+      `${process.env.NEXT_PUBLIC_API_URL}productBundles`,
       {
         method: "POST",
         headers: {
@@ -36,7 +35,7 @@ export const editProductBundle = createAsyncThunk(
   } */
 
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}productBundles/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}productBundles/${id}`,
       {
         method: "PUT", // Use PUT for updating
         headers: {
@@ -60,7 +59,7 @@ export const fetchProductBundles = createAsyncThunk(
   "productBundle/fetchProductBundles",
   async () => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}productBundles`,
+      `${process.env.NEXT_PUBLIC_API_URL}productBundles`,
       {
         method: "GET",
         headers: {
@@ -78,7 +77,7 @@ export const getProductBundleById = createAsyncThunk(
   "productBundles/getProductBundleById",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}productBundles/getProductBundleById/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}productBundles/getProductBundleById/${id}`,
       {
         method: "GET",
         headers: {
@@ -96,7 +95,7 @@ export const toggleProductBundleStatus = createAsyncThunk(
   "productBundles/toggleStatus",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}productBundles/toggle-status/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}productBundles/toggle-status/${id}`,
       {
         method: "PUT",
         headers: {
@@ -124,7 +123,7 @@ const productBundlesSlice = createSlice({
   },
   reducers: {
     profilUpdated(state, action) {
-      fetch(`${Configuration.BACK_BASEURL}productBundle/updateProfile`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}productBundle/updateProfile`, {
         method: "POST",
         headers: {
           Accept: "application/json",

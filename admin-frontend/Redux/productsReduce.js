@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 // Ensure localStorage is only accessed in the browser
 let token = null;
@@ -10,7 +9,7 @@ if (typeof window !== "undefined") {
 export const addProduct = createAsyncThunk(
   "product/addProduct",
   async (payload) => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}products`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -33,7 +32,7 @@ export const editProduct = createAsyncThunk(
   } */
 
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}products/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}products/${id}`,
       {
         method: "PUT", // Use PUT for updating
         headers: {
@@ -56,7 +55,7 @@ export const editProduct = createAsyncThunk(
 export const fetchProducts = createAsyncThunk(
   "product/fetchProducts",
   async () => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}products`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}products`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -72,7 +71,7 @@ export const getProductById = createAsyncThunk(
   "products/getProductById",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}products/getProductById/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}products/getProductById/${id}`,
       {
         method: "GET",
         headers: {
@@ -90,7 +89,7 @@ export const toggleProductStatus = createAsyncThunk(
   "products/toggleStatus",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}products/toggle-status/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}products/toggle-status/${id}`,
       {
         method: "PUT",
         headers: {
@@ -118,7 +117,7 @@ const productsSlice = createSlice({
   },
   reducers: {
     profilUpdated(state, action) {
-      fetch(`${Configuration.BACK_BASEURL}product/updateProfile`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}product/updateProfile`, {
         method: "POST",
         headers: {
           Accept: "application/json",

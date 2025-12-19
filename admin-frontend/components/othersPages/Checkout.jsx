@@ -12,7 +12,7 @@ export default function Checkout() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   // Form state - initialize with user data if available
   const [formData, setFormData] = useState({

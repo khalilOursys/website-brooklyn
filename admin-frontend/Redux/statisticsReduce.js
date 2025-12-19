@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 let token = null;
 if (typeof window !== "undefined") {
@@ -11,7 +10,7 @@ export const fetchStatistics = createAsyncThunk(
   "statistics/fetchStatistics",
   async ({ startDate, endDate }) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}statistics?start=${startDate}&end=${endDate}`,
+      `${process.env.NEXT_PUBLIC_API_URL}statistics?start=${startDate}&end=${endDate}`,
       {
         method: "GET",
         headers: {

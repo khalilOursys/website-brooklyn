@@ -27,7 +27,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { id } = useParams();
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   // États pour les champs du produit
   const [name, setName] = useState("");

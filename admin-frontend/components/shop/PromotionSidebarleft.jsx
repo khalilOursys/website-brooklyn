@@ -21,7 +21,7 @@ export default function PromotionSidebarleft() {
   const [itemsPerPage, setItemsPerPage] = useState(10); // Add state for items per page
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   // Function to fetch products from the API
   const fetchProducts = async () => {

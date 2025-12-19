@@ -6,7 +6,7 @@ import Configuration from "@/configuration";
 
 export default function RegisterBulkClient() {
   const router = useRouter();
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   const [formData, setFormData] = useState({
     firstName: "",

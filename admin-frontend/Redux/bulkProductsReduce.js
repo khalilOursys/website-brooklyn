@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 // Ensure localStorage is only accessed in the browser
 let token = null;
@@ -10,15 +9,18 @@ if (typeof window !== "undefined") {
 export const addBulkProduct = createAsyncThunk(
   "bulkProduct/addBulkProduct",
   async (payload) => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}bulkProducts`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Bearer token
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}bulkProducts`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+        body: JSON.stringify(payload),
+      }
+    );
     return response.json();
   }
 );
@@ -33,7 +35,7 @@ export const editBulkProduct = createAsyncThunk(
   } */
 
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}bulkProducts/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}bulkProducts/${id}`,
       {
         method: "PUT", // Use PUT for updating
         headers: {
@@ -56,14 +58,17 @@ export const editBulkProduct = createAsyncThunk(
 export const fetchBulkProducts = createAsyncThunk(
   "bulkProduct/fetchBulkProducts",
   async () => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}bulkProducts`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Bearer token
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}bulkProducts`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+      }
+    );
     return response.json();
   }
 );
@@ -72,7 +77,7 @@ export const getBulkProductById = createAsyncThunk(
   "bulkProducts/getBulkProductById",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}bulkProducts/getBulkProductById/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}bulkProducts/getBulkProductById/${id}`,
       {
         method: "GET",
         headers: {
@@ -90,7 +95,7 @@ export const toggleBulkProductStatus = createAsyncThunk(
   "bulkProducts/toggleStatus",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}bulkProducts/toggle-status/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}bulkProducts/toggle-status/${id}`,
       {
         method: "PUT",
         headers: {
@@ -118,7 +123,7 @@ const bulkProductsSlice = createSlice({
   },
   reducers: {
     profilUpdated(state, action) {
-      fetch(`${Configuration.BACK_BASEURL}bulkProduct/updateProfile`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}bulkProduct/updateProfile`, {
         method: "POST",
         headers: {
           Accept: "application/json",

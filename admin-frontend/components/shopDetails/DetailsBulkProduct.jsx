@@ -13,7 +13,7 @@ import { useContextElement } from "@/context/Context";
 import Configuration from "@/configuration";
 
 export default function DetailsBulkProduct({ product = allProducts[0] }) {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   const { user } = useContextElement();
   var cartId = user?.cart.id;

@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 // Ensure localStorage is only accessed in the browser
 let token = null;
@@ -9,7 +8,7 @@ if (typeof window !== "undefined") {
 
 // Async Thunks
 export const loginFetch = createAsyncThunk("user/login", async (payload) => {
-  const response = await fetch(`${Configuration.BACK_BASEURL}auth/login`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}auth/login`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -21,7 +20,7 @@ export const loginFetch = createAsyncThunk("user/login", async (payload) => {
 });
 
 export const addUser = createAsyncThunk("user/addUser", async (payload) => {
-  const response = await fetch(`${Configuration.BACK_BASEURL}users`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}users`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -40,15 +39,18 @@ export const editUser = createAsyncThunk("user/editUser", async (payload) => {
     throw new Error("No token found in localStorage");
   } */
 
-  const response = await fetch(`${Configuration.BACK_BASEURL}users/${id}`, {
-    method: "PUT", // Use PUT for updating
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Add the Bearer token
-    },
-    body: JSON.stringify(userData), // Send only the user data (without `id`) in the body
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}users/${id}`,
+    {
+      method: "PUT", // Use PUT for updating
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Add the Bearer token
+      },
+      body: JSON.stringify(userData), // Send only the user data (without `id`) in the body
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to update user");
@@ -58,7 +60,7 @@ export const editUser = createAsyncThunk("user/editUser", async (payload) => {
 });
 
 export const fetchUsers = createAsyncThunk("user/fetchUsers", async () => {
-  const response = await fetch(`${Configuration.BACK_BASEURL}users`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}users`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -71,7 +73,7 @@ export const fetchUsers = createAsyncThunk("user/fetchUsers", async () => {
 
 export const getUserById = createAsyncThunk("users/getUserById", async (id) => {
   const response = await fetch(
-    `${Configuration.BACK_BASEURL}users/getUserById/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}users/getUserById/${id}`,
     {
       method: "GET",
       headers: {
@@ -88,7 +90,7 @@ export const toggleUserStatus = createAsyncThunk(
   "users/toggleStatus",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}users/toggle-status/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}users/toggle-status/${id}`,
       {
         method: "PUT",
         headers: {
@@ -116,7 +118,7 @@ const usersSlice = createSlice({
   },
   reducers: {
     profilUpdated(state, action) {
-      fetch(`${Configuration.BACK_BASEURL}user/updateProfile`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}user/updateProfile`, {
         method: "POST",
         headers: {
           Accept: "application/json",

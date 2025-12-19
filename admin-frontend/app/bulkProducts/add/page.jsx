@@ -122,7 +122,7 @@ export default function Page() {
   // Récupérer les villes
   const getCities = useCallback(async () => {
     try {
-      const response = await fetch(`${Configuration.BACK_BASEURL}cities`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}cities`);
       if (!response.ok) throw new Error('Échec du chargement des villes');
       const data = await response.json();
       const cityOptions = data.map(city => ({

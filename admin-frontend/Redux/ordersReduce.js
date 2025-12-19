@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 // Ensure localStorage is only accessed in the browser
 let token = null;
@@ -8,7 +7,7 @@ if (typeof window !== "undefined") {
 }
 
 export const addOrder = createAsyncThunk("order/addOrder", async (payload) => {
-  const response = await fetch(`${Configuration.BACK_BASEURL}orders`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}orders`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -29,15 +28,18 @@ export const editOrder = createAsyncThunk(
     throw new Error("No token found in localStorage");
   } */
 
-    const response = await fetch(`${Configuration.BACK_BASEURL}orders/${id}`, {
-      method: "PUT", // Use PUT for updating
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Bearer token
-      },
-      body: JSON.stringify(orderData), // Send only the order data (without `id`) in the body
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}orders/${id}`,
+      {
+        method: "PUT", // Use PUT for updating
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+        body: JSON.stringify(orderData), // Send only the order data (without `id`) in the body
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to update order");
@@ -52,7 +54,7 @@ export const fetchOrders = createAsyncThunk(
   async (actions) => {
     let { isBulk } = actions;
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}orders/getOrderType/${isBulk}`,
+      `${process.env.NEXT_PUBLIC_API_URL}orders/getOrderType/${isBulk}`,
       {
         method: "GET",
         headers: {
@@ -70,7 +72,7 @@ export const getOrderById = createAsyncThunk(
   "orders/getOrderById",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}orders/getOrderById/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}orders/getOrderById/${id}`,
       {
         method: "GET",
         headers: {
@@ -89,7 +91,7 @@ export const fetchOrdersBulk = createAsyncThunk(
   "order/fetchOrdersBulk",
   async () => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}orders/getOrderType/1`,
+      `${process.env.NEXT_PUBLIC_API_URL}orders/getOrderType/1`,
       {
         method: "GET",
         headers: {
@@ -111,7 +113,7 @@ const ordersSlice = createSlice({
   },
   reducers: {
     profilUpdated(state, action) {
-      fetch(`${Configuration.BACK_BASEURL}order/updateProfile`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}order/updateProfile`, {
         method: "POST",
         headers: {
           Accept: "application/json",

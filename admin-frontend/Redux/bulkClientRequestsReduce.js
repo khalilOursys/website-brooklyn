@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 // Ensure localStorage is only accesed in the browser
 let token = null;
@@ -11,14 +10,17 @@ if (typeof window !== "undefined") {
 export const loginFetch = createAsyncThunk(
   "bulkClientRequests/login",
   async (payload) => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}auth/login`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}auth/login`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
     return response.json();
   }
 );
@@ -27,7 +29,7 @@ export const addBulkClientRequests = createAsyncThunk(
   "bulkClientRequests/addBulkClientRequests",
   async (payload) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}bulkClientRequests`,
+      `${process.env.NEXT_PUBLIC_API_URL}bulkClientRequests`,
       {
         method: "POST",
         headers: {
@@ -52,7 +54,7 @@ export const editBulkClientRequests = createAsyncThunk(
   } */
 
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}bulkClientRequests/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}bulkClientRequests/${id}`,
       {
         method: "PUT", // Use PUT for updating
         headers: {
@@ -76,7 +78,7 @@ export const fetchBulkClientRequests = createAsyncThunk(
   "bulkClientRequests/fetchBulkClientRequests",
   async () => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}bulkClientRequests`,
+      `${process.env.NEXT_PUBLIC_API_URL}bulkClientRequests`,
       {
         method: "GET",
         headers: {
@@ -94,7 +96,7 @@ export const getUserWithBulkRequest = createAsyncThunk(
   "bulkClientRequests/getUserWithBulkRequest",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}bulkClientRequests/getUserWithBulkRequest/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}bulkClientRequests/getUserWithBulkRequest/${id}`,
       {
         method: "GET",
         headers: {
@@ -117,15 +119,18 @@ const bulkClientRequestsSlice = createSlice({
   },
   reducers: {
     profilUpdated(state, action) {
-      fetch(`${Configuration.BACK_BASEURL}bulkClientRequests/updateProfile`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "x-acces-token": token || "",
-        },
-        body: JSON.stringify(action.payload),
-      });
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}bulkClientRequests/updateProfile`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "x-acces-token": token || "",
+          },
+          body: JSON.stringify(action.payload),
+        }
+      );
     },
   },
   extraReducers: (builder) => {

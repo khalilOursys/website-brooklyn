@@ -8,7 +8,7 @@ import Sorting from "./Sorting";
 import Configuration from "@/configuration";
 
 export default function ShopSidebarleft({ slug }) {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   const [gridItems, setGridItems] = useState(3);
   const [brands, setBrands] = useState([]);

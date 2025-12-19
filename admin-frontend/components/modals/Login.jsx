@@ -29,7 +29,7 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch(`${Configuration.BACK_BASEURL}auth/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}auth/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",

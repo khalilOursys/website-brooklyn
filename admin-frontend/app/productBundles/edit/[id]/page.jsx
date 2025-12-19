@@ -24,7 +24,7 @@ export default function UpdateProductBundle() {
   const router = useRouter();
   const params = useParams();
   const bundleId = params?.id;
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   const [formData, setFormData] = useState({
     name: "",

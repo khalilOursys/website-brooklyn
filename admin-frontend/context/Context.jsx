@@ -12,7 +12,7 @@ export const useContextElement = () => {
 };
 
 export default function Context({ children }) {
-  const api = Configuration.BACK_BASEURL;
+  const api = process.env.NEXT_PUBLIC_API_URL;
 
   const [cartProducts, setCartProducts] = useState([]);
   const [wishList, setWishList] = useState([1, 2, 3]);

@@ -94,7 +94,7 @@ export default function Page() {
 
   // Récupérer les produits
   const getProduct = useCallback(async () => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}product-variants`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}product-variants`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -133,7 +133,7 @@ export default function Page() {
 
   /* function changeStatus(id, e) {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}users/toggle-status/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}users/toggle-status/${id}`,
       {
         method: "PUT",
         headers: {
@@ -153,7 +153,7 @@ export default function Page() {
   } */
 
   const changeStatus = useCallback(async (id, e) => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}product-variants/toggle-status/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}product-variants/toggle-status/${id}`, {
       method: "PUT",
       headers: {
         Accept: "application/json",

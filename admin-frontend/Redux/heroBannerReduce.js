@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 // Ensure localStorage is only accessed in the browser
 let token = null;
@@ -10,15 +9,18 @@ if (typeof window !== "undefined") {
 export const addHeroBanner = createAsyncThunk(
   "brand/addHeroBanner",
   async (payload) => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}hero-banner`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Bearer token
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}hero-banner`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+        body: JSON.stringify(payload),
+      }
+    );
     return response.json();
   }
 );
@@ -33,7 +35,7 @@ export const editHeroBanner = createAsyncThunk(
   } */
 
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}hero-banner/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}hero-banner/${id}`,
       {
         method: "PUT", // Use PUT for updating
         headers: {
@@ -56,14 +58,17 @@ export const editHeroBanner = createAsyncThunk(
 export const fetchHeroBanner = createAsyncThunk(
   "brand/fetchHeroBanner",
   async () => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}hero-banner`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Bearer token
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}hero-banner`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+      }
+    );
     return response.json();
   }
 );
@@ -72,7 +77,7 @@ export const getHeroBannerById = createAsyncThunk(
   "hero-banner/getHeroBannerById",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}hero-banner/getHeroBannerById/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}hero-banner/getHeroBannerById/${id}`,
       {
         method: "GET",
         headers: {
@@ -90,7 +95,7 @@ export const toggleHeroBannerStatus = createAsyncThunk(
   "hero-banner/toggleStatus",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}hero-banner/toggle-status/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}hero-banner/toggle-status/${id}`,
       {
         method: "PUT",
         headers: {
@@ -118,7 +123,7 @@ const heroBannerSlice = createSlice({
   },
   reducers: {
     profilUpdated(state, action) {
-      fetch(`${Configuration.BACK_BASEURL}brand/updateProfile`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}brand/updateProfile`, {
         method: "POST",
         headers: {
           Accept: "application/json",

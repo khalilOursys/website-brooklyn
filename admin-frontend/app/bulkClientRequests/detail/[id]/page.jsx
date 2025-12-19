@@ -54,7 +54,7 @@ export default function Page() {
     async (id) => {
       try {
         setLoading(true);
-        const response = await fetch(`${Configuration.BACK_BASEURL}users/${id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}users/${id}`);
         if (!response.ok) throw new Error('Failed to fetch user');
         const userData = await response.json();
 
@@ -95,7 +95,7 @@ export default function Page() {
   const fetchAllCities = useCallback(async () => {
     try {
       setCitiesLoading(true);
-      const response = await fetch(`${Configuration.BACK_BASEURL}cities`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}cities`);
       if (!response.ok) throw new Error('Échec du chargement des villes');
       const citiesData = await response.json();
 
@@ -136,7 +136,7 @@ export default function Page() {
 
       const cityIds = selectedCities.map(city => city.value);
 
-      const response = await fetch(`${Configuration.BACK_BASEURL}users/${id}/cities`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}users/${id}/cities`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

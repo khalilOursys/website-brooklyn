@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 // Ensure localStorage is only accessed in the browser
 let token = null;
@@ -8,7 +7,7 @@ if (typeof window !== "undefined") {
 }
 
 export const addBrand = createAsyncThunk("brand/addBrand", async (payload) => {
-  const response = await fetch(`${Configuration.BACK_BASEURL}brands`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}brands`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -29,15 +28,18 @@ export const editBrand = createAsyncThunk(
     throw new Error("No token found in localStorage");
   } */
 
-    const response = await fetch(`${Configuration.BACK_BASEURL}brands/${id}`, {
-      method: "PUT", // Use PUT for updating
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Bearer token
-      },
-      body: JSON.stringify(brandData), // Send only the brand data (without `id`) in the body
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}brands/${id}`,
+      {
+        method: "PUT", // Use PUT for updating
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+        body: JSON.stringify(brandData), // Send only the brand data (without `id`) in the body
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to update brand");
@@ -48,7 +50,7 @@ export const editBrand = createAsyncThunk(
 );
 
 export const fetchBrands = createAsyncThunk("brand/fetchBrands", async () => {
-  const response = await fetch(`${Configuration.BACK_BASEURL}brands`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}brands`, {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -63,7 +65,7 @@ export const getBrandById = createAsyncThunk(
   "brands/getBrandById",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}brands/getBrandById/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}brands/getBrandById/${id}`,
       {
         method: "GET",
         headers: {
@@ -81,7 +83,7 @@ export const toggleBrandStatus = createAsyncThunk(
   "brands/toggleStatus",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}brands/toggle-status/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}brands/toggle-status/${id}`,
       {
         method: "PUT",
         headers: {
@@ -109,7 +111,7 @@ const brandsSlice = createSlice({
   },
   reducers: {
     profilUpdated(state, action) {
-      fetch(`${Configuration.BACK_BASEURL}brand/updateProfile`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}brand/updateProfile`, {
         method: "POST",
         headers: {
           Accept: "application/json",

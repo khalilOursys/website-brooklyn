@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import Configuration from "../configuration";
 
 // Ensure localStorage is only accessed in the browser
 let token = null;
@@ -10,15 +9,18 @@ if (typeof window !== "undefined") {
 export const addCategory = createAsyncThunk(
   "category/addCategory",
   async (payload) => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}categories`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Bearer token
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}categories`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+        body: JSON.stringify(payload),
+      }
+    );
     return response.json();
   }
 );
@@ -33,7 +35,7 @@ export const editCategory = createAsyncThunk(
   } */
 
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}categories/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}categories/${id}`,
       {
         method: "PUT", // Use PUT for updating
         headers: {
@@ -56,14 +58,17 @@ export const editCategory = createAsyncThunk(
 export const fetchCategories = createAsyncThunk(
   "category/fetchCategories",
   async () => {
-    const response = await fetch(`${Configuration.BACK_BASEURL}categories`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Bearer token
-      },
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}categories`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Add the Bearer token
+        },
+      }
+    );
     return response.json();
   }
 );
@@ -72,7 +77,7 @@ export const getCategoryById = createAsyncThunk(
   "categories/getCategoryById",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}categories/getCategoryById/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}categories/getCategoryById/${id}`,
       {
         method: "GET",
         headers: {
@@ -90,7 +95,7 @@ export const toggleCategoryStatus = createAsyncThunk(
   "categories/toggleStatus",
   async (id) => {
     const response = await fetch(
-      `${Configuration.BACK_BASEURL}categories/toggle-status/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}categories/toggle-status/${id}`,
       {
         method: "PUT",
         headers: {
@@ -119,7 +124,7 @@ const categoriesSlice = createSlice({
   },
   reducers: {
     profilUpdated(state, action) {
-      fetch(`${Configuration.BACK_BASEURL}category/updateProfile`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}category/updateProfile`, {
         method: "POST",
         headers: {
           Accept: "application/json",
